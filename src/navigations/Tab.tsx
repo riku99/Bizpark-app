@@ -5,6 +5,7 @@ import { HomeScreen } from "src/screens/Home";
 import { TalkListScreen } from "src/screens/TalkList";
 import { NewsScreen } from "src/screens/News";
 import { useColorModeValue, useTheme } from "native-base";
+import React from "react";
 
 type TabParamList = {
   Home: undefined;

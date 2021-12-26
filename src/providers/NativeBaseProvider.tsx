@@ -1,4 +1,6 @@
 import { NativeBaseProvider, extendTheme } from "native-base";
+import React from "react";
+
 type Props = {
   children: JSX.Element;
 };
