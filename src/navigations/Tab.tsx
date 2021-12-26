@@ -5,7 +5,14 @@ import { HomeScreen } from "src/screens/Home";
 import { TalkListScreen } from "src/screens/TalkList";
 import { NewsScreen } from "src/screens/News";
 
-const Tab = createBottomTabNavigator();
+type TabParamList = {
+  Home: undefined;
+  News: undefined;
+  Talk: undefined;
+  MyPage: undefined;
+};
+
+const Tab = createBottomTabNavigator<TabParamList>();
 
 export const BottomTab = () => {
   return (
@@ -25,7 +32,7 @@ export const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name="TalkList"
+        name="Talk"
         component={TalkListScreen}
         options={{
           tabBarIcon: () => <AntDesign name="message1" size={ICON_SIZE} />,
