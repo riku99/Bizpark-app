@@ -17,9 +17,6 @@ const Tab = createBottomTabNavigator<TabParamList>();
 
 export const BottomTab = () => {
   const { colors } = useTheme();
-  const iconColor = (focused: boolean) => {
-    return useColorModeValue("black", focused ? colors.pink : "white");
-  };
 
   return (
     <Tab.Navigator
@@ -27,18 +24,16 @@ export const BottomTab = () => {
         tabBarStyle: {
           backgroundColor: useColorModeValue(colors.lt.bg, colors.dt.bg),
         },
+        tabBarActiveTintColor: colors.pink,
+        tabBarInactiveTintColor: useColorModeValue("black", "white"),
       }}
     >
       <Tab.Screen
         name="Home"
         component={HomeScreen}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <AntDesign
-              name="home"
-              size={ICON_SIZE}
-              color={iconColor(focused)}
-            />
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="home" size={ICON_SIZE} color={color} />
           ),
         }}
       />
@@ -46,12 +41,8 @@ export const BottomTab = () => {
         name="News"
         component={NewsScreen}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <AntDesign
-              name="profile"
-              size={ICON_SIZE}
-              color={iconColor(focused)}
-            />
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="profile" size={ICON_SIZE} color={color} />
           ),
         }}
       />
@@ -59,12 +50,8 @@ export const BottomTab = () => {
         name="Talk"
         component={TalkListScreen}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <AntDesign
-              name="message1"
-              size={ICON_SIZE}
-              color={iconColor(focused)}
-            />
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="message1" size={ICON_SIZE} color={color} />
           ),
         }}
       />
@@ -72,12 +59,8 @@ export const BottomTab = () => {
         name="MyPage"
         component={Profile}
         options={{
-          tabBarIcon: ({ focused }) => (
-            <AntDesign
-              name="user"
-              size={ICON_SIZE}
-              color={iconColor(focused)}
-            />
+          tabBarIcon: ({ color }) => (
+            <AntDesign name="user" size={ICON_SIZE} color={color} />
           ),
         }}
       />
