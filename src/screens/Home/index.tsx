@@ -11,14 +11,14 @@ export const HomeScreen = ({ navigation }: Props) => {
     navigation.setOptions({
       headerShadowVisible: false,
       headerTitle: "",
-      headerLeft: () => <Text>Logo</Text>,
+      // headerLeft: () => <Text>Logo</Text>,
     });
   }, [navigation]);
 
   const { toggleColorMode } = useColorMode();
 
   return (
-    <Bg flex={1}>
+    <Bg flex={1} pt={1}>
       <VStack px={4}>
         <ThoughtCard
           title="キーエンスの強みを雑に"

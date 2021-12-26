@@ -1,9 +1,7 @@
 import React, { useState } from "react";
-import { Box, useColorMode, Text, Flex } from "native-base";
+import { Box, useColorModeValue, Text, Flex } from "native-base";
 import { Image } from "react-native-expo-image-cache";
-import AnimatedCheckbox from "react-native-checkbox-reanimated";
-import { Pressable } from "react-native";
-import * as Haptics from "expo-haptics";
+import { CheckBox } from "./CheckBox";
 
 type Props = {
   title: string | null;
@@ -19,12 +17,17 @@ export const ThoughtCard = ({ title, text, contributor, picked }: Props) => {
   const [checked, setChecked] = useState(picked);
 
   const onCheckPress = () => {
-    Haptics.selectionAsync();
     setChecked((c) => !c);
   };
 
   return (
-    <Box bg="warmGray.800" borderRadius="lg" py={14} px={4}>
+    <Box
+      bg={useColorModeValue("white", "warmGray.800")}
+      borderRadius="lg"
+      py={14}
+      px={4}
+      shadow={3}
+    >
       <Flex direction="row" alignItems="center">
         <Image
           uri={contributor.imageUrl}
@@ -44,17 +47,11 @@ export const ThoughtCard = ({ title, text, contributor, picked }: Props) => {
         <Text color="pink" fontWeight="bold" fontSize={16}>
           Pick
         </Text>
-        <Pressable
+        <CheckBox
           onPress={onCheckPress}
-          style={{ width: 30, height: 30, marginLeft: 4 }}
-        >
-          <AnimatedCheckbox
-            checked={checked}
-            highlightColor="#4444ff"
-            checkmarkColor="#ffffff"
-            boxOutlineColor="#4444ff"
-          />
-        </Pressable>
+          checked={checked}
+          style={{ height: 30, width: 30, marginLeft: 6 }}
+        />
       </Flex>
     </Box>
   );
