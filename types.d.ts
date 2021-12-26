@@ -1,9 +1,9 @@
-import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import { NativeStackScreenProps } from "@react-navigation/native-stack";
 
 type RootStackParamList = {
   Tab: undefined;
 };
 
-type StackScreenProps<
+export type RootNavigationProp<
   T extends keyof RootStackParamList
-> = NativeStackNavigationProp<RootStackParamList, T>;
+> = NativeStackScreenProps<RootStackParamList, T>;

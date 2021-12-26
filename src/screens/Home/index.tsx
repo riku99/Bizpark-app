@@ -1,8 +1,15 @@
 import { Box } from "native-base";
-import { StackScreenProps } from "types";
+import { RootNavigationProp } from "types";
+import { useLayoutEffect } from "react";
 
-type Props = StackScreenProps<"Tab">;
+type Props = RootNavigationProp<"Tab">;
 
-export const HomeScreen = ({ navigate }: Props) => {
+export const HomeScreen = ({ navigation }: Props) => {
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, [navigation]);
+
   return <Box></Box>;
 };
