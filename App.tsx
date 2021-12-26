@@ -4,6 +4,7 @@ import { Box, useColorModeValue, useColorMode, Button } from "native-base";
 import { NativeBaseThemeProvider } from "src/providers/NativeBaseProvider";
 import { NavigationContainer } from "@react-navigation/native";
 import { RootNavigation } from "src/navigations";
+import { UrqlProvider } from "src/providers/UrqlProvider";
 
 const UseColorMode = () => {
   const { toggleColorMode } = useColorMode();
@@ -21,7 +22,9 @@ export default function App() {
   return (
     <NativeBaseThemeProvider>
       <NavigationContainer>
-        <RootNavigation />
+        <UrqlProvider>
+          <RootNavigation />
+        </UrqlProvider>
       </NavigationContainer>
     </NativeBaseThemeProvider>
   );

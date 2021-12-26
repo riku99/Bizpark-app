@@ -18,8 +18,8 @@ export const HomeScreen = ({ navigation }: Props) => {
   }, [navigation]);
   const { toggleColorMode } = useColorMode();
 
-  const data = useThoughtsQuery();
-  console.log(data);
+  const [result, reexecuteQuery] = useThoughtsQuery();
+  console.log(result.data);
 
   const renderItem = useCallback(({}: { item }) => {}, []);
 
