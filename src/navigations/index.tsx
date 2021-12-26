@@ -11,11 +11,22 @@ export const RootNavigation = React.memo(() => {
     <>
       {/* AppだとうまくcolorModeが動かなかったのでここで定義 */}
       <StatusBar style={useColorModeValue("dark", "light")} />
-      <Stack.Navigator>
+      <Stack.Navigator
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: "red",
+          },
+        }}
+      >
         <Stack.Screen
           name="Tab"
           component={BottomTab}
-          options={{ headerShown: false }}
+          options={{
+            headerShown: false,
+            headerStyle: {
+              backgroundColor: "red",
+            },
+          }}
         />
       </Stack.Navigator>
     </>

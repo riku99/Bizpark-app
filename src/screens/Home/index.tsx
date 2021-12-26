@@ -1,4 +1,4 @@
-import { Box, VStack, Center } from "native-base";
+import { Box, VStack, Center, Button, useColorMode } from "native-base";
 import { RootNavigationProp } from "types";
 import { useLayoutEffect } from "react";
 import { SafeAreaView, Text } from "react-native";
@@ -9,18 +9,24 @@ type Props = RootNavigationProp<"Tab">;
 export const HomeScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: false,
+      headerShadowVisible: false,
+      headerTitle: "",
     });
   }, [navigation]);
 
+  const { toggleColorMode } = useColorMode();
+
   return (
     <Bg flex={1}>
-      {/* <VStack flex={1} space={10} alignItems="center">
-        <Box w="50" h="30" bg="primary.900" />
-        <Center w="64" h="20" bg="primary.500" rounded="md" shadow={3}>
-          <Text>auto center</Text>
-        </Center>
-      </VStack> */}
+      <Button
+        position="absolute"
+        w={50}
+        h={30}
+        bottom={30}
+        onPress={toggleColorMode}
+      >
+        toggle
+      </Button>
     </Bg>
   );
 };

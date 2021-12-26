@@ -21,11 +21,14 @@ export const BottomTab = () => {
   return (
     <Tab.Navigator
       screenOptions={{
+        headerStyle: {
+          backgroundColor: useColorModeValue(colors.lt.bg, colors.dt.bg),
+        },
         tabBarStyle: {
           backgroundColor: useColorModeValue(colors.lt.bg, colors.dt.bg),
         },
         tabBarActiveTintColor: colors.pink,
-        tabBarInactiveTintColor: useColorModeValue("black", "white"),
+        tabBarInactiveTintColor: useColorModeValue("#969696", "white"),
       }}
     >
       <Tab.Screen
