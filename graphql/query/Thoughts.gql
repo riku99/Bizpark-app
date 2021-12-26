@@ -1,0 +1,13 @@
+query Thoughts {
+  thoughts {
+    id
+    title
+    text
+    createdAt
+    contributor {
+      id
+      name
+      imageUrl
+    }
+  }
+}

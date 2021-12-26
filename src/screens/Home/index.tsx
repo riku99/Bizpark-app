@@ -1,8 +1,10 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useCallback } from "react";
 import { VStack, Button, useColorMode, Text } from "native-base";
 import { RootNavigationProp } from "types";
 import { Bg } from "src/components/Bg";
 import { ThoughtCard } from "src/components/ThoughtCard";
+import { FlatList } from "react-native";
+import { useThoughtsQuery } from "src/generated/graphql";
 
 type Props = RootNavigationProp<"Tab">;
 
@@ -14,8 +16,12 @@ export const HomeScreen = ({ navigation }: Props) => {
       // headerLeft: () => <Text>Logo</Text>,
     });
   }, [navigation]);
-
   const { toggleColorMode } = useColorMode();
+
+  const data = useThoughtsQuery();
+  console.log(data);
+
+  const renderItem = useCallback(({}: { item }) => {}, []);
 
   return (
     <Bg flex={1} pt={1}>
