@@ -2,6 +2,8 @@ import React from "react";
 import { SafeAreaView } from "react-native";
 import { Box, useColorModeValue, useColorMode, Button } from "native-base";
 import { NativeBaseThemeProvider } from "src/providers/NativeBaseProvider";
+import { NavigationContainer } from "@react-navigation/native";
+import { RootNavigation } from "src/navigations";
 
 const UseColorMode = () => {
   const { toggleColorMode } = useColorMode();
@@ -18,7 +20,9 @@ const UseColorMode = () => {
 export default function App() {
   return (
     <NativeBaseThemeProvider>
-      <UseColorMode />
+      <NavigationContainer>
+        <RootNavigation />
+      </NavigationContainer>
     </NativeBaseThemeProvider>
   );
 }
