@@ -1,18 +1,8 @@
-import React, { useLayoutEffect, useState } from "react";
-import {
-  Box,
-  VStack,
-  Center,
-  Button,
-  useColorMode,
-  Text,
-  Flex,
-} from "native-base";
+import React, { useLayoutEffect } from "react";
+import { VStack, Button, useColorMode, Text } from "native-base";
 import { RootNavigationProp } from "types";
 import { Bg } from "src/components/Bg";
-import { Image } from "react-native-expo-image-cache";
-import AnimatedCheckbox from "react-native-checkbox-reanimated";
-import { Pressable } from "react-native";
+import { ThoughtCard } from "src/components/ThoughtCard";
 
 type Props = RootNavigationProp<"Tab">;
 
@@ -27,45 +17,15 @@ export const HomeScreen = ({ navigation }: Props) => {
 
   const { toggleColorMode } = useColorMode();
 
-  const [checked, setChecked] = useState(false);
-  const onCheckPress = () => {
-    setChecked((c) => !c);
-  };
-
   return (
     <Bg flex={1}>
       <VStack px={4}>
-        <Box bg="warmGray.800" borderRadius="lg" py={14} px={4}>
-          <Flex direction="row" alignItems="center">
-            <Image
-              uri={uri}
-              style={{ height: 34, width: 34, borderRadius: 34 }}
-            />
-            <Text fontWeight="bold" ml={2}>
-              Riku
-            </Text>
-          </Flex>
-          <Text fontSize={16} fontWeight="bold" mt={2}>
-            キーエンスの強みを短く雑に
-          </Text>
-          <Text h={20}>{text}</Text>
-          <Flex mt={2} direction="row" alignItems="center">
-            <Text color="pink" fontWeight="bold" fontSize={16}>
-              Pick
-            </Text>
-            <Pressable
-              onPress={onCheckPress}
-              style={{ width: 30, height: 30, marginLeft: 4 }}
-            >
-              <AnimatedCheckbox
-                checked={checked}
-                highlightColor="#4444ff"
-                checkmarkColor="#ffffff"
-                boxOutlineColor="#4444ff"
-              />
-            </Pressable>
-          </Flex>
-        </Box>
+        <ThoughtCard
+          title="キーエンスの強みを雑に"
+          text={text}
+          contributor={{ name: "Riku", imageUrl: uri }}
+          picked={false}
+        />
       </VStack>
       <Button
         position="absolute"
