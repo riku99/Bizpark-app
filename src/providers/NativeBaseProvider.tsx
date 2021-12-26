@@ -1,5 +1,4 @@
 import { NativeBaseProvider, extendTheme } from "native-base";
-
 type Props = {
   children: JSX.Element;
 };
@@ -9,16 +8,23 @@ const config = {
   initialColorMode: "dark",
 };
 
-const colors = {
-  primary: {
-    900: "red",
+export const colors = {
+  dt: {
+    bg: "#1c1917",
   },
-  dark: {
-    500: "gray",
+  lt: {
+    bg: "#FFFFFF",
   },
+  pink: "#e68c8c",
 };
 
 const theme = extendTheme({ colors, config });
+
+type CustomThemeType = typeof theme;
+
+declare module "native-base" {
+  interface ICustomTheme extends CustomThemeType {}
+}
 
 export const NativeBaseThemeProvider = ({ children }: Props) => {
   return <NativeBaseProvider theme={theme}>{children}</NativeBaseProvider>;
