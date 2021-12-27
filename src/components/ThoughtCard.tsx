@@ -49,7 +49,9 @@ export const ThoughtCard = ({
           {title}
         </Text>
       )}
-      <Text h={20}>{text}</Text>
+      <Text maxH={20} mt={!title ? 2 : 1}>
+        {text}
+      </Text>
       <Flex mt={2} direction="row" alignItems="center">
         <Text color="pink" fontWeight="bold" fontSize={16}>
           Pick

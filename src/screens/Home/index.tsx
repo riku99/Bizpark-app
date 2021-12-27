@@ -24,7 +24,7 @@ export const HomeScreen = ({ navigation }: Props) => {
   const [result, reexecuteQuery] = useThoughtsQuery({
     variables: { genre: Genre.Business },
   });
-  const { data } = result;
+  const { data, error } = result;
 
   const renderItem = useCallback(
     ({ item, index }: { item: Thought; index: number }) => {
