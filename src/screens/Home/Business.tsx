@@ -1,7 +1,7 @@
 import React from "react";
-import { Box, VStack } from "native-base";
+import { VStack } from "native-base";
 import { Bg } from "src/components/Bg";
-import { useThoughtsQuery, Genre, Thought } from "src/generated/graphql";
+import { useThoughtsQuery, Genre } from "src/generated/graphql";
 import { List } from "./List";
 
 export const Business = React.memo(() => {
