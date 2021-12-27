@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { useColorMode, Button } from "native-base";
+import { useColorMode, Button, useTheme } from "native-base";
 import { RootNavigationProp } from "types";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Society } from "./Society";
@@ -22,12 +22,24 @@ export const HomeScreen = ({ navigation }: Props) => {
   }, [navigation]);
   const { toggleColorMode } = useColorMode();
   const { bgColor } = useBgColor();
+  const { colors } = useTheme();
 
   return (
     <>
       <TopTab.Navigator
         screenOptions={{
           lazy: true,
+          tabBarStyle: {
+            backgroundColor: bgColor,
+          },
+          tabBarIndicatorStyle: {
+            backgroundColor: colors.pink,
+          },
+          tabBarLabelStyle: {
+            textTransform: "none",
+            fontWeight: "bold",
+          },
+          tabBarActiveTintColor: "white",
         }}
         style={{
           backgroundColor: bgColor,
@@ -36,7 +48,13 @@ export const HomeScreen = ({ navigation }: Props) => {
           backgroundColor: bgColor,
         }}
       >
-        <TopTab.Screen name="Business" component={Business} />
+        <TopTab.Screen
+          name="Business"
+          component={Business}
+          options={{
+            tabBarLabel: "Business",
+          }}
+        />
         <TopTab.Screen name="Politics" component={Politics} />
         <TopTab.Screen name="Economy" component={Economy} />
         <TopTab.Screen name="Society" component={Society} />
