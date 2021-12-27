@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { useColorMode, Button, useTheme } from "native-base";
+import { useColorMode, Button } from "native-base";
 import { RootNavigationProp } from "types";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Society } from "./Society";
