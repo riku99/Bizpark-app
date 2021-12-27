@@ -15,6 +15,13 @@ export type Scalars = {
   Float: number;
 };
 
+export enum Genre {
+  Business = 'BUSINESS',
+  Economy = 'ECONOMY',
+  Politics = 'POLITICS',
+  Society = 'SOCIETY'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   createUser?: Maybe<User>;
@@ -29,6 +36,11 @@ export type Query = {
   __typename?: 'Query';
   thoughts: Array<Maybe<Thought>>;
   users: Array<Maybe<User>>;
+};
+
+
+export type QueryThoughtsArgs = {
+  genre: Genre;
 };
 
 export type Thought = {
@@ -48,15 +60,17 @@ export type User = {
   name: Scalars['String'];
 };
 
-export type ThoughtsQueryVariables = Exact<{ [key: string]: never; }>;
+export type ThoughtsQueryVariables = Exact<{
+  genre: Genre;
+}>;
 
 
 export type ThoughtsQuery = { __typename?: 'Query', thoughts: Array<{ __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined> };
 
 
 export const ThoughtsDocument = gql`
-    query Thoughts {
-  thoughts {
+    query Thoughts($genre: Genre!) {
+  thoughts(genre: $genre) {
     id
     title
     text

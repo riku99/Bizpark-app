@@ -4,9 +4,12 @@ import { RootNavigationProp } from "types";
 import { Bg } from "src/components/Bg";
 import { ThoughtCard } from "src/components/ThoughtCard";
 import { FlatList } from "react-native";
-import { useThoughtsQuery } from "src/generated/graphql";
+import { useThoughtsQuery, Genre, Thought } from "src/generated/graphql";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 
 type Props = RootNavigationProp<"Tab">;
+
+const TopTab = createMaterialTopTabNavigator();
 
 export const HomeScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
@@ -18,22 +21,44 @@ export const HomeScreen = ({ navigation }: Props) => {
   }, [navigation]);
   const { toggleColorMode } = useColorMode();
 
-  const [result, reexecuteQuery] = useThoughtsQuery();
-  console.log(result.data);
+  const [result, reexecuteQuery] = useThoughtsQuery({
+    variables: { genre: Genre.Business },
+  });
+  const { data } = result;
 
-  const renderItem = useCallback(({}: { item }) => {}, []);
+  const renderItem = useCallback(
+    ({ item, index }: { item: Thought; index: number }) => {
+      return (
+        <ThoughtCard
+          title={item.title}
+          text={item.text}
+          contributor={{
+            name: item.contributor.name,
+            imageUrl: item.contributor.imageUrl,
+          }}
+          picked={false}
+          key={item.id}
+          mt={index !== 0 ? 4 : 0}
+        />
+      );
+    },
+    []
+  );
+
+  if (!data) {
+    return null;
+  }
 
   return (
-    <Bg flex={1} pt={1}>
+    <Bg flex={1} pt={1} py={4}>
       <VStack px={4}>
-        <ThoughtCard
-          title="キーエンスの強みを雑に"
-          text={text}
-          contributor={{ name: "Riku", imageUrl: uri }}
-          picked={false}
+        <FlatList
+          data={data.thoughts}
+          renderItem={renderItem}
+          showsVerticalScrollIndicator={false}
         />
       </VStack>
-      <Button
+      {/* <Button
         position="absolute"
         w={50}
         h={30}
@@ -41,7 +66,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         onPress={toggleColorMode}
       >
         toggle
-      </Button>
+      </Button> */}
     </Bg>
   );
 };

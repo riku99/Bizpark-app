@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { ComponentProps, useState } from "react";
 import { Box, useColorModeValue, Text, Flex } from "native-base";
 import { Image } from "react-native-expo-image-cache";
 import { CheckBox } from "./CheckBox";
@@ -11,9 +11,15 @@ type Props = {
     name: string;
     imageUrl: null | string;
   };
-};
+} & ComponentProps<typeof Box>;
 
-export const ThoughtCard = ({ title, text, contributor, picked }: Props) => {
+export const ThoughtCard = ({
+  title,
+  text,
+  contributor,
+  picked,
+  ...props
+}: Props) => {
   const [checked, setChecked] = useState(picked);
 
   const onCheckPress = () => {
@@ -27,6 +33,7 @@ export const ThoughtCard = ({ title, text, contributor, picked }: Props) => {
       py={14}
       px={4}
       shadow={3}
+      {...props}
     >
       <Flex direction="row" alignItems="center">
         <Image

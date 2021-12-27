@@ -1,5 +1,5 @@
-query Thoughts {
-  thoughts {
+query Thoughts($genre: Genre!) {
+  thoughts(genre: $genre) {
     id
     title
     text
