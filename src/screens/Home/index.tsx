@@ -1,12 +1,11 @@
-import React, { useLayoutEffect, useCallback } from "react";
-import { VStack, Button, useColorMode, Text } from "native-base";
+import React, { useLayoutEffect } from "react";
+import { useColorMode, useColorModeValue, useTheme, Button } from "native-base";
 import { RootNavigationProp } from "types";
-import { Bg } from "src/components/Bg";
-import { ThoughtCard } from "src/components/ThoughtCard";
-import { FlatList } from "react-native";
-import { useThoughtsQuery, Genre, Thought } from "src/generated/graphql";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { List } from "./List";
+import { Society } from "./Society";
+import { Business } from "./Business";
+import { Economy } from "./Economy";
+import { Politics } from "./Politics";
 
 type Props = RootNavigationProp<"Tab">;
 
@@ -21,41 +20,27 @@ export const HomeScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
   const { toggleColorMode } = useColorMode();
-
-  const [result, reexecuteQuery] = useThoughtsQuery({
-    variables: { genre: Genre.Business },
-  });
-  const { data, error } = result;
-
-  const renderItem = useCallback(
-    ({ item, index }: { item: Thought; index: number }) => {
-      return (
-        <ThoughtCard
-          title={item.title}
-          text={item.text}
-          contributor={{
-            name: item.contributor.name,
-            imageUrl: item.contributor.imageUrl,
-          }}
-          picked={false}
-          key={item.id}
-          mt={index !== 0 ? 4 : 0}
-        />
-      );
-    },
-    []
-  );
-
-  if (!data) {
-    return null;
-  }
+  const { colors } = useTheme();
 
   return (
-    <Bg flex={1} pt={1}>
-      <VStack px={4}>
-        <List data={data.thoughts} />
-      </VStack>
-      {/* <Button
+    <>
+      <TopTab.Navigator
+        screenOptions={{
+          lazy: true,
+        }}
+        style={{
+          backgroundColor: useColorModeValue(colors.lt.bg, colors.dt.bg),
+        }}
+        sceneContainerStyle={{
+          backgroundColor: useColorModeValue(colors.lt.bg, colors.dt.bg),
+        }}
+      >
+        <TopTab.Screen name="Business" component={Business} />
+        <TopTab.Screen name="Politics" component={Politics} />
+        <TopTab.Screen name="Economy" component={Economy} />
+        <TopTab.Screen name="Society" component={Society} />
+      </TopTab.Navigator>
+      <Button
         position="absolute"
         w={50}
         h={30}
@@ -63,7 +48,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         onPress={toggleColorMode}
       >
         toggle
-      </Button> */}
-    </Bg>
+      </Button>
+    </>
   );
 };
