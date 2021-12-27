@@ -6,7 +6,7 @@ import { Society } from "./Society";
 import { Business } from "./Business";
 import { Economy } from "./Economy";
 import { Politics } from "./Politics";
-import { useBgColor } from "src/hooks/theme";
+import { useTopTabBarStyle } from "src/hooks/theme";
 
 type Props = RootNavigationProp<"Tab">;
 
@@ -21,32 +21,22 @@ export const HomeScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
   const { toggleColorMode } = useColorMode();
-  const { bgColor } = useBgColor();
-  const { colors } = useTheme();
+
+  const {
+    defaultScreenStyle,
+    style,
+    sceneContainerStyle,
+  } = useTopTabBarStyle();
 
   return (
     <>
       <TopTab.Navigator
         screenOptions={{
           lazy: true,
-          tabBarStyle: {
-            backgroundColor: bgColor,
-          },
-          tabBarIndicatorStyle: {
-            backgroundColor: colors.pink,
-          },
-          tabBarLabelStyle: {
-            textTransform: "none",
-            fontWeight: "bold",
-          },
-          tabBarActiveTintColor: "white",
+          ...defaultScreenStyle,
         }}
-        style={{
-          backgroundColor: bgColor,
-        }}
-        sceneContainerStyle={{
-          backgroundColor: bgColor,
-        }}
+        style={style}
+        sceneContainerStyle={sceneContainerStyle}
       >
         <TopTab.Screen
           name="Business"
