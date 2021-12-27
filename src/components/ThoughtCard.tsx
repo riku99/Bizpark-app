@@ -32,7 +32,7 @@ export const ThoughtCard = ({
       borderRadius="lg"
       py={14}
       px={4}
-      shadow={3}
+      shadow={2}
       {...props}
     >
       <Flex direction="row" alignItems="center">
@@ -59,7 +59,7 @@ export const ThoughtCard = ({
         <CheckBox
           onPress={onCheckPress}
           checked={checked}
-          style={{ height: 30, width: 30, marginLeft: 6 }}
+          style={{ height: 26, width: 26, marginLeft: 6 }}
         />
       </Flex>
     </Box>

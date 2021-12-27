@@ -50,15 +50,16 @@ export const HomeScreen = ({ navigation }: Props) => {
   }
 
   return (
-    <Bg flex={1} pt={1} py={4}>
+    <Bg flex={1} pt={1}>
       <VStack px={4}>
         <FlatList
           data={data.thoughts}
           renderItem={renderItem}
           showsVerticalScrollIndicator={false}
+          contentContainerStyle={{ paddingBottom: 6 }}
         />
       </VStack>
-      {/* <Button
+      <Button
         position="absolute"
         w={50}
         h={30}
@@ -66,7 +67,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         onPress={toggleColorMode}
       >
         toggle
-      </Button> */}
+      </Button>
     </Bg>
   );
 };
