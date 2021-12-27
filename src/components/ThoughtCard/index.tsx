@@ -1,7 +1,7 @@
 import React, { ComponentProps, useState } from "react";
 import { Box, useColorModeValue, Text, Flex } from "native-base";
 import { Image } from "react-native-expo-image-cache";
-import { CheckBox } from "./CheckBox";
+import { CheckBox } from "../CheckBox";
 
 type Props = {
   title: string | null;

@@ -3,6 +3,7 @@ import { VStack } from "native-base";
 import { Bg } from "src/components/Bg";
 import { useThoughtsQuery, Genre } from "src/generated/graphql";
 import { List } from "./List";
+import { Indicator } from "src/components/Indicator";
 
 export const Society = React.memo(() => {
   const [result, reexecuteQuery] = useThoughtsQuery({
@@ -11,7 +12,7 @@ export const Society = React.memo(() => {
   const { data } = result;
 
   if (!data) {
-    return null;
+    return <Indicator style={{ marginTop: 10 }} />;
   }
 
   return (
