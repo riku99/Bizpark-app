@@ -19,7 +19,11 @@
         "wasm",
         "svg"
       ]
-    }
+    },
+    "ios": {
+      "googleServicesFile": "./GoogleService-Info.plist"
+    },
+    "plugins": ["@react-native-firebase/app"]
   },
   "name": "bizpark"
 }

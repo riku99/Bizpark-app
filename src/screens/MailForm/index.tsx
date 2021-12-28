@@ -1,13 +1,10 @@
 import React, { ComponentProps, useLayoutEffect } from "react";
-import { Box, Input, VStack, Button, Text } from "native-base";
+import { Box, Input, VStack, Text, useTheme } from "native-base";
 import { RootNavigationProp } from "types";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
-import {
-  useForm,
-  Control,
-  Controller,
-  UseControllerProps,
-} from "react-hook-form";
+import { useForm, Controller, UseControllerProps } from "react-hook-form";
+import { Button } from "react-native-elements";
+import {} from "src/hooks/auth";
 
 type FormProps<T> = {
   label: string;
@@ -65,7 +62,16 @@ export const MailFormScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
-  const { control, handleSubmit } = useForm<FormData>();
+  const { colors } = useTheme();
+
+  const { control, handleSubmit, watch } = useForm<FormData>();
+
+  const email = watch("email");
+  const password = watch("password");
+  const name = watch("name");
+
+  const disabled = !email || !password || password.length < 8;
+
   const onSubmmitPress = () => {
     handleSubmit(async (data) => {
       console.log(data);
@@ -109,20 +115,17 @@ export const MailFormScreen = ({ navigation }: Props) => {
             }}
           />
           <Button
-            bg="pink"
-            h={10}
-            mt={2}
-            _text={{
-              fontSize: 16,
+            title="登録"
+            buttonStyle={{
+              backgroundColor: colors.pink,
             }}
-            _pressed={{
-              bg: "pink",
-              opacity: 1,
+            titleStyle={{
+              fontWeight: "bold",
             }}
+            disabled={disabled}
+            activeOpacity={1}
             onPress={onSubmmitPress}
-          >
-            登録
-          </Button>
+          />
         </VStack>
       </Box>
     </TouchableWithoutFeedback>

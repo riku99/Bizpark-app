@@ -29,6 +29,7 @@
     "react-hook-form": "^7.22.5",
     "react-native": "0.64.3",
     "react-native-checkbox-reanimated": "^0.1.0",
+    "react-native-elements": "^3.4.2",
     "react-native-expo-image-cache": "^4.1.0",
     "react-native-pager-view": "^5.4.9",
     "react-native-reanimated": "2.2.4",
@@ -37,6 +38,7 @@
     "react-native-svg": "^12.1.1",
     "react-native-swiper": "^1.6.0",
     "react-native-tab-view": "^3.1.1",
+    "react-native-toast-notifications": "^3.2.3",
     "react-native-web": "0.17.1",
     "urql": "^2.0.6",
     "yarn": "^1.22.17"
