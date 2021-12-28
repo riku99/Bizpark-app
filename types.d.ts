@@ -10,6 +10,7 @@ declare module "*.svg" {
 type RootStackParamList = {
   Tab: undefined;
   Signup: undefined;
+  Signin: undefined;
 };
 
 export type RootNavigationProp<

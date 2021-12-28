@@ -29,9 +29,13 @@ export const SignupScreen = ({ navigation }: Props) => {
         </VStack>
         <Box flexDirection="row" justifyContent="center" mt={8}>
           <Text>既に登録済みの方</Text>
-          <Pressable>
+          <Pressable
+            onPress={() => {
+              navigation.navigate("Signin");
+            }}
+          >
             <Text ml={8} textDecorationLine="underline">
-              ログイン
+              サインイン
             </Text>
           </Pressable>
         </Box>

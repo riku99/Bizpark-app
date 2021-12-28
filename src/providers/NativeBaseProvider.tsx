@@ -20,9 +20,23 @@ export const colors = {
   pink: "#e68c8c",
   purple: "#4444ff",
   bluePurple: "#4a7dff",
+  textBlack: "#333333",
+  textWhite: "white",
 };
 
-const theme = extendTheme({ colors, config });
+const components = {
+  Text: {
+    baseStyle: ({ colorMode }) => ({
+      color: colorMode === "dark" ? "textWhite" : "textBlack",
+    }),
+  },
+};
+
+const theme = extendTheme({
+  colors,
+  config,
+  components,
+});
 
 type CustomThemeType = typeof theme;
 
