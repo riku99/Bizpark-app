@@ -4,7 +4,7 @@ import { RootNavigationProp } from "types";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useForm, Controller, UseControllerProps } from "react-hook-form";
 import { Button } from "react-native-elements";
-import {} from "src/hooks/auth";
+import { useSignUp } from "src/hooks/auth";
 
 type FormProps<T> = {
   label: string;
@@ -62,6 +62,7 @@ export const MailFormScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
+  const { registerUser } = useSignUp();
   const { colors } = useTheme();
 
   const { control, handleSubmit, watch } = useForm<FormData>();
@@ -75,6 +76,11 @@ export const MailFormScreen = ({ navigation }: Props) => {
   const onSubmmitPress = () => {
     handleSubmit(async (data) => {
       console.log(data);
+      await registerUser({
+        email: data.email,
+        password: data.password,
+        name: data.name,
+      });
     })();
   };
 
@@ -122,7 +128,7 @@ export const MailFormScreen = ({ navigation }: Props) => {
             titleStyle={{
               fontWeight: "bold",
             }}
-            disabled={disabled}
+            // disabled={disabled}
             activeOpacity={1}
             onPress={onSubmmitPress}
           />
