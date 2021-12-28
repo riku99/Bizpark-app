@@ -18,6 +18,8 @@ export const colors = {
     bg: "#FFFFFF",
   },
   pink: "#e68c8c",
+  purple: "#4444ff",
+  bluePurple: "#4a7dff",
 };
 
 const theme = extendTheme({ colors, config });
