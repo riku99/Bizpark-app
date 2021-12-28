@@ -4,6 +4,7 @@ import { Box, Text, useTheme } from "native-base";
 import Browsing from "src/assets/svg/browsing.svg";
 import Post from "src/assets/svg/post.svg";
 import Chatting from "src/assets/svg/chatting.svg";
+import { HIGHER_8_DEVICE } from "src/constants";
 
 type ContentProps = {
   children: JSX.Element;
@@ -65,4 +66,4 @@ export const SwipeContent = () => {
   );
 };
 
-const SVG_SIZE = 200;
+const SVG_SIZE = HIGHER_8_DEVICE ? 200 : 180;
