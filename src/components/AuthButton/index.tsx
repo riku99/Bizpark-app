@@ -8,9 +8,10 @@ type BaseProps = {
   title: string;
   bg: string;
   titleColor?: string;
+  onPress?: () => void;
 };
 
-const Base = ({ icon, title, bg, titleColor }: BaseProps) => {
+const Base = ({ icon, title, bg, titleColor, onPress }: BaseProps) => {
   return (
     <Pressable
       flexDirection="row"
@@ -18,6 +19,7 @@ const Base = ({ icon, title, bg, titleColor }: BaseProps) => {
       h={12}
       alignItems="center"
       borderRadius="sm"
+      onPress={onPress}
     >
       <Box position={"absolute"} left={2}>
         {icon}
@@ -29,33 +31,38 @@ const Base = ({ icon, title, bg, titleColor }: BaseProps) => {
   );
 };
 
-export const Mail = () => {
+type Props = { type?: "signin" | "signup"; onPress?: () => void };
+
+export const Mail = ({ onPress, type = "signup" }: Props) => {
   return (
     <Base
       bg="pink"
-      title="メールアドレスで登録"
+      title={`メールアドレスで${type === "signup" ? "登録" : "ログイン"}`}
       icon={<MaterialIcons name="email" color="white" size={22} />}
+      onPress={onPress}
     />
   );
 };
 
-export const Apple = () => {
+export const Apple = ({ onPress, type = "signup" }: Props) => {
   return (
     <Base
       bg="black"
-      title="Appleで登録"
+      title={`Appleで${type === "signup" ? "登録" : "ログイン"}`}
       icon={<AntDesign name="apple1" color="white" size={22} />}
+      onPress={onPress}
     />
   );
 };
 
-export const Google = () => {
+export const Google = ({ onPress, type = "signup" }: Props) => {
   return (
     <Base
-      title="Googleで登録"
+      title={`Googleで${type === "signup" ? "登録" : "ログイン"}`}
       bg="white"
       titleColor="black"
       icon={<GoogleIcon width={22} height={22} />}
+      onPress={onPress}
     />
   );
 };

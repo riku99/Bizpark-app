@@ -35,7 +35,7 @@ export const SignupScreen = ({ navigation }: Props) => {
             }}
           >
             <Text ml={8} textDecorationLine="underline">
-              サインイン
+              ログイン
             </Text>
           </Pressable>
         </Box>
