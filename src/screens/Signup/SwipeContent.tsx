@@ -15,7 +15,7 @@ const Content = ({ children, text }: ContentProps) => {
   return (
     <Box alignItems="center">
       {children}
-      <Text fontWeight="bold" mt={4} fontSize={18}>
+      <Text fontWeight="bold" mt={4} fontSize={18} color="black">
         {text}
       </Text>
     </Box>

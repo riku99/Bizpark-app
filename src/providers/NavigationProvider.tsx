@@ -15,6 +15,7 @@ export const NavigationProvider = ({ children }: Props) => {
     colors: {
       ...DefaultTheme.colors,
       primary: useColorModeValue(colors.textBlack, colors.textWhite),
+      background: useColorModeValue(colors.lt.bg, colors.dt.bg),
     },
   };
 

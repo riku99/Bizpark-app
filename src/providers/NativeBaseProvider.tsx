@@ -30,6 +30,14 @@ const components = {
       color: colorMode === "dark" ? "textWhite" : "textBlack",
     }),
   },
+  Button: {
+    baseStyle: {
+      rounded: "sm",
+      _text: {
+        color: "textWhite",
+      },
+    },
+  },
 };
 
 const theme = extendTheme({

@@ -16,25 +16,29 @@ export const SignupScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
+  const onMailPress = () => {
+    navigation.navigate("MailForm");
+  };
+
   return (
-    <Bg flex={1}>
+    <Bg flex={1} bg="white">
       <SafeAreaView>
         <Box h={HIGHER_8_DEVICE ? 310 : 280} alignItems="center" mt={20}>
           <SwipeContent />
         </Box>
         <VStack space={4} px={8}>
-          <Mail />
+          <Mail onPress={onMailPress} />
           <Apple />
           <Google />
         </VStack>
         <Box flexDirection="row" justifyContent="center" mt={8}>
-          <Text>既に登録済みの方</Text>
+          <Text color="textBlack">既に登録済みの方</Text>
           <Pressable
             onPress={() => {
               navigation.navigate("Signin");
             }}
           >
-            <Text ml={8} textDecorationLine="underline">
+            <Text ml={8} textDecorationLine="underline" color="textBlack">
               ログイン
             </Text>
           </Pressable>

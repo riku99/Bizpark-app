@@ -2,10 +2,11 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { BottomTab } from "./Tab";
 import { StatusBar } from "expo-status-bar";
+import { RootStackParamList } from "types";
 import { useColorModeValue, useTheme } from "native-base";
 import { SignupScreen } from "src/screens/Signup";
 import { SigninScreen } from "src/screens/Siginin";
-import { RootStackParamList } from "types";
+import { MailFormScreen } from "src/screens/MailForm";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -36,6 +37,7 @@ export const RootNavigation = React.memo(() => {
           }}
         />
         <Stack.Screen name="Signin" component={SigninScreen} />
+        <Stack.Screen name="MailForm" component={MailFormScreen} />
       </Stack.Navigator>
     </>
   );

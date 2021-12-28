@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentProps } from "react";
 import { Box, Pressable, Text } from "native-base";
 import { AntDesign, MaterialIcons } from "@expo/vector-icons";
 import GoogleIcon from "src/assets/svg/google.svg";
@@ -8,10 +8,9 @@ type BaseProps = {
   title: string;
   bg: string;
   titleColor?: string;
-  onPress?: () => void;
-};
+} & ComponentProps<typeof Pressable>;
 
-const Base = ({ icon, title, bg, titleColor, onPress }: BaseProps) => {
+const Base = ({ icon, title, bg, titleColor, ...props }: BaseProps) => {
   return (
     <Pressable
       flexDirection="row"
@@ -19,7 +18,7 @@ const Base = ({ icon, title, bg, titleColor, onPress }: BaseProps) => {
       h={12}
       alignItems="center"
       borderRadius="sm"
-      onPress={onPress}
+      {...props}
     >
       <Box position={"absolute"} left={2}>
         {icon}
@@ -63,6 +62,8 @@ export const Google = ({ onPress, type = "signup" }: Props) => {
       titleColor="black"
       icon={<GoogleIcon width={22} height={22} />}
       onPress={onPress}
+      borderWidth={1}
+      borderColor="#cfcfcf"
     />
   );
 };
