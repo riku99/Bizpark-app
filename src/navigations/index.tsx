@@ -36,8 +36,21 @@ export const RootNavigation = React.memo(() => {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="Signin" component={SigninScreen} />
-        <Stack.Screen name="MailForm" component={MailFormScreen} />
+        <Stack.Group
+          screenOptions={{
+            headerStyle: {
+              backgroundColor: "white",
+            },
+            headerTitleStyle: {
+              color: colors.textBlack,
+            },
+            headerTintColor: colors.textBlack,
+            headerBackTitleVisible: false,
+          }}
+        >
+          <Stack.Screen name="Signin" component={SigninScreen} />
+          <Stack.Screen name="MailForm" component={MailFormScreen} />
+        </Stack.Group>
       </Stack.Navigator>
     </>
   );

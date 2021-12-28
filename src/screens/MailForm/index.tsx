@@ -12,7 +12,9 @@ type FormProps = {
 const Form = ({ label, placeholder, password }: FormProps) => {
   return (
     <>
-      <Text fontWeight="bold">{label}</Text>
+      <Text fontWeight="bold" color="textBlack">
+        {label}
+      </Text>
       <Input
         h={45}
         borderColor="white"
@@ -45,7 +47,7 @@ export const MailFormScreen = ({ navigation }: Props) => {
         Keyboard.dismiss();
       }}
     >
-      <Box px={4} flex={1}>
+      <Box px={4} flex={1} bg="white">
         <VStack space={4} mt={10}>
           <Form label="メールアドレス" placeholder="メールアドレス" />
           <Form
@@ -55,7 +57,7 @@ export const MailFormScreen = ({ navigation }: Props) => {
           />
           <Button
             bg="pink"
-            h={12}
+            h={10}
             mt={2}
             _text={{
               fontSize: 16,

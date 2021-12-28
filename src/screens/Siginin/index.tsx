@@ -1,24 +1,14 @@
 import React, { useLayoutEffect } from "react";
 import { RootNavigationProp } from "types";
 import { Mail, Apple, Google } from "src/components/AuthButton";
-import { VStack, Box, useTheme } from "native-base";
+import { VStack, Box } from "native-base";
 
 type Props = RootNavigationProp<"Signin">;
 
 export const SigninScreen = ({ navigation }: Props) => {
-  const { colors } = useTheme();
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: "ログイン",
-      headerStyle: {
-        backgroundColor: "white",
-      },
-      headerTitleStyle: {
-        color: colors.textBlack,
-      },
-      headerTintColor: colors.textBlack,
-      headerBackTitleVisible: false,
     });
   }, [navigation]);
 
