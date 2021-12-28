@@ -56,6 +56,7 @@ export const SwipeContent = () => {
       dotStyle={{
         backgroundColor: "#b5b5b5",
       }}
+      autoplay
     >
       <First />
       <Second />
