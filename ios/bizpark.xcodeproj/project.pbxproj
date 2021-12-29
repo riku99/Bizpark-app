@@ -13,7 +13,6 @@
 		1AA2A60BC87BE543880DE41A /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A46E4562538E6AA7699F4D1 /* ExpoModulesProvider.swift */; };
 		324906C0277C58F800F54197 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		324906C1277C58F800F54197 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		324906C2277C58F800F54197 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		324906C6277C58F800F54197 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		324906C7277C58F800F54197 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 3226E0692779F56E00BA4249 /* GoogleService-Info.plist */; };
 		324906C8277C58F800F54197 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
@@ -30,7 +29,7 @@
 		525EB374797BC95931C97A65 /* libPods-bizpark-stg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20FD77AA2708644869EE9414 /* libPods-bizpark-stg.a */; };
 		5CB74F6504AA20252D01F74D /* libPods-bizpark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D473753CB87980FA54A35A /* libPods-bizpark.a */; };
 		8447DAFDA4AA7125B362DC7B /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E0EEA279F531C22361D7B6 /* ExpoModulesProvider.swift */; };
-		96905EF65AED1B983A6B3ABC /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		96905EF65AED1B983A6B3ABC /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		C3564EB8B64C90DECA1D89DF /* libPods-bizpark-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EC12899EE9AFE62FDD0D7A9C /* libPods-bizpark-dev.a */; };
@@ -74,7 +73,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96905EF65AED1B983A6B3ABC /* BuildFile in Frameworks */,
+				96905EF65AED1B983A6B3ABC /* (null) in Frameworks */,
 				5CB74F6504AA20252D01F74D /* libPods-bizpark.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -679,7 +678,6 @@
 			files = (
 				324906C0277C58F800F54197 /* AppDelegate.m in Sources */,
 				324906C1277C58F800F54197 /* main.m in Sources */,
-				324906C2277C58F800F54197 /* ExpoModulesProvider.swift in Sources */,
 				1AA2A60BC87BE543880DE41A /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -759,7 +757,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = bizpark/bizpark.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = r;
 				DEVELOPMENT_TEAM = WY62VS9YM9;
 				ENABLE_BITCODE = NO;
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -789,7 +787,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = bizpark/bizpark.entitlements;
-				CURRENT_PROJECT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = r;
 				DEVELOPMENT_TEAM = WY62VS9YM9;
 				INFOPLIST_FILE = "bizpark copy-Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 12.0;
