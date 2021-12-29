@@ -15,6 +15,20 @@ export type Scalars = {
   Float: number;
 };
 
+export type CreateUserInput = {
+  email: Scalars['String'];
+  idToken: Scalars['String'];
+  name: Scalars['String'];
+};
+
+export type CreateUserResponse = MutationBaseResponse & {
+  __typename?: 'CreateUserResponse';
+  code: MutationResponseCode;
+  errors?: Maybe<Array<MutationResponseError>>;
+  message?: Maybe<Scalars['String']>;
+  user?: Maybe<User>;
+};
+
 export enum Genre {
   Business = 'BUSINESS',
   Economy = 'ECONOMY',
@@ -24,12 +38,29 @@ export enum Genre {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createUser?: Maybe<User>;
+  createUser: CreateUserResponse;
 };
 
 
 export type MutationCreateUserArgs = {
-  name: Scalars['String'];
+  input: CreateUserInput;
+};
+
+export type MutationBaseResponse = {
+  code: MutationResponseCode;
+  errors?: Maybe<Array<MutationResponseError>>;
+  message?: Maybe<Scalars['String']>;
+};
+
+export enum MutationResponseCode {
+  BadRequest = 'BAD_REQUEST',
+  Forbidden = 'FORBIDDEN',
+  Ok = 'OK'
+}
+
+export type MutationResponseError = {
+  __typename?: 'MutationResponseError';
+  message: Scalars['String'];
 };
 
 export type Query = {
@@ -60,6 +91,13 @@ export type User = {
   name: Scalars['String'];
 };
 
+export type CreateUserMutationVariables = Exact<{
+  input: CreateUserInput;
+}>;
+
+
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'CreateUserResponse', code: MutationResponseCode, errors?: Array<{ __typename?: 'MutationResponseError', message: string }> | null | undefined, user?: { __typename?: 'User', id: string, name: string } | null | undefined } };
+
 export type ThoughtsQueryVariables = Exact<{
   genre: Genre;
 }>;
@@ -68,6 +106,24 @@ export type ThoughtsQueryVariables = Exact<{
 export type ThoughtsQuery = { __typename?: 'Query', thoughts: Array<{ __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined> };
 
 
+export const CreateUserDocument = gql`
+    mutation CreateUser($input: CreateUserInput!) {
+  createUser(input: $input) {
+    code
+    errors {
+      message
+    }
+    user {
+      id
+      name
+    }
+  }
+}
+    `;
+
+export function useCreateUserMutation() {
+  return Urql.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument);
+};
 export const ThoughtsDocument = gql`
     query Thoughts($genre: Genre!) {
   thoughts(genre: $genre) {

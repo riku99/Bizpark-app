@@ -1,9 +1,11 @@
 import auth from "@react-native-firebase/auth";
 import { useCallback } from "react";
 import { useToast } from "react-native-toast-notifications";
+import { useCreateUserMutation } from "src/generated/graphql";
 
 export const useSignUp = () => {
   const toast = useToast();
+  const [_, createUserMutation] = useCreateUserMutation();
 
   const registerUser = useCallback(
     async ({
@@ -19,8 +21,17 @@ export const useSignUp = () => {
         const {
           user: firebaseUser,
         } = await auth().createUserWithEmailAndPassword(email, password);
-        const token = await firebaseUser.getIdToken();
+        const idToken = await firebaseUser.getIdToken();
+        const response = await createUserMutation({
+          input: {
+            name,
+            email,
+            idToken,
+          },
+        });
+        console.log(response);
       } catch (error) {
+        console.log(error);
         if (error.code === "auth/email-already-in-use") {
           toast.show("メールアドレスは既に使用されています", {
             type: "danger",

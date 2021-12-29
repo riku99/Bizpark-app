@@ -15,7 +15,6 @@ type FormProps<T> = {
 
 const Form = <T extends {}>({
   label,
-  password,
   inputProps,
   controllerProps,
 }: FormProps<T>) => {
@@ -38,7 +37,6 @@ const Form = <T extends {}>({
             _focus={{
               borderWidth: 0,
             }}
-            type={password ? "password" : "text"}
             onChangeText={onChange}
             {...inputProps}
           />
@@ -75,7 +73,6 @@ export const MailFormScreen = ({ navigation }: Props) => {
 
   const onSubmmitPress = () => {
     handleSubmit(async (data) => {
-      console.log(data);
       await registerUser({
         email: data.email,
         password: data.password,
@@ -107,6 +104,7 @@ export const MailFormScreen = ({ navigation }: Props) => {
             password
             inputProps={{
               placeholder: "パスワード(8文字以上)",
+              type: "password",
             }}
             controllerProps={{ control, name: "password" }}
           />
@@ -128,7 +126,7 @@ export const MailFormScreen = ({ navigation }: Props) => {
             titleStyle={{
               fontWeight: "bold",
             }}
-            // disabled={disabled}
+            disabled={disabled}
             activeOpacity={1}
             onPress={onSubmmitPress}
           />
