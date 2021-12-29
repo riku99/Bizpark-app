@@ -10,13 +10,13 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "cp &quot;${PROJECT_DIR}/../.env.prod&quot; &quot;${PROJECT_DIR}/../.prod&quot;&#10;">
+               scriptText = "cp &quot;${PROJECT_DIR}/../.env.stg&quot; &quot;${PROJECT_DIR}/../.stg&quot;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-                     BuildableName = "bizpark.app"
-                     BlueprintName = "bizpark"
+                     BlueprintIdentifier = "324906D2277C591200F54197"
+                     BuildableName = "bizpark-stg.app"
+                     BlueprintName = "bizpark-stg"
                      ReferencedContainer = "container:bizpark.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
@@ -32,9 +32,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "bizpark.app"
-               BlueprintName = "bizpark"
+               BlueprintIdentifier = "324906D2277C591200F54197"
+               BuildableName = "bizpark-stg.app"
+               BlueprintName = "bizpark-stg"
                ReferencedContainer = "container:bizpark.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -72,9 +72,9 @@
          runnableDebuggingMode = "0">
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "bizpark.app"
-            BlueprintName = "bizpark"
+            BlueprintIdentifier = "324906D2277C591200F54197"
+            BuildableName = "bizpark-stg.app"
+            BlueprintName = "bizpark-stg"
             ReferencedContainer = "container:bizpark.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
@@ -85,16 +85,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "bizpark.app"
-            BlueprintName = "bizpark"
+            BlueprintIdentifier = "324906D2277C591200F54197"
+            BuildableName = "bizpark-stg.app"
+            BlueprintName = "bizpark-stg"
             ReferencedContainer = "container:bizpark.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

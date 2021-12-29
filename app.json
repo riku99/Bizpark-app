@@ -21,7 +21,7 @@
       ]
     },
     "ios": {
-      "googleServicesFile": "./ios/bizpark/GoogleService-Info.plist"
+      "googleServicesFile": "./ios/bizpark/GoogleServices/Dev/GoogleService-Info.plist"
     },
     "plugins": ["@react-native-firebase/app"]
   },

@@ -10,13 +10,13 @@
             ActionType = "Xcode.IDEStandardExecutionActionsCore.ExecutionActionType.ShellScriptAction">
             <ActionContent
                title = "Run Script"
-               scriptText = "cp &quot;${PROJECT_DIR}/../.env.prod&quot; &quot;${PROJECT_DIR}/../.prod&quot;&#10;">
+               scriptText = "cp &quot;${PROJECT_DIR}/../.env.dev&quot; &quot;${PROJECT_DIR}/../.env&quot;&#10;">
                <EnvironmentBuildable>
                   <BuildableReference
                      BuildableIdentifier = "primary"
-                     BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-                     BuildableName = "bizpark.app"
-                     BlueprintName = "bizpark"
+                     BlueprintIdentifier = "324906BC277C58F800F54197"
+                     BuildableName = "bizpark-dev.app"
+                     BlueprintName = "bizpark-dev"
                      ReferencedContainer = "container:bizpark.xcodeproj">
                   </BuildableReference>
                </EnvironmentBuildable>
@@ -32,9 +32,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "bizpark.app"
-               BlueprintName = "bizpark"
+               BlueprintIdentifier = "324906BC277C58F800F54197"
+               BuildableName = "bizpark-dev.app"
+               BlueprintName = "bizpark-dev"
                ReferencedContainer = "container:bizpark.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -59,7 +59,7 @@
       </Testables>
    </TestAction>
    <LaunchAction
-      buildConfiguration = "Release"
+      buildConfiguration = "Debug"
       selectedDebuggerIdentifier = "Xcode.DebuggerFoundation.Debugger.LLDB"
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       launchStyle = "0"
@@ -78,6 +78,15 @@
             ReferencedContainer = "container:bizpark.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "324906BC277C58F800F54197"
+            BuildableName = "bizpark-dev.app"
+            BlueprintName = "bizpark-dev"
+            ReferencedContainer = "container:bizpark.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
@@ -85,16 +94,15 @@
       savedToolIdentifier = ""
       useCustomWorkingDirectory = "NO"
       debugDocumentVersioning = "YES">
-      <BuildableProductRunnable
-         runnableDebuggingMode = "0">
+      <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "bizpark.app"
-            BlueprintName = "bizpark"
+            BlueprintIdentifier = "324906BC277C58F800F54197"
+            BuildableName = "bizpark-dev.app"
+            BlueprintName = "bizpark-dev"
             ReferencedContainer = "container:bizpark.xcodeproj">
          </BuildableReference>
-      </BuildableProductRunnable>
+      </MacroExpansion>
    </ProfileAction>
    <AnalyzeAction
       buildConfiguration = "Debug">

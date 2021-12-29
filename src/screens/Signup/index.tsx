@@ -6,6 +6,7 @@ import { Bg } from "src/components/Bg";
 import { SwipeContent } from "./SwipeContent";
 import { Mail, Apple, Google } from "src/components/AuthButton";
 import { HIGHER_8_DEVICE } from "src/constants";
+import { useSignupWithApple } from "src/hooks/auth";
 
 type Props = RootNavigationProp<"Signup">;
 
@@ -16,8 +17,18 @@ export const SignupScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
+  const { signupWithApple } = useSignupWithApple();
+
   const onMailPress = () => {
     navigation.navigate("MailForm");
+  };
+
+  const onApplePress = async () => {
+    try {
+      await signupWithApple();
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   return (
@@ -28,7 +39,7 @@ export const SignupScreen = ({ navigation }: Props) => {
         </Box>
         <VStack space={4} px={8}>
           <Mail onPress={onMailPress} />
-          <Apple />
+          <Apple onPress={onApplePress} />
           <Google />
         </VStack>
         <Box flexDirection="row" justifyContent="center" mt={8}>

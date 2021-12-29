@@ -55,3 +55,8 @@ web-build/
 dist/
 
 ./GoogleService-Info.plist
+
+.env
+.env.stg
+.env.dev
+.env.prod

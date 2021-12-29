@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>CLIENT_ID</key>
+	<string>384037519929-gl26m40f5tlbkfueadk4i7998v10lita.apps.googleusercontent.com</string>
+	<key>REVERSED_CLIENT_ID</key>
+	<string>com.googleusercontent.apps.384037519929-gl26m40f5tlbkfueadk4i7998v10lita</string>
+	<key>API_KEY</key>
+	<string>AIzaSyB4eriiPmCHiyJux1bWeiFOeeXeDJc2RNE</string>
+	<key>GCM_SENDER_ID</key>
+	<string>384037519929</string>
+	<key>PLIST_VERSION</key>
+	<string>1</string>
+	<key>BUNDLE_ID</key>
+	<string>com.riku.bizpark-stg</string>
+	<key>PROJECT_ID</key>
+	<string>bizpark-stg</string>
+	<key>STORAGE_BUCKET</key>
+	<string>bizpark-stg.appspot.com</string>
+	<key>IS_ADS_ENABLED</key>
+	<false></false>
+	<key>IS_ANALYTICS_ENABLED</key>
+	<false></false>
+	<key>IS_APPINVITE_ENABLED</key>
+	<true></true>
+	<key>IS_GCM_ENABLED</key>
+	<true></true>
+	<key>IS_SIGNIN_ENABLED</key>
+	<true></true>
+	<key>GOOGLE_APP_ID</key>
+	<string>1:384037519929:ios:1566b151c75cfe8e6943e8</string>
+</dict>
+</plist>
