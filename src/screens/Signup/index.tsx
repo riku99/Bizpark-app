@@ -6,7 +6,7 @@ import { Bg } from "src/components/Bg";
 import { SwipeContent } from "./SwipeContent";
 import { Mail, Apple, Google } from "src/components/AuthButton";
 import { HIGHER_8_DEVICE } from "src/constants";
-import { useSignupWithApple } from "src/hooks/auth";
+import { useSignupWithApple, useSignupWithGoogle } from "src/hooks/auth";
 
 type Props = RootNavigationProp<"Signup">;
 
@@ -18,6 +18,7 @@ export const SignupScreen = ({ navigation }: Props) => {
   }, [navigation]);
 
   const { signupWithApple } = useSignupWithApple();
+  const { signupWithGoogle } = useSignupWithGoogle();
 
   const onMailPress = () => {
     navigation.navigate("MailForm");
@@ -31,6 +32,10 @@ export const SignupScreen = ({ navigation }: Props) => {
     }
   };
 
+  const onGooglePress = async () => {
+    await signupWithGoogle();
+  };
+
   return (
     <Bg flex={1} bg="white">
       <SafeAreaView>
@@ -40,7 +45,7 @@ export const SignupScreen = ({ navigation }: Props) => {
         <VStack space={4} px={8}>
           <Mail onPress={onMailPress} />
           <Apple onPress={onApplePress} />
-          <Google />
+          <Google onPress={onGooglePress} />
         </VStack>
         <Box flexDirection="row" justifyContent="center" mt={8}>
           <Text color="textBlack">既に登録済みの方</Text>

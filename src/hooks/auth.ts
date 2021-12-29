@@ -3,6 +3,12 @@ import { useCallback } from "react";
 import { useToast } from "react-native-toast-notifications";
 import { useCreateUserMutation } from "src/generated/graphql";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
+import Config from "react-native-config";
+
+GoogleSignin.configure({
+  webClientId: Config.GOOGLE_WEB_CLIENT_ID,
+});
 
 export const useSignUpWithEmail = () => {
   const toast = useToast();
@@ -65,23 +71,15 @@ export const useSignupWithApple = () => {
   const toast = useToast();
 
   const signupWithApple = useCallback(async () => {
-    console.log("✋run");
     const appleAuthResponse = await appleAuth.performRequest({
       requestedOperation: appleAuth.Operation.LOGOUT,
       requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
     });
 
-    console.log("✋response ok");
-
-    console.log(appleAuthResponse.user);
-
     if (!appleAuthResponse.identityToken) {
-      console.log("✋error");
       toast.show("何かしらのエラーが発生しました", { type: "danger" });
       return;
     }
-
-    console.log("✋token ok");
 
     const { identityToken, nonce } = appleAuthResponse;
     const appleCredential = auth.AppleAuthProvider.credential(
@@ -90,10 +88,37 @@ export const useSignupWithApple = () => {
     );
 
     const result = await auth().signInWithCredential(appleCredential);
-    console.log(result.user);
+
+    // ToDo mutation
   }, [toast]);
 
   return {
     signupWithApple,
+  };
+};
+
+export const useSignupWithGoogle = () => {
+  const [userData, createUserMutation] = useCreateUserMutation();
+
+  const signupWithGoogle = useCallback(async () => {
+    try {
+      const { idToken } = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      const googleResult = await auth().signInWithCredential(googleCredential);
+      const userIdToken = await googleResult.user.getIdToken();
+      const response = await createUserMutation({
+        input: {
+          email: googleResult.user.email,
+          idToken: userIdToken,
+          name: googleResult.user.displayName,
+        },
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }, []);
+
+  return {
+    signupWithGoogle,
   };
 };
