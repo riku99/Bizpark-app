@@ -126,7 +126,7 @@ export const MailFormScreen = ({ navigation }: Props) => {
             titleStyle={{
               fontWeight: "bold",
             }}
-            disabled={disabled}
+            // disabled={disabled}
             activeOpacity={1}
             onPress={onSubmmitPress}
           />
