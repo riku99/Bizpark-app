@@ -26,6 +26,7 @@ export const UrqlProvider = ({ children }: Props) => {
       }
 
       if (firstError.extensions.code === "INTERNAL_SERVER_ERROR") {
+        // console.log(error.graphQLErrors[0].message);
         toast.show("何らかのエラーが発生しました", { type: "danger" });
         return;
       }

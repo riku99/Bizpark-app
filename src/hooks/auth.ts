@@ -114,20 +114,6 @@ export const useSignupWithGoogle = () => {
           name: googleResult.user.displayName,
         },
       });
-
-      // if (error) {
-      //   const firstError = error.graphQLErrors[0];
-      //   if (firstError.extensions.code === "ALREADY_EXISTING") {
-      //     toast.show(firstError.message, { type: "danger" });
-      //   } else {
-      //     toast.show("何らかのエラーが発生しました", { type: "danger" });
-      //   }
-      // }
-      // console.log(error.graphQLErrors[0].message);
-      // console.log(error.graphQLErrors[0].extensions.code);
-      // console.log(error.message);
-      // console.log(error.name);
-      // console.log(error.stack);
     } catch (e) {
       console.log(e);
     }

@@ -21,14 +21,6 @@ export type CreateUserInput = {
   name: Scalars['String'];
 };
 
-export type CreateUserResponse = MutationBaseResponse & {
-  __typename?: 'CreateUserResponse';
-  code: MutationResponseCode;
-  errors?: Maybe<Array<MutationResponseError>>;
-  message?: Maybe<Scalars['String']>;
-  user?: Maybe<User>;
-};
-
 export enum Genre {
   Business = 'BUSINESS',
   Economy = 'ECONOMY',
@@ -38,29 +30,12 @@ export enum Genre {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  createUser: CreateUserResponse;
+  createUser: User;
 };
 
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
-};
-
-export type MutationBaseResponse = {
-  code: MutationResponseCode;
-  errors?: Maybe<Array<MutationResponseError>>;
-  message?: Maybe<Scalars['String']>;
-};
-
-export enum MutationResponseCode {
-  BadRequest = 'BAD_REQUEST',
-  Forbidden = 'FORBIDDEN',
-  Ok = 'OK'
-}
-
-export type MutationResponseError = {
-  __typename?: 'MutationResponseError';
-  message: Scalars['String'];
 };
 
 export type Query = {
@@ -96,7 +71,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'CreateUserResponse', code: MutationResponseCode, errors?: Array<{ __typename?: 'MutationResponseError', message: string }> | null | undefined, user?: { __typename?: 'User', id: string, name: string } | null | undefined } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string } };
 
 export type ThoughtsQueryVariables = Exact<{
   genre: Genre;
@@ -109,14 +84,8 @@ export type ThoughtsQuery = { __typename?: 'Query', thoughts: Array<{ __typename
 export const CreateUserDocument = gql`
     mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {
-    code
-    errors {
-      message
-    }
-    user {
-      id
-      name
-    }
+    id
+    name
   }
 }
     `;
