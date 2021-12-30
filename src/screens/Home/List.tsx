@@ -9,6 +9,7 @@ type Props = { data: QueryItemData[] };
 export const List = ({ data }: Props) => {
   const renderItem = useCallback(
     ({ item, index }: { item: QueryItemData; index: number }) => {
+      const picked = item.picked.length;
       return (
         <ThoughtCard
           title={item.title}
@@ -17,7 +18,7 @@ export const List = ({ data }: Props) => {
             name: item.contributor.name,
             imageUrl: item.contributor.imageUrl,
           }}
-          picked={false}
+          picked={!!picked}
           key={item.id}
           mt={index !== 0 ? 4 : 0}
         />

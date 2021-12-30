@@ -42,6 +42,11 @@ export type MutationCreateUserArgs = {
   input: CreateUserInput;
 };
 
+export type Pick = {
+  __typename?: 'Pick';
+  id: Scalars['ID'];
+};
+
 export type Query = {
   __typename?: 'Query';
   thoughts: Array<Maybe<Thought>>;
@@ -58,6 +63,7 @@ export type Thought = {
   contributor?: Maybe<User>;
   createdAt?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  picked: Array<Maybe<Pick>>;
   text: Scalars['String'];
   title?: Maybe<Scalars['String']>;
 };
@@ -82,7 +88,7 @@ export type ThoughtsQueryVariables = Exact<{
 }>;
 
 
-export type ThoughtsQuery = { __typename?: 'Query', thoughts: Array<{ __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined> };
+export type ThoughtsQuery = { __typename?: 'Query', thoughts: Array<{ __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, picked: Array<{ __typename?: 'Pick', id: string } | null | undefined> } | null | undefined> };
 
 
 export const CreateUserDocument = gql`
@@ -130,6 +136,9 @@ export const ThoughtsDocument = gql`
       id
       name
       imageUrl
+    }
+    picked {
+      id
     }
   }
 }

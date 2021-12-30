@@ -25,6 +25,9 @@ export const BottomTab = () => {
         headerStyle: {
           backgroundColor: useColorModeValue(colors.lt.bg, colors.dt.bg),
         },
+        headerTitleStyle: {
+          color: useColorModeValue(colors.textBlack, "white"),
+        },
         tabBarStyle: {
           backgroundColor: useColorModeValue(colors.lt.bg, colors.dt.bg),
         },

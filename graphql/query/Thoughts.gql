@@ -9,5 +9,8 @@ query Thoughts($genre: Genre!) {
       name
       imageUrl
     }
+    picked {
+      id
+    }
   }
 }

@@ -3,19 +3,40 @@ import {
   InMemoryCache,
   ApolloProvider as ApolloProviderBase,
   from,
-  HttpLink,
+  createHttpLink,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
+import { setContext } from "@apollo/client/link/context";
 import React from "react";
 import { useToast } from "react-native-toast-notifications";
 import { CustomErrorResponseCode } from "src/generated/graphql";
+import auth from "@react-native-firebase/auth";
 
 type Props = {
   children: JSX.Element;
 };
 
-const httpLink = new HttpLink({
+const httpLink = createHttpLink({
   uri: "http://localhost:5001/bizpark-dev/asia-northeast1/graphql",
+});
+
+const authLink = setContext(async (_, { headers }) => {
+  const currentUser = auth().currentUser;
+  if (currentUser) {
+    const idToken = await currentUser.getIdToken();
+    return {
+      headers: {
+        ...headers,
+        authorization: `Bearer ${idToken}`,
+      },
+    };
+  } else {
+    return {
+      headers: {
+        ...headers,
+      },
+    };
+  }
 });
 
 export const ApolloProvider = ({ children }: Props) => {
@@ -45,7 +66,7 @@ export const ApolloProvider = ({ children }: Props) => {
   });
 
   const client = new ApolloClient({
-    link: from([errorLink, httpLink]),
+    link: from([errorLink, authLink.concat(httpLink)]),
     cache: new InMemoryCache(),
   });
 

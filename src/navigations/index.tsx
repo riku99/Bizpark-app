@@ -41,7 +41,6 @@ export const RootNavigation = React.memo(() => {
           headerBackTitleVisible: false,
         }}
       >
-        <Stack.Screen name="Signup" component={SignupScreen} />
         <Stack.Screen
           name="Tab"
           component={BottomTab}
@@ -61,6 +60,7 @@ export const RootNavigation = React.memo(() => {
             headerBackTitleVisible: false,
           }}
         >
+          <Stack.Screen name="Signup" component={SignupScreen} />
           <Stack.Screen name="Signin" component={SigninScreen} />
           <Stack.Screen name="MailForm" component={MailFormScreen} />
         </Stack.Group>
