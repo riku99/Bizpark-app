@@ -11,11 +11,11 @@ export default function App() {
   return (
     <NativeBaseThemeProvider>
       <NavigationProvider>
-        <UrqlProvider>
-          <ToastProvider>
+        <ToastProvider>
+          <UrqlProvider>
             <RootNavigation />
-          </ToastProvider>
-        </UrqlProvider>
+          </UrqlProvider>
+        </ToastProvider>
       </NavigationProvider>
     </NativeBaseThemeProvider>
   );

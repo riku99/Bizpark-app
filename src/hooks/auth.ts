@@ -98,6 +98,7 @@ export const useSignupWithApple = () => {
 };
 
 export const useSignupWithGoogle = () => {
+  const toast = useToast();
   const [userData, createUserMutation] = useCreateUserMutation();
 
   const signupWithGoogle = useCallback(async () => {
@@ -106,17 +107,31 @@ export const useSignupWithGoogle = () => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       const googleResult = await auth().signInWithCredential(googleCredential);
       const userIdToken = await googleResult.user.getIdToken();
-      const response = await createUserMutation({
+      const { data, error } = await createUserMutation({
         input: {
           email: googleResult.user.email,
           idToken: userIdToken,
           name: googleResult.user.displayName,
         },
       });
+
+      // if (error) {
+      //   const firstError = error.graphQLErrors[0];
+      //   if (firstError.extensions.code === "ALREADY_EXISTING") {
+      //     toast.show(firstError.message, { type: "danger" });
+      //   } else {
+      //     toast.show("何らかのエラーが発生しました", { type: "danger" });
+      //   }
+      // }
+      // console.log(error.graphQLErrors[0].message);
+      // console.log(error.graphQLErrors[0].extensions.code);
+      // console.log(error.message);
+      // console.log(error.name);
+      // console.log(error.stack);
     } catch (e) {
-      console.error(e);
+      console.log(e);
     }
-  }, []);
+  }, [toast]);
 
   return {
     signupWithGoogle,

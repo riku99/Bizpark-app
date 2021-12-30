@@ -35,7 +35,7 @@ export const ThoughtCard = ({
       shadow={2}
       {...props}
     >
-      <Flex direction="row" alignItems="center">
+      <Box flexDirection="row" alignItems="center">
         <Image
           uri={contributor.imageUrl}
           style={{ height: 34, width: 34, borderRadius: 34 }}
@@ -43,7 +43,7 @@ export const ThoughtCard = ({
         <Text fontWeight="bold" ml={2}>
           {contributor.name}
         </Text>
-      </Flex>
+      </Box>
       {title && (
         <Text fontSize={16} fontWeight="bold" mt={2}>
           {title}
@@ -52,7 +52,7 @@ export const ThoughtCard = ({
       <Text maxH={20} mt={!title ? 2 : 1}>
         {text}
       </Text>
-      <Flex mt={2} direction="row" alignItems="center">
+      <Box mt={2} flexDirection="row" alignItems="center">
         <Text color="pink" fontWeight="bold" fontSize={16}>
           Pick
         </Text>
@@ -61,7 +61,7 @@ export const ThoughtCard = ({
           checked={checked}
           style={{ height: 26, width: 26, marginLeft: 6 }}
         />
-      </Flex>
+      </Box>
     </Box>
   );
 };
