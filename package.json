@@ -7,7 +7,8 @@
     "android": "expo run:android",
     "ios": "expo run:ios",
     "web": "expo start --web",
-    "generate": "graphql-codegen"
+    "generate": "graphql-codegen",
+    "cache": "npx react-native start -- --reset-cache"
   },
   "dependencies": {
     "@apollo/client": "^3.5.6",
@@ -44,7 +45,6 @@
     "react-native-tab-view": "^3.1.1",
     "react-native-toast-notifications": "^3.2.3",
     "react-native-web": "0.17.1",
-    "urql": "^2.0.6",
     "yarn": "^1.22.17"
   },
   "devDependencies": {

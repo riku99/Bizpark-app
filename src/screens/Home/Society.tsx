@@ -6,7 +6,7 @@ import { List } from "./List";
 import { Indicator } from "src/components/Indicator";
 
 export const Society = React.memo(() => {
-  const { data } = useThoughtsQuery({
+  const { data, error } = useThoughtsQuery({
     variables: { genre: Genre.Society },
   });
 
