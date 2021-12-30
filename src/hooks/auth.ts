@@ -1,14 +1,12 @@
 import auth from "@react-native-firebase/auth";
 import { useCallback } from "react";
 import { useToast } from "react-native-toast-notifications";
-import {
-  useCreateUserMutation,
-  CustomErrorResponseCode,
-} from "src/generated/graphql";
+import { useCreateUserMutation } from "src/generated/graphql";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Config from "react-native-config";
 import { meVar } from "src/globals/me";
+import { maybe } from "@apollo/client/utilities";
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
@@ -136,8 +134,9 @@ export const useSignupWithGoogle = () => {
           },
         },
       });
-      console.log("response id is" + data.createUser.id);
       meVar.id(data.createUser.id);
+      meVar.name(data.createUser.name);
+      meVar.loggedIn(true);
     } catch (e) {
       console.log(e);
     }

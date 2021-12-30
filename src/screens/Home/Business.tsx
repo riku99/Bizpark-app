@@ -14,8 +14,6 @@ export const Business = React.memo(() => {
     return <Indicator style={{ marginTop: 10 }} />;
   }
 
-  console.log(data.thoughts[0].picked);
-
   return (
     <Bg flex={1} pt={4} w="100%" h="100%">
       <VStack px={4}>

@@ -11,6 +11,8 @@ import React from "react";
 import { useToast } from "react-native-toast-notifications";
 import { CustomErrorResponseCode } from "src/generated/graphql";
 import auth from "@react-native-firebase/auth";
+import { Alert } from "react-native";
+import { signOut } from "src/helpers/auth";
 
 type Props = {
   children: JSX.Element;
@@ -62,7 +64,15 @@ export const ApolloProvider = ({ children }: Props) => {
       return;
     }
 
-    // TODO: 認証エラー時のログアウト
+    if (code === "FORBIDDEN") {
+      Alert.alert("エラーが発生しました", "ログインし直してください", [
+        {
+          onPress: async () => {
+            await signOut();
+          },
+        },
+      ]);
+    }
   });
 
   const client = new ApolloClient({

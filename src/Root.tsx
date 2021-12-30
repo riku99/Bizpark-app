@@ -9,18 +9,26 @@ export const Root = () => {
   const myId = useReactiveVar(meVar.id);
   const myName = useReactiveVar(meVar.name);
 
+  // ストレージのリセット時は全て別の場所(signOut)で行うのでここではデータが存在した時のみ格納
   useEffect(() => {
     (async function () {
-      await AsyncStorage.setItem(
-        storageKeys.loggedIn,
-        JSON.stringify(loggedIn)
-      );
+      if (loggedIn) {
+        await AsyncStorage.setItem(
+          storageKeys.loggedIn,
+          JSON.stringify(loggedIn)
+        );
+      }
       if (myId) {
         await AsyncStorage.setItem(storageKeys.id, JSON.stringify(myId));
       }
       if (myName) {
         await AsyncStorage.setItem(storageKeys.name, JSON.stringify(myName));
       }
+
+      const _login = await AsyncStorage.getItem(storageKeys.loggedIn);
+      console.log("Storage login is " + _login);
+      const _id = await AsyncStorage.getItem(storageKeys.id);
+      console.log("Storage id is " + _id);
     })();
   }, [loggedIn, myName, myId]);
 
