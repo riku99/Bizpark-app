@@ -1,7 +1,10 @@
 import auth from "@react-native-firebase/auth";
 import { useCallback } from "react";
 import { useToast } from "react-native-toast-notifications";
-import { useCreateUserMutation } from "src/generated/graphql";
+import {
+  useCreateUserMutation,
+  CustomErrorResponseCode,
+} from "src/generated/graphql";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Config from "react-native-config";

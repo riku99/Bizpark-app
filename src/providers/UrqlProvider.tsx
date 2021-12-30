@@ -8,6 +8,7 @@ import {
 } from "urql";
 import React from "react";
 import { useToast } from "react-native-toast-notifications";
+import { CustomErrorResponseCode } from "src/generated/graphql";
 
 type Props = {
   children: JSX.Element;
@@ -19,15 +20,21 @@ export const UrqlProvider = ({ children }: Props) => {
   const customErrorExchange = errorExchange({
     onError: (error) => {
       const firstError = error.graphQLErrors[0];
+      const code = firstError.extensions.code;
 
       if (error.networkError) {
         toast.show("ネットワークに接続されていません");
         return;
       }
 
-      if (firstError.extensions.code === "INTERNAL_SERVER_ERROR") {
+      if (code === "INTERNAL_SERVER_ERROR") {
         // console.log(error.graphQLErrors[0].message);
         toast.show("何らかのエラーが発生しました", { type: "danger" });
+        return;
+      }
+
+      if (code === CustomErrorResponseCode.AlreadyUserExisting) {
+        toast.show("既にユーザーが存在しています", { type: "danger" });
         return;
       }
 

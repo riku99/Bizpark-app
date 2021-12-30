@@ -21,6 +21,10 @@ export type CreateUserInput = {
   name: Scalars['String'];
 };
 
+export enum CustomErrorResponseCode {
+  AlreadyUserExisting = 'ALREADY_USER_EXISTING'
+}
+
 export enum Genre {
   Business = 'BUSINESS',
   Economy = 'ECONOMY',

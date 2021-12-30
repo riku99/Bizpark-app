@@ -25,11 +25,7 @@ export const SignupScreen = ({ navigation }: Props) => {
   };
 
   const onApplePress = async () => {
-    try {
-      await signupWithApple();
-    } catch (e) {
-      console.log(e);
-    }
+    await signupWithApple();
   };
 
   const onGooglePress = async () => {
