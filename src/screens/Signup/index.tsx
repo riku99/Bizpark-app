@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useEffect } from "react";
 import { Box, VStack, Text, Pressable } from "native-base";
 import { RootNavigationProp } from "types";
 import { SafeAreaView } from "react-native";

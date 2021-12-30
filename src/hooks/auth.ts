@@ -8,6 +8,7 @@ import {
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Config from "react-native-config";
+import { meVar } from "src/globals/me";
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
@@ -135,6 +136,8 @@ export const useSignupWithGoogle = () => {
           },
         },
       });
+      console.log("response id is" + data.createUser.id);
+      meVar.id(data.createUser.id);
     } catch (e) {
       console.log(e);
     }
