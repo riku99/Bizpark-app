@@ -15,7 +15,7 @@ GoogleSignin.configure({
 
 export const useSignUpWithEmail = () => {
   const toast = useToast();
-  const [_, createUserMutation] = useCreateUserMutation();
+  const [createUserMutation] = useCreateUserMutation();
 
   const registerUser = useCallback(
     async ({
@@ -32,14 +32,16 @@ export const useSignUpWithEmail = () => {
           user: firebaseUser,
         } = await auth().createUserWithEmailAndPassword(email, password);
         const idToken = await firebaseUser.getIdToken();
-        const response = await createUserMutation({
-          input: {
-            name,
-            email,
-            idToken,
+        const { data, errors } = await createUserMutation({
+          variables: {
+            input: {
+              name,
+              email,
+              idToken,
+            },
           },
         });
-        console.log(response);
+        console.log(data);
       } catch (error) {
         console.log(error);
         if (error.code === "auth/email-already-in-use") {
@@ -72,7 +74,7 @@ export const useSignUpWithEmail = () => {
 
 export const useSignupWithApple = () => {
   const toast = useToast();
-  const [userData, createUserMutation] = useCreateUserMutation();
+  const [createUserMutation] = useCreateUserMutation();
 
   const signupWithApple = useCallback(async () => {
     try {
@@ -95,11 +97,13 @@ export const useSignupWithApple = () => {
       const result = await auth().signInWithCredential(appleCredential);
       const userIdToken = await result.user.getIdToken();
 
-      const { data, error } = await createUserMutation({
-        input: {
-          email: result.user.email,
-          idToken: userIdToken,
-          name: result.user.displayName,
+      const { data, errors } = await createUserMutation({
+        variables: {
+          input: {
+            email: result.user.email,
+            idToken: userIdToken,
+            name: result.user.displayName,
+          },
         },
       });
     } catch (e) {
@@ -114,7 +118,7 @@ export const useSignupWithApple = () => {
 
 export const useSignupWithGoogle = () => {
   const toast = useToast();
-  const [userData, createUserMutation] = useCreateUserMutation();
+  const [createUserMutation] = useCreateUserMutation();
 
   const signupWithGoogle = useCallback(async () => {
     try {
@@ -122,11 +126,13 @@ export const useSignupWithGoogle = () => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       const googleResult = await auth().signInWithCredential(googleCredential);
       const userIdToken = await googleResult.user.getIdToken();
-      const { data, error } = await createUserMutation({
-        input: {
-          email: googleResult.user.email,
-          idToken: userIdToken,
-          name: googleResult.user.displayName,
+      const { data, errors } = await createUserMutation({
+        variables: {
+          input: {
+            email: googleResult.user.email,
+            idToken: userIdToken,
+            name: googleResult.user.displayName,
+          },
         },
       });
     } catch (e) {

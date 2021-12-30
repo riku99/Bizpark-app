@@ -6,10 +6,9 @@ import { List } from "./List";
 import { Indicator } from "src/components/Indicator";
 
 export const Politics = React.memo(() => {
-  const [result, reexecuteQuery] = useThoughtsQuery({
+  const { data } = useThoughtsQuery({
     variables: { genre: Genre.Politics },
   });
-  const { data } = result;
 
   if (!data) {
     return <Indicator style={{ marginTop: 10 }} />;

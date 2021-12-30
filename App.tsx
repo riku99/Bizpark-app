@@ -5,6 +5,7 @@ import { UrqlProvider } from "src/providers/UrqlProvider";
 import { NavigationProvider } from "src/providers/NavigationProvider";
 import { ToastProvider } from "src/providers/ToastProvider";
 import Config from "react-native-config";
+import { ApolloProvider } from "src/providers/ApolloProvider";
 
 export default function App() {
   console.log("🌟 ENV is " + Config.ENV);
@@ -12,9 +13,9 @@ export default function App() {
     <NativeBaseThemeProvider>
       <NavigationProvider>
         <ToastProvider>
-          <UrqlProvider>
+          <ApolloProvider>
             <RootNavigation />
-          </UrqlProvider>
+          </ApolloProvider>
         </ToastProvider>
       </NavigationProvider>
     </NativeBaseThemeProvider>
