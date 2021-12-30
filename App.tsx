@@ -1,10 +1,10 @@
 import React from "react";
 import { NativeBaseThemeProvider } from "src/providers/NativeBaseProvider";
-import { RootNavigation } from "src/navigations";
 import { NavigationProvider } from "src/providers/NavigationProvider";
 import { ToastProvider } from "src/providers/ToastProvider";
 import Config from "react-native-config";
 import { ApolloProvider } from "src/providers/ApolloProvider";
+import { Root } from "src/Root";
 
 export default function App() {
   console.log("🌟 ENV is " + Config.ENV);
@@ -13,7 +13,7 @@ export default function App() {
       <NavigationProvider>
         <ToastProvider>
           <ApolloProvider>
-            <RootNavigation />
+            <Root />
           </ApolloProvider>
         </ToastProvider>
       </NavigationProvider>

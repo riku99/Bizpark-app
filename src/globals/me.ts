@@ -9,3 +9,9 @@ export const meVar = {
   id,
   name,
 };
+
+export const storageKeys = {
+  loggedIn: "LOGGED_IN",
+  id: "ID",
+  name: "NAME",
+};

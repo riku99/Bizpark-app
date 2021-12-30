@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React from "react";
+import React, { useEffect } from "react";
 import { BottomTab } from "./Tab";
 import { StatusBar } from "expo-status-bar";
 import { RootStackParamList } from "types";
@@ -7,8 +7,9 @@ import { useColorModeValue, useTheme } from "native-base";
 import { SignupScreen } from "src/screens/Signup";
 import { SigninScreen } from "src/screens/Siginin";
 import { MailFormScreen } from "src/screens/MailForm";
-import { meVar } from "src/globals/me";
+import { meVar, storageKeys } from "src/globals/me";
 import { useReactiveVar } from "@apollo/client";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -17,6 +18,13 @@ export const RootNavigation = React.memo(() => {
 
   const myId = useReactiveVar(meVar.id);
   console.log("🌙 My id is " + myId);
+
+  useEffect(() => {
+    (async function () {
+      const d = await AsyncStorage.getItem(storageKeys.id);
+      console.log("👀 storage key is " + d);
+    })();
+  }, []);
 
   return (
     <>
