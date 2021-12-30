@@ -72,27 +72,39 @@ export const useSignUpWithEmail = () => {
 
 export const useSignupWithApple = () => {
   const toast = useToast();
+  const [userData, createUserMutation] = useCreateUserMutation();
 
   const signupWithApple = useCallback(async () => {
-    const appleAuthResponse = await appleAuth.performRequest({
-      requestedOperation: appleAuth.Operation.LOGOUT,
-      requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-    });
+    try {
+      const appleAuthResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGOUT,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+      });
 
-    if (!appleAuthResponse.identityToken) {
-      toast.show("何かしらのエラーが発生しました", { type: "danger" });
-      return;
+      if (!appleAuthResponse.identityToken) {
+        toast.show("何かしらのエラーが発生しました", { type: "danger" });
+        return;
+      }
+
+      const { identityToken, nonce } = appleAuthResponse;
+      const appleCredential = auth.AppleAuthProvider.credential(
+        identityToken,
+        nonce
+      );
+
+      const result = await auth().signInWithCredential(appleCredential);
+      const userIdToken = await result.user.getIdToken();
+
+      const { data, error } = await createUserMutation({
+        input: {
+          email: result.user.email,
+          idToken: userIdToken,
+          name: result.user.displayName,
+        },
+      });
+    } catch (e) {
+      console.log(e);
     }
-
-    const { identityToken, nonce } = appleAuthResponse;
-    const appleCredential = auth.AppleAuthProvider.credential(
-      identityToken,
-      nonce
-    );
-
-    const result = await auth().signInWithCredential(appleCredential);
-
-    // ToDo mutation
   }, [toast]);
 
   return {
