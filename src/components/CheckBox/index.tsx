@@ -21,8 +21,6 @@ export const CheckBox = ({ checked, onPress, style, ...props }: Props) => {
     ? props.boxOutlineColor
     : useColorModeValue("#4a7dff", "#4444ff");
 
-  console.log("cheched is " + checked);
-
   return (
     <Pressable
       onPress={() => {

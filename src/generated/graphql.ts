@@ -37,6 +37,11 @@ export enum Genre {
   Society = 'SOCIETY'
 }
 
+export type InitialResponse = {
+  __typename?: 'InitialResponse';
+  me: User;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createPick: Pick;
@@ -67,8 +72,8 @@ export type Pick = {
 
 export type Query = {
   __typename?: 'Query';
+  initialData: InitialResponse;
   thoughts: Array<Maybe<Thought>>;
-  users: Array<Maybe<User>>;
 };
 
 
@@ -114,6 +119,11 @@ export type DeletePickMutationVariables = Exact<{
 
 
 export type DeletePickMutation = { __typename?: 'Mutation', deletePick: { __typename?: 'Pick', id: string, thoughtId: string } };
+
+export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type InitialDataQuery = { __typename?: 'Query', initialData: { __typename?: 'InitialResponse', me: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined } } };
 
 export type ThoughtsQueryVariables = Exact<{
   genre: Genre;
@@ -225,6 +235,45 @@ export function useDeletePickMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeletePickMutationHookResult = ReturnType<typeof useDeletePickMutation>;
 export type DeletePickMutationResult = Apollo.MutationResult<DeletePickMutation>;
 export type DeletePickMutationOptions = Apollo.BaseMutationOptions<DeletePickMutation, DeletePickMutationVariables>;
+export const InitialDataDocument = gql`
+    query InitialData {
+  initialData {
+    me {
+      id
+      name
+      bio
+      imageUrl
+    }
+  }
+}
+    `;
+
+/**
+ * __useInitialDataQuery__
+ *
+ * To run a query within a React component, call `useInitialDataQuery` and pass it any options that fit your needs.
+ * When your component renders, `useInitialDataQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useInitialDataQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useInitialDataQuery(baseOptions?: Apollo.QueryHookOptions<InitialDataQuery, InitialDataQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<InitialDataQuery, InitialDataQueryVariables>(InitialDataDocument, options);
+      }
+export function useInitialDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InitialDataQuery, InitialDataQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<InitialDataQuery, InitialDataQueryVariables>(InitialDataDocument, options);
+        }
+export type InitialDataQueryHookResult = ReturnType<typeof useInitialDataQuery>;
+export type InitialDataLazyQueryHookResult = ReturnType<typeof useInitialDataLazyQuery>;
+export type InitialDataQueryResult = Apollo.QueryResult<InitialDataQuery, InitialDataQueryVariables>;
 export const ThoughtsDocument = gql`
     query Thoughts($genre: Genre!) {
   thoughts(genre: $genre) {

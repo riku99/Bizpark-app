@@ -1,0 +1,10 @@
+query InitialData {
+  initialData {
+    me {
+      id
+      name
+      bio
+      imageUrl
+    }
+  }
+}
