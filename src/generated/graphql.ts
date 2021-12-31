@@ -15,6 +15,10 @@ export type Scalars = {
   Float: number;
 };
 
+export type CreatePickInput = {
+  thoughtId: Scalars['String'];
+};
+
 export type CreateUserInput = {
   email: Scalars['String'];
   idToken: Scalars['String'];
@@ -34,7 +38,13 @@ export enum Genre {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  createPick: Pick;
   createUser: User;
+};
+
+
+export type MutationCreatePickArgs = {
+  input: CreatePickInput;
 };
 
 
@@ -45,6 +55,7 @@ export type MutationCreateUserArgs = {
 export type Pick = {
   __typename?: 'Pick';
   id: Scalars['ID'];
+  thoughtId?: Maybe<Scalars['String']>;
 };
 
 export type Query = {
@@ -76,6 +87,13 @@ export type User = {
   name: Scalars['String'];
 };
 
+export type CreatePickMutationVariables = Exact<{
+  input: CreatePickInput;
+}>;
+
+
+export type CreatePickMutation = { __typename?: 'Mutation', createPick: { __typename?: 'Pick', id: string, thoughtId?: string | null | undefined } };
+
 export type CreateUserMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
@@ -91,6 +109,40 @@ export type ThoughtsQueryVariables = Exact<{
 export type ThoughtsQuery = { __typename?: 'Query', thoughts: Array<{ __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, picked: Array<{ __typename?: 'Pick', id: string } | null | undefined> } | null | undefined> };
 
 
+export const CreatePickDocument = gql`
+    mutation CreatePick($input: CreatePickInput!) {
+  createPick(input: $input) {
+    id
+    thoughtId
+  }
+}
+    `;
+export type CreatePickMutationFn = Apollo.MutationFunction<CreatePickMutation, CreatePickMutationVariables>;
+
+/**
+ * __useCreatePickMutation__
+ *
+ * To run a mutation, you first call `useCreatePickMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreatePickMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createPickMutation, { data, loading, error }] = useCreatePickMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreatePickMutation(baseOptions?: Apollo.MutationHookOptions<CreatePickMutation, CreatePickMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreatePickMutation, CreatePickMutationVariables>(CreatePickDocument, options);
+      }
+export type CreatePickMutationHookResult = ReturnType<typeof useCreatePickMutation>;
+export type CreatePickMutationResult = Apollo.MutationResult<CreatePickMutation>;
+export type CreatePickMutationOptions = Apollo.BaseMutationOptions<CreatePickMutation, CreatePickMutationVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {

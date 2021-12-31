@@ -1,0 +1,6 @@
+mutation CreatePick($input: CreatePickInput!) {
+  createPick(input: $input) {
+    id
+    thoughtId
+  }
+}

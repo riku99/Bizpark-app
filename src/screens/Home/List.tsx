@@ -12,6 +12,7 @@ export const List = ({ data }: Props) => {
       const picked = item.picked.length;
       return (
         <ThoughtCard
+          id={item.id}
           title={item.title}
           text={item.text}
           contributor={{
