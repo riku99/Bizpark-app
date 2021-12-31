@@ -45,33 +45,38 @@ export const ApolloProvider = ({ children }: Props) => {
   const toast = useToast();
 
   const errorLink = onError((error) => {
-    const firstError = error.graphQLErrors[0];
-    const code = firstError.extensions.code;
+    try {
+      const firstError = error.graphQLErrors[0];
+      const code = firstError.extensions.code;
 
-    if (error.networkError) {
-      toast.show("ネットワークに接続されていません");
-      return;
-    }
+      if (error.networkError) {
+        toast.show("ネットワークに接続されていません");
+        return;
+      }
 
-    if (code === "INTERNAL_SERVER_ERROR") {
-      // console.log(error.graphQLErrors[0].message);
-      toast.show("何らかのエラーが発生しました", { type: "danger" });
-      return;
-    }
+      if (code === "INTERNAL_SERVER_ERROR") {
+        // console.log(error.graphQLErrors[0].message);
+        toast.show("何らかのエラーが発生しました", { type: "danger" });
+        return;
+      }
 
-    if (code === CustomErrorResponseCode.AlreadyUserExisting) {
-      toast.show("既にユーザーが存在しています", { type: "danger" });
-      return;
-    }
+      if (code === CustomErrorResponseCode.AlreadyUserExisting) {
+        toast.show("既にユーザーが存在しています", { type: "danger" });
+        return;
+      }
 
-    if (code === "FORBIDDEN") {
-      Alert.alert("エラーが発生しました", "ログインし直してください", [
-        {
-          onPress: async () => {
-            await signOut();
+      if (code === "FORBIDDEN") {
+        Alert.alert("エラーが発生しました", "ログインし直してください", [
+          {
+            onPress: async () => {
+              await signOut();
+            },
           },
-        },
-      ]);
+        ]);
+        return;
+      }
+    } catch (e) {
+      console.log(e);
     }
   });
 

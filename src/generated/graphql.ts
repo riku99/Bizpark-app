@@ -13,6 +13,7 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  Void: any;
 };
 
 export type CreatePickInput = {
@@ -40,6 +41,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   createPick: Pick;
   createUser: User;
+  deletePick: Pick;
 };
 
 
@@ -52,10 +54,15 @@ export type MutationCreateUserArgs = {
   input: CreateUserInput;
 };
 
+
+export type MutationDeletePickArgs = {
+  thoughtId: Scalars['ID'];
+};
+
 export type Pick = {
   __typename?: 'Pick';
   id: Scalars['ID'];
-  thoughtId?: Maybe<Scalars['String']>;
+  thoughtId: Scalars['ID'];
 };
 
 export type Query = {
@@ -92,7 +99,7 @@ export type CreatePickMutationVariables = Exact<{
 }>;
 
 
-export type CreatePickMutation = { __typename?: 'Mutation', createPick: { __typename?: 'Pick', id: string, thoughtId?: string | null | undefined } };
+export type CreatePickMutation = { __typename?: 'Mutation', createPick: { __typename?: 'Pick', id: string, thoughtId: string } };
 
 export type CreateUserMutationVariables = Exact<{
   input: CreateUserInput;
@@ -100,6 +107,13 @@ export type CreateUserMutationVariables = Exact<{
 
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string } };
+
+export type DeletePickMutationVariables = Exact<{
+  thoughtId: Scalars['ID'];
+}>;
+
+
+export type DeletePickMutation = { __typename?: 'Mutation', deletePick: { __typename?: 'Pick', id: string, thoughtId: string } };
 
 export type ThoughtsQueryVariables = Exact<{
   genre: Genre;
@@ -177,6 +191,40 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const DeletePickDocument = gql`
+    mutation DeletePick($thoughtId: ID!) {
+  deletePick(thoughtId: $thoughtId) {
+    id
+    thoughtId
+  }
+}
+    `;
+export type DeletePickMutationFn = Apollo.MutationFunction<DeletePickMutation, DeletePickMutationVariables>;
+
+/**
+ * __useDeletePickMutation__
+ *
+ * To run a mutation, you first call `useDeletePickMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeletePickMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deletePickMutation, { data, loading, error }] = useDeletePickMutation({
+ *   variables: {
+ *      thoughtId: // value for 'thoughtId'
+ *   },
+ * });
+ */
+export function useDeletePickMutation(baseOptions?: Apollo.MutationHookOptions<DeletePickMutation, DeletePickMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeletePickMutation, DeletePickMutationVariables>(DeletePickDocument, options);
+      }
+export type DeletePickMutationHookResult = ReturnType<typeof useDeletePickMutation>;
+export type DeletePickMutationResult = Apollo.MutationResult<DeletePickMutation>;
+export type DeletePickMutationOptions = Apollo.BaseMutationOptions<DeletePickMutation, DeletePickMutationVariables>;
 export const ThoughtsDocument = gql`
     query Thoughts($genre: Genre!) {
   thoughts(genre: $genre) {

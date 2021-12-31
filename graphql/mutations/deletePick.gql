@@ -1,0 +1,6 @@
+mutation DeletePick($thoughtId: ID!) {
+  deletePick(thoughtId: $thoughtId) {
+    id
+    thoughtId
+  }
+}

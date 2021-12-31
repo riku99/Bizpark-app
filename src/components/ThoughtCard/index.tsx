@@ -2,7 +2,10 @@ import React, { ComponentProps, useState } from "react";
 import { Box, useColorModeValue, Text, Flex } from "native-base";
 import { Image } from "react-native-expo-image-cache";
 import { CheckBox } from "../CheckBox";
-import { useCreatePickMutation } from "src/generated/graphql";
+import {
+  useCreatePickMutation,
+  useDeletePickMutation,
+} from "src/generated/graphql";
 
 type Props = {
   id: string;
@@ -25,19 +28,30 @@ export const ThoughtCard = ({
 }: Props) => {
   const [checked, setChecked] = useState(picked);
   const [createPickMutation] = useCreatePickMutation();
+  const [deletePickMutation] = useDeletePickMutation();
 
   const onCheckPress = async () => {
-    setChecked((c) => !c);
-    const { data, errors } = await createPickMutation({
-      variables: {
-        input: {
-          thoughtId: id,
-        },
-      },
-    });
-
-    console.log(data);
-    console.log(errors);
+    try {
+      if (!checked) {
+        setChecked(true);
+        await createPickMutation({
+          variables: {
+            input: {
+              thoughtId: id,
+            },
+          },
+        });
+      } else {
+        setChecked(false);
+        await deletePickMutation({
+          variables: {
+            thoughtId: id,
+          },
+        });
+      }
+    } catch (e) {
+      setChecked((c) => !c);
+    }
   };
 
   return (
