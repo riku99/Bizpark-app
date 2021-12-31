@@ -28,7 +28,6 @@ export const RootNavigation = React.memo(() => {
           headerBackTitleVisible: false,
         }}
       >
-        {/* <Stack.Screen name="Signup" component={SignupScreen} /> */}
         <Stack.Screen
           name="Tab"
           component={BottomTab}

@@ -5,7 +5,7 @@ import { RequestSignUpButton } from "src/components/RequestSignUpButton";
 export const Profile = () => {
   return (
     <Box>
-      <RequestSignUpButton />
+      <RequestSignUpButton mt="50%" />
     </Box>
   );
 };
