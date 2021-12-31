@@ -1,6 +1,6 @@
 import React, { ComponentProps, useLayoutEffect } from "react";
 import { Box, Input, VStack, Text, useTheme } from "native-base";
-import { RootNavigationProp } from "types";
+import { RootNavigationScreenProp } from "types";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useForm, Controller, UseControllerProps } from "react-hook-form";
 import { Button } from "react-native-elements";
@@ -46,7 +46,7 @@ const Form = <T extends {}>({
   );
 };
 
-type Props = {} & RootNavigationProp<"MailForm">;
+type Props = {} & RootNavigationScreenProp<"MailForm">;
 type FormData = {
   email: string;
   password: string;

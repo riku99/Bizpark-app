@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from "react";
 import { useColorMode, Button } from "native-base";
-import { RootNavigationProp } from "types";
+import { RootNavigationScreenProp } from "types";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Society } from "./Society";
 import { Business } from "./Business";
@@ -8,7 +8,7 @@ import { Economy } from "./Economy";
 import { Politics } from "./Politics";
 import { useTopTabBarStyle } from "src/hooks/theme";
 
-type Props = RootNavigationProp<"Tab">;
+type Props = RootNavigationScreenProp<"Tab">;
 
 const TopTab = createMaterialTopTabNavigator();
 

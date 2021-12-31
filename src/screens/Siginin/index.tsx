@@ -1,9 +1,9 @@
 import React, { useLayoutEffect } from "react";
-import { RootNavigationProp } from "types";
+import { RootNavigationScreenProp } from "types";
 import { Mail, Apple, Google } from "src/components/AuthButton";
 import { VStack, Box } from "native-base";
 
-type Props = RootNavigationProp<"Signin">;
+type Props = RootNavigationScreenProp<"Signin">;
 
 export const SigninScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
