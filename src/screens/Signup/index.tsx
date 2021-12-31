@@ -21,7 +21,9 @@ export const SignupScreen = ({ navigation }: Props) => {
   const { signupWithGoogle } = useSignupWithGoogle();
 
   const onMailPress = () => {
-    navigation.navigate("MailForm");
+    navigation.navigate("MailForm", {
+      type: "signUp",
+    });
   };
 
   const onApplePress = async () => {

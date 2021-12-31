@@ -7,7 +7,7 @@ import { useColorModeValue, useTheme } from "native-base";
 import { SignupScreen } from "src/screens/Signup";
 import { SigninScreen } from "src/screens/Siginin";
 import { MailFormScreen } from "src/screens/MailForm";
-import { meVar } from "src/globals/me";
+import { meVar } from "src/stores/me";
 import { useReactiveVar } from "@apollo/client";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -49,13 +49,15 @@ export const RootNavigation = React.memo(() => {
             <Stack.Screen name="MailForm" component={MailFormScreen} />
           </Stack.Group>
         )}
-        <Stack.Screen
-          name="Tab"
-          component={BottomTab}
-          options={{
-            headerShown: false,
-          }}
-        />
+        {loggedIn && (
+          <Stack.Screen
+            name="Tab"
+            component={BottomTab}
+            options={{
+              headerShown: false,
+            }}
+          />
+        )}
       </Stack.Navigator>
     </>
   );

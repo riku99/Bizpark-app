@@ -2,6 +2,7 @@ import React, { useLayoutEffect } from "react";
 import { RootNavigationScreenProp } from "types";
 import { Mail, Apple, Google } from "src/components/AuthButton";
 import { VStack, Box } from "native-base";
+import { useSignInWithGoogle } from "src/hooks/auth";
 
 type Props = RootNavigationScreenProp<"Signin">;
 
@@ -12,12 +13,24 @@ export const SigninScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
+  const { signInWithGoogle } = useSignInWithGoogle();
+
+  const onEmailPress = () => {
+    navigation.navigate("MailForm", {
+      type: "signIn",
+    });
+  };
+
+  const onGooglePress = async () => {
+    await signInWithGoogle();
+  };
+
   return (
     <Box flex={1} bg="white">
       <VStack space={4} px={8} mt="5/6">
-        <Mail type="signin" />
+        <Mail type="signin" onPress={onEmailPress} />
         <Apple type="signin" />
-        <Google type="signin" />
+        <Google type="signin" onPress={onGooglePress} />
       </VStack>
     </Box>
   );

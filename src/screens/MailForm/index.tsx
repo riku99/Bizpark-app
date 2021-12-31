@@ -4,7 +4,7 @@ import { RootNavigationScreenProp } from "types";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useForm, Controller, UseControllerProps } from "react-hook-form";
 import { Button } from "react-native-elements";
-import { useSignUpWithEmail } from "src/hooks/auth";
+import { useSignUpWithEmail, useSignInWithEmail } from "src/hooks/auth";
 
 type FormProps<T> = {
   label: string;
@@ -53,14 +53,17 @@ type FormData = {
   name?: string;
 };
 
-export const MailFormScreen = ({ navigation }: Props) => {
+export const MailFormScreen = ({ navigation, route }: Props) => {
+  const { type } = route.params;
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "ユーザー登録",
+      title: type === "signUp" ? "ユーザー登録" : "ログイン",
     });
   }, [navigation]);
 
   const { registerUser } = useSignUpWithEmail();
+  const { signInWithEmail } = useSignInWithEmail();
   const { colors } = useTheme();
 
   const { control, handleSubmit, watch } = useForm<FormData>();
@@ -69,15 +72,28 @@ export const MailFormScreen = ({ navigation }: Props) => {
   const password = watch("password");
   const name = watch("name");
 
-  const disabled = !email || !password || password.length < 8;
+  const emailAndPaswordDisabled = !email || !password || password.length < 8;
+  const disabled =
+    emailAndPaswordDisabled || (type === "signUp" ? !name : undefined);
 
   const onSubmmitPress = () => {
     handleSubmit(async (data) => {
-      await registerUser({
-        email: data.email,
-        password: data.password,
-        name: data.name,
-      });
+      if (type === "signUp") {
+        await registerUser({
+          email: data.email,
+          password: data.password,
+          name: data.name,
+        });
+
+        return;
+      }
+
+      if (type === "signIn") {
+        await signInWithEmail({
+          email: data.email,
+          password: data.password,
+        });
+      }
     })();
   };
 
@@ -108,18 +124,20 @@ export const MailFormScreen = ({ navigation }: Props) => {
             }}
             controllerProps={{ control, name: "password" }}
           />
-          <Form
-            label="名前"
-            inputProps={{
-              placeholder: "名前(後で編集可能)",
-            }}
-            controllerProps={{
-              control,
-              name: "name",
-            }}
-          />
+          {type === "signUp" && (
+            <Form
+              label="名前"
+              inputProps={{
+                placeholder: "名前(後で編集可能)",
+              }}
+              controllerProps={{
+                control,
+                name: "name",
+              }}
+            />
+          )}
           <Button
-            title="登録"
+            title={type === "signUp" ? "登録" : "ログイン"}
             buttonStyle={{
               backgroundColor: colors.pink,
             }}

@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { RootNavigation } from "src/navigations";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { meVar, storageKeys, getMeStorageData } from "src/globals/me";
+import { meVar, storageKeys, getMeStorageData } from "src/stores/me";
 import { useReactiveVar } from "@apollo/client";
 import SplashScreen from "react-native-splash-screen";
 import { useInitialDataLazyQuery } from "src/generated/graphql";
-import { setMeVar } from "src/globals/me";
+import { setMeVar } from "src/stores/me";
+import { setMeVarWithInitialData } from "src/helpers/stores";
 
 export const Root = () => {
   const loggedIn = useReactiveVar(meVar.loggedIn);
@@ -65,14 +66,7 @@ export const Root = () => {
       if (checkedLogin && loggedIn && !called) {
         const { data } = await initialDataQuery();
         if (data) {
-          const { id, name, imageUrl, bio } = data.initialData.me;
-          setMeVar({
-            loggedIn: true,
-            name,
-            id,
-            imageUrl,
-            bio,
-          });
+          setMeVarWithInitialData(data.initialData);
         }
       }
     })();

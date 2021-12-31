@@ -8,7 +8,9 @@ type RootStackParamList = {
   Tab: undefined;
   Signup: undefined;
   Signin: undefined;
-  MailForm: undefined;
+  MailForm: {
+    type: "signUp" | "signIn";
+  };
 };
 
 export type RootNavigationScreenProp<

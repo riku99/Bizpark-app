@@ -7,6 +7,7 @@ import { Business } from "./Business";
 import { Economy } from "./Economy";
 import { Politics } from "./Politics";
 import { useTopTabBarStyle } from "src/hooks/theme";
+import { signOut } from "src/helpers/auth";
 
 type Props = RootNavigationScreenProp<"Tab">;
 
@@ -27,6 +28,11 @@ export const HomeScreen = ({ navigation }: Props) => {
     style,
     sceneContainerStyle,
   } = useTopTabBarStyle();
+
+  const onSubButtonPress = async () => {
+    // toggleColorMode()
+    await signOut();
+  };
 
   return (
     <>
@@ -54,7 +60,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         w={50}
         h={30}
         bottom={30}
-        onPress={toggleColorMode}
+        onPress={onSubButtonPress}
       >
         toggle
       </Button>

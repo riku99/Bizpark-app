@@ -1,12 +1,16 @@
 import auth from "@react-native-firebase/auth";
 import { useCallback } from "react";
 import { useToast } from "react-native-toast-notifications";
-import { useCreateUserMutation } from "src/generated/graphql";
+import {
+  useCreateUserMutation,
+  useInitialDataLazyQuery,
+} from "src/generated/graphql";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import Config from "react-native-config";
-import { meVar } from "src/globals/me";
-import { maybe } from "@apollo/client/utilities";
+import { googleSignIn } from "src/helpers/auth";
+import { setMeVarWithInitialData } from "src/helpers/stores";
+import { Alert } from "react-native";
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
@@ -31,7 +35,7 @@ export const useSignUpWithEmail = () => {
           user: firebaseUser,
         } = await auth().createUserWithEmailAndPassword(email, password);
         const idToken = await firebaseUser.getIdToken();
-        const { data, errors } = await createUserMutation({
+        const { data } = await createUserMutation({
           variables: {
             input: {
               name,
@@ -40,6 +44,7 @@ export const useSignUpWithEmail = () => {
             },
           },
         });
+        setMeVarWithInitialData(data.createUser);
         console.log(data);
       } catch (error) {
         console.log(error);
@@ -116,7 +121,6 @@ export const useSignupWithApple = () => {
 };
 
 export const useSignupWithGoogle = () => {
-  const toast = useToast();
   const [createUserMutation] = useCreateUserMutation();
 
   const signupWithGoogle = useCallback(async () => {
@@ -125,7 +129,7 @@ export const useSignupWithGoogle = () => {
       const googleCredential = auth.GoogleAuthProvider.credential(idToken);
       const googleResult = await auth().signInWithCredential(googleCredential);
       const userIdToken = await googleResult.user.getIdToken();
-      const { data, errors } = await createUserMutation({
+      const { data } = await createUserMutation({
         variables: {
           input: {
             email: googleResult.user.email,
@@ -134,15 +138,60 @@ export const useSignupWithGoogle = () => {
           },
         },
       });
-      meVar.id(data.createUser.id);
-      meVar.name(data.createUser.name);
-      meVar.loggedIn(true);
+      setMeVarWithInitialData(data.createUser);
     } catch (e) {
       console.log(e);
     }
-  }, [toast]);
+  }, []);
 
   return {
     signupWithGoogle,
+  };
+};
+
+export const useSignInWithGoogle = () => {
+  const [getInitialData, { called }] = useInitialDataLazyQuery();
+
+  const signInWithGoogle = useCallback(async () => {
+    try {
+      await googleSignIn();
+      if (!called) {
+        const { data } = await getInitialData();
+        if (data) {
+          setMeVarWithInitialData(data.initialData.me);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }, []);
+
+  return {
+    signInWithGoogle,
+  };
+};
+
+export const useSignInWithEmail = () => {
+  const [getInitialData, { called }] = useInitialDataLazyQuery();
+
+  const signInWithEmail = useCallback(
+    async ({ email, password }: { email: string; password: string }) => {
+      try {
+        await auth().signInWithEmailAndPassword(email, password);
+        if (!called) {
+          const { data } = await getInitialData();
+          if (data) {
+            setMeVarWithInitialData(data.initialData.me);
+          }
+        }
+      } catch (e) {
+        Alert.alert("エラー", "メールアドレスまたはパスワードが間違っています");
+      }
+    },
+    []
+  );
+
+  return {
+    signInWithEmail,
   };
 };
