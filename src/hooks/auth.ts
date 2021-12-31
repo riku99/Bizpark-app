@@ -11,6 +11,7 @@ import Config from "react-native-config";
 import { googleSignIn } from "src/helpers/auth";
 import { setMeVarWithInitialData } from "src/helpers/stores";
 import { Alert } from "react-native";
+import { useSomeErrorToast } from "./toast";
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
@@ -18,6 +19,7 @@ GoogleSignin.configure({
 
 export const useSignUpWithEmail = () => {
   const toast = useToast();
+  const { someErrorToast } = useSomeErrorToast();
   const [createUserMutation] = useCreateUserMutation();
 
   const registerUser = useCallback(
@@ -35,17 +37,20 @@ export const useSignUpWithEmail = () => {
           user: firebaseUser,
         } = await auth().createUserWithEmailAndPassword(email, password);
         const idToken = await firebaseUser.getIdToken();
-        const { data } = await createUserMutation({
-          variables: {
-            input: {
-              name,
-              email,
-              idToken,
+        try {
+          const { data } = await createUserMutation({
+            variables: {
+              input: {
+                name,
+                email,
+                idToken,
+              },
             },
-          },
-        });
-        setMeVarWithInitialData(data.createUser);
-        console.log(data);
+          });
+          setMeVarWithInitialData(data.createUser);
+        } catch (e) {
+          console.log(e);
+        }
       } catch (error) {
         console.log(error);
         if (error.code === "auth/email-already-in-use") {
@@ -65,10 +70,10 @@ export const useSignUpWithEmail = () => {
           return;
         }
 
-        toast.show("何らかのエラーが発生しました", { type: "danger" });
+        someErrorToast();
       }
     },
-    []
+    [someErrorToast]
   );
 
   return {
@@ -77,7 +82,7 @@ export const useSignUpWithEmail = () => {
 };
 
 export const useSignupWithApple = () => {
-  const toast = useToast();
+  const { someErrorToast } = useSomeErrorToast();
   const [createUserMutation] = useCreateUserMutation();
 
   const signupWithApple = useCallback(async () => {
@@ -88,7 +93,7 @@ export const useSignupWithApple = () => {
       });
 
       if (!appleAuthResponse.identityToken) {
-        toast.show("何かしらのエラーが発生しました", { type: "danger" });
+        someErrorToast();
         return;
       }
 
@@ -101,7 +106,7 @@ export const useSignupWithApple = () => {
       const result = await auth().signInWithCredential(appleCredential);
       const userIdToken = await result.user.getIdToken();
 
-      const { data, errors } = await createUserMutation({
+      const { data } = await createUserMutation({
         variables: {
           input: {
             email: result.user.email,
@@ -113,7 +118,7 @@ export const useSignupWithApple = () => {
     } catch (e) {
       console.log(e);
     }
-  }, [toast]);
+  }, [someErrorToast]);
 
   return {
     signupWithApple,
@@ -122,19 +127,17 @@ export const useSignupWithApple = () => {
 
 export const useSignupWithGoogle = () => {
   const [createUserMutation] = useCreateUserMutation();
+  const { someErrorToast } = useSomeErrorToast();
 
   const signupWithGoogle = useCallback(async () => {
     try {
-      const { idToken } = await GoogleSignin.signIn();
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      const googleResult = await auth().signInWithCredential(googleCredential);
-      const userIdToken = await googleResult.user.getIdToken();
+      const { googleData, idToken } = await googleSignIn();
       const { data } = await createUserMutation({
         variables: {
           input: {
-            email: googleResult.user.email,
-            idToken: userIdToken,
-            name: googleResult.user.displayName,
+            email: googleData.user.email,
+            idToken,
+            name: googleData.user.displayName,
           },
         },
       });
@@ -142,32 +145,10 @@ export const useSignupWithGoogle = () => {
     } catch (e) {
       console.log(e);
     }
-  }, []);
+  }, [someErrorToast]);
 
   return {
     signupWithGoogle,
-  };
-};
-
-export const useSignInWithGoogle = () => {
-  const [getInitialData, { called }] = useInitialDataLazyQuery();
-
-  const signInWithGoogle = useCallback(async () => {
-    try {
-      await googleSignIn();
-      if (!called) {
-        const { data } = await getInitialData();
-        if (data) {
-          setMeVarWithInitialData(data.initialData.me);
-        }
-      }
-    } catch (e) {
-      console.log(e);
-    }
-  }, []);
-
-  return {
-    signInWithGoogle,
   };
 };
 
@@ -193,5 +174,29 @@ export const useSignInWithEmail = () => {
 
   return {
     signInWithEmail,
+  };
+};
+
+export const useSignInWithGoogle = () => {
+  const [getInitialData, { called }] = useInitialDataLazyQuery();
+  const { someErrorToast } = useSomeErrorToast();
+
+  const signInWithGoogle = useCallback(async () => {
+    try {
+      await googleSignIn();
+      if (!called) {
+        const { data } = await getInitialData();
+        if (data) {
+          setMeVarWithInitialData(data.initialData.me);
+        }
+      }
+    } catch (e) {
+      someErrorToast();
+      console.log(e);
+    }
+  }, [someErrorToast]);
+
+  return {
+    signInWithGoogle,
   };
 };

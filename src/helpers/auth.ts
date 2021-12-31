@@ -9,7 +9,10 @@ export const googleSignIn = async () => {
   const googleResult = await auth().signInWithCredential(googleCredential);
   const userIdToken = await googleResult.user.getIdToken();
 
-  return userIdToken;
+  return {
+    idToken: userIdToken,
+    googleData: googleResult,
+  };
 };
 
 export const signOut = async () => {

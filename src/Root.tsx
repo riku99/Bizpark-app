@@ -66,7 +66,7 @@ export const Root = () => {
       if (checkedLogin && loggedIn && !called) {
         const { data } = await initialDataQuery();
         if (data) {
-          setMeVarWithInitialData(data.initialData);
+          setMeVarWithInitialData(data.initialData.me);
         }
       }
     })();

@@ -104,7 +104,7 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
       }}
     >
       <Box px={4} flex={1} bg="white">
-        <VStack space={4} mt={10}>
+        <VStack space={4} mt={6}>
           <Form<FormData>
             label="メールアドレス"
             inputProps={{
@@ -140,6 +140,9 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
             title={type === "signUp" ? "登録" : "ログイン"}
             buttonStyle={{
               backgroundColor: colors.pink,
+            }}
+            containerStyle={{
+              marginTop: 20,
             }}
             titleStyle={{
               fontWeight: "bold",
