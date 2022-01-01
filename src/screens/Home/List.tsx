@@ -4,26 +4,31 @@ import { ThoughtsQuery } from "src/generated/graphql";
 import { ThoughtCard } from "src/components/ThoughtCard";
 import { useColorModeValue, useTheme } from "native-base";
 
-type QueryItemData = ThoughtsQuery["thoughts"][number];
-type Props = { data: QueryItemData[]; refresh: () => Promise<void> };
+type Props = { data: ThoughtsQuery; refresh: () => Promise<void> };
 
 export const List = ({ data, refresh }: Props) => {
   const { colors } = useTheme();
 
   const renderItem = useCallback(
-    ({ item, index }: { item: QueryItemData; index: number }) => {
-      const picked = item.picked.length;
+    ({
+      item,
+      index,
+    }: {
+      item: ThoughtsQuery["thoughts"]["edges"][number];
+      index: number;
+    }) => {
+      const { picked, id, title, text, contributor } = item.node;
+
       return (
         <ThoughtCard
-          id={item.id}
-          title={item.title}
-          text={item.text}
+          id={id}
+          title={title}
+          text={text}
           contributor={{
-            name: item.contributor.name,
-            imageUrl: item.contributor.imageUrl,
+            name: contributor.name,
+            imageUrl: contributor.imageUrl,
           }}
-          picked={!!picked}
-          key={item.id}
+          picked={!!picked.length}
           mt={index !== 0 ? 4 : 0}
         />
       );
@@ -34,19 +39,17 @@ export const List = ({ data, refresh }: Props) => {
   const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
     setRefreshing(true);
-    setTimeout(() => {
-      setRefreshing(false);
-    }, 2000);
-    // await refresh();
-    // setRefreshing(false);
+    await refresh();
+    setRefreshing(false);
   };
 
   return (
     <FlatList
-      data={data}
+      data={data.thoughts.edges}
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 8, height: "100%" }}
+      contentContainerStyle={{ paddingBottom: 8, minHeight: "100%" }}
+      keyExtractor={(i) => i.node.id}
       refreshControl={
         <RefreshControl
           tintColor={useColorModeValue(undefined, colors.lightGray)}

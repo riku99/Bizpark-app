@@ -65,6 +65,14 @@ export type MutationDeletePickArgs = {
   thoughtId: Scalars['ID'];
 };
 
+export type PageInfo = {
+  __typename?: 'PageInfo';
+  endCursor?: Maybe<Scalars['String']>;
+  hasNextPage: Scalars['Boolean'];
+  hasPreviousPage: Scalars['Boolean'];
+  startCursor?: Maybe<Scalars['String']>;
+};
+
 export type Pick = {
   __typename?: 'Pick';
   id: Scalars['ID'];
@@ -74,12 +82,16 @@ export type Pick = {
 export type Query = {
   __typename?: 'Query';
   initialData: InitialResponse;
-  thoughts: Array<Maybe<Thought>>;
+  thoughts: ThoughtsConnection;
 };
 
 
 export type QueryThoughtsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  before?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
   genre: Genre;
+  last?: InputMaybe<Scalars['Int']>;
 };
 
 export type SignOutResponse = {
@@ -95,6 +107,18 @@ export type Thought = {
   picked: Array<Maybe<Pick>>;
   text: Scalars['String'];
   title?: Maybe<Scalars['String']>;
+};
+
+export type ThoughtEdge = {
+  __typename?: 'ThoughtEdge';
+  cursor: Scalars['String'];
+  node: Thought;
+};
+
+export type ThoughtsConnection = {
+  __typename?: 'ThoughtsConnection';
+  edges: Array<ThoughtEdge>;
+  pageInfo: PageInfo;
 };
 
 export type User = {
@@ -141,7 +165,7 @@ export type ThoughtsQueryVariables = Exact<{
 }>;
 
 
-export type ThoughtsQuery = { __typename?: 'Query', thoughts: Array<{ __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, picked: Array<{ __typename?: 'Pick', id: string } | null | undefined> } | null | undefined> };
+export type ThoughtsQuery = { __typename?: 'Query', thoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, picked: Array<{ __typename?: 'Pick', id: string } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 
 export const CreatePickDocument = gql`
@@ -320,17 +344,28 @@ export type InitialDataQueryResult = Apollo.QueryResult<InitialDataQuery, Initia
 export const ThoughtsDocument = gql`
     query Thoughts($genre: Genre!) {
   thoughts(genre: $genre) {
-    id
-    title
-    text
-    createdAt
-    contributor {
-      id
-      name
-      imageUrl
+    edges {
+      node {
+        id
+        title
+        text
+        createdAt
+        contributor {
+          id
+          name
+          imageUrl
+        }
+        picked {
+          id
+        }
+      }
+      cursor
     }
-    picked {
-      id
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
     }
   }
 }

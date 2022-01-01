@@ -1,16 +1,27 @@
 query Thoughts($genre: Genre!) {
   thoughts(genre: $genre) {
-    id
-    title
-    text
-    createdAt
-    contributor {
-      id
-      name
-      imageUrl
+    edges {
+      node {
+        id
+        title
+        text
+        createdAt
+        contributor {
+          id
+          name
+          imageUrl
+        }
+        picked {
+          id
+        }
+      }
+      cursor
     }
-    picked {
-      id
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
     }
   }
 }

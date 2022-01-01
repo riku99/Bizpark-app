@@ -17,7 +17,7 @@ export const Politics = React.memo(() => {
   return (
     <Bg flex={1} pt={4} w="100%" h="100%">
       <VStack px={4}>
-        <List data={data.thoughts} />
+        <List data={data} />
       </VStack>
     </Bg>
   );

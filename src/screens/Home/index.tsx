@@ -33,8 +33,8 @@ export const HomeScreen = ({ navigation }: Props) => {
   const { signOut } = useSignOut();
 
   const onSubButtonPress = async () => {
-    toggleColorMode();
-    // await signOut();
+    // toggleColorMode();
+    await signOut();
   };
 
   return (

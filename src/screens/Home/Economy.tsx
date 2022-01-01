@@ -6,9 +6,13 @@ import { List } from "./List";
 import { Indicator } from "src/components/Indicator";
 
 export const Economy = React.memo(() => {
-  const { data } = useThoughtsQuery({
+  const { data, refetch } = useThoughtsQuery({
     variables: { genre: Genre.Economy },
   });
+
+  const refresh = async () => {
+    await refetch();
+  };
 
   if (!data) {
     return <Indicator style={{ marginTop: 10 }} />;
@@ -17,7 +21,7 @@ export const Economy = React.memo(() => {
   return (
     <Bg flex={1} pt={4} w="100%" h="100%">
       <VStack px={4}>
-        <List data={data.thoughts} />
+        <List data={data} refresh={refresh} />
       </VStack>
     </Bg>
   );
