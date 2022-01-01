@@ -2926,6 +2926,14 @@
   resolved "https://registry.yarnpkg.com/@types/q/-/q-1.5.5.tgz#75a2a8e7d8ab4b230414505d92335d1dcb53a6df"
   integrity sha512-L28j2FcJfSZOnL1WBjDYp2vUHCeIFlyYI/53EwD/rKUBQ7MtUUfbQWiyKJGpcnv4/WgrhWsFKrcPstcAt/J0tQ==
 
+"@types/react-native-loading-spinner-overlay@^0.5.3":
+  version "0.5.3"
+  resolved "https://registry.yarnpkg.com/@types/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-0.5.3.tgz#babb9a30fa4fb6abac1dae057209a891208c6dcf"
+  integrity sha512-TP6//QhdBEUQT0sB9iG3+a+YKsMzP4/MJNNxSyfWsbdDTbBnO0lD9ksXdwBI5KY91r8gTmBE7PwRS+eEazZpxg==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native-vector-icons@^6.4.6":
   version "6.4.10"
   resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.10.tgz#9bfd6e64dd37b8119425496b5e53ff91d034efa9"
@@ -7642,7 +7650,7 @@ prompts@^2.4.0:
     kleur "^3.0.3"
     sisteransi "^1.0.5"
 
-prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.7.2:
+prop-types@^15.5.10, prop-types@^15.6.0, prop-types@^15.6.2, prop-types@^15.7.2:
   version "15.8.0"
   resolved "https://registry.yarnpkg.com/prop-types/-/prop-types-15.8.0.tgz#d237e624c45a9846e469f5f31117f970017ff588"
   integrity sha512-fDGekdaHh65eI3lMi5OnErU6a8Ighg2KjcjQxO7m8VHyWjcPyj5kiOgV1LQDOOOgVy3+5FgjXvdSSX7B8/5/4g==
@@ -7771,6 +7779,13 @@ react-native-expo-image-cache@^4.1.0:
   dependencies:
     crypto-js "^3.1.9-1"
     lodash "^4.17.4"
+
+react-native-loading-spinner-overlay@^2.0.0:
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/react-native-loading-spinner-overlay/-/react-native-loading-spinner-overlay-2.0.0.tgz#30934b6f07cb39711020d6b422a02a2a56763a73"
+  integrity sha512-V38M+N1Wk9GlpbfrD6znsJA1K2+09b3naxq3UjDjqNTA3MOBfj4W87alKSI3P+4ZawczQASTv2fTzhEQ7Z+SVA==
+  dependencies:
+    prop-types "^15.6.2"
 
 react-native-pager-view@^5.4.9:
   version "5.4.9"

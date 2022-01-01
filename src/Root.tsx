@@ -7,15 +7,18 @@ import SplashScreen from "react-native-splash-screen";
 import { useInitialDataLazyQuery } from "src/generated/graphql";
 import { setMeVar } from "src/stores/me";
 import { setMeVarWithInitialData } from "src/helpers/stores";
+import Spinner from "react-native-loading-spinner-overlay";
+import { spinnerVisibleVar } from "src/stores/spinner";
 
 export const Root = () => {
   const loggedIn = useReactiveVar(meVar.loggedIn);
   const myId = useReactiveVar(meVar.id);
   const myName = useReactiveVar(meVar.name);
+  const spinnerVisible = useReactiveVar(spinnerVisibleVar);
 
   useEffect(() => {
     console.log("💓 My id is " + myId);
-  }, [myName]);
+  }, [myId]);
 
   const [checkedLogin, setCheckedLogin] = useState(false);
   const [initialDataQuery, { called }] = useInitialDataLazyQuery();
@@ -74,9 +77,10 @@ export const Root = () => {
 
   // ログアウト時のキャッシュ削除
   // signOutで定義できた方がいいが、ApolloのErrorLinkでclientを使う方法がわからないので一旦ここで対応
+  // 無駄に呼ばれてしまっているとかはない
   useEffect(() => {
     (async function () {
-      if (checkedLogin && !loggedIn) {
+      if (checkedLogin && !loggedIn && called) {
         await client.clearStore();
         console.log("🧹 clear cache");
       }
@@ -87,5 +91,10 @@ export const Root = () => {
     return null;
   }
 
-  return <RootNavigation />;
+  return (
+    <>
+      <RootNavigation />
+      <Spinner visible={spinnerVisible} overlayColor="rgba(0,0,0,0.5)" />
+    </>
+  );
 };

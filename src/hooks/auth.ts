@@ -12,9 +12,7 @@ import { googleSignIn } from "src/helpers/auth";
 import { setMeVarWithInitialData } from "src/helpers/stores";
 import { Alert } from "react-native";
 import { useSomeErrorToast } from "./toast";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { storageKeys, setMeVar } from "src/stores/me";
-import { useApolloClient } from "@apollo/client";
+import { spinnerVisibleVar } from "src/stores/spinner";
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
@@ -35,6 +33,7 @@ export const useSignUpWithEmail = () => {
       password: string;
       name: string;
     }) => {
+      spinnerVisibleVar(true);
       try {
         const {
           user: firebaseUser,
@@ -74,6 +73,8 @@ export const useSignUpWithEmail = () => {
         }
 
         someErrorToast();
+      } finally {
+        spinnerVisibleVar(false);
       }
     },
     [someErrorToast]
@@ -133,6 +134,7 @@ export const useSignupWithGoogle = () => {
   const { someErrorToast } = useSomeErrorToast();
 
   const signupWithGoogle = useCallback(async () => {
+    spinnerVisibleVar(true);
     try {
       const { googleData, idToken } = await googleSignIn();
       const { data } = await createUserMutation({
@@ -147,6 +149,8 @@ export const useSignupWithGoogle = () => {
       setMeVarWithInitialData(data.createUser);
     } catch (e) {
       console.log(e);
+    } finally {
+      spinnerVisibleVar(false);
     }
   }, [someErrorToast]);
 
@@ -160,16 +164,21 @@ export const useSignInWithEmail = () => {
 
   const signInWithEmail = useCallback(
     async ({ email, password }: { email: string; password: string }) => {
+      spinnerVisibleVar(true);
       try {
         await auth().signInWithEmailAndPassword(email, password);
-        if (!called) {
-          const { data } = await getInitialData();
-          if (data) {
-            setMeVarWithInitialData(data.initialData.me);
+        try {
+          if (!called) {
+            const { data } = await getInitialData();
+            if (data) {
+              setMeVarWithInitialData(data.initialData.me);
+            }
           }
-        }
+        } catch (e) {}
       } catch (e) {
         Alert.alert("エラー", "メールアドレスまたはパスワードが間違っています");
+      } finally {
+        spinnerVisibleVar(false);
       }
     },
     []
@@ -182,9 +191,9 @@ export const useSignInWithEmail = () => {
 
 export const useSignInWithGoogle = () => {
   const [getInitialData, { called }] = useInitialDataLazyQuery();
-  const { someErrorToast } = useSomeErrorToast();
 
   const signInWithGoogle = useCallback(async () => {
+    spinnerVisibleVar(true);
     try {
       await googleSignIn();
       if (!called) {
@@ -194,40 +203,41 @@ export const useSignInWithGoogle = () => {
         }
       }
     } catch (e) {
-      someErrorToast();
       console.log(e);
+    } finally {
+      spinnerVisibleVar(false);
     }
-  }, [someErrorToast]);
+  }, []);
 
   return {
     signInWithGoogle,
   };
 };
 
-export const useSignOut = () => {
-  const client = useApolloClient();
+// export const useSignOut = () => {
+//   const client = useApolloClient();
 
-  const signOut = useCallback(async () => {
-    await auth().signOut();
+//   const signOut = useCallback(async () => {
+//     await auth().signOut();
 
-    setMeVar({
-      loggedIn: false,
-      id: null,
-      name: null,
-      bio: null,
-      imageUrl: null,
-    });
+//     setMeVar({
+//       loggedIn: false,
+//       id: null,
+//       name: null,
+//       bio: null,
+//       imageUrl: null,
+//     });
 
-    await AsyncStorage.removeItem(storageKeys.id);
-    await AsyncStorage.removeItem(storageKeys.name);
-    await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(false));
+//     await AsyncStorage.removeItem(storageKeys.id);
+//     await AsyncStorage.removeItem(storageKeys.name);
+//     await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(false));
 
-    await client.clearStore();
+//     await client.clearStore();
 
-    console.log("👋 Sign out success!");
-  }, [client]);
+//     console.log("👋 Sign out success!");
+//   }, [client]);
 
-  return {
-    signOut,
-  };
-};
+//   return {
+//     signOut,
+//   };
+// };
