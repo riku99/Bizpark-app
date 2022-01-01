@@ -4,6 +4,7 @@ import { useToast } from "react-native-toast-notifications";
 import {
   useCreateUserMutation,
   useInitialDataLazyQuery,
+  useSignOutMutation,
 } from "src/generated/graphql";
 import { appleAuth } from "@invertase/react-native-apple-authentication";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
@@ -13,6 +14,9 @@ import { setMeVarWithInitialData } from "src/helpers/stores";
 import { Alert } from "react-native";
 import { useSomeErrorToast } from "./toast";
 import { spinnerVisibleVar } from "src/stores/spinner";
+import { useApolloClient } from "@apollo/client";
+import { storageKeys, setMeVar } from "src/stores/me";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
@@ -214,30 +218,39 @@ export const useSignInWithGoogle = () => {
   };
 };
 
-// export const useSignOut = () => {
-//   const client = useApolloClient();
+export const useSignOut = () => {
+  const client = useApolloClient();
+  const [signOutMutation] = useSignOutMutation();
 
-//   const signOut = useCallback(async () => {
-//     await auth().signOut();
+  const signOut = useCallback(async () => {
+    spinnerVisibleVar(true);
+    try {
+      await signOutMutation();
+      await auth().signOut();
+    } catch (e) {
+    } finally {
+      // tryのプロセスでエラー出てもログアウトさせるのでfinalltに記述
+      setMeVar({
+        loggedIn: false,
+        id: null,
+        name: null,
+        bio: null,
+        imageUrl: null,
+      });
 
-//     setMeVar({
-//       loggedIn: false,
-//       id: null,
-//       name: null,
-//       bio: null,
-//       imageUrl: null,
-//     });
+      await AsyncStorage.removeItem(storageKeys.id);
+      await AsyncStorage.removeItem(storageKeys.name);
+      await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(false));
 
-//     await AsyncStorage.removeItem(storageKeys.id);
-//     await AsyncStorage.removeItem(storageKeys.name);
-//     await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(false));
+      await client.clearStore();
 
-//     await client.clearStore();
+      console.log("👋 Sign out success!");
 
-//     console.log("👋 Sign out success!");
-//   }, [client]);
+      spinnerVisibleVar(false);
+    }
+  }, [client]);
 
-//   return {
-//     signOut,
-//   };
-// };
+  return {
+    signOut,
+  };
+};
