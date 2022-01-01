@@ -12,6 +12,9 @@ import { googleSignIn } from "src/helpers/auth";
 import { setMeVarWithInitialData } from "src/helpers/stores";
 import { Alert } from "react-native";
 import { useSomeErrorToast } from "./toast";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { storageKeys, setMeVar } from "src/stores/me";
+import { useApolloClient } from "@apollo/client";
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
@@ -198,5 +201,33 @@ export const useSignInWithGoogle = () => {
 
   return {
     signInWithGoogle,
+  };
+};
+
+export const useSignOut = () => {
+  const client = useApolloClient();
+
+  const signOut = useCallback(async () => {
+    await auth().signOut();
+
+    setMeVar({
+      loggedIn: false,
+      id: null,
+      name: null,
+      bio: null,
+      imageUrl: null,
+    });
+
+    await AsyncStorage.removeItem(storageKeys.id);
+    await AsyncStorage.removeItem(storageKeys.name);
+    await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(false));
+
+    await client.clearStore();
+
+    console.log("👋 Sign out success!");
+  }, [client]);
+
+  return {
+    signOut,
   };
 };

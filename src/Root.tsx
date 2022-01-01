@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { RootNavigation } from "src/navigations";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { meVar, storageKeys, getMeStorageData } from "src/stores/me";
-import { useReactiveVar } from "@apollo/client";
+import { useReactiveVar, useApolloClient } from "@apollo/client";
 import SplashScreen from "react-native-splash-screen";
 import { useInitialDataLazyQuery } from "src/generated/graphql";
 import { setMeVar } from "src/stores/me";
@@ -18,8 +18,8 @@ export const Root = () => {
   }, [myName]);
 
   const [checkedLogin, setCheckedLogin] = useState(false);
-
   const [initialDataQuery, { called }] = useInitialDataLazyQuery();
+  const client = useApolloClient();
 
   // ストレージのリセット時は全て別の場所(signOut)で行うのでここではデータが存在した時のみ格納
   useEffect(() => {
@@ -71,6 +71,17 @@ export const Root = () => {
       }
     })();
   }, [checkedLogin, loggedIn, called]);
+
+  // ログアウト時のキャッシュ削除
+  // signOutで定義できた方がいいが、ApolloのErrorLinkでclientを使う方法がわからないので一旦ここで対応
+  useEffect(() => {
+    (async function () {
+      if (checkedLogin && !loggedIn) {
+        await client.clearStore();
+        console.log("🧹 clear cache");
+      }
+    })();
+  }, [checkedLogin, loggedIn]);
 
   if (!checkedLogin) {
     return null;
