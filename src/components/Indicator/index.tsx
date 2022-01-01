@@ -1,15 +1,15 @@
 import React, { ComponentProps } from "react";
 import { ActivityIndicator } from "react-native";
-import { useColorMode } from "native-base";
+import { useColorModeValue, useTheme } from "native-base";
 
 type Props = ComponentProps<typeof ActivityIndicator>;
 
 export const Indicator = ({ ...props }: Props) => {
-  const { colorMode } = useColorMode();
+  const { colors } = useTheme();
 
   return (
     <ActivityIndicator
-      color={colorMode === "dark" ? "white" : undefined}
+      color={useColorModeValue(undefined, colors.lightGray)}
       {...props}
     />
   );

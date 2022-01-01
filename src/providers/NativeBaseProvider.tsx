@@ -22,6 +22,7 @@ export const colors = {
   bluePurple: "#4a7dff",
   textBlack: "#333333",
   textWhite: "white",
+  lightGray: "#c2c2c2",
 };
 
 const components = {

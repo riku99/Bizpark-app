@@ -1,12 +1,15 @@
-import React, { useCallback } from "react";
-import { FlatList } from "react-native";
+import React, { useCallback, useState } from "react";
+import { FlatList, RefreshControl } from "react-native";
 import { ThoughtsQuery } from "src/generated/graphql";
 import { ThoughtCard } from "src/components/ThoughtCard";
+import { useColorModeValue, useTheme } from "native-base";
 
 type QueryItemData = ThoughtsQuery["thoughts"][number];
-type Props = { data: QueryItemData[] };
+type Props = { data: QueryItemData[]; refresh: () => Promise<void> };
 
-export const List = ({ data }: Props) => {
+export const List = ({ data, refresh }: Props) => {
+  const { colors } = useTheme();
+
   const renderItem = useCallback(
     ({ item, index }: { item: QueryItemData; index: number }) => {
       const picked = item.picked.length;
@@ -28,12 +31,29 @@ export const List = ({ data }: Props) => {
     []
   );
 
+  const [refreshing, setRefreshing] = useState(false);
+  const onRefresh = async () => {
+    setRefreshing(true);
+    setTimeout(() => {
+      setRefreshing(false);
+    }, 2000);
+    // await refresh();
+    // setRefreshing(false);
+  };
+
   return (
     <FlatList
       data={data}
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 8 }}
+      contentContainerStyle={{ paddingBottom: 8, height: "100%" }}
+      refreshControl={
+        <RefreshControl
+          tintColor={useColorModeValue(undefined, colors.lightGray)}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
+        />
+      }
     />
   );
 };
