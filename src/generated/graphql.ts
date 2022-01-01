@@ -88,10 +88,8 @@ export type Query = {
 
 export type QueryThoughtsArgs = {
   after?: InputMaybe<Scalars['String']>;
-  before?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   genre: Genre;
-  last?: InputMaybe<Scalars['Int']>;
 };
 
 export type SignOutResponse = {
@@ -162,6 +160,7 @@ export type InitialDataQuery = { __typename?: 'Query', initialData: { __typename
 
 export type ThoughtsQueryVariables = Exact<{
   genre: Genre;
+  cursor?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -342,8 +341,8 @@ export type InitialDataQueryHookResult = ReturnType<typeof useInitialDataQuery>;
 export type InitialDataLazyQueryHookResult = ReturnType<typeof useInitialDataLazyQuery>;
 export type InitialDataQueryResult = Apollo.QueryResult<InitialDataQuery, InitialDataQueryVariables>;
 export const ThoughtsDocument = gql`
-    query Thoughts($genre: Genre!) {
-  thoughts(genre: $genre) {
+    query Thoughts($genre: Genre!, $cursor: String) {
+  thoughts(genre: $genre, first: 20, after: $cursor) {
     edges {
       node {
         id
@@ -384,6 +383,7 @@ export const ThoughtsDocument = gql`
  * const { data, loading, error } = useThoughtsQuery({
  *   variables: {
  *      genre: // value for 'genre'
+ *      cursor: // value for 'cursor'
  *   },
  * });
  */

@@ -13,6 +13,7 @@ import { CustomErrorResponseCode } from "src/generated/graphql";
 import auth from "@react-native-firebase/auth";
 import { Alert } from "react-native";
 import { signOut } from "src/helpers/auth";
+import { relayStylePagination } from "@apollo/client/utilities";
 
 type Props = {
   children: JSX.Element;
@@ -39,6 +40,16 @@ const authLink = setContext(async (_, { headers }) => {
       },
     };
   }
+});
+
+const cache = new InMemoryCache({
+  typePolicies: {
+    Query: {
+      fields: {
+        thoughts: relayStylePagination(["genre"]),
+      },
+    },
+  },
 });
 
 export const ApolloProvider = ({ children }: Props) => {
@@ -82,7 +93,7 @@ export const ApolloProvider = ({ children }: Props) => {
 
   const client = new ApolloClient({
     link: from([errorLink, authLink.concat(httpLink)]),
-    cache: new InMemoryCache(),
+    cache,
   });
 
   return <ApolloProviderBase client={client}>{children}</ApolloProviderBase>;

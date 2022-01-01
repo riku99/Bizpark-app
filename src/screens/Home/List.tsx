@@ -3,10 +3,15 @@ import { FlatList, RefreshControl } from "react-native";
 import { ThoughtsQuery } from "src/generated/graphql";
 import { ThoughtCard } from "src/components/ThoughtCard";
 import { useColorModeValue, useTheme } from "native-base";
+import { Indicator } from "src/components/Indicator";
 
-type Props = { data: ThoughtsQuery; refresh: () => Promise<void> };
+type Props = {
+  data: ThoughtsQuery;
+  refresh: () => Promise<void>;
+  infiniteLoad: () => Promise<void>;
+};
 
-export const List = ({ data, refresh }: Props) => {
+export const List = ({ data, refresh, infiniteLoad }: Props) => {
   const { colors } = useTheme();
 
   const renderItem = useCallback(
@@ -43,6 +48,34 @@ export const List = ({ data, refresh }: Props) => {
     setRefreshing(false);
   };
 
+  const [infiniteLoading, setInfiniteLoading] = useState(false);
+
+  const renderBottomIndicator = useCallback(() => {
+    if (infiniteLoading) {
+      return <Indicator style={{ marginTop: 10 }} />;
+    } else {
+      return null;
+    }
+  }, [infiniteLoading]);
+
+  const onEndReached = async () => {
+    setInfiniteLoading(true);
+  };
+
+  const onMomentumScrollEnd = async () => {
+    if (infiniteLoading) {
+      console.log("load!");
+      await infiniteLoad();
+      setInfiniteLoading(false);
+    }
+  };
+
+  const onMomentumScrollBegin = () => {
+    if (infiniteLoading) {
+      setInfiniteLoading(false);
+    }
+  };
+
   return (
     <FlatList
       data={data.thoughts.edges}
@@ -57,6 +90,11 @@ export const List = ({ data, refresh }: Props) => {
           onRefresh={onRefresh}
         />
       }
+      onEndReachedThreshold={0.3}
+      onEndReached={onEndReached}
+      ListFooterComponent={renderBottomIndicator}
+      onMomentumScrollEnd={onMomentumScrollEnd}
+      onMomentumScrollBegin={onMomentumScrollBegin}
     />
   );
 };
