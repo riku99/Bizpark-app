@@ -1,84 +1,126 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState, useStates } from "react";
 import { Box, Text, ScrollView, useColorModeValue, Button } from "native-base";
 import { RootNavigationScreenProp } from "types";
 import { Image } from "react-native-expo-image-cache";
 import { StyleSheet, SafeAreaView, Dimensions } from "react-native";
 import { CheckBox } from "src/components/CheckBox";
+import { gql, useApolloClient } from "@apollo/client";
+import { Thought } from "src/generated/graphql";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
 export const ThoughtScreen = ({ navigation, route }: Props) => {
-  const { title, text, contributor } = route.params;
+  const { id } = route.params;
+
+  const { cache } = useApolloClient();
+  const cacheData = cache.readFragment<Thought | null>({
+    id: `Thought:${id}`,
+    fragment: gql`
+      fragment ThoughtFields on Thought {
+        id
+        title
+        text
+        contributor {
+          id
+          name
+          imageUrl
+        }
+        picked {
+          id
+        }
+      }
+    `,
+  });
+  console.log(cacheData);
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: title ?? "Not title",
+      title: cacheData.title ?? "Not title",
     });
   }, []);
 
+  // const [checked, setChecked] = useState(picked);
+
+  // const d = cache.readQuery<ThoughtsQueryResult["data"]>({
+  //   query: ThoughtsDocument,
+  //   variables: {
+  //     genre: Genre.Society,
+  //   },
+  // });
+  // console.log(d.thoughts.edges[0]);
+
   return (
     <SafeAreaView style={styles.container}>
-      <ScrollView
-        px={4}
-        _contentContainerStyle={{
-          paddingBottom: BOTTOM_CONTENTS_HEIGHT,
-        }}
-      >
-        <Box flexDirection="row" alignItems="center" mt={2}>
-          <Image uri={contributor.imageUrl} style={styles.userImage} />
-          <Text ml={4} fontWeight="bold" fontSize={16}>
-            {contributor.name}
-          </Text>
-        </Box>
+      {cacheData ? (
+        <>
+          <ScrollView
+            px={4}
+            _contentContainerStyle={{
+              paddingBottom: BOTTOM_CONTENTS_HEIGHT,
+            }}
+          >
+            <Box flexDirection="row" alignItems="center" mt={2}>
+              <Image
+                uri={cacheData.contributor.imageUrl}
+                style={styles.userImage}
+              />
+              <Text ml={4} fontWeight="bold" fontSize={16}>
+                {cacheData.contributor.name}
+              </Text>
+            </Box>
 
-        <Box flexDirection="row" mt={4}>
-          <Text color="pink" fontWeight="bold" fontSize={18}>
-            Pick
-          </Text>
-          <CheckBox
-            style={{ height: 28, width: 28, marginLeft: 6 }}
-            checked={false}
-            onPress={() => {}}
-          />
-        </Box>
+            <Box flexDirection="row" mt={4}>
+              <Text color="pink" fontWeight="bold" fontSize={18}>
+                Pick
+              </Text>
+              <CheckBox
+                style={{ height: 28, width: 28, marginLeft: 6 }}
+                checked={!!cacheData.picked.length}
+                onPress={() => {
+                  // mutation & 更新
+                }}
+              />
+            </Box>
 
-        <Text fontSize={16} mt={4}>
-          {text}
-        </Text>
-        <Text fontSize={16} mt={4}>
-          {text}
-        </Text>
-        <Text fontSize={16} mt={4}>
-          {text}
-        </Text>
-        <Text fontSize={16} mt={4}>
-          {text}
-        </Text>
-        <Text fontSize={16} mt={4}>
-          {text}
-        </Text>
-        <Text fontSize={16} mt={4}>
-          {text}
-        </Text>
-        <Text fontSize={16} mt={4}>
-          {text}
-        </Text>
-        <Text fontSize={16} mt={4}>
-          {text}
-        </Text>
-      </ScrollView>
-      <Box
-        position="absolute"
-        bg={useColorModeValue("lt.bg", "dt.bg")}
-        w="100%"
-        h={BOTTOM_CONTENTS_HEIGHT}
-        bottom={0}
-        alignItems="center"
-      >
-        <Box w="90%" mt={4}>
-          <Button>トークルームに入る</Button>
-        </Box>
-      </Box>
+            <Text fontSize={16} mt={4}>
+              {cacheData.text}
+            </Text>
+            <Text fontSize={16} mt={4}>
+              {cacheData.text}
+            </Text>
+            <Text fontSize={16} mt={4}>
+              {cacheData.text}
+            </Text>
+            <Text fontSize={16} mt={4}>
+              {cacheData.text}
+            </Text>
+            <Text fontSize={16} mt={4}>
+              {cacheData.text}
+            </Text>
+            <Text fontSize={16} mt={4}>
+              {cacheData.text}
+            </Text>
+            <Text fontSize={16} mt={4}>
+              {cacheData.text}
+            </Text>
+            <Text fontSize={16} mt={4}>
+              {cacheData.text}
+            </Text>
+          </ScrollView>
+          <Box
+            position="absolute"
+            bg={useColorModeValue("lt.bg", "dt.bg")}
+            w="100%"
+            h={BOTTOM_CONTENTS_HEIGHT}
+            bottom={0}
+            alignItems="center"
+          >
+            <Box w="90%" mt={4}>
+              <Button>トークルームに入る</Button>
+            </Box>
+          </Box>
+        </>
+      ) : null}
     </SafeAreaView>
   );
 };

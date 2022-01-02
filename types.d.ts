@@ -15,6 +15,7 @@ type RootStackParamList = {
     id: string;
     title: string | null;
     text: string;
+    picked: boolean;
     contributor: {
       id: string;
       name: string;

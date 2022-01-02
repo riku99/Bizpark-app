@@ -45,6 +45,7 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
               id,
               title,
               text,
+              picked: !!picked.length,
               contributor: {
                 id: contributor.id,
                 name: contributor.name,
