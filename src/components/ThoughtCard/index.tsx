@@ -1,4 +1,4 @@
-import React, { ComponentProps, useState } from "react";
+import React, { ComponentProps, useState, useEffect } from "react";
 import { Box, useColorModeValue, Text, Pressable } from "native-base";
 import { Image } from "react-native-expo-image-cache";
 import { CheckBox } from "../CheckBox";
@@ -15,15 +15,20 @@ type Props = {
 export const ThoughtCard = ({ id, ...props }: Props) => {
   const { readThoughtFragment } = useThoughtCacheFragment();
   const cacheData = readThoughtFragment(id);
-  const picked = cacheData ? cacheData.picked : false;
-  const [checked, setChecked] = useState(picked);
+  const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
   const [createPickMutation] = useCreatePick();
   const [deletePickMutation] = useDeletePick();
 
+  useEffect(() => {
+    if (cacheData) {
+      setPicked(cacheData.picked);
+    }
+  }, [cacheData]);
+
   const onCheckPress = async () => {
     try {
-      if (!checked) {
-        setChecked(true);
+      if (!picked) {
+        setPicked(true);
         await createPickMutation({
           variables: {
             input: {
@@ -32,7 +37,7 @@ export const ThoughtCard = ({ id, ...props }: Props) => {
           },
         });
       } else {
-        setChecked(false);
+        setPicked(false);
         await deletePickMutation({
           variables: {
             thoughtId: id,
@@ -40,7 +45,7 @@ export const ThoughtCard = ({ id, ...props }: Props) => {
         });
       }
     } catch (e) {
-      setChecked((c) => !c);
+      setPicked((c) => !c);
     }
   };
 
@@ -78,7 +83,7 @@ export const ThoughtCard = ({ id, ...props }: Props) => {
             </Text>
             <CheckBox
               onPress={onCheckPress}
-              checked={checked}
+              checked={picked}
               style={{ height: 26, width: 26, marginLeft: 6 }}
             />
           </Box>

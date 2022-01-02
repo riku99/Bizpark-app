@@ -4,18 +4,22 @@ import { RootNavigationScreenProp } from "types";
 import { Image } from "react-native-expo-image-cache";
 import { StyleSheet, SafeAreaView, Dimensions } from "react-native";
 import { CheckBox } from "src/components/CheckBox";
-import { gql, useApolloClient } from "@apollo/client";
-import { Thought } from "src/generated/graphql";
 import { useCustomToast } from "src/hooks/toast";
-import { useThoughtCacheFragment } from "src/hooks/apollo";
+import {
+  useThoughtCacheFragment,
+  useCreatePick,
+  useDeletePick,
+} from "src/hooks/apollo";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
 export const ThoughtScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
-
   const { readThoughtFragment } = useThoughtCacheFragment();
   const cacheData = readThoughtFragment(id);
+  const [createPickMutation] = useCreatePick();
+  const [deletePickMutation] = useDeletePick();
+  const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -24,6 +28,30 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   }, []);
 
   const { noDataToast } = useCustomToast();
+
+  const onCheckPress = async () => {
+    try {
+      if (!picked) {
+        setPicked(true);
+        await createPickMutation({
+          variables: {
+            input: {
+              thoughtId: id,
+            },
+          },
+        });
+      } else {
+        setPicked(false);
+        await deletePickMutation({
+          variables: {
+            thoughtId: id,
+          },
+        });
+      }
+    } catch (e) {
+      setPicked((c) => !c);
+    }
+  };
 
   if (!cacheData) {
     noDataToast();
@@ -55,10 +83,8 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
               </Text>
               <CheckBox
                 style={{ height: 28, width: 28, marginLeft: 6 }}
-                checked={cacheData.picked}
-                onPress={() => {
-                  // mutation & 更新
-                }}
+                checked={picked}
+                onPress={onCheckPress}
               />
             </Box>
 
