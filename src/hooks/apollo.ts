@@ -17,9 +17,7 @@ export const useThoughtCacheFragment = () => {
             name
             imageUrl
           }
-          picked {
-            id
-          }
+          picked
         }
       `,
     });

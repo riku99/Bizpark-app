@@ -6,9 +6,8 @@ import {
   useCreatePickMutation,
   useDeletePickMutation,
 } from "src/generated/graphql";
-import { useThoughtCacheFragment } from "src/hooks/cache";
+import { useThoughtCacheFragment } from "src/hooks/apollo";
 import { gql } from "@apollo/client";
-import { Thought, Pick, ThoughtsQueryResult } from "src/generated/graphql";
 
 type Props = {
   id: string;
@@ -17,46 +16,36 @@ type Props = {
 export const ThoughtCard = ({ id, ...props }: Props) => {
   const { readThoughtFragment } = useThoughtCacheFragment();
   const cacheData = readThoughtFragment(id);
-  const picked = cacheData ? !!cacheData?.picked.length : false;
+  const picked = cacheData ? cacheData.picked : false;
   const [checked, setChecked] = useState(picked);
   const [createPickMutation] = useCreatePickMutation({
     update: (cache, { data }) => {
-      const newPick = data.createPick;
-      cache.updateFragment(
-        {
-          id: `Thought:${newPick.thoughtId}`,
-          fragment: gql`
-            fragment T on Thought {
-              picked
-            }
-          `,
+      cache.writeFragment({
+        id: cache.identify({ __typename: "Thought", id }),
+        fragment: gql`
+          fragment P on Thought {
+            picked
+          }
+        `,
+        data: {
+          picked: true,
         },
-        (data) => ({
-          ...data,
-          picked: [...data.picked, newPick],
-        })
-      );
+      });
     },
   });
   const [deletePickMutation] = useDeletePickMutation({
     update: (cache, { data }) => {
-      cache.updateFragment(
-        {
-          id: `Thought:${data.deletePick.thoughtId}`,
-          fragment: gql`
-            fragment P on Thought {
-              picked {
-                id
-                thoughtId
-              }
-            }
-          `,
+      cache.writeFragment({
+        id: cache.identify({ __typename: "Thought", id }),
+        fragment: gql`
+          fragment DeletePickFields on Thought {
+            picked
+          }
+        `,
+        data: {
+          picked: false,
         },
-        (data) => ({
-          ...data,
-          picked: [],
-        })
-      );
+      });
     },
   });
 

@@ -7,7 +7,7 @@ import { CheckBox } from "src/components/CheckBox";
 import { gql, useApolloClient } from "@apollo/client";
 import { Thought } from "src/generated/graphql";
 import { useCustomToast } from "src/hooks/toast";
-import { useThoughtCacheFragment } from "src/hooks/cache";
+import { useThoughtCacheFragment } from "src/hooks/apollo";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
@@ -16,8 +16,6 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 
   const { readThoughtFragment } = useThoughtCacheFragment();
   const cacheData = readThoughtFragment(id);
-  console.log(cacheData);
-  console.log(cacheData.picked.length);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -57,7 +55,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
               </Text>
               <CheckBox
                 style={{ height: 28, width: 28, marginLeft: 6 }}
-                checked={!!cacheData.picked.length}
+                checked={cacheData.picked}
                 onPress={() => {
                   // mutation & 更新
                 }}
