@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
-import { Profile } from "src/screens/MyPage";
+import { MyPage } from "src/screens/MyPage";
 import { HomeScreen } from "src/screens/Home";
 import { TalkListScreen } from "src/screens/TalkList";
 import { NewsScreen } from "src/screens/News";
@@ -64,7 +64,7 @@ export const BottomTab = () => {
       />
       <Tab.Screen
         name="MyPage"
-        component={Profile}
+        component={MyPage}
         options={{
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={ICON_SIZE} color={color} />

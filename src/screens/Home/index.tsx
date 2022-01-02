@@ -7,8 +7,8 @@ import { Business } from "./Business";
 import { Economy } from "./Economy";
 import { Politics } from "./Politics";
 import { useTopTabBarStyle } from "src/hooks/theme";
-// import { signOut } from "src/helpers/auth";
 import { useSignOut } from "src/hooks/auth";
+import { AddButton } from "src/components/AddButton";
 
 type Props = RootNavigationScreenProp<"Tab">;
 
@@ -58,7 +58,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         <TopTab.Screen name="Economy" component={Economy} />
         <TopTab.Screen name="Society" component={Society} />
       </TopTab.Navigator>
-      <Button
+      {/* <Button
         position="absolute"
         w={50}
         h={30}
@@ -66,7 +66,9 @@ export const HomeScreen = ({ navigation }: Props) => {
         onPress={onSubButtonPress}
       >
         toggle
-      </Button>
+      </Button> */}
+
+      <AddButton />
     </>
   );
 };

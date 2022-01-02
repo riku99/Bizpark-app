@@ -139,7 +139,6 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   );
 };
 
-const dimensions = Dimensions.get("screen");
 const USER_IMAGE_SIZE = 42;
 const BOTTOM_CONTENTS_HEIGHT = 20;
 

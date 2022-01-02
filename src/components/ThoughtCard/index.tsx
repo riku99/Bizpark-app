@@ -74,7 +74,7 @@ export const ThoughtCard = ({ id, ...props }: Props) => {
               {cacheData.title}
             </Text>
           )}
-          <Text maxH={20} mt={!cacheData.title ? 2 : 1}>
+          <Text maxH={40} mt={!cacheData.title ? 2 : 1}>
             {cacheData.text}
           </Text>
           <Box mt={2} flexDirection="row" alignItems="center">
