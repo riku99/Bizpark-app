@@ -40,6 +40,7 @@ const components = {
       },
     },
     defaultProps: {
+      h: 10,
       bg: "pink",
       _pressed: {
         bg: "pink",
