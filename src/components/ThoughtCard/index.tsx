@@ -7,6 +7,8 @@ import {
   useDeletePickMutation,
 } from "src/generated/graphql";
 import { useThoughtCacheFragment } from "src/hooks/cache";
+import { gql } from "@apollo/client";
+import { Thought, Pick, ThoughtsQueryResult } from "src/generated/graphql";
 
 type Props = {
   id: string;
@@ -17,8 +19,46 @@ export const ThoughtCard = ({ id, ...props }: Props) => {
   const cacheData = readThoughtFragment(id);
   const picked = cacheData ? !!cacheData?.picked.length : false;
   const [checked, setChecked] = useState(picked);
-  const [createPickMutation] = useCreatePickMutation();
-  const [deletePickMutation] = useDeletePickMutation();
+  const [createPickMutation] = useCreatePickMutation({
+    update: (cache, { data }) => {
+      const newPick = data.createPick;
+      cache.updateFragment(
+        {
+          id: `Thought:${newPick.thoughtId}`,
+          fragment: gql`
+            fragment T on Thought {
+              picked
+            }
+          `,
+        },
+        (data) => ({
+          ...data,
+          picked: [...data.picked, newPick],
+        })
+      );
+    },
+  });
+  const [deletePickMutation] = useDeletePickMutation({
+    update: (cache, { data }) => {
+      cache.updateFragment(
+        {
+          id: `Thought:${data.deletePick.thoughtId}`,
+          fragment: gql`
+            fragment P on Thought {
+              picked {
+                id
+                thoughtId
+              }
+            }
+          `,
+        },
+        (data) => ({
+          ...data,
+          picked: [],
+        })
+      );
+    },
+  });
 
   const onCheckPress = async () => {
     try {

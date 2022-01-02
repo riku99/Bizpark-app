@@ -16,6 +16,8 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 
   const { readThoughtFragment } = useThoughtCacheFragment();
   const cacheData = readThoughtFragment(id);
+  console.log(cacheData);
+  console.log(cacheData.picked.length);
 
   useLayoutEffect(() => {
     navigation.setOptions({
