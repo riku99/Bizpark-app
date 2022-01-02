@@ -4,6 +4,8 @@ import { ThoughtsQuery } from "src/generated/graphql";
 import { ThoughtCard } from "src/components/ThoughtCard";
 import { useColorModeValue, useTheme } from "native-base";
 import { Indicator } from "src/components/Indicator";
+import { useNavigation } from "@react-navigation/native";
+import { RootNavigationProp } from "types";
 
 type Props = {
   data: ThoughtsQuery;
@@ -15,6 +17,7 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
   const { colors } = useTheme();
   const [listHeight, setListHeight] = useState(0);
   const [contentsHeight, setContentsHeight] = useState(0);
+  const navigation = useNavigation<RootNavigationProp<"Tab">>();
 
   const renderItem = useCallback(
     ({
@@ -37,6 +40,18 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
           }}
           picked={!!picked.length}
           mt={index !== 0 ? 4 : 0}
+          onPress={() => {
+            navigation.navigate("Thought", {
+              id,
+              title,
+              text,
+              contributor: {
+                id: contributor.id,
+                name: contributor.name,
+                imageUrl: contributor.imageUrl,
+              },
+            });
+          }}
         />
       );
     },

@@ -9,6 +9,7 @@ import { SigninScreen } from "src/screens/Siginin";
 import { MailFormScreen } from "src/screens/MailForm";
 import { meVar } from "src/stores/me";
 import { useReactiveVar } from "@apollo/client";
+import { ThoughtScreen } from "src/screens/Thought";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -50,13 +51,16 @@ export const RootNavigation = React.memo(() => {
           </Stack.Group>
         )}
         {loggedIn && (
-          <Stack.Screen
-            name="Tab"
-            component={BottomTab}
-            options={{
-              headerShown: false,
-            }}
-          />
+          <>
+            <Stack.Screen
+              name="Tab"
+              component={BottomTab}
+              options={{
+                headerShown: false,
+              }}
+            />
+            <Stack.Screen name="Thought" component={ThoughtScreen} />
+          </>
         )}
       </Stack.Navigator>
     </>

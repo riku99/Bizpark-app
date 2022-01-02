@@ -11,6 +11,16 @@ type RootStackParamList = {
   MailForm: {
     type: "signUp" | "signIn";
   };
+  Thought: {
+    id: string;
+    title: string | null;
+    text: string;
+    contributor: {
+      id: string;
+      name: string;
+      imageUrl: string | null;
+    };
+  };
 };
 
 export type RootNavigationScreenProp<

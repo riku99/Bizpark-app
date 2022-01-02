@@ -18,9 +18,6 @@ export const Business = React.memo(() => {
   const infiniteLoad = async () => {
     if (data.thoughts.pageInfo.hasNextPage) {
       const cursor = data.thoughts.pageInfo.endCursor;
-      if (cursor) {
-        console.log(btoa(cursor));
-      }
       await fetchMore({
         variables: {
           genre: Genre.Business,

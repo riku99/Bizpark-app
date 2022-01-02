@@ -1,5 +1,5 @@
 import React, { ComponentProps, useState } from "react";
-import { Box, useColorModeValue, Text, Flex } from "native-base";
+import { Box, useColorModeValue, Text, Pressable } from "native-base";
 import { Image } from "react-native-expo-image-cache";
 import { CheckBox } from "../CheckBox";
 import {
@@ -16,7 +16,7 @@ type Props = {
     name: string;
     imageUrl: null | string;
   };
-} & ComponentProps<typeof Box>;
+} & ComponentProps<typeof Pressable>;
 
 export const ThoughtCard = ({
   id,
@@ -55,7 +55,7 @@ export const ThoughtCard = ({
   };
 
   return (
-    <Box
+    <Pressable
       bg={useColorModeValue("white", "warmGray.800")}
       borderRadius="lg"
       py={14}
@@ -90,6 +90,6 @@ export const ThoughtCard = ({
           style={{ height: 26, width: 26, marginLeft: 6 }}
         />
       </Box>
-    </Box>
+    </Pressable>
   );
 };
