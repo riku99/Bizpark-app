@@ -12,7 +12,7 @@ import Config from "react-native-config";
 import { googleSignIn } from "src/helpers/auth";
 import { setMeVarWithInitialData } from "src/helpers/stores";
 import { Alert } from "react-native";
-import { useSomeErrorToast } from "./toast";
+import { useCustomToast } from "./toast";
 import { spinnerVisibleVar } from "src/stores/spinner";
 import { useApolloClient } from "@apollo/client";
 import { storageKeys, setMeVar } from "src/stores/me";
@@ -24,7 +24,7 @@ GoogleSignin.configure({
 
 export const useSignUpWithEmail = () => {
   const toast = useToast();
-  const { someErrorToast } = useSomeErrorToast();
+  const { someErrorToast } = useCustomToast();
   const [createUserMutation] = useCreateUserMutation();
 
   const registerUser = useCallback(
@@ -90,7 +90,7 @@ export const useSignUpWithEmail = () => {
 };
 
 export const useSignupWithApple = () => {
-  const { someErrorToast } = useSomeErrorToast();
+  const { someErrorToast } = useCustomToast();
   const [createUserMutation] = useCreateUserMutation();
 
   const signupWithApple = useCallback(async () => {
@@ -135,7 +135,7 @@ export const useSignupWithApple = () => {
 
 export const useSignupWithGoogle = () => {
   const [createUserMutation] = useCreateUserMutation();
-  const { someErrorToast } = useSomeErrorToast();
+  const { someErrorToast } = useCustomToast();
 
   const signupWithGoogle = useCallback(async () => {
     spinnerVisibleVar(true);

@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useStates } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { Box, Text, ScrollView, useColorModeValue, Button } from "native-base";
 import { RootNavigationScreenProp } from "types";
 import { Image } from "react-native-expo-image-cache";
@@ -6,6 +6,7 @@ import { StyleSheet, SafeAreaView, Dimensions } from "react-native";
 import { CheckBox } from "src/components/CheckBox";
 import { gql, useApolloClient } from "@apollo/client";
 import { Thought } from "src/generated/graphql";
+import { useCustomToast } from "src/hooks/toast";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
@@ -31,7 +32,6 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
       }
     `,
   });
-  console.log(cacheData);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -39,15 +39,11 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
     });
   }, []);
 
-  // const [checked, setChecked] = useState(picked);
+  const { noDataToast } = useCustomToast();
 
-  // const d = cache.readQuery<ThoughtsQueryResult["data"]>({
-  //   query: ThoughtsDocument,
-  //   variables: {
-  //     genre: Genre.Society,
-  //   },
-  // });
-  // console.log(d.thoughts.edges[0]);
+  if (!cacheData) {
+    noDataToast();
+  }
 
   return (
     <SafeAreaView style={styles.container}>

@@ -43,14 +43,6 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
           onPress={() => {
             navigation.navigate("Thought", {
               id,
-              title,
-              text,
-              picked: !!picked.length,
-              contributor: {
-                id: contributor.id,
-                name: contributor.name,
-                imageUrl: contributor.imageUrl,
-              },
             });
           }}
         />

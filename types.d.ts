@@ -13,14 +13,6 @@ type RootStackParamList = {
   };
   Thought: {
     id: string;
-    title: string | null;
-    text: string;
-    picked: boolean;
-    contributor: {
-      id: string;
-      name: string;
-      imageUrl: string | null;
-    };
   };
 };
 
