@@ -13,11 +13,12 @@ const config = {
 export const colors = {
   dt: {
     bg: "#1c1917",
+    darkGray: "#292524",
   },
   lt: {
-    bg: "#FFFFFF",
+    bg: "#fff",
   },
-  pink: "#e68c8c",
+  pink: "#ff937d",
   purple: "#4444ff",
   bluePurple: "#4a7dff",
   textBlack: "#333333",
@@ -36,6 +37,12 @@ const components = {
       rounded: "sm",
       _text: {
         color: "textWhite",
+      },
+    },
+    defaultProps: {
+      bg: "pink",
+      _pressed: {
+        bg: "pink",
       },
     },
   },

@@ -33,8 +33,8 @@ export const HomeScreen = ({ navigation }: Props) => {
   const { signOut } = useSignOut();
 
   const onSubButtonPress = async () => {
-    // toggleColorMode();
-    await signOut();
+    toggleColorMode();
+    // await signOut();
   };
 
   return (
@@ -58,7 +58,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         <TopTab.Screen name="Economy" component={Economy} />
         <TopTab.Screen name="Society" component={Society} />
       </TopTab.Navigator>
-      {/* <Button
+      <Button
         position="absolute"
         w={50}
         h={30}
@@ -66,7 +66,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         onPress={onSubButtonPress}
       >
         toggle
-      </Button> */}
+      </Button>
     </>
   );
 };

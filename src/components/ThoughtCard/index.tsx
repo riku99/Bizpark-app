@@ -56,7 +56,7 @@ export const ThoughtCard = ({
 
   return (
     <Pressable
-      bg={useColorModeValue("white", "warmGray.800")}
+      bg={useColorModeValue("white", "dt.darkGray")}
       borderRadius="lg"
       py={14}
       px={4}
