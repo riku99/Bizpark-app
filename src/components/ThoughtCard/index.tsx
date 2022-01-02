@@ -3,11 +3,10 @@ import { Box, useColorModeValue, Text, Pressable } from "native-base";
 import { Image } from "react-native-expo-image-cache";
 import { CheckBox } from "../CheckBox";
 import {
-  useCreatePickMutation,
-  useDeletePickMutation,
-} from "src/generated/graphql";
-import { useThoughtCacheFragment } from "src/hooks/apollo";
-import { gql } from "@apollo/client";
+  useThoughtCacheFragment,
+  useCreatePick,
+  useDeletePick,
+} from "src/hooks/apollo";
 
 type Props = {
   id: string;
@@ -18,36 +17,8 @@ export const ThoughtCard = ({ id, ...props }: Props) => {
   const cacheData = readThoughtFragment(id);
   const picked = cacheData ? cacheData.picked : false;
   const [checked, setChecked] = useState(picked);
-  const [createPickMutation] = useCreatePickMutation({
-    update: (cache, { data }) => {
-      cache.writeFragment({
-        id: cache.identify({ __typename: "Thought", id }),
-        fragment: gql`
-          fragment P on Thought {
-            picked
-          }
-        `,
-        data: {
-          picked: true,
-        },
-      });
-    },
-  });
-  const [deletePickMutation] = useDeletePickMutation({
-    update: (cache, { data }) => {
-      cache.writeFragment({
-        id: cache.identify({ __typename: "Thought", id }),
-        fragment: gql`
-          fragment DeletePickFields on Thought {
-            picked
-          }
-        `,
-        data: {
-          picked: false,
-        },
-      });
-    },
-  });
+  const [createPickMutation] = useCreatePick();
+  const [deletePickMutation] = useDeletePick();
 
   const onCheckPress = async () => {
     try {

@@ -1,6 +1,10 @@
 import { gql, useApolloClient } from "@apollo/client";
 import { useCallback } from "react";
-import { Thought } from "src/generated/graphql";
+import {
+  Thought,
+  useCreatePickMutation,
+  useDeletePickMutation,
+} from "src/generated/graphql";
 
 export const useThoughtCacheFragment = () => {
   const { cache } = useApolloClient();
@@ -28,4 +32,50 @@ export const useThoughtCacheFragment = () => {
   return {
     readThoughtFragment,
   };
+};
+
+export const useCreatePick = () => {
+  const mutation = useCreatePickMutation({
+    update: (cache, { data }) => {
+      cache.writeFragment({
+        id: cache.identify({
+          __typename: "Thought",
+          id: data.createPick.thoughtId,
+        }),
+        fragment: gql`
+          fragment CreatePickFields on Thought {
+            picked
+          }
+        `,
+        data: {
+          picked: true,
+        },
+      });
+    },
+  });
+
+  return mutation;
+};
+
+export const useDeletePick = () => {
+  const mutation = useDeletePickMutation({
+    update: (cache, { data }) => {
+      cache.writeFragment({
+        id: cache.identify({
+          __typename: "Thought",
+          id: data.deletePick.thoughtId,
+        }),
+        fragment: gql`
+          fragment DeletePickFields on Thought {
+            picked
+          }
+        `,
+        data: {
+          picked: false,
+        },
+      });
+    },
+  });
+
+  return mutation;
 };
