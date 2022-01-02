@@ -289,6 +289,8 @@ PODS:
     - React-Core
   - react-native-pager-view (5.4.9):
     - React-Core
+  - react-native-quick-base64 (0.1.4):
+    - React-Core
   - react-native-safe-area-context (3.3.2):
     - React-Core
   - react-native-splash-screen (3.3.0):
@@ -438,6 +440,7 @@ DEPENDENCIES:
   - React-jsinspector (from `../node_modules/react-native/ReactCommon/jsinspector`)
   - react-native-config (from `../node_modules/react-native-config`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
+  - react-native-quick-base64 (from `../node_modules/react-native-quick-base64`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - react-native-splash-screen (from `../node_modules/react-native-splash-screen`)
   - React-perflogger (from `../node_modules/react-native/ReactCommon/reactperflogger`)
@@ -535,6 +538,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-config"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
+  react-native-quick-base64:
+    :path: "../node_modules/react-native-quick-base64"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-splash-screen:
@@ -624,6 +629,7 @@ SPEC CHECKSUMS:
   React-jsinspector: 34e23860273a23695342f58eed3ffd3ba10c31e0
   react-native-config: 6502b1879f97ed5ac570a029961fc35ea606cd14
   react-native-pager-view: 3ee7d4c7697fb3ef788346e834a60cca97ed8540
+  react-native-quick-base64: 4b97fd2c01032b0d9305c4a0cd91c3fe69e7e4d8
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057
   react-native-splash-screen: 4312f786b13a81b5169ef346d76d33bc0c6dc457
   React-perflogger: cc76a4254d19640f1d8ad1c66fdee800414b805c

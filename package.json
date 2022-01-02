@@ -39,6 +39,7 @@
     "react-native-expo-image-cache": "^4.1.0",
     "react-native-loading-spinner-overlay": "^2.0.0",
     "react-native-pager-view": "^5.4.9",
+    "react-native-quick-base64": "^0.1.4",
     "react-native-reanimated": "2.2.4",
     "react-native-safe-area-context": "3.3.2",
     "react-native-screens": "3.8.0",

@@ -4,6 +4,7 @@ import { Bg } from "src/components/Bg";
 import { useThoughtsQuery, Genre } from "src/generated/graphql";
 import { List } from "./List";
 import { Indicator } from "src/components/Indicator";
+import { btoa } from "react-native-quick-base64";
 
 export const Economy = React.memo(() => {
   const { data, refetch, fetchMore } = useThoughtsQuery({
@@ -16,10 +17,11 @@ export const Economy = React.memo(() => {
 
   const infiniteLoad = async () => {
     if (data.thoughts.pageInfo.hasNextPage) {
+      const cursor = data.thoughts.pageInfo.endCursor;
       await fetchMore({
         variables: {
           genre: Genre.Economy,
-          cursor: data.thoughts.pageInfo.endCursor,
+          cursor: cursor ? btoa(cursor) : undefined,
         },
       });
     }
