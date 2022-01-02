@@ -7,31 +7,15 @@ import { CheckBox } from "src/components/CheckBox";
 import { gql, useApolloClient } from "@apollo/client";
 import { Thought } from "src/generated/graphql";
 import { useCustomToast } from "src/hooks/toast";
+import { useThoughtCacheFragment } from "src/hooks/cache";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
 export const ThoughtScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
 
-  const { cache } = useApolloClient();
-  const cacheData = cache.readFragment<Thought | null>({
-    id: `Thought:${id}`,
-    fragment: gql`
-      fragment ThoughtFields on Thought {
-        id
-        title
-        text
-        contributor {
-          id
-          name
-          imageUrl
-        }
-        picked {
-          id
-        }
-      }
-    `,
-  });
+  const { readThoughtFragment } = useThoughtCacheFragment();
+  const cacheData = readThoughtFragment(id);
 
   useLayoutEffect(() => {
     navigation.setOptions({

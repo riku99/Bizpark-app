@@ -27,18 +27,11 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
       item: ThoughtsQuery["thoughts"]["edges"][number];
       index: number;
     }) => {
-      const { picked, id, title, text, contributor } = item.node;
+      const { id } = item.node;
 
       return (
         <ThoughtCard
           id={id}
-          title={title}
-          text={text}
-          contributor={{
-            name: contributor.name,
-            imageUrl: contributor.imageUrl,
-          }}
-          picked={!!picked.length}
           mt={index !== 0 ? 4 : 0}
           onPress={() => {
             navigation.navigate("Thought", {
