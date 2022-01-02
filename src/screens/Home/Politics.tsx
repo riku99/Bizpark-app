@@ -6,9 +6,24 @@ import { List } from "./List";
 import { Indicator } from "src/components/Indicator";
 
 export const Politics = React.memo(() => {
-  const { data } = useThoughtsQuery({
+  const { data, refetch, fetchMore } = useThoughtsQuery({
     variables: { genre: Genre.Politics },
   });
+
+  const refresh = async () => {
+    await refetch();
+  };
+
+  const infiniteLoad = async () => {
+    if (data.thoughts.pageInfo.hasNextPage) {
+      await fetchMore({
+        variables: {
+          genre: Genre.Politics,
+          cursor: data.thoughts.pageInfo.endCursor,
+        },
+      });
+    }
+  };
 
   if (!data) {
     return <Indicator style={{ marginTop: 10 }} />;
@@ -17,7 +32,7 @@ export const Politics = React.memo(() => {
   return (
     <Bg flex={1} pt={4} w="100%" h="100%">
       <VStack px={4}>
-        <List data={data} />
+        <List data={data} refresh={refresh} infiniteLoad={infiniteLoad} />
       </VStack>
     </Bg>
   );

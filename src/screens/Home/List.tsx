@@ -13,6 +13,8 @@ type Props = {
 
 export const List = ({ data, refresh, infiniteLoad }: Props) => {
   const { colors } = useTheme();
+  const [listHeight, setListHeight] = useState(0);
+  const [contentsHeight, setContentsHeight] = useState(0);
 
   const renderItem = useCallback(
     ({
@@ -59,12 +61,13 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
   }, [infiniteLoading]);
 
   const onEndReached = async () => {
-    setInfiniteLoading(true);
+    if (contentsHeight && listHeight && contentsHeight > listHeight) {
+      setInfiniteLoading(true);
+    }
   };
 
   const onMomentumScrollEnd = async () => {
     if (infiniteLoading) {
-      console.log("load!");
       await infiniteLoad();
       setInfiniteLoading(false);
     }
@@ -95,6 +98,12 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
       ListFooterComponent={renderBottomIndicator}
       onMomentumScrollEnd={onMomentumScrollEnd}
       onMomentumScrollBegin={onMomentumScrollBegin}
+      onLayout={(e) => {
+        setListHeight(e.nativeEvent.layout.height);
+      }}
+      onContentSizeChange={(w, h) => {
+        setContentsHeight(h);
+      }}
     />
   );
 };
