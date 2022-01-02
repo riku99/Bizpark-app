@@ -10,6 +10,7 @@ import {
   useCreatePick,
   useDeletePick,
 } from "src/hooks/apollo";
+import { MotiView } from "moti";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
@@ -113,18 +114,25 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
               {cacheData.text}
             </Text>
           </ScrollView>
-          <Box
-            position="absolute"
-            bg={useColorModeValue("lt.bg", "dt.bg")}
-            w="100%"
-            h={BOTTOM_CONTENTS_HEIGHT}
-            bottom={0}
-            alignItems="center"
+
+          <MotiView
+            from={{ translateY: 80 }}
+            animate={{ translateY: 0 }}
+            transition={{ type: "timing", duration: 400 }}
           >
-            <Box w="90%" mt={4}>
-              <Button>トークルームに入る</Button>
+            <Box
+              position="absolute"
+              bg={useColorModeValue("lt.bg", "dt.bg")}
+              w="100%"
+              h={BOTTOM_CONTENTS_HEIGHT}
+              bottom={0}
+              alignItems="center"
+            >
+              <Box w="90%" mt={4}>
+                <Button _text={{ fontSize: 16 }}>トークに参加</Button>
+              </Box>
             </Box>
-          </Box>
+          </MotiView>
         </>
       ) : null}
     </SafeAreaView>
@@ -132,8 +140,8 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 };
 
 const dimensions = Dimensions.get("screen");
-const USER_IMAGE_SIZE = 44;
-const BOTTOM_CONTENTS_HEIGHT = dimensions.height * 0.13;
+const USER_IMAGE_SIZE = 42;
+const BOTTOM_CONTENTS_HEIGHT = 20;
 
 const styles = StyleSheet.create({
   container: {
