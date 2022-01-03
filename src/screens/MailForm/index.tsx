@@ -1,6 +1,6 @@
 import React, { ComponentProps, useLayoutEffect } from "react";
 import { Box, Input, VStack, Text, useTheme } from "native-base";
-import { RootNavigationScreenProp } from "types";
+import { RootNavigationScreenProp } from "src/types";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useForm, Controller, UseControllerProps } from "react-hook-form";
 import { Button } from "react-native-elements";

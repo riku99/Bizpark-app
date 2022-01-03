@@ -2,7 +2,7 @@ import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
 import { BottomTab } from "./Tab";
 import { StatusBar } from "expo-status-bar";
-import { RootStackParamList } from "types";
+import { RootStackParamList } from "src/types";
 import { useColorModeValue, useTheme } from "native-base";
 import { SignupScreen } from "src/screens/Signup";
 import { SigninScreen } from "src/screens/Siginin";
@@ -10,6 +10,7 @@ import { MailFormScreen } from "src/screens/MailForm";
 import { meVar } from "src/stores/me";
 import { useReactiveVar } from "@apollo/client";
 import { ThoughtScreen } from "src/screens/Thought";
+import { ThoughtWritingScreen } from "src/screens/ThoughtWriting";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -60,6 +61,18 @@ export const RootNavigation = React.memo(() => {
               }}
             />
             <Stack.Screen name="Thought" component={ThoughtScreen} />
+            <Stack.Group
+              screenOptions={{
+                presentation: "modal",
+              }}
+            >
+              <Stack.Group screenOptions={{ headerShown: false }}>
+                <Stack.Screen
+                  name="ThoughtWriting"
+                  component={ThoughtWritingScreen}
+                />
+              </Stack.Group>
+            </Stack.Group>
           </>
         )}
       </Stack.Navigator>

@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useState } from "react";
 import { Box, Text, ScrollView, useColorModeValue, Button } from "native-base";
-import { RootNavigationScreenProp } from "types";
+import { RootNavigationScreenProp } from "src/types";
 import { Image } from "react-native-expo-image-cache";
 import { StyleSheet, SafeAreaView, Dimensions } from "react-native";
 import { CheckBox } from "src/components/CheckBox";

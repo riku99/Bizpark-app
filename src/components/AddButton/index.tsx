@@ -1,10 +1,18 @@
 import React from "react";
 import { Ionicons } from "@expo/vector-icons";
-import { Box } from "native-base";
+import { Box, Pressable } from "native-base";
+import { RootNavigationProp } from "src/types";
+import { useNavigation } from "@react-navigation/native";
 
 export const AddButton = () => {
+  const navigation = useNavigation<RootNavigationProp<"Tab">>();
+
+  const onPress = () => {
+    navigation.navigate("ThoughtWriting");
+  };
+
   return (
-    <Box
+    <Pressable
       w={SIZE}
       h={SIZE}
       borderRadius={SIZE}
@@ -14,9 +22,10 @@ export const AddButton = () => {
       position="absolute"
       bottom={4}
       right={6}
+      onPress={onPress}
     >
       <Ionicons name="add" size={28} color="white" />
-    </Box>
+    </Pressable>
   );
 };
 

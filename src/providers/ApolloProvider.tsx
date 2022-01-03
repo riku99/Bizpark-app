@@ -46,7 +46,7 @@ const cache = new InMemoryCache({
   typePolicies: {
     Query: {
       fields: {
-        thoughts: relayStylePagination(["genre"]),
+        thoughts: relayStylePagination(["genre"]), // genreが異なっていたら異なるキャッシュとして管理
       },
     },
   },

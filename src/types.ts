@@ -4,7 +4,7 @@ import {
 } from "@react-navigation/native-stack";
 import { NavigationProp } from "@react-navigation/native";
 
-type RootStackParamList = {
+export type RootStackParamList = {
   Tab: undefined;
   Signup: undefined;
   Signin: undefined;
@@ -14,6 +14,7 @@ type RootStackParamList = {
   Thought: {
     id: string;
   };
+  ThoughtWriting: undefined;
 };
 
 export type RootNavigationScreenProp<

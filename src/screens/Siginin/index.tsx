@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { RootNavigationScreenProp } from "types";
+import { RootNavigationScreenProp } from "src/types";
 import { Mail, Apple, Google } from "src/components/AuthButton";
 import { VStack, Box } from "native-base";
 import { useSignInWithGoogle } from "src/hooks/auth";

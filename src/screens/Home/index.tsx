@@ -1,6 +1,6 @@
 import React, { useLayoutEffect } from "react";
 import { useColorMode, Button } from "native-base";
-import { RootNavigationScreenProp } from "types";
+import { RootNavigationScreenProp } from "src/types";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Society } from "./Society";
 import { Business } from "./Business";
@@ -58,7 +58,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         <TopTab.Screen name="Economy" component={Economy} />
         <TopTab.Screen name="Society" component={Society} />
       </TopTab.Navigator>
-      {/* <Button
+      <Button
         position="absolute"
         w={50}
         h={30}
@@ -66,7 +66,7 @@ export const HomeScreen = ({ navigation }: Props) => {
         onPress={onSubButtonPress}
       >
         toggle
-      </Button> */}
+      </Button>
 
       <AddButton />
     </>

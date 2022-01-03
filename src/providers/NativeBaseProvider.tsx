@@ -16,12 +16,12 @@ export const colors = {
     darkGray: "#292524",
   },
   lt: {
-    bg: "#fff",
+    bg: "#fcfcfc",
   },
   pink: "#ff937d",
   purple: "#4444ff",
   bluePurple: "#4a7dff",
-  textBlack: "#333333",
+  textBlack: "#0d0d0d",
   textWhite: "white",
   lightGray: "#c2c2c2",
 };

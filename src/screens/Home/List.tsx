@@ -5,7 +5,7 @@ import { ThoughtCard } from "src/components/ThoughtCard";
 import { useColorModeValue, useTheme } from "native-base";
 import { Indicator } from "src/components/Indicator";
 import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "types";
+import { RootNavigationProp } from "src/types";
 
 type Props = {
   data: ThoughtsQuery;

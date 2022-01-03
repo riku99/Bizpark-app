@@ -1,6 +1,6 @@
 import React, { useLayoutEffect, useEffect } from "react";
 import { Box, VStack, Text, Pressable } from "native-base";
-import { RootNavigationScreenProp } from "types";
+import { RootNavigationScreenProp } from "src/types";
 import { SafeAreaView } from "react-native";
 import { Bg } from "src/components/Bg";
 import { SwipeContent } from "./SwipeContent";

@@ -1,7 +1,7 @@
 import React, { ComponentProps } from "react";
 import { Button, Text, Box } from "native-base";
 import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "types";
+import { RootNavigationProp } from "src/types";
 
 type Props = {} & ComponentProps<typeof Box>;
 
