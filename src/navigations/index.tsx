@@ -66,12 +66,10 @@ export const RootNavigation = React.memo(() => {
                 presentation: "modal",
               }}
             >
-              <Stack.Group screenOptions={{ headerShown: false }}>
-                <Stack.Screen
-                  name="ThoughtWriting"
-                  component={ThoughtWritingScreen}
-                />
-              </Stack.Group>
+              <Stack.Screen
+                name="ThoughtWriting"
+                component={ThoughtWritingScreen}
+              />
             </Stack.Group>
           </>
         )}
