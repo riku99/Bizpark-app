@@ -31,6 +31,7 @@ export const RootNavigation = React.memo(() => {
             color: useColorModeValue(colors.textBlack, "white"),
           },
           headerBackTitleVisible: false,
+          headerShadowVisible: false,
         }}
       >
         {!loggedIn && (
