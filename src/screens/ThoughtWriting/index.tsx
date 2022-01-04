@@ -1,8 +1,16 @@
 import React, { useLayoutEffect } from "react";
-import { Box, Pressable, Text, Input, useColorModeValue } from "native-base";
+import {
+  Box,
+  Pressable,
+  Text,
+  Input,
+  useColorModeValue,
+  KeyboardAvoidingView,
+} from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { CloseButton } from "src/components/BackButon";
 import { InputAccessoryView } from "react-native";
+import { KeyboardAccessory } from "./KeyboardAccessory";
 
 type Props = RootNavigationScreenProp<"ThoughtWriting">;
 
@@ -38,22 +46,20 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         keyboardAppearance={useColorModeValue("light", "dark")}
       />
 
-      <Box h="100%">
-        <Input
-          borderWidth={0}
-          mt={4}
-          placeholder="テキスト"
-          fontSize={16}
-          multiline
-          h="28%"
-          keyboardAppearance={useColorModeValue("light", "dark")}
-          autoFocus
-          inputAccessoryViewID={textInputId}
-        />
-      </Box>
+      <Input
+        borderWidth={0}
+        mt={4}
+        placeholder="テキスト"
+        fontSize={16}
+        multiline
+        h="29%"
+        keyboardAppearance={useColorModeValue("light", "dark")}
+        autoFocus
+        inputAccessoryViewID={textInputId}
+      />
 
       <InputAccessoryView nativeID={textInputId}>
-        <Box w={40} h={50} bg="blue.900"></Box>
+        <KeyboardAccessory />
       </InputAccessoryView>
     </Box>
   );
