@@ -1,16 +1,17 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useRef } from "react";
 import {
   Box,
   Pressable,
   Text,
   Input,
   useColorModeValue,
-  KeyboardAvoidingView,
+  Factory,
 } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { CloseButton } from "src/components/BackButon";
-import { InputAccessoryView } from "react-native";
+import { InputAccessoryView, TextInput } from "react-native";
 import { KeyboardAccessory } from "./KeyboardAccessory";
+import ImagePicker from "react-native-image-crop-picker";
 
 type Props = RootNavigationScreenProp<"ThoughtWriting">;
 
@@ -33,9 +34,32 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
     });
   }, []);
 
+  const NBInput = Factory(TextInput);
+
   const textInputId = "textInput";
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
+  const [images, setImages] = useState<{ url: string }[]>([]);
+
+  const textInputRef = useRef<TextInput>(null);
+
+  const onAccessoryImagePress = async () => {
+    ImagePicker.openPicker({
+      multiple: true,
+      mediaType: "photo",
+      maxFiles: 4,
+    })
+      .then((images) => {
+        const imageStateData = images.map((m) => ({ url: m.sourceURL }));
+        setImages(imageStateData);
+      })
+      .catch((e) => {
+        console.log(e);
+      })
+      .finally(() => {
+        textInputRef.current?.focus();
+      });
+  };
 
   return (
     <Box flex={1} px={4}>
@@ -48,7 +72,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         keyboardAppearance={useColorModeValue("light", "dark")}
       />
 
-      <Input
+      <NBInput
         borderWidth={0}
         mt={4}
         placeholder="テキスト"
@@ -59,10 +83,15 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         autoFocus
         inputAccessoryViewID={textInputId}
         onChangeText={setText}
+        ref={textInputRef}
       />
 
       <InputAccessoryView nativeID={textInputId}>
-        <KeyboardAccessory text={text} />
+        <KeyboardAccessory
+          text={text}
+          images={images}
+          onCamerarollImagePress={onAccessoryImagePress}
+        />
       </InputAccessoryView>
     </Box>
   );
