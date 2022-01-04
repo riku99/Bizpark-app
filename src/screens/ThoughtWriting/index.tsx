@@ -1,12 +1,5 @@
 import React, { useLayoutEffect, useState, useRef } from "react";
-import {
-  Box,
-  Pressable,
-  Text,
-  Input,
-  useColorModeValue,
-  Factory,
-} from "native-base";
+import { Box, Pressable, Text, Input, useColorModeValue } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { CloseButton } from "src/components/BackButon";
 import { InputAccessoryView, TextInput } from "react-native";
@@ -15,26 +8,20 @@ import ImagePicker from "react-native-image-crop-picker";
 
 type Props = RootNavigationScreenProp<"ThoughtWriting">;
 
-const Share = () => {
-  return (
-    <Pressable>
-      <Text fontWeight="bold" color="pink" fontSize={16}>
-        シェア
-      </Text>
-    </Pressable>
-  );
-};
-
 export const ThoughtWritingScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <CloseButton />,
-      headerRight: () => <Share />,
+      headerRight: () => (
+        <Pressable>
+          <Text fontWeight="bold" color="pink" fontSize={16}>
+            シェア
+          </Text>
+        </Pressable>
+      ),
       title: "作成",
     });
   }, []);
-
-  const NBInput = Factory(TextInput);
 
   const textInputId = "textInput";
   const [title, setTitle] = useState("");
@@ -72,7 +59,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         keyboardAppearance={useColorModeValue("light", "dark")}
       />
 
-      <NBInput
+      <Input
         borderWidth={0}
         mt={4}
         placeholder="テキスト"

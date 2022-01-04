@@ -25,8 +25,6 @@ export const KeyboardAccessory = ({
     getPhoto();
   }, []);
 
-  console.log(images);
-
   return (
     <Box
       w={40}
@@ -53,7 +51,7 @@ export const KeyboardAccessory = ({
           </ImageBackground>
         </Pressable>
       )}
-      <HStack flexDirection="row" flex={1} ml={2} space={4}>
+      <HStack flexDirection="row" flex={1} ml={4} space={4}>
         {images.map((img, i) => {
           return (
             <Image
