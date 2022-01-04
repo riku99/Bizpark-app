@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import {
   Box,
   Pressable,
@@ -34,6 +34,8 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
   }, []);
 
   const textInputId = "textInput";
+  const [title, setTitle] = useState("");
+  const [text, setText] = useState("");
 
   return (
     <Box flex={1} px={4}>
@@ -56,10 +58,11 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         keyboardAppearance={useColorModeValue("light", "dark")}
         autoFocus
         inputAccessoryViewID={textInputId}
+        onChangeText={setText}
       />
 
       <InputAccessoryView nativeID={textInputId}>
-        <KeyboardAccessory />
+        <KeyboardAccessory text={text} />
       </InputAccessoryView>
     </Box>
   );

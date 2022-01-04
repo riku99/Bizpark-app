@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
-import { Box, Pressable } from "native-base";
+import { Box, Pressable, Text } from "native-base";
 import { ImageBackground, StyleSheet } from "react-native";
 import CameraRoll from "@react-native-community/cameraroll";
 import { MaterialIcons } from "@expo/vector-icons";
 
-export const KeyboardAccessory = () => {
+type Props = {
+  text: string;
+};
+
+export const KeyboardAccessory = ({ text }: Props) => {
   const [firstPhotoUri, setFirstPhotoUri] = useState<string>();
 
   useEffect(() => {
@@ -17,7 +21,14 @@ export const KeyboardAccessory = () => {
   }, []);
 
   return (
-    <Box w={40} h={50} px={2} flexDirection="row">
+    <Box
+      w={40}
+      h={52}
+      px={2}
+      flexDirection="row"
+      justifyContent="space-between"
+      alignItems="center"
+    >
       {firstPhotoUri && (
         <Pressable>
           <ImageBackground
@@ -35,6 +46,7 @@ export const KeyboardAccessory = () => {
           </ImageBackground>
         </Pressable>
       )}
+      <Text fontWeight="bold">{text.length} / 500</Text>
     </Box>
   );
 };
