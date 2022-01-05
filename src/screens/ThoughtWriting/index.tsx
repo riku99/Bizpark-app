@@ -20,7 +20,15 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
   const [images, setImages] = useState<{ url: string; mime: string }[]>([]);
 
   const [uploadMutation] = useUploadThoughtImagesMutation();
+  const [createThoughtMutation] = useCreateThoughtMutation();
+
   const onSharePress = async () => {
+    if (!text) {
+      return;
+    }
+
+    let imageUrls: string[] | undefined;
+
     if (images.length) {
       const files = images.map(
         (image) =>
@@ -32,12 +40,23 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       );
 
       try {
-        const { data } = await uploadMutation({
+        const { data: imageData } = await uploadMutation({
           variables: {
             files,
           },
         });
-        console.log(data.uploadThoughtImages);
+        imageUrls = imageData.uploadThoughtImages.urls;
+        const { data } = await createThoughtMutation({
+          variables: {
+            input: {
+              title,
+              text,
+              images: imageUrls,
+            },
+          },
+        });
+        console.log("✋");
+        console.log(data);
       } catch (e) {
         console.log(e);
       }
