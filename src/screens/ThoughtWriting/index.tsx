@@ -5,7 +5,10 @@ import { CloseButton } from "src/components/BackButon";
 import { InputAccessoryView, TextInput } from "react-native";
 import { KeyboardAccessory } from "./KeyboardAccessory";
 import ImagePicker from "react-native-image-crop-picker";
-import { useUploadThoughtImagesMutation } from "src/generated/graphql";
+import {
+  useUploadThoughtImagesMutation,
+  useCreateThoughtMutation,
+} from "src/generated/graphql";
 import { ReactNativeFile } from "apollo-upload-client";
 
 type Props = RootNavigationScreenProp<"ThoughtWriting">;

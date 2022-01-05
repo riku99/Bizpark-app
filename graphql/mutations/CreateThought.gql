@@ -1,0 +1,5 @@
+mutation CreateThought($input: CreateThoughtInput!) {
+  createThought(input: $input) {
+    id
+  }
+}

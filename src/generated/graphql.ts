@@ -22,6 +22,17 @@ export type CreatePickInput = {
   thoughtId: Scalars['String'];
 };
 
+export type CreateThoughtInput = {
+  images?: InputMaybe<Array<Scalars['String']>>;
+  text: Scalars['String'];
+  title?: InputMaybe<Scalars['String']>;
+};
+
+export type CreateThoughtResponse = {
+  __typename?: 'CreateThoughtResponse';
+  id: Scalars['ID'];
+};
+
 export type CreateUserInput = {
   email: Scalars['String'];
   idToken: Scalars['String'];
@@ -47,6 +58,7 @@ export type InitialResponse = {
 export type Mutation = {
   __typename?: 'Mutation';
   createPick: Pick;
+  createThought: CreateThoughtResponse;
   createUser: User;
   deletePick: Pick;
   signOut: SignOutResponse;
@@ -56,6 +68,11 @@ export type Mutation = {
 
 export type MutationCreatePickArgs = {
   input: CreatePickInput;
+};
+
+
+export type MutationCreateThoughtArgs = {
+  input: CreateThoughtInput;
 };
 
 
@@ -147,6 +164,13 @@ export type CreatePickMutationVariables = Exact<{
 
 export type CreatePickMutation = { __typename?: 'Mutation', createPick: { __typename?: 'Pick', id: string, thoughtId: string } };
 
+export type CreateThoughtMutationVariables = Exact<{
+  input: CreateThoughtInput;
+}>;
+
+
+export type CreateThoughtMutation = { __typename?: 'Mutation', createThought: { __typename?: 'CreateThoughtResponse', id: string } };
+
 export type CreateUserMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
@@ -221,6 +245,39 @@ export function useCreatePickMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreatePickMutationHookResult = ReturnType<typeof useCreatePickMutation>;
 export type CreatePickMutationResult = Apollo.MutationResult<CreatePickMutation>;
 export type CreatePickMutationOptions = Apollo.BaseMutationOptions<CreatePickMutation, CreatePickMutationVariables>;
+export const CreateThoughtDocument = gql`
+    mutation CreateThought($input: CreateThoughtInput!) {
+  createThought(input: $input) {
+    id
+  }
+}
+    `;
+export type CreateThoughtMutationFn = Apollo.MutationFunction<CreateThoughtMutation, CreateThoughtMutationVariables>;
+
+/**
+ * __useCreateThoughtMutation__
+ *
+ * To run a mutation, you first call `useCreateThoughtMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateThoughtMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createThoughtMutation, { data, loading, error }] = useCreateThoughtMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateThoughtMutation(baseOptions?: Apollo.MutationHookOptions<CreateThoughtMutation, CreateThoughtMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateThoughtMutation, CreateThoughtMutationVariables>(CreateThoughtDocument, options);
+      }
+export type CreateThoughtMutationHookResult = ReturnType<typeof useCreateThoughtMutation>;
+export type CreateThoughtMutationResult = Apollo.MutationResult<CreateThoughtMutation>;
+export type CreateThoughtMutationOptions = Apollo.BaseMutationOptions<CreateThoughtMutation, CreateThoughtMutationVariables>;
 export const CreateUserDocument = gql`
     mutation CreateUser($input: CreateUserInput!) {
   createUser(input: $input) {
