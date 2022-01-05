@@ -14,7 +14,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
   const textInputId = "textInput";
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
-  const [images, setImages] = useState<{ url: string }[]>([]);
+  const [images, setImages] = useState<{ url: string; mime: string }[]>([]);
 
   const [uploadMutation] = useUploadThoughtImagesMutation();
   const onSharePress = async () => {
@@ -23,7 +23,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         (image) =>
           new ReactNativeFile({
             uri: image.url,
-            type: "image/jpeg",
+            type: image.mime,
             name: `image-${Date.now()}`,
           })
       );
@@ -68,7 +68,9 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       maxFiles: 4,
     })
       .then((images) => {
-        const imageStateData = images.map((m) => ({ url: m.sourceURL }));
+        const imageStateData = images.map((m) => {
+          return { url: m.sourceURL, mime: m.mime };
+        });
         setImages(imageStateData);
       })
       .catch((e) => {

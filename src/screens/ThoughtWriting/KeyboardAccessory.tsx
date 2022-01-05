@@ -6,7 +6,7 @@ import { MaterialIcons } from "@expo/vector-icons";
 
 type Props = {
   text: string;
-  images: { url: string }[];
+  images: { url: string; mime: string }[];
   onCamerarollImagePress: () => void;
 };
 
