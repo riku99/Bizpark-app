@@ -69,7 +69,7 @@ export const ThoughtCard = ({ id, ...props }: Props) => {
               {cacheData.contributor.name}
             </Text>
           </Box>
-          {cacheData.title && (
+          {!!cacheData.title && (
             <Text fontSize={16} fontWeight="bold" mt={2}>
               {cacheData.title}
             </Text>

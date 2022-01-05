@@ -8,6 +8,7 @@ import ImagePicker from "react-native-image-crop-picker";
 import {
   useUploadThoughtImagesMutation,
   useCreateThoughtMutation,
+  ImageInput,
 } from "src/generated/graphql";
 import { ReactNativeFile } from "apollo-upload-client";
 
@@ -27,39 +28,45 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       return;
     }
 
-    let imageUrls: string[] | undefined;
+    let imageInput: ImageInput[] | undefined;
 
-    if (images.length) {
-      const files = images.map(
-        (image) =>
-          new ReactNativeFile({
-            uri: image.url,
-            type: image.mime,
-            name: `image-${Date.now()}`,
-          })
-      );
+    try {
+      if (images.length) {
+        const files = images.map(
+          (image) =>
+            new ReactNativeFile({
+              uri: image.url,
+              type: image.mime,
+              name: `image-${Date.now()}`,
+            })
+        );
 
-      try {
         const { data: imageData } = await uploadMutation({
           variables: {
             files,
           },
         });
-        imageUrls = imageData.uploadThoughtImages.urls;
-        const { data } = await createThoughtMutation({
-          variables: {
-            input: {
-              title,
-              text,
-              images: imageUrls,
-            },
-          },
-        });
-        console.log("✋");
-        console.log(data);
-      } catch (e) {
-        console.log(e);
+
+        imageInput = imageData.uploadThoughtImages.images.map((i) => ({
+          url: i.url,
+          width: i.width,
+          height: i.height,
+        }));
       }
+
+      const { data } = await createThoughtMutation({
+        variables: {
+          input: {
+            title,
+            text,
+            images: imageInput,
+          },
+        },
+      });
+      console.log("✋");
+      console.log(data);
+    } catch (e) {
+      console.log(e);
     }
   };
 

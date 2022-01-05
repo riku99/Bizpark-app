@@ -1,5 +1,9 @@
 mutation UploadThoughtImages($files: [Upload!]!) {
   uploadThoughtImages(files: $files) {
-    urls
+    images {
+      url
+      width
+      height
+    }
   }
 }

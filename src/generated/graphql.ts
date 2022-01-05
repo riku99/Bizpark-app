@@ -23,7 +23,7 @@ export type CreatePickInput = {
 };
 
 export type CreateThoughtInput = {
-  images?: InputMaybe<Array<Scalars['String']>>;
+  images?: InputMaybe<Array<ImageInput>>;
   text: Scalars['String'];
   title?: InputMaybe<Scalars['String']>;
 };
@@ -49,6 +49,20 @@ export enum Genre {
   Politics = 'POLITICS',
   Society = 'SOCIETY'
 }
+
+export type Image = {
+  __typename?: 'Image';
+  height?: Maybe<Scalars['Int']>;
+  id: Scalars['ID'];
+  url: Scalars['String'];
+  width?: Maybe<Scalars['Int']>;
+};
+
+export type ImageInput = {
+  height?: InputMaybe<Scalars['Int']>;
+  url: Scalars['String'];
+  width?: InputMaybe<Scalars['Int']>;
+};
 
 export type InitialResponse = {
   __typename?: 'InitialResponse';
@@ -122,6 +136,13 @@ export type SignOutResponse = {
   id: Scalars['ID'];
 };
 
+export type SubImage = {
+  __typename?: 'SubImage';
+  height?: Maybe<Scalars['Int']>;
+  url: Scalars['String'];
+  width?: Maybe<Scalars['Int']>;
+};
+
 export type Thought = {
   __typename?: 'Thought';
   contributor?: Maybe<User>;
@@ -146,7 +167,7 @@ export type ThoughtsConnection = {
 
 export type UploadThoughtImagesResponse = {
   __typename?: 'UploadThoughtImagesResponse';
-  urls: Array<Scalars['String']>;
+  images: Array<SubImage>;
 };
 
 export type User = {
@@ -195,7 +216,7 @@ export type UploadThoughtImagesMutationVariables = Exact<{
 }>;
 
 
-export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoughtImages: { __typename?: 'UploadThoughtImagesResponse', urls: Array<string> } };
+export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoughtImages: { __typename?: 'UploadThoughtImagesResponse', images: Array<{ __typename?: 'SubImage', url: string, width?: number | null | undefined, height?: number | null | undefined }> } };
 
 export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -381,7 +402,11 @@ export type SignOutMutationOptions = Apollo.BaseMutationOptions<SignOutMutation,
 export const UploadThoughtImagesDocument = gql`
     mutation UploadThoughtImages($files: [Upload!]!) {
   uploadThoughtImages(files: $files) {
-    urls
+    images {
+      url
+      width
+      height
+    }
   }
 }
     `;
