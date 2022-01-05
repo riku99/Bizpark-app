@@ -32,7 +32,7 @@ const First = () => {
 
 const Second = () => {
   return (
-    <Content text={`考えや知ったことを気軽に載せよう`}>
+    <Content text={`考えや思ったことをシェアしよう`}>
       <Post width={SVG_SIZE} height={SVG_SIZE} />
     </Content>
   );
@@ -40,7 +40,7 @@ const Second = () => {
 
 const Third = () => {
   return (
-    <Content text="トークで思考と輪を広げよう">
+    <Content text="トークで輪を広げよう">
       <Chatting width={SVG_SIZE} height={SVG_SIZE} />
     </Content>
   );

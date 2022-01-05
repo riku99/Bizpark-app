@@ -21,7 +21,7 @@ export const AddButton = () => {
       alignItems="center"
       position="absolute"
       bottom={4}
-      right={6}
+      right={5}
       onPress={onPress}
     >
       <Ionicons name="add" size={28} color="white" />

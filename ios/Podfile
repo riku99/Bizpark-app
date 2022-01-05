@@ -17,6 +17,8 @@ def shared_pods
     :hermes_enabled => podfile_properties['expo.jsEngine'] == 'hermes'
   )
 
+  pod 'RNFS', :path => '../node_modules/react-native-fs'
+
   # Uncomment to opt-in to using Flipper
   #
   # if !ENV['CI']

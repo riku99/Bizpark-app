@@ -1,0 +1,5 @@
+mutation UploadThoughtImages($files: [Upload!]!) {
+  uploadThoughtImages(files: $files) {
+    urls
+  }
+}

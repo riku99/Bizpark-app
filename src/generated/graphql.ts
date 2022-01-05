@@ -13,6 +13,8 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  /** The `Upload` scalar type represents a file upload. */
+  Upload: any;
   Void: any;
 };
 
@@ -48,6 +50,7 @@ export type Mutation = {
   createUser: User;
   deletePick: Pick;
   signOut: SignOutResponse;
+  uploadThoughtImages: UploadThoughtImagesResponse;
 };
 
 
@@ -63,6 +66,11 @@ export type MutationCreateUserArgs = {
 
 export type MutationDeletePickArgs = {
   thoughtId: Scalars['ID'];
+};
+
+
+export type MutationUploadThoughtImagesArgs = {
+  files: Array<Scalars['Upload']>;
 };
 
 export type PageInfo = {
@@ -119,6 +127,11 @@ export type ThoughtsConnection = {
   pageInfo: PageInfo;
 };
 
+export type UploadThoughtImagesResponse = {
+  __typename?: 'UploadThoughtImagesResponse';
+  urls: Array<Scalars['String']>;
+};
+
 export type User = {
   __typename?: 'User';
   bio?: Maybe<Scalars['String']>;
@@ -152,6 +165,13 @@ export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SignOutMutation = { __typename?: 'Mutation', signOut: { __typename?: 'SignOutResponse', id: string } };
+
+export type UploadThoughtImagesMutationVariables = Exact<{
+  files: Array<Scalars['Upload']> | Scalars['Upload'];
+}>;
+
+
+export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoughtImages: { __typename?: 'UploadThoughtImagesResponse', urls: Array<string> } };
 
 export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -301,6 +321,39 @@ export function useSignOutMutation(baseOptions?: Apollo.MutationHookOptions<Sign
 export type SignOutMutationHookResult = ReturnType<typeof useSignOutMutation>;
 export type SignOutMutationResult = Apollo.MutationResult<SignOutMutation>;
 export type SignOutMutationOptions = Apollo.BaseMutationOptions<SignOutMutation, SignOutMutationVariables>;
+export const UploadThoughtImagesDocument = gql`
+    mutation UploadThoughtImages($files: [Upload!]!) {
+  uploadThoughtImages(files: $files) {
+    urls
+  }
+}
+    `;
+export type UploadThoughtImagesMutationFn = Apollo.MutationFunction<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
+
+/**
+ * __useUploadThoughtImagesMutation__
+ *
+ * To run a mutation, you first call `useUploadThoughtImagesMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadThoughtImagesMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadThoughtImagesMutation, { data, loading, error }] = useUploadThoughtImagesMutation({
+ *   variables: {
+ *      files: // value for 'files'
+ *   },
+ * });
+ */
+export function useUploadThoughtImagesMutation(baseOptions?: Apollo.MutationHookOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>(UploadThoughtImagesDocument, options);
+      }
+export type UploadThoughtImagesMutationHookResult = ReturnType<typeof useUploadThoughtImagesMutation>;
+export type UploadThoughtImagesMutationResult = Apollo.MutationResult<UploadThoughtImagesMutation>;
+export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
 export const InitialDataDocument = gql`
     query InitialData {
   initialData {

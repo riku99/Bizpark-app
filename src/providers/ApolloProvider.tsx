@@ -14,13 +14,14 @@ import auth from "@react-native-firebase/auth";
 import { Alert } from "react-native";
 import { signOut } from "src/helpers/auth";
 import { relayStylePagination } from "@apollo/client/utilities";
+import { createUploadLink } from "apollo-upload-client";
 
 type Props = {
   children: JSX.Element;
 };
 
-const httpLink = createHttpLink({
-  uri: "http://localhost:5001/bizpark-dev/asia-northeast1/graphql",
+const uploadLink = createUploadLink({
+  uri: "http://localhost:4000/graphql",
 });
 
 const authLink = setContext(async (_, { headers }) => {
@@ -92,7 +93,7 @@ export const ApolloProvider = ({ children }: Props) => {
   });
 
   const client = new ApolloClient({
-    link: from([errorLink, authLink.concat(httpLink)]),
+    link: from([errorLink, authLink, uploadLink]),
     cache,
   });
 

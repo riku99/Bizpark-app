@@ -61,6 +61,7 @@ export const KeyboardAccessory = ({
               size={IMAGE_SIZE}
               borderRadius={8}
               key={img.url}
+              alt={""}
             />
           );
         })}
