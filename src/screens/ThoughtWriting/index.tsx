@@ -26,8 +26,6 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       return;
     }
 
-    console.log(title);
-
     navigation.navigate("ThoughtShare", {
       title,
       text,
@@ -51,7 +49,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       ),
       title: "作成",
     });
-  }, [text]);
+  }, [text, onNextPress]);
 
   const textInputRef = useRef<TextInput>(null);
 

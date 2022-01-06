@@ -10,6 +10,7 @@ import {
 } from "src/generated/graphql";
 import { ReactNativeFile } from "apollo-upload-client";
 import { Alert } from "react-native";
+import { GenreMenu } from "./GenreMenu";
 
 type Props = RootNavigationScreenProp<"ThoughtShare">;
 
@@ -90,13 +91,19 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
     });
   }, []);
 
+  const onMenuAction = (id: Genre) => {
+    setGenre(id);
+  };
+
   return (
     <ScrollView flex={1} px={4}>
-      <Box>
+      <GenreMenu onAction={onMenuAction}>
         <Button mt={2} w={32} h={8} borderRadius={32} _text={{ fontSize: 12 }}>
           ジャンルを選択
         </Button>
+      </GenreMenu>
 
+      <Box px={1} mt={2}>
         {!!title && (
           <Text mt={4} fontWeight="bold" fontSize={17}>
             {title}
