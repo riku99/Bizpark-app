@@ -1,5 +1,13 @@
 import React, { useLayoutEffect, useState } from "react";
-import { Box, Pressable, Text, Button, ScrollView, Image } from "native-base";
+import {
+  Box,
+  Pressable,
+  Text,
+  Button,
+  ScrollView,
+  Image,
+  HStack,
+} from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { CloseButton } from "src/components/BackButon";
 import {
@@ -148,7 +156,22 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
         )}
 
         <Text mt={4}>{text}</Text>
+
+        <HStack space={4} mt={8}>
+          {images.map((img) => (
+            <Image
+              key={img.url}
+              source={{ uri: img.url }}
+              w={IMAGE_SIZE}
+              h={IMAGE_SIZE}
+              size={IMAGE_SIZE}
+              alt={""}
+            />
+          ))}
+        </HStack>
       </Box>
     </ScrollView>
   );
 };
+
+const IMAGE_SIZE = 55;
