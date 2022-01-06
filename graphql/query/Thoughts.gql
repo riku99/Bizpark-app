@@ -12,6 +12,12 @@ query Thoughts($genre: Genre!, $cursor: String) {
           imageUrl
         }
         picked
+        images {
+          id
+          url
+          width
+          height
+        }
       }
       cursor
     }

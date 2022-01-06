@@ -16,6 +16,12 @@ export const useThoughtCacheFragment = () => {
           id
           title
           text
+          images {
+            id
+            url
+            width
+            height
+          }
           contributor {
             id
             name

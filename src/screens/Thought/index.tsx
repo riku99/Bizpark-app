@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { Box, Text, ScrollView, useColorModeValue, Button } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
-import { Image } from "react-native-expo-image-cache";
+import FastImage from "react-native-fast-image";
 import { StyleSheet, SafeAreaView, Dimensions } from "react-native";
 import { CheckBox } from "src/components/CheckBox";
 import { useCustomToast } from "src/hooks/toast";
@@ -69,8 +69,8 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
             }}
           >
             <Box flexDirection="row" alignItems="center" mt={2}>
-              <Image
-                uri={cacheData.contributor.imageUrl}
+              <FastImage
+                source={{ uri: cacheData.contributor.imageUrl }}
                 style={styles.userImage}
               />
               <Text ml={4} fontWeight="bold" fontSize={16}>

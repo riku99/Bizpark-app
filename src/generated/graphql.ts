@@ -149,6 +149,7 @@ export type Thought = {
   contributor?: Maybe<User>;
   createdAt?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  images: Array<Maybe<Image>>;
   picked: Scalars['Boolean'];
   text: Scalars['String'];
   title?: Maybe<Scalars['String']>;
@@ -230,7 +231,7 @@ export type ThoughtsQueryVariables = Exact<{
 }>;
 
 
-export type ThoughtsQuery = { __typename?: 'Query', thoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked: boolean, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type ThoughtsQuery = { __typename?: 'Query', thoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked: boolean, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 
 export const CreatePickDocument = gql`
@@ -491,6 +492,12 @@ export const ThoughtsDocument = gql`
           imageUrl
         }
         picked
+        images {
+          id
+          url
+          width
+          height
+        }
       }
       cursor
     }
