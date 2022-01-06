@@ -17,9 +17,14 @@ export type TohughtStackParamList = {
   SharedImage: {
     item: {
       id: string;
+      url: string;
     };
   };
 };
+
+export type ThoughtNavigationScreenProps<
+  T extends keyof TohughtStackParamList
+> = NativeStackScreenProps<TohughtStackParamList, T>;
 
 export type RootStackParamList = {
   Tab: undefined;

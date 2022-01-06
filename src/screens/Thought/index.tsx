@@ -7,8 +7,9 @@ import {
   Button,
   HStack,
   VStack,
+  Pressable,
 } from "native-base";
-import { RootNavigationScreenProp } from "src/types";
+import { ThoughtNavigationScreenProps } from "src/types";
 import FastImage from "react-native-fast-image";
 import { StyleSheet, SafeAreaView, Dimensions } from "react-native";
 import { CheckBox } from "src/components/CheckBox";
@@ -20,13 +21,9 @@ import {
 } from "src/hooks/apollo";
 import { MotiView } from "moti";
 import { Image } from "src/components/Image";
-import {
-  SharedElement,
-  SharedElementTransition,
-  nodeFromRef,
-} from "react-native-shared-element";
+import { SharedElement } from "react-navigation-shared-element";
 
-type Props = {} & RootNavigationScreenProp<"Thought">;
+type Props = {} & ThoughtNavigationScreenProps<"Thought">;
 
 export const ThoughtScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
@@ -79,7 +76,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
           <ScrollView
             px={4}
             _contentContainerStyle={{
-              paddingBottom: BOTTOM_CONTENTS_HEIGHT,
+              paddingBottom: BOTTOM_CONTENTS_HEIGHT + 4,
             }}
           >
             <Box flexDirection="row" alignItems="center" mt={2}>
@@ -118,27 +115,33 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
             <Text fontSize={16} mt={4}>
               {cacheData.text}
             </Text>
-            <Text fontSize={16} mt={4}>
-              {cacheData.text}
-            </Text>
-            <Text fontSize={16} mt={4}>
-              {cacheData.text}
-            </Text>
-            <Text fontSize={16} mt={4}>
-              {cacheData.text}
-            </Text>
 
             <HStack flexWrap="wrap" justifyContent="space-between" mt={4}>
               {cacheData.images.map((img) => {
                 return (
-                  <Image
+                  <Pressable
                     key={img.id}
                     w={"49%"}
                     h={"32"}
-                    borderRadius="md"
-                    source={{ uri: img.url }}
                     mt={2}
-                  />
+                    onPress={() => {
+                      navigation.navigate("SharedImage", {
+                        item: {
+                          id: img.id,
+                          url: img.url,
+                        },
+                      });
+                    }}
+                  >
+                    <SharedElement id={`item.${img.id}.photo`}>
+                      <Image
+                        w={"100%"}
+                        h={"100%"}
+                        borderRadius="md"
+                        source={{ uri: img.url }}
+                      />
+                    </SharedElement>
+                  </Pressable>
                 );
               })}
             </HStack>

@@ -24,6 +24,7 @@ export const ThoughtNavigation = React.memo(() => {
           const { item } = route.params;
           return [`item.${item.id}.photo`];
         }}
+        options={{ gestureEnabled: false }}
       />
     </Stack.Navigator>
   );
