@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useRef } from "react";
+import React, { useLayoutEffect, useState, useRef, useCallback } from "react";
 import { Box, Pressable, Text, Input, useColorModeValue } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { CloseButton } from "src/components/BackButon";
@@ -90,7 +90,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
 
   const textInputRef = useRef<TextInput>(null);
 
-  const onAccessoryImagePress = async () => {
+  const onAccessoryImagePress = useCallback(async () => {
     ImagePicker.openPicker({
       multiple: true,
       mediaType: "photo",
@@ -108,7 +108,16 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       .finally(() => {
         textInputRef.current?.focus();
       });
-  };
+  }, []);
+
+  const onSelectedImagesDeleteButtonPress = useCallback(
+    (url: string) => {
+      setImages((c) => {
+        return c.filter((image) => image.url !== url);
+      });
+    },
+    [images]
+  );
 
   return (
     <Box flex={1} px={4}>
@@ -141,6 +150,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
           text={text}
           images={images}
           onCamerarollImagePress={onAccessoryImagePress}
+          onSelectedImageDeletePress={onSelectedImagesDeleteButtonPress}
         />
       </InputAccessoryView>
     </Box>
