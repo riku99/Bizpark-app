@@ -1,5 +1,13 @@
 import React, { useLayoutEffect, useState } from "react";
-import { Box, Text, ScrollView, useColorModeValue, Button } from "native-base";
+import {
+  Box,
+  Text,
+  ScrollView,
+  useColorModeValue,
+  Button,
+  HStack,
+  VStack,
+} from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import FastImage from "react-native-fast-image";
 import { StyleSheet, SafeAreaView, Dimensions } from "react-native";
@@ -11,6 +19,7 @@ import {
   useDeletePick,
 } from "src/hooks/apollo";
 import { MotiView } from "moti";
+import { Image } from "src/components/Image";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
@@ -113,6 +122,21 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
             <Text fontSize={16} mt={4}>
               {cacheData.text}
             </Text>
+
+            <HStack flexWrap="wrap" justifyContent="space-between" mt={4}>
+              {cacheData.images.map((img) => {
+                return (
+                  <Image
+                    key={img.id}
+                    w={"49%"}
+                    h={"32"}
+                    borderRadius="md"
+                    source={{ uri: img.url }}
+                    mt={2}
+                  />
+                );
+              })}
+            </HStack>
           </ScrollView>
 
           <MotiView
