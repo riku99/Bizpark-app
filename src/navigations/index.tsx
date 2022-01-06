@@ -64,7 +64,11 @@ export const RootNavigation = React.memo(() => {
               }}
             />
 
-            <Stack.Screen name="Thought" component={ThoughtNavigation} />
+            <Stack.Screen
+              name="Thought"
+              component={ThoughtNavigation}
+              options={{ headerShown: false }}
+            />
 
             <Stack.Group
               screenOptions={{

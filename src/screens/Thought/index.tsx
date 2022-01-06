@@ -11,7 +11,7 @@ import {
 } from "native-base";
 import { ThoughtNavigationScreenProps } from "src/types";
 import FastImage from "react-native-fast-image";
-import { StyleSheet, SafeAreaView, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
 import { CheckBox } from "src/components/CheckBox";
 import { useCustomToast } from "src/hooks/toast";
 import {
@@ -22,6 +22,7 @@ import {
 import { MotiView } from "moti";
 import { Image } from "src/components/Image";
 import { SharedElement } from "react-navigation-shared-element";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Props = {} & ThoughtNavigationScreenProps<"Thought">;
 
@@ -34,7 +35,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
 
   useLayoutEffect(() => {
-    navigation.getParent().setOptions({
+    navigation.setOptions({
       title: cacheData.title ?? "Not title",
     });
   }, []);
@@ -69,14 +70,16 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
     noDataToast();
   }
 
+  const { bottom } = useSafeAreaInsets();
+
   return (
-    <SafeAreaView style={styles.container}>
+    <Box style={styles.container} pb={bottom}>
       {cacheData ? (
         <>
           <ScrollView
             px={4}
             _contentContainerStyle={{
-              paddingBottom: BOTTOM_CONTENTS_HEIGHT + 4,
+              paddingBottom: BOTTOM_CONTENTS_HEIGHT,
             }}
           >
             <Box flexDirection="row" alignItems="center" mt={2}>
@@ -148,9 +151,10 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
           </ScrollView>
 
           <MotiView
-            from={{ translateY: 80 }}
-            animate={{ translateY: 0 }}
+            from={{ translateY: 180 }}
+            animate={{ translateY: 20 }}
             transition={{ type: "timing", duration: 400 }}
+            style={{ height: BOTTOM_CONTENTS_HEIGHT }}
           >
             <Box
               position="absolute"
@@ -167,7 +171,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
           </MotiView>
         </>
       ) : null}
-    </SafeAreaView>
+    </Box>
   );
 };
 
