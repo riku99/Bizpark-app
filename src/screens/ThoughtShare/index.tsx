@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
-import { Box, Pressable, Text, Button, ScrollView } from "native-base";
+import { Box, Pressable, Text, Button, ScrollView, Image } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { CloseButton } from "src/components/BackButon";
 import {
@@ -28,6 +28,11 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
         "テキストがありません",
         "前のページに戻りテキストを入力してください"
       );
+      return;
+    }
+
+    if (!genre) {
+      Alert.alert("ジャンルが選択されていません", "ジャンルを選択してください");
       return;
     }
 
@@ -63,11 +68,12 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
             title,
             text,
             images: imageInput,
+            genre,
           },
         },
       });
-      console.log("✋");
-      console.log(data);
+
+      navigation.navigate("Tab");
     } catch (e) {
       console.log(e);
     }
@@ -83,24 +89,55 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
             fontWeight="bold"
             color={genre ? "pink" : "lightGray"}
             fontSize={16}
+            onPress={onSharePress}
           >
             シェア
           </Text>
         </Pressable>
       ),
     });
-  }, []);
+  }, [genre, onSharePress]);
 
   const onMenuAction = (id: Genre) => {
     setGenre(id);
   };
 
+  let menuText: string | null = null;
+  if (genre) {
+    switch (genre) {
+      case Genre.Business:
+        menuText = "Business";
+        break;
+      case Genre.Politics:
+        menuText = "Politics";
+        break;
+      case Genre.Economy:
+        menuText = "Economy";
+        break;
+      case Genre.Society:
+        menuText = "Society";
+        break;
+    }
+  }
+
   return (
     <ScrollView flex={1} px={4}>
       <GenreMenu onAction={onMenuAction}>
-        <Button mt={2} w={32} h={8} borderRadius={32} _text={{ fontSize: 12 }}>
-          ジャンルを選択
-        </Button>
+        {!genre ? (
+          <Button
+            mt={2}
+            w={32}
+            h={8}
+            borderRadius={32}
+            _text={{ fontSize: 12 }}
+          >
+            ジャンルを選択
+          </Button>
+        ) : (
+          <Text mt={2} fontSize={16} fontWeight="bold" color="pink">
+            ジャンル: {menuText}
+          </Text>
+        )}
       </GenreMenu>
 
       <Box px={1} mt={2}>
