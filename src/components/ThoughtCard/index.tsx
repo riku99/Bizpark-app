@@ -1,12 +1,19 @@
 import React, { ComponentProps, useState, useEffect } from "react";
-import { Box, useColorModeValue, Text, Pressable, HStack } from "native-base";
+import {
+  Box,
+  useColorModeValue,
+  Text,
+  Pressable,
+  HStack,
+  Factory,
+} from "native-base";
 import { CheckBox } from "../CheckBox";
 import {
   useThoughtCacheFragment,
   useCreatePick,
   useDeletePick,
 } from "src/hooks/apollo";
-import FastImage from "react-native-fast-image";
+import { Image } from "src/components/Image";
 
 type Props = {
   id: string;
@@ -61,9 +68,10 @@ export const ThoughtCard = ({ id, ...props }: Props) => {
           {...props}
         >
           <Box flexDirection="row" alignItems="center">
-            <FastImage
+            <Image
               source={{ uri: cacheData.contributor.imageUrl }}
-              style={{ height: 34, width: 34, borderRadius: 34 }}
+              size={34}
+              borderRadius={34}
             />
             <Text fontWeight="bold" ml={2}>
               {cacheData.contributor.name}
@@ -76,24 +84,28 @@ export const ThoughtCard = ({ id, ...props }: Props) => {
             </Text>
           )}
 
-          <Text maxH={40} mt={!cacheData.title ? 2 : 1}>
+          <Text maxH={40} mt={!cacheData.title ? 2 : 1} fontSize={15}>
             {cacheData.text}
           </Text>
 
-          <HStack>
+          <HStack space={2} mt={4}>
             {cacheData.images.map((img) => (
-              <Box key={img.url}>
-                <FastImage
-                  source={{
-                    uri: img.url,
-                  }}
-                  style={{ width: 50, height: 50 }}
-                />
-              </Box>
+              <Image
+                key={img.id}
+                source={{
+                  uri: img.url,
+                }}
+                size={70}
+                borderRadius="md"
+              />
             ))}
           </HStack>
 
-          <Box mt={2} flexDirection="row" alignItems="center">
+          <Box
+            mt={cacheData.images.length ? 4 : 2}
+            flexDirection="row"
+            alignItems="center"
+          >
             <Text color="pink" fontWeight="bold" fontSize={16}>
               Pick
             </Text>
