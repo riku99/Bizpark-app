@@ -24,6 +24,7 @@ export const colors = {
   textBlack: "#0d0d0d",
   textWhite: "white",
   lightGray: "#c2c2c2",
+  darkGray: "#303030",
 };
 
 const components = {

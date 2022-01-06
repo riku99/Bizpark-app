@@ -3,6 +3,7 @@ import { Box, Pressable, Text, Image, HStack } from "native-base";
 import { ImageBackground, StyleSheet } from "react-native";
 import CameraRoll from "@react-native-community/cameraroll";
 import { MaterialIcons } from "@expo/vector-icons";
+import { CloseButton } from "src/components/CloseButton";
 
 type Props = {
   text: string;
@@ -54,15 +55,18 @@ export const KeyboardAccessory = ({
       <HStack flexDirection="row" flex={1} ml={4} space={4}>
         {images.map((img, i) => {
           return (
-            <Image
-              source={{ uri: img.url }}
-              w={IMAGE_SIZE}
-              h={IMAGE_SIZE}
-              size={IMAGE_SIZE}
-              borderRadius={8}
-              key={img.url}
-              alt={""}
-            />
+            <Box>
+              <Image
+                source={{ uri: img.url }}
+                w={IMAGE_SIZE}
+                h={IMAGE_SIZE}
+                size={IMAGE_SIZE}
+                borderRadius={8}
+                key={img.url}
+                alt={""}
+              />
+              <CloseButton size={6} position="absolute" top={-10} right={-10} />
+            </Box>
           );
         })}
       </HStack>
