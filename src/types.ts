@@ -2,7 +2,12 @@ import {
   NativeStackScreenProps,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
-import { NavigationProp } from "@react-navigation/native";
+
+type ThoughtShare = {
+  title?: string;
+  text: string;
+  images: { url: string; mime: string }[];
+};
 
 export type RootStackParamList = {
   Tab: undefined;
@@ -15,6 +20,7 @@ export type RootStackParamList = {
     id: string;
   };
   ThoughtWriting: undefined;
+  ThoughtShare: ThoughtShare;
 };
 
 export type RootNavigationScreenProp<

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Box, Pressable, Text, Image, HStack } from "native-base";
+import { Box, Pressable, Text, Image, HStack, Button } from "native-base";
 import { ImageBackground, StyleSheet } from "react-native";
 import CameraRoll from "@react-native-community/cameraroll";
 import { MaterialIcons } from "@expo/vector-icons";
@@ -30,59 +30,61 @@ export const KeyboardAccessory = React.memo(
     }, []);
 
     return (
-      <Box
-        w={40}
-        h={52}
-        px={2}
-        flexDirection="row"
-        justifyContent="space-between"
-        alignItems="center"
-      >
-        {firstPhotoUri && (
-          <Pressable onPress={onCamerarollImagePress}>
-            <ImageBackground
-              source={{ uri: firstPhotoUri }}
-              width={IMAGE_SIZE}
-              height={IMAGE_SIZE}
-              style={styles.imageContainer}
-              imageStyle={styles.image}
-            >
-              <MaterialIcons
-                name="add-photo-alternate"
-                size={24}
-                color="#f2f2f2"
-              />
-            </ImageBackground>
-          </Pressable>
-        )}
-        <HStack flexDirection="row" flex={1} ml={4} space={4}>
-          {images.map((img, i) => {
-            return (
-              <Box>
-                <Image
-                  source={{ uri: img.url }}
-                  w={IMAGE_SIZE}
-                  h={IMAGE_SIZE}
-                  size={IMAGE_SIZE}
-                  borderRadius={8}
-                  key={img.url}
-                  alt={""}
+      <>
+        <Box
+          w={40}
+          h={52}
+          px={2}
+          flexDirection="row"
+          justifyContent="space-between"
+          alignItems="center"
+        >
+          {firstPhotoUri && (
+            <Pressable onPress={onCamerarollImagePress}>
+              <ImageBackground
+                source={{ uri: firstPhotoUri }}
+                width={IMAGE_SIZE}
+                height={IMAGE_SIZE}
+                style={styles.imageContainer}
+                imageStyle={styles.image}
+              >
+                <MaterialIcons
+                  name="add-photo-alternate"
+                  size={24}
+                  color="#f2f2f2"
                 />
-                <CloseButton
-                  size={6}
-                  position="absolute"
-                  top={-10}
-                  right={-10}
-                  onPress={() => {
-                    onSelectedImageDeletePress(img.url);
-                  }}
-                />
-              </Box>
-            );
-          })}
-        </HStack>
-        <Text fontWeight="bold">{text.length} / 500</Text>
-      </Box>
+              </ImageBackground>
+            </Pressable>
+          )}
+          <HStack flexDirection="row" flex={1} ml={4} space={4}>
+            {images.map((img, i) => {
+              return (
+                <Box>
+                  <Image
+                    source={{ uri: img.url }}
+                    w={IMAGE_SIZE}
+                    h={IMAGE_SIZE}
+                    size={IMAGE_SIZE}
+                    borderRadius={8}
+                    key={img.url}
+                    alt={""}
+                  />
+                  <CloseButton
+                    size={6}
+                    position="absolute"
+                    top={-10}
+                    right={-10}
+                    onPress={() => {
+                      onSelectedImageDeletePress(img.url);
+                    }}
+                  />
+                </Box>
+              );
+            })}
+          </HStack>
+          <Text fontWeight="bold">{text.length} / 500</Text>
+        </Box>
+      </>
     );
   }
 );

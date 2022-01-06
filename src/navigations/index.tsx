@@ -11,6 +11,7 @@ import { meVar } from "src/stores/me";
 import { useReactiveVar } from "@apollo/client";
 import { ThoughtScreen } from "src/screens/Thought";
 import { ThoughtWritingScreen } from "src/screens/ThoughtWriting";
+import { ThoughtShareScreen } from "src/screens/ThoughtShare";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -62,6 +63,7 @@ export const RootNavigation = React.memo(() => {
               }}
             />
             <Stack.Screen name="Thought" component={ThoughtScreen} />
+
             <Stack.Group
               screenOptions={{
                 presentation: "modal",
@@ -70,6 +72,10 @@ export const RootNavigation = React.memo(() => {
               <Stack.Screen
                 name="ThoughtWriting"
                 component={ThoughtWritingScreen}
+              />
+              <Stack.Screen
+                name="ThoughtShare"
+                component={ThoughtShareScreen}
               />
             </Stack.Group>
           </>

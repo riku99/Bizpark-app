@@ -1,16 +1,17 @@
 import React, { useLayoutEffect, useState, useRef, useCallback } from "react";
-import { Box, Pressable, Text, Input, useColorModeValue } from "native-base";
+import {
+  Box,
+  Pressable,
+  Text,
+  Input,
+  useColorModeValue,
+  Button,
+} from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { CloseButton } from "src/components/BackButon";
 import { InputAccessoryView, TextInput } from "react-native";
 import { KeyboardAccessory } from "./KeyboardAccessory";
 import ImagePicker from "react-native-image-crop-picker";
-import {
-  useUploadThoughtImagesMutation,
-  useCreateThoughtMutation,
-  ImageInput,
-} from "src/generated/graphql";
-import { ReactNativeFile } from "apollo-upload-client";
 
 type Props = RootNavigationScreenProp<"ThoughtWriting">;
 
@@ -20,73 +21,37 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
   const [text, setText] = useState("");
   const [images, setImages] = useState<{ url: string; mime: string }[]>([]);
 
-  const [uploadMutation] = useUploadThoughtImagesMutation();
-  const [createThoughtMutation] = useCreateThoughtMutation();
-
-  const onSharePress = async () => {
+  const onNextPress = () => {
     if (!text) {
       return;
     }
 
-    let imageInput: ImageInput[] | undefined;
+    console.log(title);
 
-    try {
-      if (images.length) {
-        const files = images.map(
-          (image) =>
-            new ReactNativeFile({
-              uri: image.url,
-              type: image.mime,
-              name: `image-${Date.now()}`,
-            })
-        );
-
-        const { data: imageData } = await uploadMutation({
-          variables: {
-            files,
-          },
-        });
-
-        imageInput = imageData.uploadThoughtImages.images.map((i) => ({
-          url: i.url,
-          width: i.width,
-          height: i.height,
-        }));
-      }
-
-      const { data } = await createThoughtMutation({
-        variables: {
-          input: {
-            title,
-            text,
-            images: imageInput,
-          },
-        },
-      });
-      console.log("✋");
-      console.log(data);
-    } catch (e) {
-      console.log(e);
-    }
+    navigation.navigate("ThoughtShare", {
+      title,
+      text,
+      images,
+    });
   };
 
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => <CloseButton />,
       headerRight: () => (
-        <Pressable onPress={onSharePress}>
+        <Pressable onPress={onNextPress}>
           <Text
             fontWeight="bold"
             color={text ? "pink" : "lightGray"}
             fontSize={16}
           >
-            シェア
+            次へ
           </Text>
         </Pressable>
       ),
       title: "作成",
     });
-  }, [text, onSharePress]);
+  }, [text]);
 
   const textInputRef = useRef<TextInput>(null);
 
@@ -137,7 +102,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         placeholder="テキスト"
         fontSize={16}
         multiline
-        h="29%"
+        h="27%"
         keyboardAppearance={useColorModeValue("light", "dark")}
         autoFocus
         inputAccessoryViewID={textInputId}
