@@ -2,11 +2,23 @@ import {
   NativeStackScreenProps,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
+import { NavigatorScreenParams } from "@react-navigation/native";
 
 type ThoughtShare = {
   title?: string;
   text: string;
   images: { url: string; mime: string }[];
+};
+
+export type TohughtStackParamList = {
+  Thought: {
+    id: string;
+  };
+  SharedImage: {
+    item: {
+      id: string;
+    };
+  };
 };
 
 export type RootStackParamList = {
@@ -16,9 +28,7 @@ export type RootStackParamList = {
   MailForm: {
     type: "signUp" | "signIn";
   };
-  Thought: {
-    id: string;
-  };
+  Thought: NavigatorScreenParams<TohughtStackParamList>;
   ThoughtWriting: undefined;
   ThoughtShare: ThoughtShare;
 };

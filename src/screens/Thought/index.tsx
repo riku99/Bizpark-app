@@ -20,6 +20,11 @@ import {
 } from "src/hooks/apollo";
 import { MotiView } from "moti";
 import { Image } from "src/components/Image";
+import {
+  SharedElement,
+  SharedElementTransition,
+  nodeFromRef,
+} from "react-native-shared-element";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
@@ -32,7 +37,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
 
   useLayoutEffect(() => {
-    navigation.setOptions({
+    navigation.getParent().setOptions({
       title: cacheData.title ?? "Not title",
     });
   }, []);
