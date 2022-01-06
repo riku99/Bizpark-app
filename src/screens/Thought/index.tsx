@@ -9,7 +9,7 @@ import {
   VStack,
   Pressable,
 } from "native-base";
-import { ThoughtNavigationScreenProps } from "src/types";
+import { RootNavigationScreenProp } from "src/types";
 import FastImage from "react-native-fast-image";
 import { StyleSheet } from "react-native";
 import { CheckBox } from "src/components/CheckBox";
@@ -21,10 +21,9 @@ import {
 } from "src/hooks/apollo";
 import { MotiView } from "moti";
 import { Image } from "src/components/Image";
-import { SharedElement } from "react-navigation-shared-element";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 
-type Props = {} & ThoughtNavigationScreenProps<"Thought">;
+type Props = {} & RootNavigationScreenProp<"Thought">;
 
 export const ThoughtScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
@@ -38,7 +37,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
     navigation.setOptions({
       title: cacheData.title ?? "Not title",
     });
-  }, []);
+  }, [navigation]);
 
   const { noDataToast } = useCustomToast();
 
@@ -127,23 +126,14 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
                     w={"49%"}
                     h={"32"}
                     mt={2}
-                    onPress={() => {
-                      navigation.navigate("SharedImage", {
-                        item: {
-                          id: img.id,
-                          url: img.url,
-                        },
-                      });
-                    }}
+                    onPress={() => {}}
                   >
-                    <SharedElement id={`item.${img.id}.photo`}>
-                      <Image
-                        w={"100%"}
-                        h={"100%"}
-                        borderRadius="md"
-                        source={{ uri: img.url }}
-                      />
-                    </SharedElement>
+                    <Image
+                      w={"100%"}
+                      h={"100%"}
+                      borderRadius="md"
+                      source={{ uri: img.url }}
+                    />
                   </Pressable>
                 );
               })}

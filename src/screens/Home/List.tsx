@@ -35,10 +35,7 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
           mt={index !== 0 ? 4 : 0}
           onPress={() => {
             navigation.navigate("Thought", {
-              screen: "Thought",
-              params: {
-                id,
-              },
+              id,
             });
           }}
         />

@@ -33,7 +33,9 @@ export type RootStackParamList = {
   MailForm: {
     type: "signUp" | "signIn";
   };
-  Thought: NavigatorScreenParams<TohughtStackParamList>;
+  Thought: {
+    id: string;
+  };
   ThoughtWriting: undefined;
   ThoughtShare: ThoughtShare;
 };
