@@ -1,0 +1,5 @@
+mutation DeleteThought($input: DeleteThoughtInput!) {
+  deleteThought(input: $input) {
+    id
+  }
+}

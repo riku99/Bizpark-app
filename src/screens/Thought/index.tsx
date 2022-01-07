@@ -10,7 +10,7 @@ import {
   useTheme,
 } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
-import { StyleSheet } from "react-native";
+import { Alert, StyleSheet } from "react-native";
 import { CheckBox } from "src/components/CheckBox";
 import { useCustomToast } from "src/hooks/toast";
 import {
@@ -27,6 +27,12 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { Menu } from "./Menu";
 import { meVar } from "src/stores/me";
 import { useReactiveVar } from "@apollo/client";
+import {
+  useDeleteThoughtMutation,
+  CustomErrorResponseCode,
+} from "src/generated/graphql";
+import { spinnerVisibleVar } from "src/stores/spinner";
+import { useToast } from "react-native-toast-notifications";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
@@ -36,10 +42,12 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   const cacheData = readThoughtFragment(id);
   const [createPickMutation] = useCreatePick();
   const [deletePickMutation] = useDeletePick();
+  const [deleteThoughtMutation] = useDeleteThoughtMutation();
   const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
   const [imageViewing, setImageViewing] = useState<number | null>(null);
   const { colors } = useTheme();
   const myId = useReactiveVar(meVar.id);
+  const toast = useToast();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -83,6 +91,37 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 
   const isMyItem = myId === cacheData.contributor.id;
 
+  const deleteThought = async () => {
+    try {
+      spinnerVisibleVar(true);
+      await deleteThoughtMutation({
+        variables: {
+          input: {
+            id: cacheData.id,
+          },
+        },
+      });
+      navigation.goBack();
+      toast.show("削除しました", { type: "success" });
+    } catch (error) {
+      const firstError = error.graphQLErrors[0];
+      const code = firstError.extensions.code;
+
+      if (code === CustomErrorResponseCode.InvalidRequest) {
+        Alert.alert("エラー", "既に削除されています", [
+          {
+            text: "OK",
+            onPress: () => {
+              navigation.goBack();
+            },
+          },
+        ]);
+      }
+    } finally {
+      spinnerVisibleVar(false);
+    }
+  };
+
   return (
     <Box style={styles.container} pb={bottom}>
       {cacheData ? (
@@ -111,7 +150,14 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 
               {/* 現在は項目が「削除」のみなのでhorizontalアイコンも表示しない */}
               {isMyItem && (
-                <Menu onAction={(id) => {}} isMyItem={isMyItem}>
+                <Menu
+                  onAction={async (id) => {
+                    if (id === "delete") {
+                      await deleteThought();
+                    }
+                  }}
+                  isMyItem={isMyItem}
+                >
                   <MaterialCommunityIcons
                     name="dots-horizontal"
                     size={24}

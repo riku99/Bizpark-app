@@ -41,8 +41,18 @@ export type CreateUserInput = {
 };
 
 export enum CustomErrorResponseCode {
-  AlreadyUserExisting = 'ALREADY_USER_EXISTING'
+  AlreadyUserExisting = 'ALREADY_USER_EXISTING',
+  InvalidRequest = 'INVALID_REQUEST'
 }
+
+export type DeleteThoughtInput = {
+  id: Scalars['String'];
+};
+
+export type DeleteThoughtResponse = {
+  __typename?: 'DeleteThoughtResponse';
+  id: Scalars['ID'];
+};
 
 export enum Genre {
   Business = 'BUSINESS',
@@ -76,6 +86,7 @@ export type Mutation = {
   createThought: CreateThoughtResponse;
   createUser: User;
   deletePick: Pick;
+  deleteThought: DeleteThoughtResponse;
   signOut: SignOutResponse;
   uploadThoughtImages: UploadThoughtImagesResponse;
 };
@@ -98,6 +109,11 @@ export type MutationCreateUserArgs = {
 
 export type MutationDeletePickArgs = {
   thoughtId: Scalars['ID'];
+};
+
+
+export type MutationDeleteThoughtArgs = {
+  input: DeleteThoughtInput;
 };
 
 
@@ -207,6 +223,13 @@ export type DeletePickMutationVariables = Exact<{
 
 
 export type DeletePickMutation = { __typename?: 'Mutation', deletePick: { __typename?: 'Pick', id: string, thoughtId: string } };
+
+export type DeleteThoughtMutationVariables = Exact<{
+  input: DeleteThoughtInput;
+}>;
+
+
+export type DeleteThoughtMutation = { __typename?: 'Mutation', deleteThought: { __typename?: 'DeleteThoughtResponse', id: string } };
 
 export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -369,6 +392,39 @@ export function useDeletePickMutation(baseOptions?: Apollo.MutationHookOptions<D
 export type DeletePickMutationHookResult = ReturnType<typeof useDeletePickMutation>;
 export type DeletePickMutationResult = Apollo.MutationResult<DeletePickMutation>;
 export type DeletePickMutationOptions = Apollo.BaseMutationOptions<DeletePickMutation, DeletePickMutationVariables>;
+export const DeleteThoughtDocument = gql`
+    mutation DeleteThought($input: DeleteThoughtInput!) {
+  deleteThought(input: $input) {
+    id
+  }
+}
+    `;
+export type DeleteThoughtMutationFn = Apollo.MutationFunction<DeleteThoughtMutation, DeleteThoughtMutationVariables>;
+
+/**
+ * __useDeleteThoughtMutation__
+ *
+ * To run a mutation, you first call `useDeleteThoughtMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteThoughtMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteThoughtMutation, { data, loading, error }] = useDeleteThoughtMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteThoughtMutation(baseOptions?: Apollo.MutationHookOptions<DeleteThoughtMutation, DeleteThoughtMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteThoughtMutation, DeleteThoughtMutationVariables>(DeleteThoughtDocument, options);
+      }
+export type DeleteThoughtMutationHookResult = ReturnType<typeof useDeleteThoughtMutation>;
+export type DeleteThoughtMutationResult = Apollo.MutationResult<DeleteThoughtMutation>;
+export type DeleteThoughtMutationOptions = Apollo.BaseMutationOptions<DeleteThoughtMutation, DeleteThoughtMutationVariables>;
 export const SignOutDocument = gql`
     mutation SignOut {
   signOut {
