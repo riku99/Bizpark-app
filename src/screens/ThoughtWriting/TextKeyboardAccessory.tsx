@@ -12,7 +12,7 @@ type Props = {
   onSelectedImageDeletePress: (url: string) => void;
 };
 
-export const KeyboardAccessory = React.memo(
+export const TextKeyboardAccessory = React.memo(
   ({
     text,
     onCamerarollImagePress,
@@ -82,7 +82,12 @@ export const KeyboardAccessory = React.memo(
               );
             })}
           </HStack>
-          <Text fontWeight="bold">{text.length} / 500</Text>
+          <Text
+            fontWeight="bold"
+            color={text.length > 500 ? "red.900" : undefined}
+          >
+            {text.length} / 500
+          </Text>
         </Box>
       </>
     );

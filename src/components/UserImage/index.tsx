@@ -16,7 +16,7 @@ export const UserImage = ({ uri, size }: Props) => {
         <Image source={{ uri }} size={size} borderRadius="full" />
       ) : (
         <NBImage
-          bg="#808080"
+          bg="#e0e0e0"
           borderRadius="full"
           source={User}
           size={size}

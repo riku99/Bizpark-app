@@ -10,13 +10,15 @@ import {
 import { RootNavigationScreenProp } from "src/types";
 import { CloseButton } from "src/components/BackButon";
 import { InputAccessoryView, TextInput } from "react-native";
-import { KeyboardAccessory } from "./KeyboardAccessory";
+import { TextKeyboardAccessory } from "./TextKeyboardAccessory";
 import ImagePicker from "react-native-image-crop-picker";
+import { TitleKeyboardAccessory } from "./TitleKeyboardAccessory";
 
 type Props = RootNavigationScreenProp<"ThoughtWriting">;
 
 export const ThoughtWritingScreen = ({ navigation }: Props) => {
   const textInputId = "textInput";
+  const titleInputId = "titleInput";
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [images, setImages] = useState<{ url: string; mime: string }[]>([]);
@@ -92,6 +94,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         mt={2}
         keyboardAppearance={useColorModeValue("light", "dark")}
         onChangeText={setTitle}
+        inputAccessoryViewID={titleInputId}
       />
 
       <Input
@@ -109,12 +112,16 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       />
 
       <InputAccessoryView nativeID={textInputId}>
-        <KeyboardAccessory
+        <TextKeyboardAccessory
           text={text}
           images={images}
           onCamerarollImagePress={onAccessoryImagePress}
           onSelectedImageDeletePress={onSelectedImagesDeleteButtonPress}
         />
+      </InputAccessoryView>
+
+      <InputAccessoryView nativeID={titleInputId}>
+        <TitleKeyboardAccessory title={title} />
       </InputAccessoryView>
     </Box>
   );
