@@ -34,7 +34,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   const [createPickMutation] = useCreatePick();
   const [deletePickMutation] = useDeletePick();
   const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
-  const [imageViewing, setImageViewing] = useState(false);
+  const [imageViewing, setImageViewing] = useState<number | null>(null);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -124,7 +124,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
             </Text>
 
             <HStack flexWrap="wrap" justifyContent="space-between" mt={4}>
-              {cacheData.images.map((img) => {
+              {cacheData.images.map((img, idx) => {
                 return (
                   <Pressable
                     key={img.id}
@@ -132,7 +132,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
                     h={"32"}
                     mt={2}
                     onPress={() => {
-                      setImageViewing(true);
+                      setImageViewing(idx);
                     }}
                   >
                     <Image
@@ -168,11 +168,11 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
           </MotiView>
 
           <ImageView
-            visible={imageViewing}
+            visible={imageViewing !== null}
             images={imageViewingData}
-            imageIndex={0}
+            imageIndex={imageViewing}
             onRequestClose={() => {
-              setImageViewing(false);
+              setImageViewing(null);
             }}
           />
         </>
