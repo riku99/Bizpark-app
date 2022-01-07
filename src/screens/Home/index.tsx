@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from "react";
-import { useColorMode, Button } from "native-base";
+import { useColorMode, Button, Box } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { Society } from "./Society";
@@ -9,6 +9,9 @@ import { Politics } from "./Politics";
 import { useTopTabBarStyle } from "src/hooks/theme";
 import { useSignOut } from "src/hooks/auth";
 import { AddButton } from "src/components/AddButton";
+import { CreatingToast } from "src/components/CreatingToast";
+import { useReactiveVar } from "@apollo/client";
+import { creatingThoughtVar } from "src/stores/thought";
 
 type Props = RootNavigationScreenProp<"Tab">;
 
@@ -36,6 +39,8 @@ export const HomeScreen = ({ navigation }: Props) => {
     toggleColorMode();
     // await signOut();
   };
+
+  const creatingThought = useReactiveVar(creatingThoughtVar);
 
   return (
     <>
@@ -69,6 +74,10 @@ export const HomeScreen = ({ navigation }: Props) => {
       </Button>
 
       <AddButton />
+
+      {creatingThought && (
+        <CreatingToast position="absolute" top={16} alignSelf="center" />
+      )}
     </>
   );
 };

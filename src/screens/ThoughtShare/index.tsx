@@ -19,20 +19,20 @@ import {
 import { ReactNativeFile } from "apollo-upload-client";
 import { Alert } from "react-native";
 import { GenreMenu } from "./GenreMenu";
-import { useCustomToast } from "src/hooks/toast";
+import { creatingThoughtVar } from "src/stores/thought";
+import { useToast } from "react-native-toast-notifications";
 
 type Props = RootNavigationScreenProp<"ThoughtShare">;
 
 export const ThoughtShareScreen = ({ navigation, route }: Props) => {
   const { title, text, images } = route.params;
-  const { someErrorToast } = useCustomToast();
   const [uploadMutation] = useUploadThoughtImagesMutation();
   const [createThoughtMutation] = useCreateThoughtMutation();
+  const toast = useToast();
 
   const [genre, setGenre] = useState<Genre>();
 
   const onSharePress = async () => {
-    someErrorToast();
     if (!text) {
       Alert.alert(
         "テキストがありません",
@@ -49,6 +49,8 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
     let imageInput: ImageInput[] | undefined;
 
     try {
+      creatingThoughtVar(true);
+      navigation.navigate("Tab");
       if (images.length) {
         const files = images.map(
           (image) =>
@@ -83,8 +85,11 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
         },
       });
 
-      navigation.navigate("Tab");
-    } catch (e) {}
+      toast.show("シェアしました", { type: "success" });
+    } catch (e) {
+    } finally {
+      creatingThoughtVar(false);
+    }
   };
 
   useLayoutEffect(() => {
