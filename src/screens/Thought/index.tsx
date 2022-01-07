@@ -136,7 +136,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 
           <MotiView
             from={{ translateY: 180 }}
-            animate={{ translateY: 20 }}
+            animate={{ translateY: 0 }}
             transition={{ type: "timing", duration: 400 }}
             style={{ height: BOTTOM_CONTENTS_HEIGHT }}
           >
