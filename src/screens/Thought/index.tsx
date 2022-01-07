@@ -6,7 +6,6 @@ import {
   useColorModeValue,
   Button,
   HStack,
-  VStack,
   Pressable,
 } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
@@ -22,8 +21,8 @@ import {
 import { MotiView } from "moti";
 import { Image } from "src/components/Image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { ImagePreview } from "./ImagePreview";
 import ImageView from "react-native-image-viewing";
+import { UserImage } from "src/components/UserImage";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
@@ -87,9 +86,9 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
             }}
           >
             <Box flexDirection="row" alignItems="center" mt={2}>
-              <FastImage
-                source={{ uri: cacheData.contributor.imageUrl }}
-                style={styles.userImage}
+              <UserImage
+                uri={cacheData.contributor.imageUrl}
+                size={USER_IMAGE_SIZE}
               />
               <Text ml={4} fontWeight="bold" fontSize={16}>
                 {cacheData.contributor.name}

@@ -14,6 +14,7 @@ import {
   useDeletePick,
 } from "src/hooks/apollo";
 import { Image } from "src/components/Image";
+import { UserImage } from "src/components/UserImage";
 
 type Props = {
   id: string;
@@ -68,11 +69,7 @@ export const ThoughtCard = ({ id, ...props }: Props) => {
           {...props}
         >
           <Box flexDirection="row" alignItems="center">
-            <Image
-              source={{ uri: cacheData.contributor.imageUrl }}
-              size={34}
-              borderRadius={34}
-            />
+            <UserImage uri={cacheData.contributor.imageUrl} size={34} />
             <Text fontWeight="bold" ml={2}>
               {cacheData.contributor.name}
             </Text>
