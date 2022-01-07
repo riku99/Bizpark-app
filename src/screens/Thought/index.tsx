@@ -7,9 +7,9 @@ import {
   Button,
   HStack,
   Pressable,
+  useTheme,
 } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
-import FastImage from "react-native-fast-image";
 import { StyleSheet } from "react-native";
 import { CheckBox } from "src/components/CheckBox";
 import { useCustomToast } from "src/hooks/toast";
@@ -23,6 +23,10 @@ import { Image } from "src/components/Image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import ImageView from "react-native-image-viewing";
 import { UserImage } from "src/components/UserImage";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Menu } from "./Menu";
+import { meVar } from "src/stores/me";
+import { useReactiveVar } from "@apollo/client";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
@@ -34,6 +38,8 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   const [deletePickMutation] = useDeletePick();
   const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
   const [imageViewing, setImageViewing] = useState<number | null>(null);
+  const { colors } = useTheme();
+  const myId = useReactiveVar(meVar.id);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -75,6 +81,8 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 
   const imageViewingData = cacheData.images.map((img) => ({ uri: img.url }));
 
+  const isMyItem = myId === cacheData.contributor.id;
+
   return (
     <Box style={styles.container} pb={bottom}>
       {cacheData ? (
@@ -85,14 +93,35 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
               paddingBottom: BOTTOM_CONTENTS_HEIGHT,
             }}
           >
-            <Box flexDirection="row" alignItems="center" mt={2}>
-              <UserImage
-                uri={cacheData.contributor.imageUrl}
-                size={USER_IMAGE_SIZE}
-              />
-              <Text ml={4} fontWeight="bold" fontSize={16}>
-                {cacheData.contributor.name}
-              </Text>
+            <Box
+              flexDirection="row"
+              alignItems="center"
+              justifyContent="space-between"
+              mt={2}
+            >
+              <HStack alignItems="center">
+                <UserImage
+                  uri={cacheData.contributor.imageUrl}
+                  size={USER_IMAGE_SIZE}
+                />
+                <Text ml={4} fontWeight="bold" fontSize={16}>
+                  {cacheData.contributor.name}
+                </Text>
+              </HStack>
+
+              {/* 現在は項目が「削除」のみなのでhorizontalアイコンも表示しない */}
+              {isMyItem && (
+                <Menu onAction={(id) => {}} isMyItem={isMyItem}>
+                  <MaterialCommunityIcons
+                    name="dots-horizontal"
+                    size={24}
+                    color={useColorModeValue(
+                      colors.textBlack,
+                      colors.textWhite
+                    )}
+                  />
+                </Menu>
+              )}
             </Box>
 
             <Box flexDirection="row" mt={4}>
