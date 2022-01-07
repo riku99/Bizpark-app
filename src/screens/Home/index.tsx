@@ -76,7 +76,14 @@ export const HomeScreen = ({ navigation }: Props) => {
       <AddButton />
 
       {creatingThought && (
-        <CreatingToast position="absolute" top={16} alignSelf="center" />
+        <CreatingToast
+          position="absolute"
+          top={16}
+          alignSelf="center"
+          onClosePress={() => {
+            creatingThoughtVar(false);
+          }}
+        />
       )}
     </>
   );

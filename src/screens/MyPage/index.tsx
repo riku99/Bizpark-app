@@ -13,7 +13,14 @@ export const MyPage = () => {
       <AddButton />
 
       {creatingThought && (
-        <CreatingToast position="absolute" top={6} alignSelf="center" />
+        <CreatingToast
+          position="absolute"
+          top={6}
+          alignSelf="center"
+          onClosePress={() => {
+            creatingThoughtVar(false);
+          }}
+        />
       )}
     </Box>
   );

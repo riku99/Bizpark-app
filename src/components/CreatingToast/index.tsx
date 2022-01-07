@@ -1,13 +1,13 @@
 import React, { ComponentProps } from "react";
-import { MotiView } from "moti";
-import { Box, Text, Factory } from "native-base";
-import { ActivityIndicator } from "react-native";
+import { Box, Text, HStack } from "native-base";
+import { ActivityIndicator, Pressable } from "react-native";
+import { AntDesign } from "@expo/vector-icons";
 
-type Props = {} & ComponentProps<typeof Box>;
+type Props = {
+  onClosePress: () => void;
+} & ComponentProps<typeof Box>;
 
-export const CreatingToast = ({ ...props }: Props) => {
-  const FactoryMotiView = Factory(MotiView);
-
+export const CreatingToast = ({ onClosePress, ...props }: Props) => {
   return (
     <Box
       borderRadius="lg"
@@ -17,12 +17,19 @@ export const CreatingToast = ({ ...props }: Props) => {
       flexDirection="row"
       px={6}
       alignItems="center"
+      justifyContent="space-between"
       {...props}
     >
-      <ActivityIndicator color="white" />
-      <Text color="white" fontWeight="bold" ml="4">
-        作成中です
-      </Text>
+      <HStack>
+        <ActivityIndicator color="white" />
+        <Text color="white" fontWeight="bold" ml="4">
+          作成中です
+        </Text>
+      </HStack>
+
+      <Pressable onPress={onClosePress}>
+        <AntDesign name="close" size={18} color="white" />
+      </Pressable>
     </Box>
   );
 };
