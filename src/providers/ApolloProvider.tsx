@@ -15,6 +15,7 @@ import { Alert } from "react-native";
 import { signOut } from "src/helpers/auth";
 import { relayStylePagination } from "@apollo/client/utilities";
 import { createUploadLink } from "apollo-upload-client";
+import { useCustomToast } from "src/hooks/toast";
 
 type Props = {
   children: JSX.Element;
@@ -55,11 +56,15 @@ const cache = new InMemoryCache({
 
 export const ApolloProvider = ({ children }: Props) => {
   const toast = useToast();
+  const { someErrorToast } = useCustomToast();
 
   const errorLink = onError((error) => {
     try {
       const firstError = error.graphQLErrors[0];
       const code = firstError.extensions.code;
+
+      console.log("This log is output from errorLink");
+      console.error(code);
 
       if (error.networkError) {
         toast.show("ネットワークに接続されていません");
@@ -68,7 +73,7 @@ export const ApolloProvider = ({ children }: Props) => {
 
       if (code === "INTERNAL_SERVER_ERROR") {
         // console.log(error.graphQLErrors[0].message);
-        toast.show("何らかのエラーが発生しました", { type: "danger" });
+        someErrorToast();
         return;
       }
 

@@ -109,18 +109,6 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
             <Text fontSize={16} mt={4}>
               {cacheData.text}
             </Text>
-            <Text fontSize={16} mt={4}>
-              {cacheData.text}
-            </Text>
-            <Text fontSize={16} mt={4}>
-              {cacheData.text}
-            </Text>
-            <Text fontSize={16} mt={4}>
-              {cacheData.text}
-            </Text>
-            <Text fontSize={16} mt={4}>
-              {cacheData.text}
-            </Text>
 
             <HStack flexWrap="wrap" justifyContent="space-between" mt={4}>
               {cacheData.images.map((img, idx) => {

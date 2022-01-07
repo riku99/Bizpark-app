@@ -1,12 +1,11 @@
-import React, { useLayoutEffect, useState, useRef, useCallback } from "react";
-import {
-  Box,
-  Pressable,
-  Text,
-  Input,
-  useColorModeValue,
-  Button,
-} from "native-base";
+import React, {
+  useLayoutEffect,
+  useState,
+  useRef,
+  useCallback,
+  useEffect,
+} from "react";
+import { Box, Pressable, Text, Input, useColorModeValue } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { CloseButton } from "src/components/BackButon";
 import { InputAccessoryView, TextInput } from "react-native";
@@ -22,9 +21,18 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
   const [title, setTitle] = useState("");
   const [text, setText] = useState("");
   const [images, setImages] = useState<{ url: string; mime: string }[]>([]);
+  const [nextDisabled, setNextDisabled] = useState(true);
+
+  useEffect(() => {
+    if (!text || text.length > 500 || title.length > 30) {
+      setNextDisabled(true);
+    } else {
+      setNextDisabled(false);
+    }
+  }, [title, text]);
 
   const onNextPress = () => {
-    if (!text) {
+    if (nextDisabled) {
       return;
     }
 
@@ -42,7 +50,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         <Pressable onPress={onNextPress}>
           <Text
             fontWeight="bold"
-            color={text ? "pink" : "lightGray"}
+            color={!nextDisabled ? "pink" : "lightGray"}
             fontSize={16}
           >
             次へ
