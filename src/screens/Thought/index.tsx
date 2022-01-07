@@ -22,6 +22,8 @@ import {
 import { MotiView } from "moti";
 import { Image } from "src/components/Image";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { ImagePreview } from "./ImagePreview";
+import ImageView from "react-native-image-viewing";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
@@ -32,6 +34,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   const [createPickMutation] = useCreatePick();
   const [deletePickMutation] = useDeletePick();
   const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
+  const [imageViewing, setImageViewing] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -70,6 +73,8 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   }
 
   const { bottom } = useSafeAreaInsets();
+
+  const imageViewingData = cacheData.images.map((img) => ({ uri: img.url }));
 
   return (
     <Box style={styles.container} pb={bottom}>
@@ -126,7 +131,9 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
                     w={"49%"}
                     h={"32"}
                     mt={2}
-                    onPress={() => {}}
+                    onPress={() => {
+                      setImageViewing(true);
+                    }}
                   >
                     <Image
                       w={"100%"}
@@ -159,6 +166,15 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
               </Box>
             </Box>
           </MotiView>
+
+          <ImageView
+            visible={imageViewing}
+            images={imageViewingData}
+            imageIndex={0}
+            onRequestClose={() => {
+              setImageViewing(false);
+            }}
+          />
         </>
       ) : null}
     </Box>
