@@ -5,6 +5,7 @@ import {
   useCreatePickMutation,
   useDeletePickMutation,
   NewsFieldsFragmentDoc,
+  News,
 } from "src/generated/graphql";
 
 export const useThoughtCacheFragment = () => {
@@ -44,7 +45,7 @@ export const useThoughtCacheFragment = () => {
 export const useNewsCacheFragment = () => {
   const { cache } = useApolloClient();
   const readNewsFragment = useCallback(({ id }: { id: string }) => {
-    const data = cache.readFragment({
+    const data = cache.readFragment<News>({
       id: cache.identify({
         __typename: "News",
         id,
