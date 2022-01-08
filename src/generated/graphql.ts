@@ -121,6 +121,36 @@ export type MutationUploadThoughtImagesArgs = {
   files: Array<Scalars['Upload']>;
 };
 
+export type News = {
+  __typename?: 'News';
+  articleCreatedAt?: Maybe<Scalars['String']>;
+  genre: NewsGenre;
+  id: Scalars['ID'];
+  image?: Maybe<Scalars['String']>;
+  link: Scalars['String'];
+  provider?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+};
+
+export type NewsConnection = {
+  __typename?: 'NewsConnection';
+  edges: Array<NewsEdge>;
+  pageInfo: PageInfo;
+};
+
+export type NewsEdge = {
+  __typename?: 'NewsEdge';
+  cursor: Scalars['String'];
+  node: News;
+};
+
+export enum NewsGenre {
+  Business = 'BUSINESS',
+  Economy = 'ECONOMY',
+  Politics = 'POLITICS',
+  Technology = 'TECHNOLOGY'
+}
+
 export type PageInfo = {
   __typename?: 'PageInfo';
   endCursor?: Maybe<Scalars['String']>;
@@ -138,7 +168,15 @@ export type Pick = {
 export type Query = {
   __typename?: 'Query';
   initialData: InitialResponse;
+  news?: Maybe<NewsConnection>;
   thoughts: ThoughtsConnection;
+};
+
+
+export type QueryNewsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+  genre: NewsGenre;
 };
 
 
@@ -247,6 +285,14 @@ export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type InitialDataQuery = { __typename?: 'Query', initialData: { __typename?: 'InitialResponse', me: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined } } };
+
+export type NewsQueryVariables = Exact<{
+  genre: NewsGenre;
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type NewsQuery = { __typename?: 'Query', news?: { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
 
 export type ThoughtsQueryVariables = Exact<{
   genre: Genre;
@@ -533,6 +579,59 @@ export function useInitialDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type InitialDataQueryHookResult = ReturnType<typeof useInitialDataQuery>;
 export type InitialDataLazyQueryHookResult = ReturnType<typeof useInitialDataLazyQuery>;
 export type InitialDataQueryResult = Apollo.QueryResult<InitialDataQuery, InitialDataQueryVariables>;
+export const NewsDocument = gql`
+    query News($genre: NewsGenre!, $cursor: String) {
+  news(genre: $genre, first: 30, after: $cursor) {
+    edges {
+      node {
+        id
+        title
+        link
+        image
+        articleCreatedAt
+        genre
+        provider
+      }
+      cursor
+    }
+    pageInfo {
+      hasNextPage
+      hasPreviousPage
+      startCursor
+      endCursor
+    }
+  }
+}
+    `;
+
+/**
+ * __useNewsQuery__
+ *
+ * To run a query within a React component, call `useNewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useNewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useNewsQuery({
+ *   variables: {
+ *      genre: // value for 'genre'
+ *      cursor: // value for 'cursor'
+ *   },
+ * });
+ */
+export function useNewsQuery(baseOptions: Apollo.QueryHookOptions<NewsQuery, NewsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<NewsQuery, NewsQueryVariables>(NewsDocument, options);
+      }
+export function useNewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NewsQuery, NewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<NewsQuery, NewsQueryVariables>(NewsDocument, options);
+        }
+export type NewsQueryHookResult = ReturnType<typeof useNewsQuery>;
+export type NewsLazyQueryHookResult = ReturnType<typeof useNewsLazyQuery>;
+export type NewsQueryResult = Apollo.QueryResult<NewsQuery, NewsQueryVariables>;
 export const ThoughtsDocument = gql`
     query Thoughts($genre: Genre!, $cursor: String) {
   thoughts(genre: $genre, first: 20, after: $cursor) {
