@@ -234,6 +234,8 @@ export type User = {
   name: Scalars['String'];
 };
 
+export type NewsFieldsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined };
+
 export type CreatePickMutationVariables = Exact<{
   input: CreatePickInput;
 }>;
@@ -302,7 +304,17 @@ export type ThoughtsQueryVariables = Exact<{
 
 export type ThoughtsQuery = { __typename?: 'Query', thoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked: boolean, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
-
+export const NewsFieldsFragmentDoc = gql`
+    fragment NewsFields on News {
+  id
+  title
+  link
+  image
+  articleCreatedAt
+  genre
+  provider
+}
+    `;
 export const CreatePickDocument = gql`
     mutation CreatePick($input: CreatePickInput!) {
   createPick(input: $input) {

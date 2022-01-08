@@ -1,0 +1,9 @@
+fragment NewsFields on News {
+  id
+  title
+  link
+  image
+  articleCreatedAt
+  genre
+  provider
+}
