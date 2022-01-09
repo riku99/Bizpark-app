@@ -56,7 +56,7 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
   return (
     <>
       {cacheData ? (
-        <ContentsCard borderRadius="lg" py={14} px={4} shadow={2} {...props}>
+        <ContentsCard borderRadius="lg" py={14} px={4} {...props}>
           <Pressable onPress={onPress}>
             <Box flexDirection="row" alignItems="center">
               <UserImage uri={cacheData.contributor.imageUrl} size={34} />

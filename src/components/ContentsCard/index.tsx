@@ -7,7 +7,7 @@ type Props = {
 
 export const ContentsCard = ({ children, ...props }: Props) => {
   return (
-    <Box bg={useColorModeValue("white", "dt.darkGray")} {...props}>
+    <Box bg={useColorModeValue("white", "dt.darkGray")} shadow={2} {...props}>
       {children}
     </Box>
   );

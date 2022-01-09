@@ -12,7 +12,13 @@ export const MyProfile = () => {
   }
 
   return (
-    <ScrollView flex={1}>
+    <ScrollView
+      flex={1}
+      contentContainerStyle={{
+        alignItems: "center",
+        paddingTop: 76,
+      }}
+    >
       <Profile />
     </ScrollView>
   );

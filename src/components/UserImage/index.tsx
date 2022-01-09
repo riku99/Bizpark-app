@@ -6,7 +6,7 @@ const User = require("src/assets/image/user.png");
 
 type Props = {
   uri?: string | null;
-  size: number;
+  size: number | string;
 };
 
 export const UserImage = ({ uri, size }: Props) => {
