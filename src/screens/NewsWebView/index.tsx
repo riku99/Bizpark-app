@@ -3,6 +3,8 @@ import { RootNavigationScreenProp } from "src/types";
 import { WebView } from "react-native-webview";
 import { useNewsCacheFragment } from "src/hooks/apollo";
 import { SafeAreaView } from "react-native";
+import { MotiView } from "moti";
+import { Box, Button } from "native-base";
 
 type Props = RootNavigationScreenProp<"NewsWebView">;
 
@@ -32,6 +34,18 @@ export const NewsWebViewScreen = ({ navigation, route }: Props) => {
         cacheEnabled={true}
         incognito={true}
       />
+
+      <MotiView
+        from={{ translateY: 180 }}
+        animate={{ translateY: 0 }}
+        transition={{ type: "timing", duration: 400 }}
+      >
+        <Box position="absolute" w="100%" alignItems="center" bottom={4}>
+          <Button w="90%" _text={{ fontSize: 16 }}>
+            トークする
+          </Button>
+        </Box>
+      </MotiView>
     </SafeAreaView>
   );
 };
