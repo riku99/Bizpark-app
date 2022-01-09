@@ -1,4 +1,4 @@
-import React, { ComponentProps } from "react";
+import React, { ComponentProps, useState, useEffect } from "react";
 import { Box, Pressable, Text } from "native-base";
 import { useNewsCacheFragment } from "src/hooks/apollo";
 import { format } from "date-fns";
@@ -11,12 +11,24 @@ type Props = {
 
 export const NewsCard = React.memo(({ id, ...props }: Props) => {
   const { readNewsFragment } = useNewsCacheFragment();
-  const cahceData = readNewsFragment({ id });
+  const cacheData = readNewsFragment({ id });
+  const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
 
-  if (!cahceData) {
+  useEffect(() => {
+    if (cacheData) {
+      setPicked(cacheData.picked);
+    }
+  }, [cacheData]);
+
+  const onCheckPress = async () => {
+    setPicked((c) => !c);
+  };
+
+  if (!cacheData) {
     return null;
   }
-  const { title, provider, articleCreatedAt, image, picked } = cahceData;
+
+  const { title, provider, articleCreatedAt, image } = cacheData;
   const formatedDate = format(
     new Date(Number(articleCreatedAt)),
     "yyyy/MM/dd HH:mm"
@@ -59,7 +71,7 @@ export const NewsCard = React.memo(({ id, ...props }: Props) => {
           mr="2"
           checkBoxProp={{
             checked: picked,
-            onPress: () => {},
+            onPress: onCheckPress,
             style: {
               height: 24,
               width: 24,
