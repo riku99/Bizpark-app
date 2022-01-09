@@ -16,7 +16,7 @@ export const NewsCard = React.memo(({ id, ...props }: Props) => {
   if (!cahceData) {
     return null;
   }
-  const { title, provider, articleCreatedAt, image } = cahceData;
+  const { title, provider, articleCreatedAt, image, picked } = cahceData;
   const formatedDate = format(
     new Date(Number(articleCreatedAt)),
     "yyyy/MM/dd HH:mm"
@@ -58,7 +58,7 @@ export const NewsCard = React.memo(({ id, ...props }: Props) => {
         <Pick
           mr="2"
           checkBoxProp={{
-            checked: true,
+            checked: picked,
             onPress: () => {},
             style: {
               height: 24,

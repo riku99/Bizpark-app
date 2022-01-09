@@ -128,6 +128,7 @@ export type News = {
   id: Scalars['ID'];
   image?: Maybe<Scalars['String']>;
   link: Scalars['String'];
+  picked: Scalars['Boolean'];
   provider?: Maybe<Scalars['String']>;
   title: Scalars['String'];
 };
@@ -294,7 +295,7 @@ export type NewsQueryVariables = Exact<{
 }>;
 
 
-export type NewsQuery = { __typename?: 'Query', news?: { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
+export type NewsQuery = { __typename?: 'Query', news?: { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
 
 export type ThoughtsQueryVariables = Exact<{
   genre: Genre;
@@ -603,6 +604,7 @@ export const NewsDocument = gql`
         articleCreatedAt
         genre
         provider
+        picked
       }
       cursor
     }
