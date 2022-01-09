@@ -93,12 +93,24 @@ export type InitialResponse = {
   me: User;
 };
 
+export type Me = {
+  __typename?: 'Me';
+  bio?: Maybe<Scalars['String']>;
+  facebook?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
+  imageUrl?: Maybe<Scalars['String']>;
+  instagram?: Maybe<Scalars['String']>;
+  linkedin?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+  twitter?: Maybe<Scalars['String']>;
+};
+
 export type Mutation = {
   __typename?: 'Mutation';
   createNewsPick: NewsPick;
   createPick: Pick;
   createThought: CreateThoughtResponse;
-  createUser: User;
+  createUser: Me;
   deleteNewsPick: NewsPick;
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
@@ -200,6 +212,7 @@ export type Pick = {
 export type Query = {
   __typename?: 'Query';
   initialData: InitialResponse;
+  me: Me;
   news?: Maybe<NewsConnection>;
   thoughts: ThoughtsConnection;
 };
@@ -261,9 +274,13 @@ export type UploadThoughtImagesResponse = {
 export type User = {
   __typename?: 'User';
   bio?: Maybe<Scalars['String']>;
+  facebook?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   imageUrl?: Maybe<Scalars['String']>;
+  instagram?: Maybe<Scalars['String']>;
+  linkedin?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+  twitter?: Maybe<Scalars['String']>;
 };
 
 export type NewsFieldsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
@@ -294,7 +311,7 @@ export type CreateUserMutationVariables = Exact<{
 }>;
 
 
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string } };
+export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'Me', id: string, name: string } };
 
 export type DeleteNewsPickMutationVariables = Exact<{
   input: DeleteNewsPickInput;
@@ -332,7 +349,12 @@ export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoug
 export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type InitialDataQuery = { __typename?: 'Query', initialData: { __typename?: 'InitialResponse', me: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined } } };
+export type InitialDataQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+
+export type MeQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type NewsQueryVariables = Exact<{
   genre: NewsGenre;
@@ -669,13 +691,15 @@ export type UploadThoughtImagesMutationResult = Apollo.MutationResult<UploadThou
 export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
 export const InitialDataDocument = gql`
     query InitialData {
-  initialData {
-    me {
-      id
-      name
-      bio
-      imageUrl
-    }
+  me: me {
+    id
+    name
+    bio
+    imageUrl
+    facebook
+    twitter
+    linkedin
+    instagram
   }
 }
     `;
@@ -706,6 +730,47 @@ export function useInitialDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOption
 export type InitialDataQueryHookResult = ReturnType<typeof useInitialDataQuery>;
 export type InitialDataLazyQueryHookResult = ReturnType<typeof useInitialDataLazyQuery>;
 export type InitialDataQueryResult = Apollo.QueryResult<InitialDataQuery, InitialDataQueryVariables>;
+export const MeDocument = gql`
+    query Me {
+  me {
+    id
+    name
+    bio
+    imageUrl
+    facebook
+    twitter
+    linkedin
+    instagram
+  }
+}
+    `;
+
+/**
+ * __useMeQuery__
+ *
+ * To run a query within a React component, call `useMeQuery` and pass it any options that fit your needs.
+ * When your component renders, `useMeQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useMeQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+      }
+export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+        }
+export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
+export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
+export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const NewsDocument = gql`
     query News($genre: NewsGenre!, $cursor: String) {
   news(genre: $genre, first: 30, after: $cursor) {

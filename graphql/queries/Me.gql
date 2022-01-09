@@ -1,5 +1,5 @@
-query InitialData {
-  me: me {
+query Me {
+  me {
     id
     name
     bio

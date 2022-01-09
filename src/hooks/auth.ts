@@ -175,7 +175,7 @@ export const useSignInWithEmail = () => {
           if (!called) {
             const { data } = await getInitialData();
             if (data) {
-              setMeVarWithInitialData(data.initialData.me);
+              setMeVarWithInitialData(data.me);
             }
           }
         } catch (e) {}
@@ -203,7 +203,7 @@ export const useSignInWithGoogle = () => {
       if (!called) {
         const { data } = await getInitialData();
         if (data) {
-          setMeVarWithInitialData(data.initialData.me);
+          setMeVarWithInitialData(data.me);
         }
       }
     } catch (e) {
