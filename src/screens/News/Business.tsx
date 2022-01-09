@@ -5,11 +5,15 @@ import { NewsCard } from "src/components/NewsCard";
 import { List } from "./List";
 
 export const Business = React.memo(() => {
-  const { data } = useNewsQuery({
+  const { data, refetch } = useNewsQuery({
     variables: {
       genre: NewsGenre.Business,
     },
   });
+
+  const refresh = async () => {
+    await refetch();
+  };
 
   if (!data) {
     return null;
@@ -17,7 +21,7 @@ export const Business = React.memo(() => {
 
   return (
     <Box flex={1}>
-      <List data={data} />
+      <List data={data} refresh={refresh} />
     </Box>
   );
 });
