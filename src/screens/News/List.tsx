@@ -10,6 +10,8 @@ import {
 import { NewsQuery } from "src/generated/graphql";
 import { NewsCard } from "src/components/NewsCard";
 import { Indicator } from "src/components/Indicator";
+import { useNavigation } from "@react-navigation/native";
+import { RootNavigationProp } from "src/types";
 
 type Props = {
   data: NewsQuery;
@@ -64,12 +66,18 @@ export const List = React.memo(({ data, refresh, infiniteLoad }: Props) => {
     }
   };
 
+  const navigation = useNavigation<RootNavigationProp<"Tab">>();
+
   const renderItem = useCallback(
     ({ item, index }: { item: Item; index: number }) => {
       const { id } = item.node;
+      const onPress = () => {
+        navigation.navigate("NewsWebView", { id });
+      };
+
       return (
         <>
-          <NewsCard id={id} />
+          <NewsCard id={id} onPress={onPress} />
           <Box px="4">
             <Divider />
           </Box>

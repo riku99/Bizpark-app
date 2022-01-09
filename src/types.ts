@@ -38,6 +38,9 @@ export type RootStackParamList = {
   };
   ThoughtWriting: undefined;
   ThoughtShare: ThoughtShare;
+  NewsWebView: {
+    id: string;
+  };
 };
 
 export type RootNavigationScreenProp<

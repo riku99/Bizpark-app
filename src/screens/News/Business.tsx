@@ -21,14 +21,12 @@ export const Business = React.memo(() => {
     if (pageInfo.hasNextPage) {
       const { endCursor } = pageInfo;
 
-      const { data: d } = await fetchMore({
+      await fetchMore({
         variables: {
           genre: NewsGenre.Business,
           cursor: endCursor ? btoa(endCursor) : undefined,
         },
       });
-
-      console.log(d.news.edges[0].node);
     }
   };
 

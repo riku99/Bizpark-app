@@ -1,4 +1,4 @@
-import React from "react";
+import React, { ComponentProps } from "react";
 import { Box, Pressable, Text } from "native-base";
 import { useNewsCacheFragment } from "src/hooks/apollo";
 import { format } from "date-fns";
@@ -6,9 +6,9 @@ import { Image } from "src/components/Image";
 
 type Props = {
   id: string;
-};
+} & ComponentProps<typeof Pressable>;
 
-export const NewsCard = React.memo(({ id }: Props) => {
+export const NewsCard = React.memo(({ id, ...props }: Props) => {
   const { readNewsFragment } = useNewsCacheFragment();
   const cahceData = readNewsFragment({ id });
 
@@ -29,6 +29,7 @@ export const NewsCard = React.memo(({ id }: Props) => {
       flexDirection="row"
       alignItems="center"
       justifyContent="space-between"
+      {...props}
     >
       <Box w="70%">
         <Text fontWeight="bold" fontSize="14">
