@@ -1,5 +1,4 @@
 import React, { useLayoutEffect } from "react";
-import { useNewsQuery, NewsGenre } from "src/generated/graphql";
 import { RootNavigationScreenProp } from "src/types";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { useTopTabBarStyle } from "src/hooks/theme";
@@ -33,6 +32,10 @@ export const NewsScreen = ({ navigation }: Props) => {
       <TopTab.Navigator
         screenOptions={{
           ...defaultScreenStyle,
+          tabBarLabelStyle: {
+            fontSize: 11,
+            fontWeight: "bold",
+          },
           lazy: true,
         }}
         style={{
