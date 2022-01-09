@@ -29,6 +29,8 @@ export const NewsWebViewScreen = ({ navigation, route }: Props) => {
         allowsInlineMediaPlayback={true}
         allowsFullscreenVideo={false}
         mediaPlaybackRequiresUserAction={true}
+        cacheEnabled={true}
+        incognito={true}
       />
     </SafeAreaView>
   );
