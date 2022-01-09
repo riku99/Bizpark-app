@@ -3,7 +3,7 @@ import { CheckBox } from "../CheckBox";
 import { Box, Text } from "native-base";
 
 type Props = {
-  textProp: ComponentProps<typeof Text>;
+  textProp?: ComponentProps<typeof Text>;
   checkBoxProp: ComponentProps<typeof CheckBox>;
 } & ComponentProps<typeof Box>;
 
