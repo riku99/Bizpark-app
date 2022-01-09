@@ -4,6 +4,7 @@ import { useNewsCacheFragment } from "src/hooks/apollo";
 import { format } from "date-fns";
 import { Image } from "src/components/Image";
 import { Pick } from "src/components/Pick";
+import { useCreateNewsPick } from "src/hooks/apollo";
 
 type Props = {
   id: string;
@@ -13,6 +14,7 @@ export const NewsCard = React.memo(({ id, ...props }: Props) => {
   const { readNewsFragment } = useNewsCacheFragment();
   const cacheData = readNewsFragment({ id });
   const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
+  const [createNewsPickMutation] = useCreateNewsPick();
 
   useEffect(() => {
     if (cacheData) {
@@ -21,7 +23,21 @@ export const NewsCard = React.memo(({ id, ...props }: Props) => {
   }, [cacheData]);
 
   const onCheckPress = async () => {
-    setPicked((c) => !c);
+    try {
+      if (!picked) {
+        setPicked(true);
+        await createNewsPickMutation({
+          variables: {
+            input: {
+              newsId: id,
+            },
+          },
+        });
+      } else {
+      }
+    } catch (e) {
+      setPicked((c) => !c);
+    }
   };
 
   if (!cacheData) {

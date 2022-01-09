@@ -6,6 +6,7 @@ import {
   useDeletePickMutation,
   NewsFieldsFragmentDoc,
   News,
+  useCreateNewsPickMutation,
 } from "src/generated/graphql";
 
 export const useThoughtCacheFragment = () => {
@@ -99,6 +100,29 @@ export const useDeletePick = () => {
         `,
         data: {
           picked: false,
+        },
+      });
+    },
+  });
+
+  return mutation;
+};
+
+export const useCreateNewsPick = () => {
+  const mutation = useCreateNewsPickMutation({
+    update: (cache, { data }) => {
+      cache.writeFragment({
+        id: cache.identify({
+          __typename: "News",
+          id: data.createNewsPick.newsId,
+        }),
+        fragment: gql`
+          fragment CreateNewsPickFields on News {
+            picked
+          }
+        `,
+        data: {
+          picked: true,
         },
       });
     },

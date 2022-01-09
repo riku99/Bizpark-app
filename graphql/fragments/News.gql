@@ -6,4 +6,5 @@ fragment NewsFields on News {
   articleCreatedAt
   genre
   provider
+  picked
 }

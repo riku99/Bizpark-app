@@ -256,7 +256,7 @@ export type User = {
   name: Scalars['String'];
 };
 
-export type NewsFieldsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined };
+export type NewsFieldsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
 
 export type CreateNewsPickMutationVariables = Exact<{
   input: CreateNewsPickInput;
@@ -342,6 +342,7 @@ export const NewsFieldsFragmentDoc = gql`
   articleCreatedAt
   genre
   provider
+  picked
 }
     `;
 export const CreateNewsPickDocument = gql`
