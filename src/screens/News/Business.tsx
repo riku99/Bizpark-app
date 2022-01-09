@@ -2,6 +2,7 @@ import React from "react";
 import { Box } from "native-base";
 import { useNewsQuery, NewsGenre } from "src/generated/graphql";
 import { NewsCard } from "src/components/NewsCard";
+import { List } from "./List";
 
 export const Business = React.memo(() => {
   const { data } = useNewsQuery({
@@ -10,10 +11,13 @@ export const Business = React.memo(() => {
     },
   });
 
-  if (data) {
-    console.log(data.news.edges[0].node);
-    return <NewsCard id={data.news.edges[1].node.id} />;
+  if (!data) {
+    return null;
   }
 
-  return <Box flex={1}></Box>;
+  return (
+    <Box flex={1}>
+      <List data={data} />
+    </Box>
+  );
 });
