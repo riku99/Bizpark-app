@@ -54,6 +54,10 @@ export enum CustomErrorResponseCode {
   InvalidRequest = 'INVALID_REQUEST'
 }
 
+export type DeleteNewsPickInput = {
+  newsId: Scalars['ID'];
+};
+
 export type DeleteThoughtInput = {
   id: Scalars['String'];
 };
@@ -95,6 +99,7 @@ export type Mutation = {
   createPick: Pick;
   createThought: CreateThoughtResponse;
   createUser: User;
+  deleteNewsPick: NewsPick;
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
   signOut: SignOutResponse;
@@ -119,6 +124,11 @@ export type MutationCreateThoughtArgs = {
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
+};
+
+
+export type MutationDeleteNewsPickArgs = {
+  input: DeleteNewsPickInput;
 };
 
 
@@ -285,6 +295,13 @@ export type CreateUserMutationVariables = Exact<{
 
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'User', id: string, name: string } };
+
+export type DeleteNewsPickMutationVariables = Exact<{
+  input: DeleteNewsPickInput;
+}>;
+
+
+export type DeleteNewsPickMutation = { __typename?: 'Mutation', deleteNewsPick: { __typename?: 'NewsPick', id: string, newsId: string } };
 
 export type DeletePickMutationVariables = Exact<{
   thoughtId: Scalars['ID'];
@@ -480,6 +497,40 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const DeleteNewsPickDocument = gql`
+    mutation DeleteNewsPick($input: DeleteNewsPickInput!) {
+  deleteNewsPick(input: $input) {
+    id
+    newsId
+  }
+}
+    `;
+export type DeleteNewsPickMutationFn = Apollo.MutationFunction<DeleteNewsPickMutation, DeleteNewsPickMutationVariables>;
+
+/**
+ * __useDeleteNewsPickMutation__
+ *
+ * To run a mutation, you first call `useDeleteNewsPickMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteNewsPickMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteNewsPickMutation, { data, loading, error }] = useDeleteNewsPickMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteNewsPickMutation(baseOptions?: Apollo.MutationHookOptions<DeleteNewsPickMutation, DeleteNewsPickMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteNewsPickMutation, DeleteNewsPickMutationVariables>(DeleteNewsPickDocument, options);
+      }
+export type DeleteNewsPickMutationHookResult = ReturnType<typeof useDeleteNewsPickMutation>;
+export type DeleteNewsPickMutationResult = Apollo.MutationResult<DeleteNewsPickMutation>;
+export type DeleteNewsPickMutationOptions = Apollo.BaseMutationOptions<DeleteNewsPickMutation, DeleteNewsPickMutationVariables>;
 export const DeletePickDocument = gql`
     mutation DeletePick($thoughtId: ID!) {
   deletePick(thoughtId: $thoughtId) {
