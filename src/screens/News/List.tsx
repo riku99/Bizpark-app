@@ -2,7 +2,6 @@ import React, { useCallback, useState } from "react";
 import { RefreshControl } from "react-native";
 import {
   Box,
-  Text,
   FlatList,
   Divider,
   useTheme,

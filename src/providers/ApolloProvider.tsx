@@ -49,6 +49,7 @@ const cache = new InMemoryCache({
     Query: {
       fields: {
         thoughts: relayStylePagination(["genre"]), // genreが異なっていたら異なるキャッシュとして管理
+        news: relayStylePagination(["genre"]),
       },
     },
   },

@@ -1,9 +1,9 @@
 import React from "react";
 import { Box } from "native-base";
 import { useNewsQuery, NewsGenre } from "src/generated/graphql";
-import { NewsCard } from "src/components/NewsCard";
 import { List } from "./List";
 import { btoa } from "react-native-quick-base64";
+import { Indicator } from "src/components/Indicator";
 
 export const Business = React.memo(() => {
   const { data, refetch, fetchMore } = useNewsQuery({
@@ -18,18 +18,22 @@ export const Business = React.memo(() => {
 
   const infiniteLoad = async () => {
     const { pageInfo } = data.news;
-    const { endCursor } = pageInfo;
+    if (pageInfo.hasNextPage) {
+      const { endCursor } = pageInfo;
 
-    await fetchMore({
-      variables: {
-        genre: NewsGenre.Business,
-        cursor: endCursor ? btoa(endCursor) : undefined,
-      },
-    });
+      const { data: d } = await fetchMore({
+        variables: {
+          genre: NewsGenre.Business,
+          cursor: endCursor ? btoa(endCursor) : undefined,
+        },
+      });
+
+      console.log(d.news.edges[0].node);
+    }
   };
 
   if (!data) {
-    return null;
+    return <Indicator style={{ marginTop: 10 }} />;
   }
 
   return (
