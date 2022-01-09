@@ -27,7 +27,6 @@ export const NewsCard = React.memo(({ id, ...props }: Props) => {
       px="4"
       py="4"
       flexDirection="row"
-      alignItems="center"
       justifyContent="space-between"
       {...props}
     >
@@ -48,7 +47,8 @@ export const NewsCard = React.memo(({ id, ...props }: Props) => {
           source={{
             uri: image,
           }}
-          size="16"
+          w="16"
+          h="10"
         />
       )}
     </Pressable>

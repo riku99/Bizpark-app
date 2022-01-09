@@ -15,6 +15,7 @@ import {
 } from "src/hooks/apollo";
 import { Image } from "src/components/Image";
 import { UserImage } from "src/components/UserImage";
+import { Pick } from "src/components/Pick";
 
 type Props = {
   id: string;
@@ -98,20 +99,21 @@ export const ThoughtCard = ({ id, ...props }: Props) => {
             ))}
           </HStack>
 
-          <Box
+          <Pick
             mt={cacheData.images.length ? 4 : 2}
-            flexDirection="row"
-            alignItems="center"
-          >
-            <Text color="pink" fontWeight="bold" fontSize={16}>
-              Pick
-            </Text>
-            <CheckBox
-              onPress={onCheckPress}
-              checked={picked}
-              style={{ height: 26, width: 26, marginLeft: 6 }}
-            />
-          </Box>
+            textProp={{
+              fontSize: 16,
+            }}
+            checkBoxProp={{
+              onPress: onCheckPress,
+              checked: picked,
+              style: {
+                height: 26,
+                width: 26,
+                marginLeft: 6,
+              },
+            }}
+          />
         </Pressable>
       ) : null}
     </>
