@@ -1,23 +1,10 @@
 import React from "react";
-import { Box, useColorModeValue, Text, HStack, ScrollView } from "native-base";
+import { Box, useColorModeValue, Text, HStack, Pressable } from "native-base";
 import { ContentsCard } from "src/components/ContentsCard";
 import { UserImage } from "src/components/UserImage";
 import { SocialIcon, SocialIconProps } from "react-native-elements";
 import { StyleSheet } from "react-native";
 import { Social, SocialType } from "src/generated/graphql";
-
-const image =
-  "https://kuro-bucket-sample.s3.ap-northeast-1.amazonaws.com/IMG_0261.HEIC";
-
-// const icons: SocialIconProps["type"][] = [
-//   "facebook",
-//   "twitter",
-//   "linkedin",
-//   "instagram",
-// ];
-
-// const bio =
-//   "初めましてBizparkの製作者です。スタートアップでエンジニアインターンとして働いています。サービスやビジネスやテクノロジーが好きで、自分で事業を起こすためにプログラムを書き始めました。何か要望ありましたら是非メッセージ送ってください!";
 
 type Props = {
   id: string;
@@ -73,32 +60,42 @@ export const Profile = ({ name, imageUrl, bio, socials }: Props) => {
         shadow="1"
         minH="2/3"
       >
-        <Box>
-          <Text fontWeight="bold" fontSize="16" alignSelf="center" mt="12">
-            {name}
-          </Text>
+        <>
+          <Box>
+            <Text fontWeight="bold" fontSize="16" alignSelf="center" mt="12">
+              {name}
+            </Text>
 
-          <HStack alignSelf="center" mt="2">
-            {icons.map((l, idx) => (
-              <SocialIcon
-                type={l.type}
-                iconType={"font-awesome"}
-                key={idx}
-                raised={false}
-                iconSize={20}
-                style={styles.social}
-              />
-            ))}
-          </HStack>
+            <HStack alignSelf="center" mt="2">
+              {icons.map((l, idx) => (
+                <SocialIcon
+                  type={l.type}
+                  iconType={"font-awesome"}
+                  key={idx}
+                  raised={false}
+                  iconSize={20}
+                  style={styles.social}
+                />
+              ))}
+            </HStack>
 
-          <Box mt="4">
-            <Text lineHeight="lg">{bio}</Text>
+            <Box mt="4">
+              <Text lineHeight="lg">{bio}</Text>
+            </Box>
           </Box>
-        </Box>
 
-        <Box position="absolute" top="4" right="8">
-          <Text>編集</Text>
-        </Box>
+          <Pressable
+            position="absolute"
+            top="4"
+            right="4"
+            borderWidth="1"
+            borderColor={useColorModeValue("textBlack", "textWhite")}
+            p="2"
+            borderRadius="2xl"
+          >
+            <Text fontWeight="bold">編集</Text>
+          </Pressable>
+        </>
       </ContentsCard>
 
       <ContentsCard borderRadius="full" shadow="0" style={styles.imageOuter}>
@@ -122,7 +119,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    top: 36,
+    top: 22,
   },
   social: {
     width: 35,

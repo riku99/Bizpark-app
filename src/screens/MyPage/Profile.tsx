@@ -20,7 +20,7 @@ export const MyProfile = () => {
       flex={1}
       contentContainerStyle={{
         alignItems: "center",
-        paddingTop: 76,
+        paddingTop: 60,
         paddingBottom: 50,
       }}
     >
