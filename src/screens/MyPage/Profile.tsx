@@ -17,6 +17,7 @@ export const MyProfile = () => {
       contentContainerStyle={{
         alignItems: "center",
         paddingTop: 76,
+        paddingBottom: 50,
       }}
     >
       <Profile />
