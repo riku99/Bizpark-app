@@ -20,6 +20,7 @@ const image =
 //   "初めましてBizparkの製作者です。スタートアップでエンジニアインターンとして働いています。サービスやビジネスやテクノロジーが好きで、自分で事業を起こすためにプログラムを書き始めました。何か要望ありましたら是非メッセージ送ってください!";
 
 type Props = {
+  id: string;
   name: string;
   imageUrl: string | null;
   bio: string | null;
@@ -65,7 +66,7 @@ export const Profile = ({ name, imageUrl, bio, socials }: Props) => {
   return (
     <>
       <ContentsCard
-        w="4/5"
+        w="5/6"
         px="4"
         pb="8"
         borderRadius="lg"
@@ -91,26 +92,37 @@ export const Profile = ({ name, imageUrl, bio, socials }: Props) => {
           </HStack>
 
           <Box mt="4">
-            <Text>{bio}</Text>
+            <Text lineHeight="lg">{bio}</Text>
           </Box>
+        </Box>
+
+        <Box position="absolute" top="4" right="8">
+          <Text>編集</Text>
         </Box>
       </ContentsCard>
 
       <ContentsCard borderRadius="full" shadow="0" style={styles.imageOuter}>
-        <UserImage uri={imageUrl} size="16" />
+        <UserImage uri={imageUrl} style={styles.image} />
       </ContentsCard>
     </>
   );
 };
 
+const IMAGE_SIZE = 60;
+const IMAGE_OUTER_SIZE = IMAGE_SIZE + 10;
+
 const styles = StyleSheet.create({
+  image: {
+    width: IMAGE_SIZE,
+    height: IMAGE_SIZE,
+  },
   imageOuter: {
-    width: 74,
-    height: 74,
+    width: IMAGE_OUTER_SIZE,
+    height: IMAGE_OUTER_SIZE,
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    top: 32,
+    top: 36,
   },
   social: {
     width: 35,
