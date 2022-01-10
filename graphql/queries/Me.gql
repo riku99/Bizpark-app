@@ -4,9 +4,10 @@ query Me {
     name
     bio
     imageUrl
-    facebook
-    twitter
-    linkedin
-    instagram
+    socials {
+      id
+      type
+      link
+    }
   }
 }

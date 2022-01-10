@@ -10,6 +10,8 @@ type ThoughtShare = {
   images: { url: string; mime: string }[];
 };
 
+type Socials = "facebook" | "twitter" | "linkedin" | "instagram";
+
 export type TohughtStackParamList = {
   Thought: {
     id: string;

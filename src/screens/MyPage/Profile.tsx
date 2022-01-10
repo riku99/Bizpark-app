@@ -11,6 +11,10 @@ export const MyProfile = () => {
     return null;
   }
 
+  const { name, bio, imageUrl, socials } = data.me;
+
+  console.log(socials);
+
   return (
     <ScrollView
       flex={1}
@@ -20,7 +24,7 @@ export const MyProfile = () => {
         paddingBottom: 50,
       }}
     >
-      <Profile />
+      <Profile name={name} bio={bio} imageUrl={imageUrl} socials={socials} />
     </ScrollView>
   );
 };

@@ -4,9 +4,10 @@ query InitialData {
     name
     bio
     imageUrl
-    facebook
-    twitter
-    linkedin
-    instagram
+    socials {
+      id
+      type
+      link
+    }
   }
 }
