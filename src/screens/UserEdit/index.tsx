@@ -1,35 +1,12 @@
-import React, { useLayoutEffect, ComponentProps } from "react";
-import {
-  Box,
-  ScrollView,
-  VStack,
-  Text,
-  Pressable,
-  useColorModeValue,
-  HStack,
-} from "native-base";
+import React, { useLayoutEffect, useState } from "react";
+import { Box, ScrollView, VStack, Pressable, HStack } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
-import { useMeQuery } from "src/generated/graphql";
+import { useMeQuery, SocialType } from "src/generated/graphql";
 import { UserImage } from "src/components/UserImage";
-import { SocialIcon, SocialIconProps } from "react-native-elements";
+import { SocialIcon } from "react-native-elements";
 import { socialIcons } from "src/constants";
-
-type ItemProps = {
-  label: string;
-  value: string;
-} & ComponentProps<typeof Pressable>;
-const Item = ({ label, value, ...props }: ItemProps) => {
-  return (
-    <Pressable {...props}>
-      <Text fontWeight="bold" color={useColorModeValue("gray.600", "gray.300")}>
-        {label}
-      </Text>
-      <Text fontWeight="bold" fontSize="16" mt="2">
-        {value}
-      </Text>
-    </Pressable>
-  );
-};
+import ImagePicker from "react-native-image-crop-picker";
+import { Item } from "./EditItem";
 
 type Props = RootNavigationScreenProp<"UserEdit">;
 
@@ -41,16 +18,51 @@ export const UserEditScreen = ({ navigation }: Props) => {
   }, [navigation]);
 
   const { data } = useMeQuery();
+  const facebookData = data.me.socials.find(
+    (s) => s.type === SocialType.Facebook
+  );
+  const twitterData = data.me.socials.find(
+    (s) => s.type === SocialType.Twitter
+  );
+  const linkedinData = data.me.socials.find(
+    (s) => s.type === SocialType.Linkedin
+  );
+  const instagramData = data.me.socials.find(
+    (s) => s.type === SocialType.Instagram
+  );
+
+  const [imageUrl, setImageUrl] = useState(data.me.imageUrl);
+  const [name, setName] = useState(data.me.name);
+  const [bio, setBio] = useState(data.me.bio);
+  const [facebook, setFacebook] = useState(
+    facebookData ? facebookData.link : null
+  );
+  const [twitter, setTwitter] = useState(twitterData ? twitterData.link : null);
+  const [linkedIn, setLinkedIn] = useState(
+    linkedinData ? linkedinData.link : null
+  );
+  const [instagram, setInstagram] = useState(
+    instagramData ? instagramData.link : null
+  );
+
+  const onUserImagePress = async () => {
+    try {
+      const image = await ImagePicker.openPicker({
+        multiple: false,
+        mediaType: "photo",
+      });
+    } catch (e) {}
+  };
 
   if (!data) {
     return null;
   }
 
-  const { imageUrl, name, bio } = data.me;
-
   return (
     <ScrollView flex={1} px="4" pt="8">
-      <UserImage uri={imageUrl} size={16} alignSelf="center" />
+      <Pressable onPress={onUserImagePress}>
+        <UserImage uri={imageUrl} size={16} alignSelf="center" />
+      </Pressable>
 
       <VStack mt="12" space={8}>
         <Item label="名前" value={name} />
@@ -59,7 +71,6 @@ export const UserEditScreen = ({ navigation }: Props) => {
 
       <HStack mt="16" space={4}>
         {socialIcons.map((s, idx) => {
-          console.log(socialIcons);
           return (
             <SocialIcon
               type={s}
