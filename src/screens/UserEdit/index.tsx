@@ -7,6 +7,7 @@ import { SocialIcon } from "react-native-elements";
 import { socialIcons } from "src/constants";
 import ImagePicker from "react-native-image-crop-picker";
 import { Item } from "./EditItem";
+import { AvatarMenu } from "./AvatarMenu";
 
 type Props = RootNavigationScreenProp<"UserEdit">;
 
@@ -45,13 +46,20 @@ export const UserEditScreen = ({ navigation }: Props) => {
     instagramData ? instagramData.link : null
   );
 
-  const onUserImagePress = async () => {
-    try {
-      const image = await ImagePicker.openPicker({
-        multiple: false,
-        mediaType: "photo",
-      });
-    } catch (e) {}
+  const onAvatarAction = async (id: string) => {
+    if (id === "select") {
+      try {
+        const image = await ImagePicker.openPicker({
+          multiple: false,
+          mediaType: "photo",
+        });
+        setImageUrl(image.sourceURL);
+      } catch (e) {}
+    }
+
+    if (id === "delete") {
+      setImageUrl(null);
+    }
   };
 
   if (!data) {
@@ -60,9 +68,9 @@ export const UserEditScreen = ({ navigation }: Props) => {
 
   return (
     <ScrollView flex={1} px="4" pt="8">
-      <Pressable onPress={onUserImagePress}>
+      <AvatarMenu onAction={onAvatarAction}>
         <UserImage uri={imageUrl} size={16} alignSelf="center" />
-      </Pressable>
+      </AvatarMenu>
 
       <VStack mt="12" space={8}>
         <Item label="名前" value={name} />
