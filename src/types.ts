@@ -43,6 +43,7 @@ export type RootStackParamList = {
   NewsWebView: {
     id: string;
   };
+  UserEdit: undefined;
 };
 
 export type RootNavigationScreenProp<

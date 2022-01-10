@@ -5,6 +5,9 @@ import { UserImage } from "src/components/UserImage";
 import { SocialIcon, SocialIconProps } from "react-native-elements";
 import { StyleSheet } from "react-native";
 import { Social, SocialType } from "src/generated/graphql";
+import { useNavigation } from "@react-navigation/native";
+import { RootNavigationProp } from "src/types";
+import { useMeQuery } from "src/generated/graphql";
 
 type Props = {
   id: string;
@@ -14,7 +17,10 @@ type Props = {
   socials: Omit<Social, "userId">[];
 };
 
-export const Profile = ({ name, imageUrl, bio, socials }: Props) => {
+export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
+  const { data } = useMeQuery();
+  const navigation = useNavigation<RootNavigationProp<any>>();
+
   const icons = socials.map((s) => {
     let data: {
       type: SocialIconProps["type"];
@@ -50,6 +56,8 @@ export const Profile = ({ name, imageUrl, bio, socials }: Props) => {
     return data;
   });
 
+  const isMe = data && data.me.id && data.me.id === id;
+
   return (
     <>
       <ContentsCard
@@ -84,17 +92,26 @@ export const Profile = ({ name, imageUrl, bio, socials }: Props) => {
             </Box>
           </Box>
 
-          <Pressable
-            position="absolute"
-            top="4"
-            right="4"
-            borderWidth="1"
-            borderColor={useColorModeValue("textBlack", "textWhite")}
-            p="2"
-            borderRadius="2xl"
-          >
-            <Text fontWeight="bold">編集</Text>
-          </Pressable>
+          {isMe && (
+            <Pressable
+              position="absolute"
+              top="4"
+              right="4"
+              borderWidth="1"
+              borderColor={useColorModeValue("textBlack", "textWhite")}
+              p="2"
+              borderRadius="2xl"
+            >
+              <Text
+                fontWeight="bold"
+                onPress={() => {
+                  navigation.navigate("UserEdit");
+                }}
+              >
+                編集
+              </Text>
+            </Pressable>
+          )}
         </>
       </ContentsCard>
 
