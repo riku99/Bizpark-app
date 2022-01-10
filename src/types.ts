@@ -44,6 +44,11 @@ export type RootStackParamList = {
     id: string;
   };
   UserEdit: undefined;
+  UserItemEdit: {
+    type: "name" | "bio";
+    value: string;
+    setValue: (v: string) => void;
+  };
 };
 
 export type RootNavigationScreenProp<

@@ -14,6 +14,7 @@ import { ThoughtWritingScreen } from "src/screens/ThoughtWriting";
 import { ThoughtShareScreen } from "src/screens/ThoughtShare";
 import { NewsWebViewScreen } from "src/screens/NewsWebView";
 import { UserEditScreen } from "src/screens/UserEdit";
+import { UserItemEditScreen } from "src/screens/UserItemEdit";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -65,6 +66,7 @@ export const RootNavigation = React.memo(() => {
             <Stack.Screen name="Thought" component={ThoughtScreen} />
             <Stack.Screen name="NewsWebView" component={NewsWebViewScreen} />
             <Stack.Screen name="UserEdit" component={UserEditScreen} />
+            <Stack.Screen name="UserItemEdit" component={UserItemEditScreen} />
             <Stack.Group
               screenOptions={{
                 presentation: "modal",

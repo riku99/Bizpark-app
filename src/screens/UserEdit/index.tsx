@@ -73,8 +73,29 @@ export const UserEditScreen = ({ navigation }: Props) => {
       </AvatarMenu>
 
       <VStack mt="12" space={8}>
-        <Item label="名前" value={name} />
-        <Item label="自己紹介" value={bio} maxH="20" />
+        <Item
+          label="名前"
+          value={name}
+          onPress={() => {
+            navigation.navigate("UserItemEdit", {
+              type: "name",
+              value: name,
+              setValue: setName,
+            });
+          }}
+        />
+        <Item
+          label="自己紹介"
+          value={bio}
+          maxH="20"
+          onPress={() => {
+            navigation.navigate("UserItemEdit", {
+              type: "bio",
+              value: bio,
+              setValue: setBio,
+            });
+          }}
+        />
       </VStack>
 
       <HStack mt="16" space={4}>
