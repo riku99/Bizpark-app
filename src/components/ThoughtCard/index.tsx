@@ -1,6 +1,5 @@
 import React, { ComponentProps, useState, useEffect } from "react";
 import { Box, useColorModeValue, Text, Pressable, HStack } from "native-base";
-import { CheckBox } from "../CheckBox";
 import {
   useThoughtCacheFragment,
   useCreatePick,
@@ -10,6 +9,8 @@ import { Image } from "src/components/Image";
 import { UserImage } from "src/components/UserImage";
 import { Pick } from "src/components/Pick";
 import { ContentsCard } from "src/components/ContentsCard";
+import { useNavigation } from "@react-navigation/native";
+import { RootNavigationProp } from "src/types";
 
 type Props = {
   id: string;
@@ -22,6 +23,8 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
   const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
   const [createPickMutation] = useCreatePick();
   const [deletePickMutation] = useDeletePick();
+
+  const navigation = useNavigation<RootNavigationProp<any>>();
 
   useEffect(() => {
     if (cacheData) {
@@ -53,17 +56,27 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
     }
   };
 
+  const onUserPress = () => {
+    navigation.navigate("UserProfile", {
+      id: cacheData.contributor.id,
+    });
+  };
+
   return (
     <>
       {cacheData ? (
         <ContentsCard borderRadius="lg" py={14} px={4} {...props}>
           <Pressable onPress={onPress}>
-            <Box flexDirection="row" alignItems="center">
+            <Pressable
+              flexDirection="row"
+              alignItems="center"
+              onPress={onUserPress}
+            >
               <UserImage uri={cacheData.contributor.imageUrl} size={34} />
               <Text fontWeight="bold" ml={2}>
                 {cacheData.contributor.name}
               </Text>
-            </Box>
+            </Pressable>
 
             {!!cacheData.title && (
               <Text fontSize={16} fontWeight="bold" mt={2}>

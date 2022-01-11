@@ -6,6 +6,7 @@ import { TalkListScreen } from "src/screens/TalkList";
 import { NewsScreen } from "src/screens/News";
 import { useColorModeValue, useTheme } from "native-base";
 import React from "react";
+import { HomeNavigation } from "./Home";
 
 type TabParamList = {
   Home: undefined;
@@ -37,8 +38,9 @@ export const BottomTab = () => {
     >
       <Tab.Screen
         name="Home"
-        component={HomeScreen}
+        component={HomeNavigation}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <AntDesign name="home" size={ICON_SIZE} color={color} />
           ),

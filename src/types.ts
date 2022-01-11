@@ -2,7 +2,6 @@ import {
   NativeStackScreenProps,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
-import { NavigatorScreenParams } from "@react-navigation/native";
 
 type ThoughtShare = {
   title?: string;
@@ -48,6 +47,9 @@ export type RootStackParamList = {
     type: "name" | "bio" | Socials;
     value: string | null;
     setValue: (v: string | null) => void;
+  };
+  UserProfile: {
+    id: string;
   };
 };
 
