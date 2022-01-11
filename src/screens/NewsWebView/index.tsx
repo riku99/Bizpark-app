@@ -1,10 +1,11 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { RootNavigationScreenProp } from "src/types";
 import { WebView } from "react-native-webview";
 import { useNewsCacheFragment } from "src/hooks/apollo";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
 import { MotiView } from "moti";
 import { Box, Button } from "native-base";
+import { CloseButton } from "src/components/CloseButton";
 
 type Props = RootNavigationScreenProp<"NewsWebView">;
 
@@ -18,6 +19,7 @@ export const NewsWebViewScreen = ({ navigation, route }: Props) => {
 
   const { readNewsFragment } = useNewsCacheFragment();
   const data = readNewsFragment({ id });
+  const [talkButtonVisible, setTalkButtonVisible] = useState(true);
 
   if (!data) {
     return null;
@@ -35,17 +37,39 @@ export const NewsWebViewScreen = ({ navigation, route }: Props) => {
         incognito={true}
       />
 
-      <MotiView
-        from={{ translateY: 180 }}
-        animate={{ translateY: 0 }}
-        transition={{ type: "timing", duration: 400 }}
-      >
-        <Box position="absolute" w="100%" alignItems="center" bottom={4}>
-          <Button w="90%" _text={{ fontSize: 16 }}>
-            トークする
-          </Button>
-        </Box>
-      </MotiView>
+      {talkButtonVisible && (
+        <MotiView
+          from={{ translateY: 180 }}
+          animate={{ translateY: 0 }}
+          transition={{ type: "timing", duration: 400 }}
+        >
+          <Box
+            position="absolute"
+            w="90%"
+            alignItems="center"
+            alignSelf="center"
+            bottom={4}
+          >
+            <CloseButton
+              size={7}
+              style={styles.closeButton}
+              onPress={() => {
+                setTalkButtonVisible(false);
+              }}
+            />
+            <Button w="100%" _text={{ fontSize: 16 }}>
+              このニュースについてトークする
+            </Button>
+          </Box>
+        </MotiView>
+      )}
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  closeButton: {
+    alignSelf: "flex-end",
+    transform: [{ translateY: -15 }],
+  },
+});

@@ -1,5 +1,5 @@
 import React, { ComponentProps } from "react";
-import { Box, Pressable, Factory } from "native-base";
+import { Pressable } from "native-base";
 import { AntDesign } from "@expo/vector-icons";
 
 type Props = {
