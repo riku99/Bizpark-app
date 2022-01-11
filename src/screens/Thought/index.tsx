@@ -138,15 +138,23 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
               justifyContent="space-between"
               mt={2}
             >
-              <HStack alignItems="center">
-                <UserImage
-                  uri={cacheData.contributor.imageUrl}
-                  size={USER_IMAGE_SIZE}
-                />
-                <Text ml={4} fontWeight="bold" fontSize={16}>
-                  {cacheData.contributor.name}
-                </Text>
-              </HStack>
+              <Pressable
+                onPress={() => {
+                  navigation.navigate("UserProfile", {
+                    id: cacheData.contributor.id,
+                  });
+                }}
+              >
+                <HStack alignItems="center">
+                  <UserImage
+                    uri={cacheData.contributor.imageUrl}
+                    size={USER_IMAGE_SIZE}
+                  />
+                  <Text ml={4} fontWeight="bold" fontSize={16}>
+                    {cacheData.contributor.name}
+                  </Text>
+                </HStack>
+              </Pressable>
 
               {/* 現在は項目が「削除」のみなのでhorizontalアイコンも表示しない */}
               {isMyItem && (
