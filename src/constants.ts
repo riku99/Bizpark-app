@@ -11,3 +11,6 @@ export const socialIcons: SocialIconProps["type"][] = [
   "linkedin",
   "instagram",
 ];
+
+export const INSTAGRAM_BASE_URL = "https://www.instagram.com";
+export const TWITTER_BASE_URL = "https://twitter.com";

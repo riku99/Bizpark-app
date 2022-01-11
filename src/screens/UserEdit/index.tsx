@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { Box, ScrollView, VStack, Pressable, HStack, Text } from "native-base";
 import { RootNavigationScreenProp, Socials } from "src/types";
 import {
@@ -14,16 +14,21 @@ import { Item } from "./EditItem";
 import { AvatarMenu } from "./AvatarMenu";
 import { ReactNativeFile } from "apollo-upload-client";
 import { spinnerVisibleVar } from "src/stores/spinner";
+import { useToast } from "react-native-toast-notifications";
+import FastImage from "react-native-fast-image";
 
 type Props = RootNavigationScreenProp<"UserEdit">;
 
 export const UserEditScreen = ({ navigation }: Props) => {
-  const { data } = useMeQuery();
+  const { data, refetch } = useMeQuery();
+  const toast = useToast();
 
-  const [image, setImage] = useState({
-    url: data.me.imageUrl,
-    mime: null,
-  });
+  const [newImage, setNewImage] = useState<{
+    url: string;
+    mime: string;
+  } | null>(null);
+  const [imageDeleted, setImageDeleted] = useState(false);
+  const [displayedImageUrl, setDisplayedImageUrl] = useState(data.me.imageUrl);
   const [name, setName] = useState(data.me.name);
   const [bio, setBio] = useState(data.me.bio);
   const [facebook, setFacebook] = useState(data.me.facebook);
@@ -34,14 +39,27 @@ export const UserEditScreen = ({ navigation }: Props) => {
   const [updateMeMutation] = useUpdateMeMutation();
   const [uploadImageMutation] = useUploadImageMutation();
 
+  useEffect(() => {
+    if (imageDeleted) {
+      setDisplayedImageUrl(null);
+      setNewImage(null);
+      return;
+    }
+
+    if (newImage) {
+      setDisplayedImageUrl(newImage.url);
+    }
+  }, [imageDeleted, newImage]);
+
   const onCompletePress = async () => {
     try {
       spinnerVisibleVar(true);
-      let imageUrl: null | string = null;
-      if (image.url) {
+      let newImageUrl: null | string = null;
+
+      if (newImage && !imageDeleted) {
         const file = new ReactNativeFile({
-          uri: image.url,
-          type: image.mime,
+          uri: newImage.url,
+          type: newImage.mime,
           name: `image-${Date.now()}`,
         });
         const { data } = await uploadImageMutation({
@@ -50,7 +68,17 @@ export const UserEditScreen = ({ navigation }: Props) => {
           },
         });
 
-        imageUrl = data.uploadImage.url;
+        newImageUrl = data.uploadImage.url;
+        FastImage.preload([{ uri: newImageUrl }]);
+      }
+
+      let imageUrl: string | null | undefined;
+      if (newImageUrl) {
+        imageUrl = newImageUrl;
+      } else if (imageDeleted) {
+        imageUrl = null;
+      } else {
+        imageUrl = undefined;
       }
 
       await updateMeMutation({
@@ -67,7 +95,9 @@ export const UserEditScreen = ({ navigation }: Props) => {
         },
       });
 
+      await refetch();
       navigation.goBack();
+      toast.show("更新しました", { type: "success" });
     } catch (e) {
       console.log(e);
     } finally {
@@ -124,18 +154,17 @@ export const UserEditScreen = ({ navigation }: Props) => {
           multiple: false,
           mediaType: "photo",
         });
-        setImage({
+        setNewImage({
           url: image.sourceURL,
           mime: image.mime,
         });
+        setImageDeleted(false);
       } catch (e) {}
     }
 
     if (id === "delete") {
-      setImage({
-        url: null,
-        mime: null,
-      });
+      setNewImage(null);
+      setImageDeleted(true);
     }
   };
 
@@ -146,7 +175,7 @@ export const UserEditScreen = ({ navigation }: Props) => {
   return (
     <ScrollView flex={1} px="4" pt="8">
       <AvatarMenu onAction={onAvatarAction}>
-        <UserImage uri={image.url} size={16} alignSelf="center" />
+        <UserImage uri={displayedImageUrl} size={16} alignSelf="center" />
       </AvatarMenu>
 
       <VStack mt="12" space={8}>

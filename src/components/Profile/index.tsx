@@ -22,6 +22,9 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
 
   const isMe = data && data.me.id && data.me.id === id;
 
+  console.log(data.me.imageUrl);
+  console.log(imageUrl);
+
   return (
     <>
       <ContentsCard
@@ -41,7 +44,7 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
             <HStack alignSelf="center" mt="4" space="2">
               {socials.map((l, idx) => (
                 <React.Fragment key={idx}>
-                  {l.value && (
+                  {!!l.value && (
                     <SocialIcon
                       type={l.type}
                       iconType={"font-awesome"}
