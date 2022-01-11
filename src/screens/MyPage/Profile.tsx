@@ -1,14 +1,21 @@
-import React from "react";
+import React, { useState } from "react";
 import { ScrollView } from "native-base";
 import { useMeQuery } from "src/generated/graphql";
 import { Profile } from "src/components/Profile";
 import { SocialIconProps } from "react-native-elements";
+import { RefreshControl } from "src/components/RefreshControl";
 
 export const MyProfile = () => {
-  const { data } = useMeQuery();
+  const { data, refetch } = useMeQuery();
+  const [refreshing, setRefreshing] = useState(false);
+
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
 
   if (!data) {
-    console.log("no me data!!");
     return null;
   }
 
@@ -37,6 +44,9 @@ export const MyProfile = () => {
         paddingTop: 60,
         paddingBottom: 50,
       }}
+      refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+      }
     >
       <Profile
         id={id}

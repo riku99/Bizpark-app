@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState } from "react";
-import { Box, ScrollView } from "native-base";
+import { ScrollView } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { useUserCacheFragment } from "src/hooks/users";
 import { useUserLazyQuery } from "src/generated/graphql";
