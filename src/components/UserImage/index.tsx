@@ -10,7 +10,9 @@ type Props = {
 export const UserImage = ({ uri, size, ...props }: Props) => {
   return (
     <Image
-      source={{ uri: uri ?? noUserImageUrl }}
+      source={{
+        uri: uri ?? noUserImageUrl,
+      }}
       size={size}
       borderRadius="full"
       {...props}

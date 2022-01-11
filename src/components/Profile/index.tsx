@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Box, useColorModeValue, Text, HStack, Pressable } from "native-base";
 import { ContentsCard } from "src/components/ContentsCard";
 import { UserImage } from "src/components/UserImage";
@@ -19,17 +19,8 @@ type Props = {
 export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
   const { data } = useMeQuery();
   const navigation = useNavigation<RootNavigationProp<any>>();
-  const [i, setI] = useState(imageUrl);
 
   const isMe = data && data.me.id && data.me.id === id;
-
-  useEffect(() => {
-    setI(imageUrl);
-  }, [imageUrl]);
-
-  useEffect(() => {
-    console.log(i);
-  }, [i]);
 
   return (
     <>
@@ -92,13 +83,7 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
       </ContentsCard>
 
       <ContentsCard borderRadius="full" shadow="0" style={styles.imageOuter}>
-        <UserImage
-          uri={i}
-          style={styles.image}
-          onLoad={() => {
-            console.log("load!");
-          }}
-        />
+        <UserImage uri={imageUrl} style={styles.image} />
       </ContentsCard>
     </>
   );
