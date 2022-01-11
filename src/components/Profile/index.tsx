@@ -4,7 +4,6 @@ import { ContentsCard } from "src/components/ContentsCard";
 import { UserImage } from "src/components/UserImage";
 import { SocialIcon, SocialIconProps } from "react-native-elements";
 import { StyleSheet } from "react-native";
-import { Social, SocialType } from "src/generated/graphql";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
 import { useMeQuery } from "src/generated/graphql";
@@ -14,47 +13,12 @@ type Props = {
   name: string;
   imageUrl: string | null;
   bio: string | null;
-  socials: Omit<Social, "userId">[];
+  socials: { type: SocialIconProps["type"]; value: string | null }[];
 };
 
 export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
   const { data } = useMeQuery();
   const navigation = useNavigation<RootNavigationProp<any>>();
-
-  const icons = socials.map((s) => {
-    let data: {
-      type: SocialIconProps["type"];
-      link: string;
-    };
-    switch (s.type) {
-      case SocialType.Facebook:
-        data = {
-          type: "facebook",
-          link: s.link,
-        };
-        break;
-      case SocialType.Instagram:
-        data = {
-          type: "instagram",
-          link: s.link,
-        };
-        break;
-      case SocialType.Linkedin:
-        data = {
-          type: "linkedin",
-          link: s.link,
-        };
-        break;
-      case SocialType.Twitter:
-        data = {
-          type: "twitter",
-          link: s.link,
-        };
-        break;
-    }
-
-    return data;
-  });
 
   const isMe = data && data.me.id && data.me.id === id;
 
@@ -75,15 +39,19 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
             </Text>
 
             <HStack alignSelf="center" mt="2">
-              {icons.map((l, idx) => (
-                <SocialIcon
-                  type={l.type}
-                  iconType={"font-awesome"}
-                  key={idx}
-                  raised={false}
-                  iconSize={20}
-                  style={styles.social}
-                />
+              {socials.map((l, idx) => (
+                <>
+                  {l.value && (
+                    <SocialIcon
+                      type={l.type}
+                      iconType={"font-awesome"}
+                      key={idx}
+                      raised={false}
+                      iconSize={20}
+                      style={styles.social}
+                    />
+                  )}
+                </>
               ))}
             </HStack>
 

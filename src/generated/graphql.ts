@@ -96,10 +96,13 @@ export type InitialResponse = {
 export type Me = {
   __typename?: 'Me';
   bio?: Maybe<Scalars['String']>;
+  facebook?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   imageUrl?: Maybe<Scalars['String']>;
+  instagram?: Maybe<Scalars['String']>;
+  linkedin?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  socials: Array<Maybe<Social>>;
+  twitter?: Maybe<Scalars['String']>;
 };
 
 export type Mutation = {
@@ -278,6 +281,12 @@ export type ThoughtsConnection = {
   pageInfo: PageInfo;
 };
 
+export type UpdateMe = {
+  bio?: InputMaybe<Scalars['String']>;
+  imageUrl?: InputMaybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
 export type UploadThoughtImagesResponse = {
   __typename?: 'UploadThoughtImagesResponse';
   images: Array<SubImage>;
@@ -286,10 +295,13 @@ export type UploadThoughtImagesResponse = {
 export type User = {
   __typename?: 'User';
   bio?: Maybe<Scalars['String']>;
+  facebook?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   imageUrl?: Maybe<Scalars['String']>;
+  instagram?: Maybe<Scalars['String']>;
+  linkedin?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  socials: Array<Maybe<SocialType>>;
+  twitter?: Maybe<Scalars['String']>;
 };
 
 export type NewsFieldsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
@@ -358,12 +370,12 @@ export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoug
 export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type InitialDataQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, socials: Array<{ __typename?: 'Social', id: string, type: SocialType, link: string } | null | undefined> } };
+export type InitialDataQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined } };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, socials: Array<{ __typename?: 'Social', id: string, type: SocialType, link: string } | null | undefined> } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined } };
 
 export type NewsQueryVariables = Exact<{
   genre: NewsGenre;
@@ -705,11 +717,10 @@ export const InitialDataDocument = gql`
     name
     bio
     imageUrl
-    socials {
-      id
-      type
-      link
-    }
+    facebook
+    twitter
+    instagram
+    linkedin
   }
 }
     `;
@@ -747,11 +758,10 @@ export const MeDocument = gql`
     name
     bio
     imageUrl
-    socials {
-      id
-      type
-      link
-    }
+    facebook
+    twitter
+    instagram
+    linkedin
   }
 }
     `;

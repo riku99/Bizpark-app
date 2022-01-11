@@ -2,6 +2,7 @@ import React from "react";
 import { Box, ScrollView } from "native-base";
 import { useMeQuery } from "src/generated/graphql";
 import { Profile } from "src/components/Profile";
+import { SocialIconProps } from "react-native-elements";
 
 export const MyProfile = () => {
   const { data } = useMeQuery();
@@ -11,9 +12,22 @@ export const MyProfile = () => {
     return null;
   }
 
-  const { id, name, bio, imageUrl, socials } = data.me;
-
-  console.log(socials);
+  const {
+    id,
+    name,
+    bio,
+    imageUrl,
+    instagram,
+    facebook,
+    twitter,
+    linkedin,
+  } = data.me;
+  const socials: { type: SocialIconProps["type"]; value: string | null }[] = [
+    { type: "instagram", value: instagram },
+    { type: "facebook", value: facebook },
+    { type: "twitter", value: twitter },
+    { type: "linkedin", value: linkedin },
+  ];
 
   return (
     <ScrollView

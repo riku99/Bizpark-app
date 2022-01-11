@@ -4,10 +4,9 @@ query Me {
     name
     bio
     imageUrl
-    socials {
-      id
-      type
-      link
-    }
+    facebook
+    twitter
+    instagram
+    linkedin
   }
 }
