@@ -7,6 +7,8 @@ import { StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
 import { useMeQuery } from "src/generated/graphql";
+import { Linking, Alert } from "react-native";
+import { INSTAGRAM_BASE_URL, TWITTER_BASE_URL } from "src/constants";
 
 type Props = {
   id: string;
@@ -21,6 +23,40 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
   const navigation = useNavigation<RootNavigationProp<any>>();
 
   const isMe = data && data.me.id && data.me.id === id;
+
+  const onSnsIconPress = async ({
+    type,
+    value,
+  }: {
+    type: SocialIconProps["type"];
+    value: string;
+  }) => {
+    const notSupportedAlert = () => {
+      Alert.alert("無効なURLです");
+    };
+
+    let link = value;
+    switch (type) {
+      case "instagram":
+        link = `${INSTAGRAM_BASE_URL}/${value}`;
+        break;
+      case "twitter":
+        link = `${TWITTER_BASE_URL}/${value}`;
+        break;
+    }
+
+    try {
+      const supported = await Linking.canOpenURL(link);
+
+      if (supported) {
+        await Linking.openURL(link);
+      } else {
+        notSupportedAlert();
+      }
+    } catch (e) {
+      notSupportedAlert();
+    }
+  };
 
   return (
     <>
@@ -48,6 +84,9 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
                       raised={false}
                       iconSize={20}
                       style={styles.social}
+                      onPress={() => {
+                        onSnsIconPress({ type: l.type, value: l.value });
+                      }}
                     />
                   )}
                 </React.Fragment>
