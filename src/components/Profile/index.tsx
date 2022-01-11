@@ -40,18 +40,17 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
 
             <HStack alignSelf="center" mt="2">
               {socials.map((l, idx) => (
-                <>
+                <React.Fragment key={idx}>
                   {l.value && (
                     <SocialIcon
                       type={l.type}
                       iconType={"font-awesome"}
-                      key={idx}
                       raised={false}
                       iconSize={20}
                       style={styles.social}
                     />
                   )}
-                </>
+                </React.Fragment>
               ))}
             </HStack>
 

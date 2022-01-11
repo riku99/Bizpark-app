@@ -115,6 +115,8 @@ export type Mutation = {
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
   signOut: SignOutResponse;
+  updateMe: Me;
+  uploadImage: SubImage;
   uploadThoughtImages: UploadThoughtImagesResponse;
 };
 
@@ -151,6 +153,16 @@ export type MutationDeletePickArgs = {
 
 export type MutationDeleteThoughtArgs = {
   input: DeleteThoughtInput;
+};
+
+
+export type MutationUpdateMeArgs = {
+  input: UpdateMeInput;
+};
+
+
+export type MutationUploadImageArgs = {
+  file: Scalars['Upload'];
 };
 
 
@@ -236,21 +248,6 @@ export type SignOutResponse = {
   id: Scalars['ID'];
 };
 
-export type Social = {
-  __typename?: 'Social';
-  id: Scalars['ID'];
-  link: Scalars['String'];
-  type: SocialType;
-  userId: Scalars['String'];
-};
-
-export enum SocialType {
-  Facebook = 'FACEBOOK',
-  Instagram = 'INSTAGRAM',
-  Linkedin = 'LINKEDIN',
-  Twitter = 'TWITTER'
-}
-
 export type SubImage = {
   __typename?: 'SubImage';
   height?: Maybe<Scalars['Int']>;
@@ -281,10 +278,14 @@ export type ThoughtsConnection = {
   pageInfo: PageInfo;
 };
 
-export type UpdateMe = {
+export type UpdateMeInput = {
   bio?: InputMaybe<Scalars['String']>;
+  facebook?: InputMaybe<Scalars['String']>;
   imageUrl?: InputMaybe<Scalars['String']>;
+  instagram?: InputMaybe<Scalars['String']>;
+  linkedin?: InputMaybe<Scalars['String']>;
   name: Scalars['String'];
+  twitter?: InputMaybe<Scalars['String']>;
 };
 
 export type UploadThoughtImagesResponse = {
@@ -359,6 +360,20 @@ export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SignOutMutation = { __typename?: 'Mutation', signOut: { __typename?: 'SignOutResponse', id: string } };
+
+export type UpdateMeMutationVariables = Exact<{
+  input: UpdateMeInput;
+}>;
+
+
+export type UpdateMeMutation = { __typename?: 'Mutation', updateMe: { __typename?: 'Me', id: string } };
+
+export type UploadImageMutationVariables = Exact<{
+  file: Scalars['Upload'];
+}>;
+
+
+export type UploadImageMutation = { __typename?: 'Mutation', uploadImage: { __typename?: 'SubImage', url: string } };
 
 export type UploadThoughtImagesMutationVariables = Exact<{
   files: Array<Scalars['Upload']> | Scalars['Upload'];
@@ -673,6 +688,72 @@ export function useSignOutMutation(baseOptions?: Apollo.MutationHookOptions<Sign
 export type SignOutMutationHookResult = ReturnType<typeof useSignOutMutation>;
 export type SignOutMutationResult = Apollo.MutationResult<SignOutMutation>;
 export type SignOutMutationOptions = Apollo.BaseMutationOptions<SignOutMutation, SignOutMutationVariables>;
+export const UpdateMeDocument = gql`
+    mutation UpdateMe($input: UpdateMeInput!) {
+  updateMe(input: $input) {
+    id
+  }
+}
+    `;
+export type UpdateMeMutationFn = Apollo.MutationFunction<UpdateMeMutation, UpdateMeMutationVariables>;
+
+/**
+ * __useUpdateMeMutation__
+ *
+ * To run a mutation, you first call `useUpdateMeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateMeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateMeMutation, { data, loading, error }] = useUpdateMeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateMeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMeMutation, UpdateMeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateMeMutation, UpdateMeMutationVariables>(UpdateMeDocument, options);
+      }
+export type UpdateMeMutationHookResult = ReturnType<typeof useUpdateMeMutation>;
+export type UpdateMeMutationResult = Apollo.MutationResult<UpdateMeMutation>;
+export type UpdateMeMutationOptions = Apollo.BaseMutationOptions<UpdateMeMutation, UpdateMeMutationVariables>;
+export const UploadImageDocument = gql`
+    mutation UploadImage($file: Upload!) {
+  uploadImage(file: $file) {
+    url
+  }
+}
+    `;
+export type UploadImageMutationFn = Apollo.MutationFunction<UploadImageMutation, UploadImageMutationVariables>;
+
+/**
+ * __useUploadImageMutation__
+ *
+ * To run a mutation, you first call `useUploadImageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUploadImageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [uploadImageMutation, { data, loading, error }] = useUploadImageMutation({
+ *   variables: {
+ *      file: // value for 'file'
+ *   },
+ * });
+ */
+export function useUploadImageMutation(baseOptions?: Apollo.MutationHookOptions<UploadImageMutation, UploadImageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UploadImageMutation, UploadImageMutationVariables>(UploadImageDocument, options);
+      }
+export type UploadImageMutationHookResult = ReturnType<typeof useUploadImageMutation>;
+export type UploadImageMutationResult = Apollo.MutationResult<UploadImageMutation>;
+export type UploadImageMutationOptions = Apollo.BaseMutationOptions<UploadImageMutation, UploadImageMutationVariables>;
 export const UploadThoughtImagesDocument = gql`
     mutation UploadThoughtImages($files: [Upload!]!) {
   uploadThoughtImages(files: $files) {

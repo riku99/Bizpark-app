@@ -1,32 +1,92 @@
 import React, { useLayoutEffect, useState } from "react";
-import { Box, ScrollView, VStack, Pressable, HStack } from "native-base";
+import { Box, ScrollView, VStack, Pressable, HStack, Text } from "native-base";
 import { RootNavigationScreenProp, Socials } from "src/types";
-import { useMeQuery, SocialType } from "src/generated/graphql";
+import {
+  useMeQuery,
+  useUploadImageMutation,
+  useUpdateMeMutation,
+} from "src/generated/graphql";
 import { UserImage } from "src/components/UserImage";
 import { SocialIcon, SocialIconProps } from "react-native-elements";
 import { socialIcons } from "src/constants";
 import ImagePicker from "react-native-image-crop-picker";
 import { Item } from "./EditItem";
 import { AvatarMenu } from "./AvatarMenu";
+import { ReactNativeFile } from "apollo-upload-client";
+import { spinnerVisibleVar } from "src/stores/spinner";
 
 type Props = RootNavigationScreenProp<"UserEdit">;
 
 export const UserEditScreen = ({ navigation }: Props) => {
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: "プロフィール編集",
-    });
-  }, [navigation]);
-
   const { data } = useMeQuery();
 
-  const [imageUrl, setImageUrl] = useState(data.me.imageUrl);
+  const [image, setImage] = useState({
+    url: data.me.imageUrl,
+    mime: null,
+  });
   const [name, setName] = useState(data.me.name);
   const [bio, setBio] = useState(data.me.bio);
   const [facebook, setFacebook] = useState(data.me.facebook);
   const [twitter, setTwitter] = useState(data.me.twitter);
   const [linkedin, setLinkedin] = useState(data.me.linkedin);
   const [instagram, setInstagram] = useState(data.me.instagram);
+
+  const [updateMeMutation] = useUpdateMeMutation();
+  const [uploadImageMutation] = useUploadImageMutation();
+
+  const onCompletePress = async () => {
+    try {
+      spinnerVisibleVar(true);
+      let imageUrl: null | string = null;
+      if (image.url) {
+        const file = new ReactNativeFile({
+          uri: image.url,
+          type: image.mime,
+          name: `image-${Date.now()}`,
+        });
+        const { data } = await uploadImageMutation({
+          variables: {
+            file,
+          },
+        });
+
+        imageUrl = data.uploadImage.url;
+      }
+
+      await updateMeMutation({
+        variables: {
+          input: {
+            name,
+            bio,
+            imageUrl,
+            facebook: facebook ?? null,
+            twitter: twitter ?? null,
+            linkedin: linkedin ?? null,
+            instagram: instagram ?? null,
+          },
+        },
+      });
+
+      navigation.goBack();
+    } catch (e) {
+      console.log(e);
+    } finally {
+      spinnerVisibleVar(false);
+    }
+  };
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      title: "プロフィール編集",
+      headerRight: () => (
+        <Pressable onPress={onCompletePress}>
+          <Text fontWeight="bold" color="pink" fontSize="17">
+            完了
+          </Text>
+        </Pressable>
+      ),
+    });
+  }, [navigation, onCompletePress]);
 
   const socialsStateData = socialIcons.map((s) => {
     switch (s) {
@@ -64,12 +124,18 @@ export const UserEditScreen = ({ navigation }: Props) => {
           multiple: false,
           mediaType: "photo",
         });
-        setImageUrl(image.sourceURL);
+        setImage({
+          url: image.sourceURL,
+          mime: image.mime,
+        });
       } catch (e) {}
     }
 
     if (id === "delete") {
-      setImageUrl(null);
+      setImage({
+        url: null,
+        mime: null,
+      });
     }
   };
 
@@ -80,7 +146,7 @@ export const UserEditScreen = ({ navigation }: Props) => {
   return (
     <ScrollView flex={1} px="4" pt="8">
       <AvatarMenu onAction={onAvatarAction}>
-        <UserImage uri={imageUrl} size={16} alignSelf="center" />
+        <UserImage uri={image.url} size={16} alignSelf="center" />
       </AvatarMenu>
 
       <VStack mt="12" space={8}>

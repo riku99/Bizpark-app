@@ -1,5 +1,5 @@
 import React from "react";
-import { Box, ScrollView } from "native-base";
+import { ScrollView } from "native-base";
 import { useMeQuery } from "src/generated/graphql";
 import { Profile } from "src/components/Profile";
 import { SocialIconProps } from "react-native-elements";
