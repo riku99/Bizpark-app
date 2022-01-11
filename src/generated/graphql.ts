@@ -227,6 +227,7 @@ export type Query = {
   me: Me;
   news?: Maybe<NewsConnection>;
   thoughts: ThoughtsConnection;
+  user: User;
 };
 
 
@@ -243,6 +244,11 @@ export type QueryThoughtsArgs = {
   genre: Genre;
 };
 
+
+export type QueryUserArgs = {
+  id: Scalars['ID'];
+};
+
 export type SignOutResponse = {
   __typename?: 'SignOutResponse';
   id: Scalars['ID'];
@@ -257,7 +263,7 @@ export type SubImage = {
 
 export type Thought = {
   __typename?: 'Thought';
-  contributor?: Maybe<User>;
+  contributor: User;
   createdAt?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   images: Array<Maybe<Image>>;
@@ -306,6 +312,8 @@ export type User = {
 };
 
 export type NewsFieldsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
+
+export type UserPartsFragment = { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined };
 
 export type CreateNewsPickMutationVariables = Exact<{
   input: CreateNewsPickInput;
@@ -406,7 +414,14 @@ export type ThoughtsQueryVariables = Exact<{
 }>;
 
 
-export type ThoughtsQuery = { __typename?: 'Query', thoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked: boolean, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type ThoughtsQuery = { __typename?: 'Query', thoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked: boolean, contributor: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined }, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+
+export type UserQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export const NewsFieldsFragmentDoc = gql`
     fragment NewsFields on News {
@@ -418,6 +433,18 @@ export const NewsFieldsFragmentDoc = gql`
   genre
   provider
   picked
+}
+    `;
+export const UserPartsFragmentDoc = gql`
+    fragment UserParts on User {
+  id
+  name
+  bio
+  imageUrl
+  facebook
+  twitter
+  linkedin
+  instagram
 }
     `;
 export const CreateNewsPickDocument = gql`
@@ -937,9 +964,7 @@ export const ThoughtsDocument = gql`
         text
         createdAt
         contributor {
-          id
-          name
-          imageUrl
+          ...UserParts
         }
         picked
         images {
@@ -959,7 +984,7 @@ export const ThoughtsDocument = gql`
     }
   }
 }
-    `;
+    ${UserPartsFragmentDoc}`;
 
 /**
  * __useThoughtsQuery__
@@ -989,3 +1014,38 @@ export function useThoughtsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<T
 export type ThoughtsQueryHookResult = ReturnType<typeof useThoughtsQuery>;
 export type ThoughtsLazyQueryHookResult = ReturnType<typeof useThoughtsLazyQuery>;
 export type ThoughtsQueryResult = Apollo.QueryResult<ThoughtsQuery, ThoughtsQueryVariables>;
+export const UserDocument = gql`
+    query User($id: ID!) {
+  user(id: $id) {
+    ...UserParts
+  }
+}
+    ${UserPartsFragmentDoc}`;
+
+/**
+ * __useUserQuery__
+ *
+ * To run a query within a React component, call `useUserQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+      }
+export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+        }
+export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
+export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
+export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;

@@ -1,0 +1,10 @@
+fragment UserParts on User {
+  id
+  name
+  bio
+  imageUrl
+  facebook
+  twitter
+  linkedin
+  instagram
+}

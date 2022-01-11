@@ -7,9 +7,7 @@ query Thoughts($genre: Genre!, $cursor: String) {
         text
         createdAt
         contributor {
-          id
-          name
-          imageUrl
+          ...UserParts
         }
         picked
         images {
