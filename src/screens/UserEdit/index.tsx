@@ -1,9 +1,9 @@
 import React, { useLayoutEffect, useState } from "react";
 import { Box, ScrollView, VStack, Pressable, HStack } from "native-base";
-import { RootNavigationScreenProp } from "src/types";
+import { RootNavigationScreenProp, Socials } from "src/types";
 import { useMeQuery, SocialType } from "src/generated/graphql";
 import { UserImage } from "src/components/UserImage";
-import { SocialIcon } from "react-native-elements";
+import { SocialIcon, SocialIconProps } from "react-native-elements";
 import { socialIcons } from "src/constants";
 import ImagePicker from "react-native-image-crop-picker";
 import { Item } from "./EditItem";
@@ -39,12 +39,41 @@ export const UserEditScreen = ({ navigation }: Props) => {
     facebookData ? facebookData.link : null
   );
   const [twitter, setTwitter] = useState(twitterData ? twitterData.link : null);
-  const [linkedIn, setLinkedIn] = useState(
+  const [linkedin, setLinkedin] = useState(
     linkedinData ? linkedinData.link : null
   );
   const [instagram, setInstagram] = useState(
     instagramData ? instagramData.link : null
   );
+
+  const socialsStateData = socialIcons.map((s) => {
+    switch (s) {
+      case "facebook":
+        return {
+          type: "facebook",
+          value: facebook,
+          setValue: setFacebook,
+        };
+      case "twitter":
+        return {
+          type: "twitter",
+          value: twitter,
+          setValue: setTwitter,
+        };
+      case "linkedin":
+        return {
+          type: "linkedin",
+          value: linkedin,
+          setValue: setLinkedin,
+        };
+      case "instagram":
+        return {
+          type: "instagram",
+          value: instagram,
+          setValue: setInstagram,
+        };
+    }
+  });
 
   const onAvatarAction = async (id: string) => {
     if (id === "select") {
@@ -99,16 +128,23 @@ export const UserEditScreen = ({ navigation }: Props) => {
       </VStack>
 
       <HStack mt="16" space={4}>
-        {socialIcons.map((s, idx) => {
+        {socialsStateData.map((s, idx) => {
           return (
             <SocialIcon
-              type={s}
+              type={s.type as SocialIconProps["type"]}
               iconType="font-awesome"
               key={idx}
               raised={false}
               style={{
                 width: 40,
                 height: 40,
+              }}
+              onPress={() => {
+                navigation.navigate("UserItemEdit", {
+                  type: s.type as Socials,
+                  value: s.value,
+                  setValue: s.setValue,
+                });
               }}
             />
           );

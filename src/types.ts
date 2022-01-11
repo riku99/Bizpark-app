@@ -10,7 +10,7 @@ type ThoughtShare = {
   images: { url: string; mime: string }[];
 };
 
-type Socials = "facebook" | "twitter" | "linkedin" | "instagram";
+export type Socials = "facebook" | "twitter" | "linkedin" | "instagram";
 
 export type TohughtStackParamList = {
   Thought: {
@@ -45,9 +45,9 @@ export type RootStackParamList = {
   };
   UserEdit: undefined;
   UserItemEdit: {
-    type: "name" | "bio";
-    value: string;
-    setValue: (v: string) => void;
+    type: "name" | "bio" | Socials;
+    value: string | null;
+    setValue: (v: string | null) => void;
   };
 };
 

@@ -14,6 +14,18 @@ export const UserItemEditScreen = ({ navigation, route }: Props) => {
     case "bio":
       title = "自己紹介";
       break;
+    case "facebook":
+      title = "Facebook";
+      break;
+    case "instagram":
+      title = "Instagram";
+      break;
+    case "linkedin":
+      title = "LinkedIn";
+      break;
+    case "twitter":
+      title = "Twitter";
+      break;
   }
 
   const [newValue, setNewValue] = useState(value);
