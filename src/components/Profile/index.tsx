@@ -38,7 +38,7 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
               {name}
             </Text>
 
-            <HStack alignSelf="center" mt="2">
+            <HStack alignSelf="center" mt="4" space="2">
               {socials.map((l, idx) => (
                 <React.Fragment key={idx}>
                   {l.value && (
