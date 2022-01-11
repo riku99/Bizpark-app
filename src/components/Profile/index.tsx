@@ -118,11 +118,15 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
               </Text>
             </Pressable>
           )}
-        </>
-      </ContentsCard>
 
-      <ContentsCard borderRadius="full" shadow="0" style={styles.imageOuter}>
-        <UserImage uri={imageUrl} style={styles.image} />
+          <ContentsCard
+            borderRadius="full"
+            shadow="0"
+            style={styles.imageOuter}
+          >
+            <UserImage uri={imageUrl} style={styles.image} />
+          </ContentsCard>
+        </>
       </ContentsCard>
     </>
   );
@@ -142,7 +146,8 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     position: "absolute",
-    top: 22,
+    alignSelf: "center",
+    transform: [{ translateY: -40 }],
   },
   social: {
     width: 35,
