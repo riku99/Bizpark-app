@@ -23,10 +23,10 @@ export const MyProfile = () => {
     linkedin,
   } = data.me;
   const socials: { type: SocialIconProps["type"]; value: string | null }[] = [
-    { type: "instagram", value: instagram },
     { type: "facebook", value: facebook },
     { type: "twitter", value: twitter },
     { type: "linkedin", value: linkedin },
+    { type: "instagram", value: instagram },
   ];
 
   return (

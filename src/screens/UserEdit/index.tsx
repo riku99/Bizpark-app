@@ -19,32 +19,14 @@ export const UserEditScreen = ({ navigation }: Props) => {
   }, [navigation]);
 
   const { data } = useMeQuery();
-  const facebookData = data.me.socials.find(
-    (s) => s.type === SocialType.Facebook
-  );
-  const twitterData = data.me.socials.find(
-    (s) => s.type === SocialType.Twitter
-  );
-  const linkedinData = data.me.socials.find(
-    (s) => s.type === SocialType.Linkedin
-  );
-  const instagramData = data.me.socials.find(
-    (s) => s.type === SocialType.Instagram
-  );
 
   const [imageUrl, setImageUrl] = useState(data.me.imageUrl);
   const [name, setName] = useState(data.me.name);
   const [bio, setBio] = useState(data.me.bio);
-  const [facebook, setFacebook] = useState(
-    facebookData ? facebookData.link : null
-  );
-  const [twitter, setTwitter] = useState(twitterData ? twitterData.link : null);
-  const [linkedin, setLinkedin] = useState(
-    linkedinData ? linkedinData.link : null
-  );
-  const [instagram, setInstagram] = useState(
-    instagramData ? instagramData.link : null
-  );
+  const [facebook, setFacebook] = useState(data.me.facebook);
+  const [twitter, setTwitter] = useState(data.me.twitter);
+  const [linkedin, setLinkedin] = useState(data.me.linkedin);
+  const [instagram, setInstagram] = useState(data.me.instagram);
 
   const socialsStateData = socialIcons.map((s) => {
     switch (s) {
