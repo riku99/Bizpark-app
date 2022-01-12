@@ -61,7 +61,7 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
   return (
     <>
       <ContentsCard
-        w="5/6"
+        w="85%"
         px="4"
         pb="8"
         borderRadius="lg"
@@ -98,7 +98,7 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
             </Box>
           </Box>
 
-          {isMe && (
+          {isMe ? (
             <Pressable
               position="absolute"
               top="4"
@@ -107,15 +107,24 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
               borderColor={useColorModeValue("textBlack", "textWhite")}
               p="2"
               borderRadius="2xl"
+              onPress={() => {
+                navigation.navigate("UserEdit");
+              }}
             >
-              <Text
-                fontWeight="bold"
-                onPress={() => {
-                  navigation.navigate("UserEdit");
-                }}
-              >
-                編集
-              </Text>
+              <Text fontWeight="bold">編集</Text>
+            </Pressable>
+          ) : (
+            <Pressable
+              position="absolute"
+              top="4"
+              right="4"
+              borderWidth="1"
+              borderColor={useColorModeValue("textBlack", "textWhite")}
+              p="2"
+              borderRadius="2xl"
+              onPress={() => {}}
+            >
+              <Text fontWeight="bold">フォロー</Text>
             </Pressable>
           )}
 
