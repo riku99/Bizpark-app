@@ -230,6 +230,7 @@ export type Query = {
   pickedThoughts: ThoughtsConnection;
   thoughts: ThoughtsConnection;
   user: User;
+  userThoughts: ThoughtsConnection;
 };
 
 
@@ -261,6 +262,13 @@ export type QueryThoughtsArgs = {
 
 export type QueryUserArgs = {
   id: Scalars['ID'];
+};
+
+
+export type QueryUserThoughtsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first: Scalars['Int'];
+  userId: Scalars['ID'];
 };
 
 export type SignOutResponse = {
@@ -460,6 +468,14 @@ export type PickedNewsQueryVariables = Exact<{
 
 
 export type PickedNewsQuery = { __typename?: 'Query', pickedNews: { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+
+export type UserThoughtsQueryVariables = Exact<{
+  userId: Scalars['ID'];
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type UserThoughtsQuery = { __typename?: 'Query', userThoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked: boolean, contributor: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined }, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 export const NewsFieldsFragmentDoc = gql`
     fragment NewsFields on News {
@@ -1181,3 +1197,39 @@ export function usePickedNewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type PickedNewsQueryHookResult = ReturnType<typeof usePickedNewsQuery>;
 export type PickedNewsLazyQueryHookResult = ReturnType<typeof usePickedNewsLazyQuery>;
 export type PickedNewsQueryResult = Apollo.QueryResult<PickedNewsQuery, PickedNewsQueryVariables>;
+export const UserThoughtsDocument = gql`
+    query UserThoughts($userId: ID!, $cursor: String) {
+  userThoughts(userId: $userId, first: 20, after: $cursor) {
+    ...ThoughtsConnectionParts
+  }
+}
+    ${ThoughtsConnectionPartsFragmentDoc}`;
+
+/**
+ * __useUserThoughtsQuery__
+ *
+ * To run a query within a React component, call `useUserThoughtsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useUserThoughtsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useUserThoughtsQuery({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *      cursor: // value for 'cursor'
+ *   },
+ * });
+ */
+export function useUserThoughtsQuery(baseOptions: Apollo.QueryHookOptions<UserThoughtsQuery, UserThoughtsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<UserThoughtsQuery, UserThoughtsQueryVariables>(UserThoughtsDocument, options);
+      }
+export function useUserThoughtsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserThoughtsQuery, UserThoughtsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<UserThoughtsQuery, UserThoughtsQueryVariables>(UserThoughtsDocument, options);
+        }
+export type UserThoughtsQueryHookResult = ReturnType<typeof useUserThoughtsQuery>;
+export type UserThoughtsLazyQueryHookResult = ReturnType<typeof useUserThoughtsLazyQuery>;
+export type UserThoughtsQueryResult = Apollo.QueryResult<UserThoughtsQuery, UserThoughtsQueryVariables>;

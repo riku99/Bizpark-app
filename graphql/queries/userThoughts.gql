@@ -1,0 +1,5 @@
+query UserThoughts($userId: ID!, $cursor: String) {
+  userThoughts(userId: $userId, first: 20, after: $cursor) {
+    ...ThoughtsConnectionParts
+  }
+}
