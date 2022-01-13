@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Box, Button, Text } from "native-base";
+import { Button } from "native-base";
 import { PickedThoughts } from "./PickedThoughts";
 import { PickedNews } from "./PickedNews";
 import { MenuView, MenuAction } from "@react-native-menu/menu";
@@ -24,6 +24,18 @@ export const Picks = React.memo(() => {
     },
   ];
 
+  const onMenuAction = (id: string) => {
+    if (id === "thought") {
+      setDisplayedCategory("thought");
+      return;
+    }
+
+    if (id === "news") {
+      setDisplayedCategory("news");
+      return;
+    }
+  };
+
   return (
     <>
       {displayedCategory === "thought" ? <PickedThoughts /> : <PickedNews />}
@@ -34,6 +46,9 @@ export const Picks = React.memo(() => {
           position: "absolute",
           right: 22,
           bottom: 20,
+        }}
+        onPressAction={({ nativeEvent }) => {
+          onMenuAction(nativeEvent.event);
         }}
       >
         <Button
