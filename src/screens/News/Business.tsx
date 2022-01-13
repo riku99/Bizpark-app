@@ -16,7 +16,11 @@ export const Business = React.memo(() => {
 
   return (
     <Box flex={1}>
-      <List data={data} refresh={refresh} infiniteLoad={infiniteLoad} />
+      <List
+        data={data.news.edges}
+        refresh={refresh}
+        infiniteLoad={infiniteLoad}
+      />
     </Box>
   );
 });

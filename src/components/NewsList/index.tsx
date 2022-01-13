@@ -7,14 +7,14 @@ import {
   useTheme,
   useColorModeValue,
 } from "native-base";
-import { NewsQuery } from "src/generated/graphql";
+import { NewsQuery, NewsEdge } from "src/generated/graphql";
 import { NewsCard } from "src/components/NewsCard";
 import { Indicator } from "src/components/Indicator";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
 
 type Props = {
-  data: NewsQuery;
+  data: NewsEdge[];
   refresh: () => Promise<void>;
   infiniteLoad: () => Promise<void>;
 };
@@ -89,7 +89,7 @@ export const List = React.memo(({ data, refresh, infiniteLoad }: Props) => {
 
   return (
     <FlatList
-      data={data.news.edges}
+      data={data}
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
       keyExtractor={(i) => i.node.id}

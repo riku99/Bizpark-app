@@ -31,7 +31,11 @@ export const PickedNews = () => {
 
   return (
     <Box flex={1}>
-      <List data={data} refresh={refresh} infiniteLoad={infiniteLoad} />
+      <List
+        data={data.pickedNews.edges}
+        refresh={refresh}
+        infiniteLoad={infiniteLoad}
+      />
     </Box>
   );
 };
