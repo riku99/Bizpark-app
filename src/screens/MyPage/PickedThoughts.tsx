@@ -30,7 +30,7 @@ export const PickedThoughts = React.memo(() => {
   }
 
   return (
-    <Box flex={1} pt={4} w="100%" h="100%">
+    <Box flex={1} pt={4} px={4} w="100%" h="100%">
       <List
         data={data.pickedThoughts.edges}
         refresh={refresh}

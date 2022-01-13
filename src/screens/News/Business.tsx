@@ -1,7 +1,7 @@
 import React from "react";
 import { Box } from "native-base";
 import { NewsGenre } from "src/generated/graphql";
-import { List } from "./List";
+import { List } from "../../components/NewsList";
 import { Indicator } from "src/components/Indicator";
 import { useNews } from "src/hooks/news";
 
