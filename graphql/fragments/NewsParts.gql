@@ -1,0 +1,10 @@
+fragment NewsParts on News {
+  id
+  title
+  link
+  image
+  articleCreatedAt
+  genre
+  provider
+  picked
+}

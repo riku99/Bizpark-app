@@ -1,23 +1,5 @@
 query News($genre: NewsGenre!, $cursor: String) {
-  news(genre: $genre, first: 30, after: $cursor) {
-    edges {
-      node {
-        id
-        title
-        link
-        image
-        articleCreatedAt
-        genre
-        provider
-        picked
-      }
-      cursor
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      startCursor
-      endCursor
-    }
+  news(genre: $genre, first: 20, after: $cursor) {
+    ...NewsConnectionParts
   }
 }

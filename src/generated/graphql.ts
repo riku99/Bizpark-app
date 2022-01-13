@@ -226,6 +226,7 @@ export type Query = {
   initialData: InitialResponse;
   me: Me;
   news?: Maybe<NewsConnection>;
+  pickedNews: NewsConnection;
   pickedThoughts: ThoughtsConnection;
   thoughts: ThoughtsConnection;
   user: User;
@@ -236,6 +237,12 @@ export type QueryNewsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   genre: NewsGenre;
+};
+
+
+export type QueryPickedNewsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first: Scalars['Int'];
 };
 
 
@@ -319,6 +326,10 @@ export type User = {
 };
 
 export type NewsFieldsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
+
+export type NewsConnectionPartsFragment = { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } };
+
+export type NewsPartsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
 
 export type PageInfoPartsFragment = { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined };
 
@@ -443,6 +454,13 @@ export type UserQueryVariables = Exact<{
 
 export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
+export type PickedNewsQueryVariables = Exact<{
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type PickedNewsQuery = { __typename?: 'Query', pickedNews: { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+
 export const NewsFieldsFragmentDoc = gql`
     fragment NewsFields on News {
   id
@@ -455,6 +473,40 @@ export const NewsFieldsFragmentDoc = gql`
   picked
 }
     `;
+export const NewsPartsFragmentDoc = gql`
+    fragment NewsParts on News {
+  id
+  title
+  link
+  image
+  articleCreatedAt
+  genre
+  provider
+  picked
+}
+    `;
+export const PageInfoPartsFragmentDoc = gql`
+    fragment PageInfoParts on PageInfo {
+  hasNextPage
+  hasPreviousPage
+  startCursor
+  endCursor
+}
+    `;
+export const NewsConnectionPartsFragmentDoc = gql`
+    fragment NewsConnectionParts on NewsConnection {
+  edges {
+    node {
+      ...NewsParts
+    }
+    cursor
+  }
+  pageInfo {
+    ...PageInfoParts
+  }
+}
+    ${NewsPartsFragmentDoc}
+${PageInfoPartsFragmentDoc}`;
 export const UserPartsFragmentDoc = gql`
     fragment UserParts on User {
   id
@@ -485,14 +537,6 @@ export const ThoughtPartsFragmentDoc = gql`
   }
 }
     ${UserPartsFragmentDoc}`;
-export const PageInfoPartsFragmentDoc = gql`
-    fragment PageInfoParts on PageInfo {
-  hasNextPage
-  hasPreviousPage
-  startCursor
-  endCursor
-}
-    `;
 export const ThoughtsConnectionPartsFragmentDoc = gql`
     fragment ThoughtsConnectionParts on ThoughtsConnection {
   edges {
@@ -962,29 +1006,11 @@ export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const NewsDocument = gql`
     query News($genre: NewsGenre!, $cursor: String) {
-  news(genre: $genre, first: 30, after: $cursor) {
-    edges {
-      node {
-        id
-        title
-        link
-        image
-        articleCreatedAt
-        genre
-        provider
-        picked
-      }
-      cursor
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      startCursor
-      endCursor
-    }
+  news(genre: $genre, first: 20, after: $cursor) {
+    ...NewsConnectionParts
   }
 }
-    `;
+    ${NewsConnectionPartsFragmentDoc}`;
 
 /**
  * __useNewsQuery__
@@ -1120,3 +1146,38 @@ export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQ
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
+export const PickedNewsDocument = gql`
+    query PickedNews($cursor: String) {
+  pickedNews(first: 20, after: $cursor) {
+    ...NewsConnectionParts
+  }
+}
+    ${NewsConnectionPartsFragmentDoc}`;
+
+/**
+ * __usePickedNewsQuery__
+ *
+ * To run a query within a React component, call `usePickedNewsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePickedNewsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePickedNewsQuery({
+ *   variables: {
+ *      cursor: // value for 'cursor'
+ *   },
+ * });
+ */
+export function usePickedNewsQuery(baseOptions?: Apollo.QueryHookOptions<PickedNewsQuery, PickedNewsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PickedNewsQuery, PickedNewsQueryVariables>(PickedNewsDocument, options);
+      }
+export function usePickedNewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PickedNewsQuery, PickedNewsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PickedNewsQuery, PickedNewsQueryVariables>(PickedNewsDocument, options);
+        }
+export type PickedNewsQueryHookResult = ReturnType<typeof usePickedNewsQuery>;
+export type PickedNewsLazyQueryHookResult = ReturnType<typeof usePickedNewsLazyQuery>;
+export type PickedNewsQueryResult = Apollo.QueryResult<PickedNewsQuery, PickedNewsQueryVariables>;
