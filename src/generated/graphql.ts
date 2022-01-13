@@ -421,6 +421,13 @@ export type NewsQueryVariables = Exact<{
 
 export type NewsQuery = { __typename?: 'Query', news?: { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
 
+export type PickedThoughtsQueryVariables = Exact<{
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type PickedThoughtsQuery = { __typename?: 'Query', pickedThoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked: boolean, contributor: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined }, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+
 export type ThoughtsQueryVariables = Exact<{
   genre: Genre;
   cursor?: InputMaybe<Scalars['String']>;
@@ -1007,6 +1014,41 @@ export function useNewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NewsQ
 export type NewsQueryHookResult = ReturnType<typeof useNewsQuery>;
 export type NewsLazyQueryHookResult = ReturnType<typeof useNewsLazyQuery>;
 export type NewsQueryResult = Apollo.QueryResult<NewsQuery, NewsQueryVariables>;
+export const PickedThoughtsDocument = gql`
+    query PickedThoughts($cursor: String) {
+  pickedThoughts(first: 20, after: $cursor) {
+    ...ThoughtsConnectionParts
+  }
+}
+    ${ThoughtsConnectionPartsFragmentDoc}`;
+
+/**
+ * __usePickedThoughtsQuery__
+ *
+ * To run a query within a React component, call `usePickedThoughtsQuery` and pass it any options that fit your needs.
+ * When your component renders, `usePickedThoughtsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = usePickedThoughtsQuery({
+ *   variables: {
+ *      cursor: // value for 'cursor'
+ *   },
+ * });
+ */
+export function usePickedThoughtsQuery(baseOptions?: Apollo.QueryHookOptions<PickedThoughtsQuery, PickedThoughtsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<PickedThoughtsQuery, PickedThoughtsQueryVariables>(PickedThoughtsDocument, options);
+      }
+export function usePickedThoughtsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PickedThoughtsQuery, PickedThoughtsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<PickedThoughtsQuery, PickedThoughtsQueryVariables>(PickedThoughtsDocument, options);
+        }
+export type PickedThoughtsQueryHookResult = ReturnType<typeof usePickedThoughtsQuery>;
+export type PickedThoughtsLazyQueryHookResult = ReturnType<typeof usePickedThoughtsLazyQuery>;
+export type PickedThoughtsQueryResult = Apollo.QueryResult<PickedThoughtsQuery, PickedThoughtsQueryVariables>;
 export const ThoughtsDocument = gql`
     query Thoughts($genre: Genre!, $cursor: String) {
   thoughts(genre: $genre, first: 20, after: $cursor) {

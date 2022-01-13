@@ -1,0 +1,5 @@
+query PickedThoughts($cursor: String) {
+  pickedThoughts(first: 20, after: $cursor) {
+    ...ThoughtsConnectionParts
+  }
+}
