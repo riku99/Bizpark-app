@@ -1,29 +1,5 @@
 query Thoughts($genre: Genre!, $cursor: String) {
   thoughts(genre: $genre, first: 20, after: $cursor) {
-    edges {
-      node {
-        id
-        title
-        text
-        createdAt
-        contributor {
-          ...UserParts
-        }
-        picked
-        images {
-          id
-          url
-          width
-          height
-        }
-      }
-      cursor
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      startCursor
-      endCursor
-    }
+    ...ThoughtsConnectionParts
   }
 }

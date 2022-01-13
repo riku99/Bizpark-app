@@ -4,6 +4,7 @@ import { useMeQuery } from "src/generated/graphql";
 import { Profile } from "src/components/Profile";
 import { SocialIconProps } from "react-native-elements";
 import { RefreshControl } from "src/components/RefreshControl";
+import { AddButton } from "src/components/AddButton";
 
 export const MyProfile = () => {
   const { data, refetch } = useMeQuery();
@@ -37,24 +38,28 @@ export const MyProfile = () => {
   ];
 
   return (
-    <ScrollView
-      flex={1}
-      contentContainerStyle={{
-        alignItems: "center",
-        paddingTop: 60,
-        paddingBottom: 50,
-      }}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
-      <Profile
-        id={id}
-        name={name}
-        bio={bio}
-        imageUrl={imageUrl}
-        socials={socials}
-      />
-    </ScrollView>
+    <>
+      <ScrollView
+        flex={1}
+        contentContainerStyle={{
+          alignItems: "center",
+          paddingTop: 60,
+          paddingBottom: 50,
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <Profile
+          id={id}
+          name={name}
+          bio={bio}
+          imageUrl={imageUrl}
+          socials={socials}
+        />
+      </ScrollView>
+
+      <AddButton />
+    </>
   );
 };

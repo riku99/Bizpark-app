@@ -20,7 +20,7 @@ export const AddButton = () => {
       justifyContent="center"
       alignItems="center"
       position="absolute"
-      bottom={4}
+      bottom={6}
       right={5}
       onPress={onPress}
     >

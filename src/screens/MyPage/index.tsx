@@ -52,7 +52,6 @@ export const MyPage = ({ navigation }: Props) => {
         <TopTab.Screen name="フォロー" component={Follows} />
         <TopTab.Screen name="シェア" component={Thouhgts} />
       </TopTab.Navigator>
-      <AddButton />
 
       {creatingThought && (
         <CreatingToast

@@ -1,0 +1,11 @@
+fragment ThoughtsConnectionParts on ThoughtsConnection {
+  edges {
+    node {
+      ...ThoughtParts
+    }
+    cursor
+  }
+  pageInfo {
+    ...PageInfoParts
+  }
+}

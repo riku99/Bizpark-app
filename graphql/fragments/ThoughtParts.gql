@@ -1,0 +1,16 @@
+fragment ThoughtParts on Thought {
+  id
+  title
+  text
+  createdAt
+  contributor {
+    ...UserParts
+  }
+  picked
+  images {
+    id
+    url
+    width
+    height
+  }
+}

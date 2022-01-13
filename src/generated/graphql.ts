@@ -226,6 +226,7 @@ export type Query = {
   initialData: InitialResponse;
   me: Me;
   news?: Maybe<NewsConnection>;
+  pickedThoughts: ThoughtsConnection;
   thoughts: ThoughtsConnection;
   user: User;
 };
@@ -235,6 +236,12 @@ export type QueryNewsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
   genre: NewsGenre;
+};
+
+
+export type QueryPickedThoughtsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first: Scalars['Int'];
 };
 
 
@@ -312,6 +319,12 @@ export type User = {
 };
 
 export type NewsFieldsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
+
+export type PageInfoPartsFragment = { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined };
+
+export type ThoughtPartsFragment = { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked: boolean, contributor: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined }, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> };
+
+export type ThoughtsConnectionPartsFragment = { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked: boolean, contributor: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined }, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } };
 
 export type UserPartsFragment = { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined };
 
@@ -447,6 +460,46 @@ export const UserPartsFragmentDoc = gql`
   instagram
 }
     `;
+export const ThoughtPartsFragmentDoc = gql`
+    fragment ThoughtParts on Thought {
+  id
+  title
+  text
+  createdAt
+  contributor {
+    ...UserParts
+  }
+  picked
+  images {
+    id
+    url
+    width
+    height
+  }
+}
+    ${UserPartsFragmentDoc}`;
+export const PageInfoPartsFragmentDoc = gql`
+    fragment PageInfoParts on PageInfo {
+  hasNextPage
+  hasPreviousPage
+  startCursor
+  endCursor
+}
+    `;
+export const ThoughtsConnectionPartsFragmentDoc = gql`
+    fragment ThoughtsConnectionParts on ThoughtsConnection {
+  edges {
+    node {
+      ...ThoughtParts
+    }
+    cursor
+  }
+  pageInfo {
+    ...PageInfoParts
+  }
+}
+    ${ThoughtPartsFragmentDoc}
+${PageInfoPartsFragmentDoc}`;
 export const CreateNewsPickDocument = gql`
     mutation CreateNewsPick($input: CreateNewsPickInput!) {
   createNewsPick(input: $input) {
@@ -957,34 +1010,10 @@ export type NewsQueryResult = Apollo.QueryResult<NewsQuery, NewsQueryVariables>;
 export const ThoughtsDocument = gql`
     query Thoughts($genre: Genre!, $cursor: String) {
   thoughts(genre: $genre, first: 20, after: $cursor) {
-    edges {
-      node {
-        id
-        title
-        text
-        createdAt
-        contributor {
-          ...UserParts
-        }
-        picked
-        images {
-          id
-          url
-          width
-          height
-        }
-      }
-      cursor
-    }
-    pageInfo {
-      hasNextPage
-      hasPreviousPage
-      startCursor
-      endCursor
-    }
+    ...ThoughtsConnectionParts
   }
 }
-    ${UserPartsFragmentDoc}`;
+    ${ThoughtsConnectionPartsFragmentDoc}`;
 
 /**
  * __useThoughtsQuery__
