@@ -33,7 +33,7 @@ export const BottomTab = () => {
           backgroundColor: useColorModeValue(colors.lt.bg, colors.dt.bg),
         },
         tabBarActiveTintColor: colors.pink,
-        tabBarInactiveTintColor: useColorModeValue("#969696", "white"),
+        tabBarInactiveTintColor: useColorModeValue("#969696", "#c9c9c9"),
       }}
     >
       <Tab.Screen
