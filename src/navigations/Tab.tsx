@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
 import { MyPage } from "src/screens/MyPage";
-import { HomeScreen } from "src/screens/Home";
+import { MyPageStack } from "./MyPage";
 import { TalkListScreen } from "src/screens/TalkList";
 import { NewsScreen } from "src/screens/News";
 import { useColorModeValue, useTheme } from "native-base";
 import React from "react";
-import { HomeNavigation } from "./Home";
+import { HomeStack } from "./Home";
 
 type TabParamList = {
   Home: undefined;
@@ -38,7 +38,7 @@ export const BottomTab = () => {
     >
       <Tab.Screen
         name="Home"
-        component={HomeNavigation}
+        component={HomeStack}
         options={{
           headerShown: false,
           tabBarIcon: ({ color }) => (
@@ -66,8 +66,9 @@ export const BottomTab = () => {
       />
       <Tab.Screen
         name="MyPage"
-        component={MyPage}
+        component={MyPageStack}
         options={{
+          headerShown: false,
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={ICON_SIZE} color={color} />
           ),

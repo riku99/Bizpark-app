@@ -33,3 +33,21 @@ export const useTopTabBarStyle = () => {
 
   return { defaultScreenStyle, style, sceneContainerStyle };
 };
+
+export const useNavigationHeaderStyle = () => {
+  const { colors } = useTheme();
+  const { bgColor } = useBgColor();
+
+  const headerStyle = {
+    backgroundColor: bgColor,
+  };
+
+  const headerTitleStyle = {
+    color: useColorModeValue(colors.textBlack, "white"),
+  };
+
+  return {
+    headerStyle,
+    headerTitleStyle,
+  };
+};

@@ -18,7 +18,7 @@ export type HomeNavigationScreenProps<
 
 const Stack = createNativeStackNavigator();
 
-export const HomeNavigation = React.memo(() => {
+export const HomeStack = React.memo(() => {
   const { colors } = useTheme();
 
   return (
