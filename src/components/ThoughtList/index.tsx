@@ -1,14 +1,16 @@
 import React, { useCallback, useState } from "react";
 import { FlatList, RefreshControl } from "react-native";
-import { ThoughtsQuery } from "src/generated/graphql";
+import { ThoughtsQuery, ThoughtEdge } from "src/generated/graphql";
 import { ThoughtCard } from "src/components/ThoughtCard";
 import { useColorModeValue, useTheme } from "native-base";
 import { Indicator } from "src/components/Indicator";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
 
+type Data = ThoughtEdge[];
+
 type Props = {
-  data: ThoughtsQuery;
+  data: Data;
   refresh: () => Promise<void>;
   infiniteLoad: () => Promise<void>;
 };
@@ -18,6 +20,8 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
   const [listHeight, setListHeight] = useState(0);
   const [contentsHeight, setContentsHeight] = useState(0);
   const navigation = useNavigation<RootNavigationProp<"Tab">>();
+  const [refreshing, setRefreshing] = useState(false);
+  const [infiniteLoading, setInfiniteLoading] = useState(false);
 
   const renderItem = useCallback(
     ({
@@ -44,14 +48,11 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
     []
   );
 
-  const [refreshing, setRefreshing] = useState(false);
   const onRefresh = async () => {
     setRefreshing(true);
     await refresh();
     setRefreshing(false);
   };
-
-  const [infiniteLoading, setInfiniteLoading] = useState(false);
 
   const renderBottomIndicator = useCallback(() => {
     if (infiniteLoading) {
@@ -87,7 +88,7 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
 
   return (
     <FlatList
-      data={data.thoughts.edges}
+      data={data}
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 8, minHeight: "100%" }}
