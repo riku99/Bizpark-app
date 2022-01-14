@@ -31,6 +31,8 @@ export const Business = React.memo(() => {
     return <Indicator style={{ marginTop: 10 }} />;
   }
 
+  console.log(data.thoughts.edges[0].node);
+
   return (
     <Bg flex={1} pt={4} w="100%" h="100%">
       <VStack px={4}>

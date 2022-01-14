@@ -9,6 +9,7 @@ import { RootNavigationProp } from "src/types";
 import { useMeQuery } from "src/generated/graphql";
 import { Linking, Alert } from "react-native";
 import { INSTAGRAM_BASE_URL, TWITTER_BASE_URL } from "src/constants";
+import { FollowButton } from "./FollowButton";
 
 type Props = {
   id: string;
@@ -114,18 +115,7 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
               <Text fontWeight="bold">編集</Text>
             </Pressable>
           ) : (
-            <Pressable
-              position="absolute"
-              top="4"
-              right="4"
-              borderWidth="1"
-              borderColor={useColorModeValue("textBlack", "textWhite")}
-              p="2"
-              borderRadius="2xl"
-              onPress={() => {}}
-            >
-              <Text fontWeight="bold">フォロー</Text>
-            </Pressable>
+            <FollowButton userId={id} />
           )}
 
           <ContentsCard
