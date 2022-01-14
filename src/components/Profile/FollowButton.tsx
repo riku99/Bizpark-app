@@ -4,9 +4,10 @@ import { useFollowMutation } from "src/generated/graphql";
 
 type Props = {
   userId: string;
+  follow?: boolean;
 };
 
-export const FollowButton = ({ userId }: Props) => {
+export const FollowButton = ({ userId, follow }: Props) => {
   const [followMutation] = useFollowMutation();
 
   const onPress = async () => {
@@ -21,14 +22,24 @@ export const FollowButton = ({ userId }: Props) => {
     <Pressable
       position="absolute"
       top="4"
-      right="4"
-      borderWidth="1"
-      borderColor={useColorModeValue("textBlack", "textWhite")}
-      p="2"
+      right="3"
+      borderWidth={follow ? "1" : "0"}
+      borderColor={
+        follow ? useColorModeValue("textBlack", "textWhite") : undefined
+      }
+      bg={follow ? undefined : "pink"}
+      px="2"
+      py="1"
       borderRadius="2xl"
       onPress={onPress}
     >
-      <Text fontWeight="bold">フォロー</Text>
+      <Text
+        fontWeight="bold"
+        color={follow ? undefined : "textWhite"}
+        fontSize="13"
+      >
+        {follow ? "フォロー中" : "フォローする"}
+      </Text>
     </Pressable>
   );
 };

@@ -41,6 +41,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     facebook,
     twitter,
     linkedin,
+    follow,
   } = cacheData;
   const socials: { type: SocialIconProps["type"]; value: string | null }[] = [
     { type: "facebook", value: facebook },
@@ -67,6 +68,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
         bio={bio}
         imageUrl={imageUrl}
         socials={socials}
+        follow={follow}
       />
     </ScrollView>
   );

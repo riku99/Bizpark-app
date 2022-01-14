@@ -17,9 +17,17 @@ type Props = {
   imageUrl: string | null;
   bio: string | null;
   socials: { type: SocialIconProps["type"]; value: string | null }[];
+  follow?: boolean;
 };
 
-export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
+export const Profile = ({
+  id,
+  name,
+  imageUrl,
+  bio,
+  socials,
+  follow,
+}: Props) => {
   const { data } = useMeQuery();
   const navigation = useNavigation<RootNavigationProp<any>>();
 
@@ -115,7 +123,7 @@ export const Profile = ({ id, name, imageUrl, bio, socials }: Props) => {
               <Text fontWeight="bold">編集</Text>
             </Pressable>
           ) : (
-            <FollowButton userId={id} />
+            <FollowButton userId={id} follow={follow} />
           )}
 
           <ContentsCard
