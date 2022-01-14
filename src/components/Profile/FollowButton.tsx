@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Pressable, Text, useColorModeValue } from "native-base";
-import { useFollowMutation, useUnfollowMutation } from "src/generated/graphql";
+import { useFollow, useUnfollow } from "src/hooks/users";
 
 type Props = {
   userId: string;
@@ -8,8 +8,8 @@ type Props = {
 };
 
 export const FollowButton = ({ userId, follow }: Props) => {
-  const [followMutation] = useFollowMutation();
-  const [unfollowMutation] = useUnfollowMutation();
+  const [followMutation] = useFollow({ followeeId: userId });
+  const [unfollowMutation] = useUnfollow({ followeeId: userId });
   const [isFollowing, setIsFollowing] = useState(follow);
 
   const onPress = async () => {
