@@ -242,7 +242,7 @@ export type Pick = {
 
 export type Query = {
   __typename?: 'Query';
-  follows: Array<Maybe<User>>;
+  follows: UserConnection;
   initialData: InitialResponse;
   me: Me;
   news?: Maybe<NewsConnection>;
@@ -251,6 +251,12 @@ export type Query = {
   thoughts: ThoughtsConnection;
   user: User;
   userThoughts: ThoughtsConnection;
+};
+
+
+export type QueryFollowsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first: Scalars['Int'];
 };
 
 
@@ -352,6 +358,18 @@ export type User = {
   linkedin?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   twitter?: Maybe<Scalars['String']>;
+};
+
+export type UserConnection = {
+  __typename?: 'UserConnection';
+  edges: Array<UserEdge>;
+  pageInfo: PageInfo;
+};
+
+export type UserEdge = {
+  __typename?: 'UserEdge';
+  cursor: Scalars['String'];
+  node: User;
 };
 
 export type NewsFieldsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
@@ -456,6 +474,13 @@ export type UploadThoughtImagesMutationVariables = Exact<{
 
 
 export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoughtImages: { __typename?: 'UploadThoughtImagesResponse', images: Array<{ __typename?: 'SubImage', url: string, width?: number | null | undefined, height?: number | null | undefined }> } };
+
+export type FollowsQueryVariables = Exact<{
+  cursor?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type FollowsQuery = { __typename?: 'Query', follows: { __typename?: 'UserConnection', edges: Array<{ __typename?: 'UserEdge', cursor: string, node: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined, follow: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1036,6 +1061,50 @@ export function useUploadThoughtImagesMutation(baseOptions?: Apollo.MutationHook
 export type UploadThoughtImagesMutationHookResult = ReturnType<typeof useUploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationResult = Apollo.MutationResult<UploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
+export const FollowsDocument = gql`
+    query Follows($cursor: String) {
+  follows(first: 30, after: $cursor) {
+    edges {
+      node {
+        ...UserParts
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
+}
+    ${UserPartsFragmentDoc}
+${PageInfoPartsFragmentDoc}`;
+
+/**
+ * __useFollowsQuery__
+ *
+ * To run a query within a React component, call `useFollowsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useFollowsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useFollowsQuery({
+ *   variables: {
+ *      cursor: // value for 'cursor'
+ *   },
+ * });
+ */
+export function useFollowsQuery(baseOptions?: Apollo.QueryHookOptions<FollowsQuery, FollowsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<FollowsQuery, FollowsQueryVariables>(FollowsDocument, options);
+      }
+export function useFollowsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FollowsQuery, FollowsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<FollowsQuery, FollowsQueryVariables>(FollowsDocument, options);
+        }
+export type FollowsQueryHookResult = ReturnType<typeof useFollowsQuery>;
+export type FollowsLazyQueryHookResult = ReturnType<typeof useFollowsLazyQuery>;
+export type FollowsQueryResult = Apollo.QueryResult<FollowsQuery, FollowsQueryVariables>;
 export const InitialDataDocument = gql`
     query InitialData {
   me: me {
