@@ -1,5 +1,5 @@
 import React, { ComponentProps, useState, useEffect } from "react";
-import { Box, useColorModeValue, Text, Pressable, HStack } from "native-base";
+import { Box, Text, Pressable, HStack } from "native-base";
 import {
   useThoughtCacheFragment,
   useCreatePick,

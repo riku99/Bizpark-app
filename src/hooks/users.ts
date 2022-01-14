@@ -9,17 +9,20 @@ import {
 
 export const useUserCacheFragment = () => {
   const { cache } = useApolloClient();
-  const readUserFragment = useCallback(({ id }: { id: string }) => {
-    const data = cache.readFragment<UserPartsFragment>({
-      id: cache.identify({
-        __typename: "User",
-        id,
-      }),
-      fragment: UserPartsFragmentDoc,
-    });
+  const readUserFragment = useCallback(
+    ({ id }: { id: string }) => {
+      const data = cache.readFragment<UserPartsFragment>({
+        id: cache.identify({
+          __typename: "User",
+          id,
+        }),
+        fragment: UserPartsFragmentDoc,
+      });
 
-    return data;
-  }, []);
+      return data;
+    },
+    [cache]
+  );
 
   return {
     readUserFragment,

@@ -2,7 +2,7 @@ import React, { useLayoutEffect, useState } from "react";
 import { ScrollView } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { useUserCacheFragment } from "src/hooks/users";
-import { useUserLazyQuery } from "src/generated/graphql";
+import { useUserQuery } from "src/generated/graphql";
 import { SocialIconProps } from "react-native-elements";
 import { Profile } from "src/components/Profile";
 import { RefreshControl } from "src/components/RefreshControl";
@@ -14,18 +14,22 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
   const { readUserFragment } = useUserCacheFragment();
   const cacheData = readUserFragment({ id });
-  const [getUser] = useUserLazyQuery();
+  const { refetch } = useUserQuery({
+    variables: {
+      id,
+    },
+  });
   const [refreshing, setRefreshing] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: cacheData ? cacheData.name : "ユーザーが存在しません",
     });
-  }, []);
+  }, [cacheData]);
 
   const onRefresh = async () => {
     setRefreshing(true);
-    await getUser({ variables: { id } });
+    await refetch();
     setRefreshing(false);
   };
 

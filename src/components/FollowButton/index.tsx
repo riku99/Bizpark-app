@@ -1,16 +1,19 @@
-import React, { useState } from "react";
+import React, { useState, ComponentProps, useEffect } from "react";
 import { Pressable, Text, useColorModeValue } from "native-base";
 import { useFollow, useUnfollow } from "src/hooks/users";
 
 type Props = {
   userId: string;
   follow?: boolean;
-};
+} & ComponentProps<typeof Pressable>;
 
-export const FollowButton = ({ userId, follow }: Props) => {
+export const FollowButton = ({ userId, follow, ...props }: Props) => {
   const [followMutation] = useFollow({ followeeId: userId });
   const [unfollowMutation] = useUnfollow({ followeeId: userId });
-  const [isFollowing, setIsFollowing] = useState(follow);
+  const [isFollowing, setIsFollowing] = useState<boolean>(follow);
+  useEffect(() => {
+    setIsFollowing(follow);
+  }, [follow]);
 
   const onPress = async () => {
     try {
@@ -48,6 +51,7 @@ export const FollowButton = ({ userId, follow }: Props) => {
       py="1"
       borderRadius="2xl"
       onPress={onPress}
+      {...props}
     >
       <Text
         fontWeight="bold"
