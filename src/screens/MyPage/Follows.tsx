@@ -5,6 +5,9 @@ import { FollowUserCard } from "src/components/FollowUserCard";
 import { RefreshControl } from "src/components/RefreshControl";
 import { InfiniteFlatList } from "src/components/InfiniteFlatList";
 import { btoa } from "react-native-quick-base64";
+import { StyleSheet } from "react-native";
+import { Indicator } from "src/components/Indicator";
+import { SerachBar } from "src/components/SearchBar";
 
 export const Follows = React.memo(() => {
   const { data, refetch, fetchMore } = useFollowsQuery();
@@ -34,6 +37,14 @@ export const Follows = React.memo(() => {
     }
   };
 
+  const renderListHeaderComponent = useCallback(() => {
+    return <SerachBar />;
+  }, []);
+
+  if (!data) {
+    return <Indicator style={{ marginTop: 10 }} />;
+  }
+
   return (
     <Box flex={1}>
       <InfiniteFlatList
@@ -43,8 +54,21 @@ export const Follows = React.memo(() => {
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
+        contentContainerStyle={styles.contentContainer}
         infiniteLoad={infiniteLoad}
+        ListHeaderComponent={renderListHeaderComponent}
+        ListHeaderComponentStyle={styles.listHeader}
       />
     </Box>
   );
+});
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    paddingTop: 20,
+  },
+  listHeader: {
+    marginBottom: 10,
+    paddingHorizontal: 16,
+  },
 });

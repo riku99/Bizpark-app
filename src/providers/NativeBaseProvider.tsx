@@ -48,6 +48,14 @@ const components = {
       },
     },
   },
+  Input: {
+    baseStyle: ({ colorMode }) => ({
+      borderWidth: 0,
+      keyboardAppearance: colorMode === "light" ? "light" : "dark",
+      // fontWeight: "bold",
+    }),
+    defaultProps: ({ colorMode }) => ({}),
+  },
 };
 
 const theme = extendTheme({

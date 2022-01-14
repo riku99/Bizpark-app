@@ -47,6 +47,7 @@ export const HomeScreen = ({ navigation }: Props) => {
       <TopTab.Navigator
         screenOptions={{
           lazy: true,
+          // tabBarScrollEnabled: true,
           ...defaultScreenStyle,
         }}
         style={style}
