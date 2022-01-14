@@ -122,6 +122,24 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
     }
   };
 
+  const onMenuAction = async (id: string) => {
+    if (id === "delete") {
+      Alert.alert("削除する?", "削除してよろしいですか?", [
+        {
+          text: "キャンセル",
+          style: "cancel",
+        },
+        {
+          text: "削除",
+          style: "destructive",
+          onPress: async () => {
+            await deleteThought();
+          },
+        },
+      ]);
+    }
+  };
+
   return (
     <Box style={styles.container} pb={bottom}>
       {cacheData ? (
@@ -158,14 +176,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 
               {/* 現在は項目が「削除」のみなのでhorizontalアイコンも表示しない */}
               {isMyItem && (
-                <Menu
-                  onAction={async (id) => {
-                    if (id === "delete") {
-                      await deleteThought();
-                    }
-                  }}
-                  isMyItem={isMyItem}
-                >
+                <Menu onAction={onMenuAction} isMyItem={isMyItem}>
                   <MaterialCommunityIcons
                     name="dots-horizontal"
                     size={24}

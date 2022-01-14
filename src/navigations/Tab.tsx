@@ -68,6 +68,7 @@ export const BottomTab = () => {
         name="MyPage"
         component={MyPageStack}
         options={{
+          lazy: false, // MyPage表示させるときチラつかせたくないのでここはfalse
           headerShown: false,
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={ICON_SIZE} color={color} />
