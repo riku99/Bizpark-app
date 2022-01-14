@@ -1,5 +1,5 @@
-import React, { useCallback, useState, ComponentProps } from "react";
-import { FlatList, RefreshControl, FlatListProps } from "react-native";
+import React, { useCallback, useState } from "react";
+import { FlatList, FlatListProps } from "react-native";
 import { Indicator } from "src/components/Indicator";
 
 type Props<T> = { infiniteLoad: () => Promise<void> } & FlatListProps<T>;
