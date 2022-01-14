@@ -18,10 +18,10 @@ export const FollowUserCard = ({ id }: Props) => {
   const { name, imageUrl, follow } = cacheData;
 
   return (
-    <HStack px="4" alignItems="center" h="16">
+    <HStack px="4" py="4" alignItems="center">
       <HStack alignItems="center">
         <UserImage uri={imageUrl} size="10" />
-        <Text fontWeight="bold" ml="2">
+        <Text fontWeight="bold" ml="4">
           {name}
         </Text>
       </HStack>
