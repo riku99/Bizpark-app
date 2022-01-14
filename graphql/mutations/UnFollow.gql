@@ -1,0 +1,3 @@
+mutation Unfollow($followeeId: ID!) {
+  unfollow(followeeId: $followeeId)
+}

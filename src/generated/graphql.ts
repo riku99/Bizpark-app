@@ -121,8 +121,9 @@ export type Mutation = {
   deleteNewsPick: NewsPick;
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
-  follow: User;
+  follow?: Maybe<Scalars['Boolean']>;
   signOut: SignOutResponse;
+  unfollow?: Maybe<Scalars['Boolean']>;
   updateMe: Me;
   uploadImage: SubImage;
   uploadThoughtImages: UploadThoughtImagesResponse;
@@ -165,6 +166,11 @@ export type MutationDeleteThoughtArgs = {
 
 
 export type MutationFollowArgs = {
+  followeeId: Scalars['ID'];
+};
+
+
+export type MutationUnfollowArgs = {
   followeeId: Scalars['ID'];
 };
 
@@ -416,12 +422,19 @@ export type FollowMutationVariables = Exact<{
 }>;
 
 
-export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'User', id: string } };
+export type FollowMutation = { __typename?: 'Mutation', follow?: boolean | null | undefined };
 
 export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
 export type SignOutMutation = { __typename?: 'Mutation', signOut: { __typename?: 'SignOutResponse', id: string } };
+
+export type UnfollowMutationVariables = Exact<{
+  followeeId: Scalars['ID'];
+}>;
+
+
+export type UnfollowMutation = { __typename?: 'Mutation', unfollow?: boolean | null | undefined };
 
 export type UpdateMeMutationVariables = Exact<{
   input: UpdateMeInput;
@@ -828,9 +841,7 @@ export type DeleteThoughtMutationResult = Apollo.MutationResult<DeleteThoughtMut
 export type DeleteThoughtMutationOptions = Apollo.BaseMutationOptions<DeleteThoughtMutation, DeleteThoughtMutationVariables>;
 export const FollowDocument = gql`
     mutation Follow($followeeId: ID!) {
-  follow(followeeId: $followeeId) {
-    id
-  }
+  follow(followeeId: $followeeId)
 }
     `;
 export type FollowMutationFn = Apollo.MutationFunction<FollowMutation, FollowMutationVariables>;
@@ -891,6 +902,37 @@ export function useSignOutMutation(baseOptions?: Apollo.MutationHookOptions<Sign
 export type SignOutMutationHookResult = ReturnType<typeof useSignOutMutation>;
 export type SignOutMutationResult = Apollo.MutationResult<SignOutMutation>;
 export type SignOutMutationOptions = Apollo.BaseMutationOptions<SignOutMutation, SignOutMutationVariables>;
+export const UnfollowDocument = gql`
+    mutation Unfollow($followeeId: ID!) {
+  unfollow(followeeId: $followeeId)
+}
+    `;
+export type UnfollowMutationFn = Apollo.MutationFunction<UnfollowMutation, UnfollowMutationVariables>;
+
+/**
+ * __useUnfollowMutation__
+ *
+ * To run a mutation, you first call `useUnfollowMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnfollowMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unfollowMutation, { data, loading, error }] = useUnfollowMutation({
+ *   variables: {
+ *      followeeId: // value for 'followeeId'
+ *   },
+ * });
+ */
+export function useUnfollowMutation(baseOptions?: Apollo.MutationHookOptions<UnfollowMutation, UnfollowMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnfollowMutation, UnfollowMutationVariables>(UnfollowDocument, options);
+      }
+export type UnfollowMutationHookResult = ReturnType<typeof useUnfollowMutation>;
+export type UnfollowMutationResult = Apollo.MutationResult<UnfollowMutation>;
+export type UnfollowMutationOptions = Apollo.BaseMutationOptions<UnfollowMutation, UnfollowMutationVariables>;
 export const UpdateMeDocument = gql`
     mutation UpdateMe($input: UpdateMeInput!) {
   updateMe(input: $input) {
