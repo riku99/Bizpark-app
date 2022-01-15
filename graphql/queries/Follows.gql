@@ -1,5 +1,5 @@
-query Follows($cursor: String) {
-  follows(first: 30, after: $cursor) {
+query Follows($cursor: String, $q: String) {
+  follows(first: 30, after: $cursor, q: $q) {
     edges {
       node {
         ...UserParts

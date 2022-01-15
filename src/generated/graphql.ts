@@ -257,6 +257,7 @@ export type Query = {
 export type QueryFollowsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first: Scalars['Int'];
+  q?: InputMaybe<Scalars['String']>;
 };
 
 
@@ -477,6 +478,7 @@ export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoug
 
 export type FollowsQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']>;
+  q?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -1062,8 +1064,8 @@ export type UploadThoughtImagesMutationHookResult = ReturnType<typeof useUploadT
 export type UploadThoughtImagesMutationResult = Apollo.MutationResult<UploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
 export const FollowsDocument = gql`
-    query Follows($cursor: String) {
-  follows(first: 30, after: $cursor) {
+    query Follows($cursor: String, $q: String) {
+  follows(first: 30, after: $cursor, q: $q) {
     edges {
       node {
         ...UserParts
@@ -1091,6 +1093,7 @@ ${PageInfoPartsFragmentDoc}`;
  * const { data, loading, error } = useFollowsQuery({
  *   variables: {
  *      cursor: // value for 'cursor'
+ *      q: // value for 'q'
  *   },
  * });
  */
