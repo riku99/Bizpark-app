@@ -2,7 +2,11 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { ScrollView, useColorModeValue, useTheme } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { useUserCacheFragment } from "src/hooks/users";
-import { useUserQuery, useBlockMutation } from "src/generated/graphql";
+import {
+  useUserQuery,
+  useBlockMutation,
+  useUnBlockMutation,
+} from "src/generated/graphql";
 import { SocialIconProps } from "react-native-elements";
 import { Profile } from "src/components/Profile";
 import { RefreshControl } from "src/components/RefreshControl";
@@ -27,7 +31,9 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
   const { colors } = useTheme();
   const [blockMutation] = useBlockMutation();
+  const [unblockMutation] = useUnBlockMutation();
   const toast = useToast();
+  const iconColor = useColorModeValue(colors.textBlack, colors.textWhite);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,7 +43,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
             <MaterialCommunityIcons
               name="dots-horizontal"
               size={24}
-              color={useColorModeValue(colors.textBlack, colors.textWhite)}
+              color={iconColor}
               onPress={() => {
                 setModalVisible(true);
               }}
@@ -45,7 +51,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
           )
         : undefined,
     });
-  }, [cacheData]);
+  }, [iconColor]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -70,7 +76,6 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     twitter,
     linkedin,
     follow,
-    blocking,
   } = cacheData;
   const socials: { type: SocialIconProps["type"]; value: string | null }[] = [
     { type: "facebook", value: facebook },
@@ -81,34 +86,64 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
 
   const modalList = [
     {
-      title: blocking ? "ブロック解除" : "ブロックする",
+      title: data?.user.blocking ? "ブロック解除" : "ブロックする",
       color: "#f51000",
       onPress: async () => {
-        if (id) {
+        if (id && data) {
           try {
-            Alert.alert(
-              "ブロックしますか?",
-              "シェアが表示されなくなり、フォローも解除されます",
-              [
-                {
-                  text: "キャンセル",
-                  style: "cancel",
-                },
-                {
-                  text: "ブロックする",
-                  style: "destructive",
-                  onPress: async () => {
-                    await blockMutation({
-                      variables: {
-                        blockTo: id,
-                      },
-                    });
-
-                    toast.show("ブロックしました", { type: "success" });
+            if (!data?.user.blocking) {
+              Alert.alert(
+                "ブロックしますか?",
+                "シェアが表示されなくなり、フォローも解除されます",
+                [
+                  {
+                    text: "キャンセル",
+                    style: "cancel",
                   },
-                },
-              ]
-            );
+                  {
+                    text: "ブロックする",
+                    style: "destructive",
+                    onPress: async () => {
+                      try {
+                        await blockMutation({
+                          variables: {
+                            blockTo: id,
+                          },
+                        });
+
+                        toast.show("ブロックしました", { type: "success" });
+                      } catch (e) {}
+                    },
+                  },
+                ]
+              );
+            } else {
+              Alert.alert(
+                "ブロック解除しますか?",
+                "シェアが表示されるようになり、フォローも可能になります",
+                [
+                  {
+                    text: "キャンセル",
+                    style: "cancel",
+                  },
+                  {
+                    text: "解除する",
+                    style: "destructive",
+                    onPress: async () => {
+                      try {
+                        await unblockMutation({
+                          variables: {
+                            blockedUserId: id,
+                          },
+                        });
+
+                        toast.show("解除しました", { type: "success" });
+                      } catch (e) {}
+                    },
+                  },
+                ]
+              );
+            }
           } catch (e) {
           } finally {
             setModalVisible(false);
