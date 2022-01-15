@@ -12,7 +12,7 @@ import { SerachBar } from "src/components/SearchBar";
 export const Follows = React.memo(() => {
   const { data, refetch, fetchMore } = useFollowsQuery();
   const [refreshing, setRefreshing] = useState(false);
-  const [q, setQ] = useState("");
+  const [isRefetching, setIsRefetching] = useState(false);
 
   const renderItem = useCallback(
     ({ item }: { item: UserEdge }) => {
@@ -42,13 +42,15 @@ export const Follows = React.memo(() => {
     return (
       <SerachBar
         onEndEditing={async ({ nativeEvent }) => {
+          setIsRefetching(true);
           await refetch({ q: nativeEvent.text });
+          setIsRefetching(false);
         }}
       />
     );
   }, []);
 
-  if (!data) {
+  if (!data || isRefetching) {
     return <Indicator style={{ marginTop: 10 }} />;
   }
 
