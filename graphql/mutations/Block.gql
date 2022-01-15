@@ -1,0 +1,6 @@
+mutation Block($blockTo: ID!) {
+  block(blockTo: $blockTo) {
+    id
+    blocking
+  }
+}

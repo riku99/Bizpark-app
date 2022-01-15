@@ -8,4 +8,5 @@ fragment UserParts on User {
   linkedin
   instagram
   follow
+  blocking
 }
