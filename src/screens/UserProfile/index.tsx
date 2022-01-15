@@ -1,11 +1,13 @@
 import React, { useLayoutEffect, useState } from "react";
-import { ScrollView } from "native-base";
+import { ScrollView, useColorModeValue, useTheme } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { useUserCacheFragment } from "src/hooks/users";
 import { useUserQuery } from "src/generated/graphql";
 import { SocialIconProps } from "react-native-elements";
 import { Profile } from "src/components/Profile";
 import { RefreshControl } from "src/components/RefreshControl";
+import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { Modal } from "./Modal";
 
 type Props = RootNavigationScreenProp<"UserProfile">;
 
@@ -20,10 +22,21 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     },
   });
   const [refreshing, setRefreshing] = useState(false);
+  const { colors } = useTheme();
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: cacheData ? cacheData.name : "ユーザーが存在しません",
+      headerRight: cacheData
+        ? () => (
+            <MaterialCommunityIcons
+              name="dots-horizontal"
+              size={24}
+              color={useColorModeValue(colors.textBlack, colors.textWhite)}
+              onPress={() => {}}
+            />
+          )
+        : undefined,
     });
   }, [cacheData]);
 
@@ -55,25 +68,29 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
   ];
 
   return (
-    <ScrollView
-      flex={1}
-      contentContainerStyle={{
-        alignItems: "center",
-        paddingTop: 60,
-        paddingBottom: 50,
-      }}
-      refreshControl={
-        <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-      }
-    >
-      <Profile
-        id={id}
-        name={name}
-        bio={bio}
-        imageUrl={imageUrl}
-        socials={socials}
-        follow={follow}
-      />
-    </ScrollView>
+    <>
+      <ScrollView
+        flex={1}
+        contentContainerStyle={{
+          alignItems: "center",
+          paddingTop: 60,
+          paddingBottom: 50,
+        }}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
+      >
+        <Profile
+          id={id}
+          name={name}
+          bio={bio}
+          imageUrl={imageUrl}
+          socials={socials}
+          follow={follow}
+        />
+      </ScrollView>
+
+      <Modal isVisible={true} />
+    </>
   );
 };
