@@ -3,7 +3,7 @@ import { ScrollView, useColorModeValue, useTheme } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { CloseButton } from "src/components/BackButon";
 import { StyleSheet } from "react-native";
-import { SettingItem } from "src/components/SettingItem";
+import { SimpleListItem } from "src/components/SimpleListItem";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
 
@@ -38,7 +38,7 @@ export const SettingsScreen = ({ navigation }: Props) => {
   return (
     <ScrollView flex={1} contentContainerStyle={styles.contetContainer}>
       {settingList.map((item, idx) => (
-        <SettingItem
+        <SimpleListItem
           Icon={item.Icon}
           title={item.title}
           onPress={item.onPress}

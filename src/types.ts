@@ -2,6 +2,7 @@ import {
   NativeStackScreenProps,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
+import { SettingsParamList } from "src/navigations/Settings";
 
 type ThoughtShare = {
   title?: string;
@@ -53,9 +54,7 @@ export type RootStackParamList = {
   };
   // Settings
   Settings: undefined;
-  UserSettings: undefined;
-  //
-};
+} & SettingsParamList;
 
 export type RootNavigationScreenProp<
   T extends keyof RootStackParamList
