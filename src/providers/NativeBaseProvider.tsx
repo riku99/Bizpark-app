@@ -14,9 +14,11 @@ export const colors = {
   dt: {
     bg: "#1c1917",
     darkGray: "#292524",
+    pressed: "#211d1b",
   },
   lt: {
     bg: "#fcfcfc",
+    pressed: "#f5f5f5",
   },
   pink: "#ff937d",
   purple: "#4444ff",

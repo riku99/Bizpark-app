@@ -5,6 +5,7 @@ import { CloseButton } from "src/components/BackButon";
 import { StyleSheet } from "react-native";
 import { SettingItem } from "src/components/SettingItem";
 import { MaterialIcons } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 type Props = RootNavigationScreenProp<"Settings">;
 
@@ -23,6 +24,11 @@ export const SettingsScreen = ({ navigation }: Props) => {
     {
       Icon: <MaterialIcons name="account-box" size={24} color={iconColor} />,
       title: "アカウント",
+      onPress: () => {},
+    },
+    {
+      Icon: <Feather name="users" size={24} color={iconColor} />,
+      title: "ユーザー",
       onPress: () => {},
     },
   ];

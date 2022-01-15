@@ -1,6 +1,5 @@
 import React from "react";
-import { HStack, Text, Pressable } from "native-base";
-import { AntDesign } from "@expo/vector-icons";
+import { HStack, Text, Pressable, useColorModeValue } from "native-base";
 import { RightIcon } from "src/components/RightIcon";
 
 type Props = {
@@ -11,8 +10,13 @@ type Props = {
 
 export const SettingItem = ({ Icon, title, onPress }: Props) => {
   return (
-    <Pressable onPress={onPress}>
-      <HStack justifyContent="space-between" alignItems="center">
+    <Pressable
+      onPress={onPress}
+      _pressed={{
+        bg: useColorModeValue("lt.pressed", "dt.pressed"),
+      }}
+    >
+      <HStack justifyContent="space-between" alignItems="center" py="4">
         <HStack alignItems="center">
           {Icon}
           <Text fontWeight="bold" fontSize="16" ml="3">
