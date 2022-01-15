@@ -6,7 +6,6 @@ import { SocialIcon, SocialIconProps } from "react-native-elements";
 import { StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
-import { useMeQuery } from "src/generated/graphql";
 import { Linking, Alert } from "react-native";
 import { INSTAGRAM_BASE_URL, TWITTER_BASE_URL } from "src/constants";
 import { FollowButton } from "../FollowButton";
@@ -30,7 +29,6 @@ export const Profile = ({
   follow,
   isMe,
 }: Props) => {
-  const { data } = useMeQuery();
   const navigation = useNavigation<RootNavigationProp<any>>();
 
   const onSnsIconPress = async ({
