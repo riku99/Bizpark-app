@@ -10,6 +10,7 @@ import { Picks } from "./Picks";
 import { Thouhgts } from "./Thoughts";
 import { Follows } from "./Follows";
 import { MyProfile } from "./Profile";
+import { HeaderRight } from "./HeaderRight";
 
 type Props = RootNavigationScreenProp<"Tab">;
 
@@ -20,8 +21,9 @@ export const MyPage = ({ navigation }: Props) => {
     navigation.setOptions({
       headerShadowVisible: false,
       headerTitle: "",
+      headerRight: () => <HeaderRight />,
     });
-  }, []);
+  }, [navigation]);
 
   const {
     defaultScreenStyle,

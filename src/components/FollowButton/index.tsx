@@ -3,6 +3,7 @@ import { Pressable, Text, useColorModeValue } from "native-base";
 import { useFollow, useUnfollow } from "src/hooks/users";
 import { CustomErrorResponseCode } from "src/generated/graphql";
 import { useToast } from "react-native-toast-notifications";
+import { getGraphQLErrorCode } from "src/utils";
 
 type Props = {
   userId: string;
@@ -37,8 +38,7 @@ export const FollowButton = ({ userId, follow, ...props }: Props) => {
       }
     } catch (error) {
       setIsFollowing((c) => !c);
-      const firstError = error.graphQLErrors[0];
-      const code = firstError.extensions.code;
+      const code = getGraphQLErrorCode(error);
       if (code === CustomErrorResponseCode.InvalidRequest) {
         toast.show("ブロックを解除してください", {
           type: "danger",
