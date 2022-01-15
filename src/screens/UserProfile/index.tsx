@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useEffect, useLayoutEffect, useState } from "react";
 import { ScrollView, useColorModeValue, useTheme } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { useUserCacheFragment } from "src/hooks/users";
@@ -9,6 +9,7 @@ import { RefreshControl } from "src/components/RefreshControl";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { InstaLikeModal } from "src/components/InstaLikeModal";
 import { useToast } from "react-native-toast-notifications";
+import { Alert } from "react-native";
 
 type Props = RootNavigationScreenProp<"UserProfile">;
 
@@ -17,7 +18,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
   const { readUserFragment } = useUserCacheFragment();
   const cacheData = readUserFragment({ id });
-  const { refetch } = useUserQuery({
+  const { refetch, data } = useUserQuery({
     variables: {
       id,
     },
@@ -78,23 +79,36 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     { type: "instagram", value: instagram },
   ];
 
-  console.log("is blocking?");
-  console.log(blocking);
-
   const modalList = [
     {
-      title: "ブロックする",
+      title: blocking ? "ブロック解除" : "ブロックする",
       color: "#f51000",
       onPress: async () => {
         if (id) {
           try {
-            await blockMutation({
-              variables: {
-                blockTo: id,
-              },
-            });
+            Alert.alert(
+              "ブロックしますか?",
+              "シェアが表示されなくなり、フォローも解除されます",
+              [
+                {
+                  text: "キャンセル",
+                  style: "cancel",
+                },
+                {
+                  text: "ブロックする",
+                  style: "destructive",
+                  onPress: async () => {
+                    await blockMutation({
+                      variables: {
+                        blockTo: id,
+                      },
+                    });
 
-            toast.show("ブロックしました", { type: "success" });
+                    toast.show("ブロックしました", { type: "success" });
+                  },
+                },
+              ]
+            );
           } catch (e) {
           } finally {
             setModalVisible(false);

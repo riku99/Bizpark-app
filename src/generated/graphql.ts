@@ -399,7 +399,7 @@ export type BlockMutationVariables = Exact<{
 }>;
 
 
-export type BlockMutation = { __typename?: 'Mutation', block: { __typename?: 'User', id: string, blocking?: boolean | null | undefined } };
+export type BlockMutation = { __typename?: 'Mutation', block: { __typename?: 'User', id: string, blocking?: boolean | null | undefined, follow: boolean } };
 
 export type CreateNewsPickMutationVariables = Exact<{
   input: CreateNewsPickInput;
@@ -650,6 +650,7 @@ export const BlockDocument = gql`
   block(blockTo: $blockTo) {
     id
     blocking
+    follow
   }
 }
     `;
