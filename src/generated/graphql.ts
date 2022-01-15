@@ -255,6 +255,7 @@ export type Pick = {
 
 export type Query = {
   __typename?: 'Query';
+  blockingUsers: Array<Maybe<User>>;
   follows: UserConnection;
   initialData: InitialResponse;
   me: Me;
@@ -503,6 +504,11 @@ export type UploadThoughtImagesMutationVariables = Exact<{
 
 
 export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoughtImages: { __typename?: 'UploadThoughtImagesResponse', images: Array<{ __typename?: 'SubImage', url: string, width?: number | null | undefined, height?: number | null | undefined }> } };
+
+export type BlockingUsersQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type BlockingUsersQuery = { __typename?: 'Query', blockingUsers: Array<{ __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined, follow: boolean } | null | undefined> };
 
 export type FollowsQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']>;
@@ -1160,6 +1166,40 @@ export function useUploadThoughtImagesMutation(baseOptions?: Apollo.MutationHook
 export type UploadThoughtImagesMutationHookResult = ReturnType<typeof useUploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationResult = Apollo.MutationResult<UploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
+export const BlockingUsersDocument = gql`
+    query BlockingUsers {
+  blockingUsers {
+    ...UserParts
+  }
+}
+    ${UserPartsFragmentDoc}`;
+
+/**
+ * __useBlockingUsersQuery__
+ *
+ * To run a query within a React component, call `useBlockingUsersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useBlockingUsersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useBlockingUsersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useBlockingUsersQuery(baseOptions?: Apollo.QueryHookOptions<BlockingUsersQuery, BlockingUsersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<BlockingUsersQuery, BlockingUsersQueryVariables>(BlockingUsersDocument, options);
+      }
+export function useBlockingUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BlockingUsersQuery, BlockingUsersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<BlockingUsersQuery, BlockingUsersQueryVariables>(BlockingUsersDocument, options);
+        }
+export type BlockingUsersQueryHookResult = ReturnType<typeof useBlockingUsersQuery>;
+export type BlockingUsersLazyQueryHookResult = ReturnType<typeof useBlockingUsersLazyQuery>;
+export type BlockingUsersQueryResult = Apollo.QueryResult<BlockingUsersQuery, BlockingUsersQueryVariables>;
 export const FollowsDocument = gql`
     query Follows($cursor: String, $q: String) {
   follows(first: 30, after: $cursor, q: $q) {
