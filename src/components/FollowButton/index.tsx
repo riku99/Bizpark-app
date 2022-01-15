@@ -1,6 +1,8 @@
 import React, { useState, ComponentProps, useEffect } from "react";
 import { Pressable, Text, useColorModeValue } from "native-base";
 import { useFollow, useUnfollow } from "src/hooks/users";
+import { CustomErrorResponseCode } from "src/generated/graphql";
+import { useToast } from "react-native-toast-notifications";
 
 type Props = {
   userId: string;
@@ -8,6 +10,7 @@ type Props = {
 } & ComponentProps<typeof Pressable>;
 
 export const FollowButton = ({ userId, follow, ...props }: Props) => {
+  const toast = useToast();
   const [followMutation] = useFollow({ followeeId: userId });
   const [unfollowMutation] = useUnfollow({ followeeId: userId });
   const [isFollowing, setIsFollowing] = useState<boolean>(follow);
@@ -32,8 +35,15 @@ export const FollowButton = ({ userId, follow, ...props }: Props) => {
           },
         });
       }
-    } catch (e) {
+    } catch (error) {
       setIsFollowing((c) => !c);
+      const firstError = error.graphQLErrors[0];
+      const code = firstError.extensions.code;
+      if (code === CustomErrorResponseCode.InvalidRequest) {
+        toast.show("ブロックを解除してください", {
+          type: "danger",
+        });
+      }
     }
   };
 
