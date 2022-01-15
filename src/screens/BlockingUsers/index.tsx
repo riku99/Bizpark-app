@@ -1,10 +1,11 @@
 import React, { useLayoutEffect, useCallback } from "react";
-import { Box, Text, HStack, Pressable, Button } from "native-base";
+import { Box, Button } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { useBlockingUsersQuery, User } from "src/generated/graphql";
 import { Indicator } from "src/components/Indicator";
 import { FlatList, StyleSheet } from "react-native";
 import { UserImage } from "src/components/UserImage";
+import { ListItem } from "src/components/ListItem";
 
 type Props = RootNavigationScreenProp<"BlockingUsers">;
 
@@ -19,25 +20,15 @@ export const BlockingUsersScreen = ({ navigation }: Props) => {
 
   const renderItem = useCallback(({ item }: { item: User }) => {
     return (
-      <Pressable onPress={() => {}}>
-        <HStack
-          alignItems="center"
-          justifyContent="space-between"
-          h="16"
-          px="4"
-        >
-          <HStack alignItems="center">
-            <UserImage uri={item.imageUrl} size="10" />
-            <Text ml="4" fontWeight="bold">
-              {item.name}
-            </Text>
-          </HStack>
-
+      <ListItem
+        title={item.name}
+        ItemLeft={<UserImage uri={item.imageUrl} size="10" />}
+        ItemRight={
           <Button py="0" h="7">
             解除
           </Button>
-        </HStack>
-      </Pressable>
+        }
+      />
     );
   }, []);
 

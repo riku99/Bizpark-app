@@ -3,9 +3,10 @@ import { ScrollView, useColorModeValue, useTheme } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { CloseButton } from "src/components/BackButon";
 import { StyleSheet } from "react-native";
-import { SimpleListItem } from "src/components/SimpleListItem";
+import { ListItem } from "src/components/ListItem";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Feather } from "@expo/vector-icons";
+import { RightIcon } from "src/components/RightIcon";
 
 type Props = RootNavigationScreenProp<"Settings">;
 
@@ -38,11 +39,15 @@ export const SettingsScreen = ({ navigation }: Props) => {
   return (
     <ScrollView flex={1} contentContainerStyle={styles.contetContainer}>
       {settingList.map((item, idx) => (
-        <SimpleListItem
-          Icon={item.Icon}
+        <ListItem
           title={item.title}
+          titleStyle={{
+            fontSize: "16",
+          }}
           onPress={item.onPress}
           key={idx}
+          ItemRight={<RightIcon />}
+          ItemLeft={item.Icon}
         />
       ))}
     </ScrollView>
@@ -51,6 +56,6 @@ export const SettingsScreen = ({ navigation }: Props) => {
 
 const styles = StyleSheet.create({
   contetContainer: {
-    paddingHorizontal: 16,
+    // paddingHorizontal: 16,
   },
 });

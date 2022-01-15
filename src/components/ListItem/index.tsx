@@ -1,30 +1,38 @@
-import React from "react";
+import React, { ComponentProps } from "react";
 import { HStack, Text, Pressable, useColorModeValue } from "native-base";
-import { RightIcon } from "src/components/RightIcon";
 
 type Props = {
   Icon?: JSX.Element;
   title: string;
-  onPress: () => void;
-};
+  titleStyle?: ComponentProps<typeof Text>;
+  ItemLeft?: JSX.Element;
+  ItemRight?: JSX.Element;
+} & ComponentProps<typeof Pressable>;
 
-export const SimpleListItem = ({ Icon, title, onPress }: Props) => {
+export const ListItem = ({
+  title,
+  titleStyle,
+  ItemLeft,
+  ItemRight,
+  ...props
+}: Props) => {
   return (
     <Pressable
-      onPress={onPress}
       _pressed={{
         bg: useColorModeValue("lt.pressed", "dt.pressed"),
       }}
+      px="4"
+      {...props}
     >
       <HStack justifyContent="space-between" alignItems="center" py="4">
         <HStack alignItems="center">
-          {!!Icon && Icon}
-          <Text fontWeight="bold" fontSize="16" ml={Icon ? "3" : 0}>
+          {ItemLeft && ItemLeft}
+          <Text fontWeight="bold" ml={ItemLeft ? "4" : 0} {...titleStyle}>
             {title}
           </Text>
         </HStack>
 
-        <RightIcon />
+        {!!ItemRight && ItemRight}
       </HStack>
     </Pressable>
   );
