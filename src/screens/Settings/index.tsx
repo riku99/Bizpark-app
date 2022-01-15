@@ -29,7 +29,9 @@ export const SettingsScreen = ({ navigation }: Props) => {
     {
       Icon: <Feather name="users" size={24} color={iconColor} />,
       title: "ユーザー",
-      onPress: () => {},
+      onPress: () => {
+        navigation.navigate("UserSettings");
+      },
     },
   ];
 

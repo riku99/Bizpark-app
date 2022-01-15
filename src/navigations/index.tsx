@@ -17,6 +17,7 @@ import { UserEditScreen } from "src/screens/UserEdit";
 import { UserItemEditScreen } from "src/screens/UserItemEdit";
 import { UserProfileScreen } from "src/screens/UserProfile";
 import { SettingsScreen } from "src/screens/Settings";
+import { Settings } from "./Settings";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -83,7 +84,11 @@ export const RootNavigation = React.memo(() => {
                 name="ThoughtShare"
                 component={ThoughtShareScreen}
               />
-              <Stack.Screen name="Settings" component={SettingsScreen} />
+              <Stack.Screen
+                name="Settings"
+                component={Settings}
+                options={{ headerShown: false }}
+              />
             </Stack.Group>
           </>
         )}

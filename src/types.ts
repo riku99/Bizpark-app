@@ -51,7 +51,10 @@ export type RootStackParamList = {
   UserProfile: {
     id: string;
   };
+  // Settings
   Settings: undefined;
+  UserSettings: undefined;
+  //
 };
 
 export type RootNavigationScreenProp<
