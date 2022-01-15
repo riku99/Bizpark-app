@@ -7,7 +7,7 @@ import { SocialIconProps } from "react-native-elements";
 import { Profile } from "src/components/Profile";
 import { RefreshControl } from "src/components/RefreshControl";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Modal } from "./Modal";
+import { InstaLikeModal } from "src/components/InstaLikeModal";
 
 type Props = RootNavigationScreenProp<"UserProfile">;
 
@@ -22,6 +22,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     },
   });
   const [refreshing, setRefreshing] = useState(false);
+  const [modalVisible, setModalVisible] = useState(false);
   const { colors } = useTheme();
 
   useLayoutEffect(() => {
@@ -33,7 +34,9 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
               name="dots-horizontal"
               size={24}
               color={useColorModeValue(colors.textBlack, colors.textWhite)}
-              onPress={() => {}}
+              onPress={() => {
+                setModalVisible(true);
+              }}
             />
           )
         : undefined,
@@ -45,6 +48,22 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     await refetch();
     setRefreshing(false);
   };
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
+
+  const modalList = [
+    {
+      title: "ブロックする",
+      color: "#f51000",
+      onPress: async () => {},
+    },
+    {
+      title: "メッセージを送る",
+      onPress: async () => {},
+    },
+  ];
 
   if (!cacheData) {
     return null;
@@ -90,7 +109,12 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
         />
       </ScrollView>
 
-      <Modal isVisible={true} />
+      <InstaLikeModal
+        isVisible={modalVisible}
+        onBackdropPress={closeModal}
+        onCancel={closeModal}
+        list={modalList}
+      />
     </>
   );
 };
