@@ -18,6 +18,7 @@ type Props = {
   bio: string | null;
   socials: { type: SocialIconProps["type"]; value: string | null }[];
   follow?: boolean;
+  isMe: boolean;
 };
 
 export const Profile = ({
@@ -27,11 +28,10 @@ export const Profile = ({
   bio,
   socials,
   follow,
+  isMe,
 }: Props) => {
   const { data } = useMeQuery();
   const navigation = useNavigation<RootNavigationProp<any>>();
-
-  const isMe = data && data.me.id && data.me.id === id;
 
   const onSnsIconPress = async ({
     type,

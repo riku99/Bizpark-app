@@ -6,6 +6,7 @@ import {
   useUserQuery,
   useBlockMutation,
   useUnBlockMutation,
+  useMeQuery,
 } from "src/generated/graphql";
 import { SocialIconProps } from "react-native-elements";
 import { Profile } from "src/components/Profile";
@@ -34,24 +35,29 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
   const [unblockMutation] = useUnBlockMutation();
   const toast = useToast();
   const iconColor = useColorModeValue(colors.textBlack, colors.textWhite);
+  const {
+    data: { me },
+  } = useMeQuery();
+  const isMe = me.id === id;
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: cacheData ? cacheData.name : "ユーザーが存在しません",
-      headerRight: cacheData
-        ? () => (
-            <MaterialCommunityIcons
-              name="dots-horizontal"
-              size={24}
-              color={iconColor}
-              onPress={() => {
-                setModalVisible(true);
-              }}
-            />
-          )
-        : undefined,
+      headerRight:
+        cacheData && !isMe
+          ? () => (
+              <MaterialCommunityIcons
+                name="dots-horizontal"
+                size={24}
+                color={iconColor}
+                onPress={() => {
+                  setModalVisible(true);
+                }}
+              />
+            )
+          : undefined,
     });
-  }, [iconColor]);
+  }, [iconColor, isMe]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -177,6 +183,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
           imageUrl={imageUrl}
           socials={socials}
           follow={follow}
+          isMe={isMe}
         />
       </ScrollView>
 

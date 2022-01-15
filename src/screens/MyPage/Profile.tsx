@@ -56,6 +56,7 @@ export const MyProfile = () => {
           bio={bio}
           imageUrl={imageUrl}
           socials={socials}
+          isMe={true}
         />
       </ScrollView>
 
