@@ -244,7 +244,10 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
               alignItems="center"
             >
               <Box w="90%" mt={4}>
-                <JoinButton thoughtId={id} />
+                <JoinButton
+                  thoughtId={id}
+                  contributorId={cacheData.contributor.id}
+                />
               </Box>
             </Box>
           </MotiView>

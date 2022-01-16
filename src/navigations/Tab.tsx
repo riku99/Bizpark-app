@@ -44,6 +44,7 @@ export const BottomTab = () => {
           tabBarIcon: ({ color }) => (
             <AntDesign name="home" size={ICON_SIZE} color={color} />
           ),
+          tabBarLabel: "ホーム",
         }}
       />
       <Tab.Screen
@@ -53,6 +54,7 @@ export const BottomTab = () => {
           tabBarIcon: ({ color }) => (
             <AntDesign name="profile" size={ICON_SIZE} color={color} />
           ),
+          tabBarLabel: "ニュース",
         }}
       />
       <Tab.Screen
@@ -62,6 +64,7 @@ export const BottomTab = () => {
           tabBarIcon: ({ color }) => (
             <AntDesign name="message1" size={ICON_SIZE} color={color} />
           ),
+          tabBarLabel: "トーク",
         }}
       />
       <Tab.Screen
@@ -73,6 +76,7 @@ export const BottomTab = () => {
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={ICON_SIZE} color={color} />
           ),
+          tabBarLabel: "マイページ",
         }}
       />
     </Tab.Navigator>

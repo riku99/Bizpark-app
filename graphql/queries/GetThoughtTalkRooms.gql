@@ -1,15 +1,5 @@
-query InitialData {
-  me: me {
-    id
-    name
-    bio
-    imageUrl
-    facebook
-    twitter
-    instagram
-    linkedin
-  }
-  thoughtTalkRooms: thoughtTalkRooms {
+query GetThoughtTalkRooms {
+  thoughtTalkRooms {
     id
     createdAt
     members {

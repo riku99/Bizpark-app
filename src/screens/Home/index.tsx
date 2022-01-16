@@ -7,7 +7,6 @@ import { Business } from "./Business";
 import { Economy } from "./Economy";
 import { Politics } from "./Politics";
 import { useTopTabBarStyle } from "src/hooks/theme";
-import { useSignOut } from "src/hooks/auth";
 import { AddButton } from "src/components/AddButton";
 import { CreatingToast } from "src/components/CreatingToast";
 import { useReactiveVar } from "@apollo/client";
@@ -34,11 +33,8 @@ export const HomeScreen = ({ navigation }: Props) => {
     sceneContainerStyle,
   } = useTopTabBarStyle();
 
-  const { signOut } = useSignOut();
-
   const onSubButtonPress = async () => {
     toggleColorMode();
-    // await signOut();
   };
 
   const creatingThought = useReactiveVar(creatingThoughtVar);

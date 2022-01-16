@@ -2,9 +2,9 @@ import React from "react";
 import { Button } from "native-base";
 import { useJoinThoughtTalkMutation } from "src/generated/graphql";
 
-type Props = { thoughtId: string };
+type Props = { thoughtId: string; contributorId: string };
 
-export const JoinButton = ({ thoughtId }: Props) => {
+export const JoinButton = ({ thoughtId, contributorId }: Props) => {
   const [joinMutation] = useJoinThoughtTalkMutation();
 
   const onPress = async () => {
@@ -12,11 +12,10 @@ export const JoinButton = ({ thoughtId }: Props) => {
       variables: {
         input: {
           thoughtId,
+          contributorId,
         },
       },
     });
-
-    console.log(data);
   };
 
   return (
