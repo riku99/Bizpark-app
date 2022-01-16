@@ -4,6 +4,7 @@ import { RootNavigationScreenProp } from "src/types";
 import { ListItem } from "src/components/ListItem";
 import { RightIcon } from "src/components/RightIcon";
 import { Alert } from "react-native";
+import { useSignOut } from "src/hooks/auth";
 
 type Props = RootNavigationScreenProp<"AccountSettings">;
 
@@ -13,6 +14,8 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
       title: "アカウント",
     });
   }, [navigation]);
+
+  const { signOut } = useSignOut();
 
   const list = [
     {
@@ -26,7 +29,9 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
           {
             text: "ログアウト",
             style: "destructive",
-            onPress: async () => {},
+            onPress: async () => {
+              await signOut();
+            },
           },
         ]);
       },

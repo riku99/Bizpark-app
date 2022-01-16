@@ -229,7 +229,7 @@ export const useSignOut = () => {
       await auth().signOut();
     } catch (e) {
     } finally {
-      // tryのプロセスでエラー出てもログアウトさせるのでfinalltに記述
+      // tryのプロセスでエラー出てもログアウトさせるのでfinallyに記述
       setMeVar({
         loggedIn: false,
         id: null,
