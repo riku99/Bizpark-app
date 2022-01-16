@@ -297,7 +297,8 @@ export type QueryPickedThoughtsArgs = {
 export type QueryThoughtsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
-  genre: Genre;
+  follow?: InputMaybe<Scalars['Boolean']>;
+  genre?: InputMaybe<Genre>;
 };
 
 
@@ -544,8 +545,9 @@ export type PickedThoughtsQueryVariables = Exact<{
 export type PickedThoughtsQuery = { __typename?: 'Query', pickedThoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked: boolean, contributor: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined, follow: boolean }, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 export type ThoughtsQueryVariables = Exact<{
-  genre: Genre;
+  genre?: InputMaybe<Genre>;
   cursor?: InputMaybe<Scalars['String']>;
+  follow?: InputMaybe<Scalars['Boolean']>;
 }>;
 
 
@@ -1402,8 +1404,8 @@ export type PickedThoughtsQueryHookResult = ReturnType<typeof usePickedThoughtsQ
 export type PickedThoughtsLazyQueryHookResult = ReturnType<typeof usePickedThoughtsLazyQuery>;
 export type PickedThoughtsQueryResult = Apollo.QueryResult<PickedThoughtsQuery, PickedThoughtsQueryVariables>;
 export const ThoughtsDocument = gql`
-    query Thoughts($genre: Genre!, $cursor: String) {
-  thoughts(genre: $genre, first: 20, after: $cursor) {
+    query Thoughts($genre: Genre, $cursor: String, $follow: Boolean) {
+  thoughts(genre: $genre, first: 20, after: $cursor, follow: $follow) {
     ...ThoughtsConnectionParts
   }
 }
@@ -1423,10 +1425,11 @@ export const ThoughtsDocument = gql`
  *   variables: {
  *      genre: // value for 'genre'
  *      cursor: // value for 'cursor'
+ *      follow: // value for 'follow'
  *   },
  * });
  */
-export function useThoughtsQuery(baseOptions: Apollo.QueryHookOptions<ThoughtsQuery, ThoughtsQueryVariables>) {
+export function useThoughtsQuery(baseOptions?: Apollo.QueryHookOptions<ThoughtsQuery, ThoughtsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<ThoughtsQuery, ThoughtsQueryVariables>(ThoughtsDocument, options);
       }

@@ -1,5 +1,5 @@
-query Thoughts($genre: Genre!, $cursor: String) {
-  thoughts(genre: $genre, first: 20, after: $cursor) {
+query Thoughts($genre: Genre, $cursor: String, $follow: Boolean) {
+  thoughts(genre: $genre, first: 20, after: $cursor, follow: $follow) {
     ...ThoughtsConnectionParts
   }
 }
