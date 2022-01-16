@@ -1,3 +1,5 @@
 mutation Follow($followeeId: ID!) {
-  follow(followeeId: $followeeId)
+  follow(followeeId: $followeeId) {
+    ...UserParts
+  }
 }

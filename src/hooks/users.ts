@@ -33,52 +33,6 @@ export const useUserCacheFragment = () => {
   };
 };
 
-export const useFollow = ({ followeeId }: { followeeId: string }) => {
-  const mutation = useFollowMutation({
-    update: (cache, { data }) => {
-      cache.writeFragment({
-        id: cache.identify({
-          __typename: "User",
-          id: followeeId,
-        }),
-        fragment: gql`
-          fragment UserFollow on User {
-            follow
-          }
-        `,
-        data: {
-          follow: true,
-        },
-      });
-    },
-  });
-
-  return mutation;
-};
-
-export const useUnfollow = ({ followeeId }: { followeeId: string }) => {
-  const mutation = useUnfollowMutation({
-    update: (cache) => {
-      cache.writeFragment({
-        id: cache.identify({
-          __typename: "User",
-          id: followeeId,
-        }),
-        fragment: gql`
-          fragment UserUnFollow on User {
-            follow
-          }
-        `,
-        data: {
-          follow: false,
-        },
-      });
-    },
-  });
-
-  return mutation;
-};
-
 export const useBlock = () => {
   const mutation = useBlockMutation({
     update: (cache, result) => {

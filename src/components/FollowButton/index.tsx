@@ -1,7 +1,10 @@
 import React, { useState, ComponentProps, useEffect } from "react";
 import { Pressable, Text, useColorModeValue } from "native-base";
-import { useFollow, useUnfollow } from "src/hooks/users";
-import { CustomErrorResponseCode } from "src/generated/graphql";
+import {
+  CustomErrorResponseCode,
+  useFollowMutation,
+  useUnfollowMutation,
+} from "src/generated/graphql";
 import { useToast } from "react-native-toast-notifications";
 import { getGraphQLErrorCode } from "src/utils";
 
@@ -12,12 +15,13 @@ type Props = {
 
 export const FollowButton = ({ userId, follow, ...props }: Props) => {
   const toast = useToast();
-  const [followMutation] = useFollow({ followeeId: userId });
-  const [unfollowMutation] = useUnfollow({ followeeId: userId });
+  const [followMutation] = useFollowMutation();
+  const [unfollowMutation] = useUnfollowMutation();
   const [isFollowing, setIsFollowing] = useState<boolean>(follow);
   useEffect(() => {
     setIsFollowing(follow);
   }, [follow]);
+  const borderColor = useColorModeValue("textBlack", "textWhite");
 
   const onPress = async () => {
     try {
@@ -53,9 +57,7 @@ export const FollowButton = ({ userId, follow, ...props }: Props) => {
       top="4"
       right="3"
       borderWidth={isFollowing ? "1" : "0"}
-      borderColor={
-        isFollowing ? useColorModeValue("textBlack", "textWhite") : undefined
-      }
+      borderColor={isFollowing ? borderColor : undefined}
       bg={isFollowing ? undefined : "pink"}
       px="2"
       py="1"

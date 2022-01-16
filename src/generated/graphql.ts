@@ -123,10 +123,10 @@ export type Mutation = {
   deleteNewsPick: NewsPick;
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
-  follow?: Maybe<Scalars['Boolean']>;
+  follow: User;
   signOut: SignOutResponse;
   unblock: User;
-  unfollow?: Maybe<Scalars['Boolean']>;
+  unfollow: User;
   updateMe: Me;
   uploadImage: SubImage;
   uploadThoughtImages: UploadThoughtImagesResponse;
@@ -463,7 +463,7 @@ export type FollowMutationVariables = Exact<{
 }>;
 
 
-export type FollowMutation = { __typename?: 'Mutation', follow?: boolean | null | undefined };
+export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined, follow: boolean } };
 
 export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -482,7 +482,7 @@ export type UnfollowMutationVariables = Exact<{
 }>;
 
 
-export type UnfollowMutation = { __typename?: 'Mutation', unfollow?: boolean | null | undefined };
+export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined, follow: boolean } };
 
 export type UpdateMeMutationVariables = Exact<{
   input: UpdateMeInput;
@@ -936,9 +936,11 @@ export type DeleteThoughtMutationResult = Apollo.MutationResult<DeleteThoughtMut
 export type DeleteThoughtMutationOptions = Apollo.BaseMutationOptions<DeleteThoughtMutation, DeleteThoughtMutationVariables>;
 export const FollowDocument = gql`
     mutation Follow($followeeId: ID!) {
-  follow(followeeId: $followeeId)
+  follow(followeeId: $followeeId) {
+    ...UserParts
+  }
 }
-    `;
+    ${UserPartsFragmentDoc}`;
 export type FollowMutationFn = Apollo.MutationFunction<FollowMutation, FollowMutationVariables>;
 
 /**
@@ -1033,9 +1035,11 @@ export type UnBlockMutationResult = Apollo.MutationResult<UnBlockMutation>;
 export type UnBlockMutationOptions = Apollo.BaseMutationOptions<UnBlockMutation, UnBlockMutationVariables>;
 export const UnfollowDocument = gql`
     mutation Unfollow($followeeId: ID!) {
-  unfollow(followeeId: $followeeId)
+  unfollow(followeeId: $followeeId) {
+    ...UserParts
+  }
 }
-    `;
+    ${UserPartsFragmentDoc}`;
 export type UnfollowMutationFn = Apollo.MutationFunction<UnfollowMutation, UnfollowMutationVariables>;
 
 /**
