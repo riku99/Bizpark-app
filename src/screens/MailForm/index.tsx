@@ -1,5 +1,12 @@
 import React, { ComponentProps, useLayoutEffect } from "react";
-import { Box, Input, VStack, Text, useTheme } from "native-base";
+import {
+  Box,
+  Input,
+  VStack,
+  Text,
+  useTheme,
+  KeyboardAvoidingView,
+} from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { TouchableWithoutFeedback, Keyboard } from "react-native";
 import { useForm, Controller, UseControllerProps } from "react-hook-form";
@@ -99,61 +106,63 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <TouchableWithoutFeedback
-      onPress={() => {
-        Keyboard.dismiss();
-      }}
-    >
-      <Box px={4} flex={1} bg="white">
-        <VStack space={4} mt={6}>
-          <Form<FormData>
-            label="メールアドレス"
-            inputProps={{
-              placeholder: "メールアドレス",
-            }}
-            controllerProps={{
-              control,
-              name: "email",
-            }}
-          />
-          <Form
-            label="パスワード"
-            password
-            inputProps={{
-              placeholder: "パスワード(8文字以上)",
-              type: "password",
-            }}
-            controllerProps={{ control, name: "password" }}
-          />
-          {type === "signUp" && (
-            <Form
-              label="名前"
+    <KeyboardAvoidingView flex={1}>
+      <TouchableWithoutFeedback
+        onPress={() => {
+          Keyboard.dismiss();
+        }}
+      >
+        <Box px={4} flex={1} bg="white">
+          <VStack space={4} mt={6}>
+            <Form<FormData>
+              label="メールアドレス"
               inputProps={{
-                placeholder: "名前(後で編集可能)",
+                placeholder: "メールアドレス",
               }}
               controllerProps={{
                 control,
-                name: "name",
+                name: "email",
               }}
             />
-          )}
-          <Button
-            title={type === "signUp" ? "登録" : "ログイン"}
-            buttonStyle={{
-              backgroundColor: colors.pink,
-            }}
-            containerStyle={{
-              marginTop: 20,
-            }}
-            titleStyle={{
-              fontWeight: "bold",
-            }}
-            disabled={disabled}
-            activeOpacity={1}
-            onPress={onSubmmitPress}
-          />
-        </VStack>
-      </Box>
-    </TouchableWithoutFeedback>
+            <Form
+              label="パスワード"
+              password
+              inputProps={{
+                placeholder: "パスワード(8文字以上)",
+                type: "password",
+              }}
+              controllerProps={{ control, name: "password" }}
+            />
+            {type === "signUp" && (
+              <Form
+                label="名前"
+                inputProps={{
+                  placeholder: "名前(後で編集可能)",
+                }}
+                controllerProps={{
+                  control,
+                  name: "name",
+                }}
+              />
+            )}
+            <Button
+              title={type === "signUp" ? "登録" : "ログイン"}
+              buttonStyle={{
+                backgroundColor: colors.pink,
+              }}
+              containerStyle={{
+                marginTop: 20,
+              }}
+              titleStyle={{
+                fontWeight: "bold",
+              }}
+              disabled={disabled}
+              activeOpacity={1}
+              onPress={onSubmmitPress}
+            />
+          </VStack>
+        </Box>
+      </TouchableWithoutFeedback>
+    </KeyboardAvoidingView>
   );
 };

@@ -7,6 +7,7 @@ import SplashScreen from "react-native-splash-screen";
 import { useInitialDataLazyQuery } from "src/generated/graphql";
 import Spinner from "react-native-loading-spinner-overlay";
 import { spinnerVisibleVar } from "src/stores/spinner";
+import FastImage from "react-native-fast-image";
 
 export const Root = () => {
   const loggedIn = useReactiveVar(meVar.loggedIn);
@@ -61,6 +62,13 @@ export const Root = () => {
         if (data) {
           meVar.loggedIn(true);
           meVar.id(data.me.id);
+          if (data.me.imageUrl) {
+            FastImage.preload([
+              {
+                uri: data.me.imageUrl,
+              },
+            ]);
+          }
         }
       }
     })();
