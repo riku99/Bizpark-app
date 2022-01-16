@@ -1,6 +1,7 @@
 mutation Block($blockTo: ID!) {
   block(blockTo: $blockTo) {
     blocking
+    follow
     ...UserParts
   }
 }

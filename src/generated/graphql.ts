@@ -436,7 +436,7 @@ export type BlockMutationVariables = Exact<{
 }>;
 
 
-export type BlockMutation = { __typename?: 'Mutation', block: { __typename?: 'User', blocking?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type BlockMutation = { __typename?: 'Mutation', block: { __typename?: 'User', blocking?: boolean | null | undefined, follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type CreateNewsPickMutationVariables = Exact<{
   input: CreateNewsPickInput;
@@ -511,7 +511,7 @@ export type UnfollowMutationVariables = Exact<{
 }>;
 
 
-export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type UpdateMeMutationVariables = Exact<{
   input: UpdateMeInput;
@@ -697,6 +697,7 @@ export const BlockDocument = gql`
     mutation Block($blockTo: ID!) {
   block(blockTo: $blockTo) {
     blocking
+    follow
     ...UserParts
   }
 }
@@ -1066,6 +1067,7 @@ export type UnBlockMutationOptions = Apollo.BaseMutationOptions<UnBlockMutation,
 export const UnfollowDocument = gql`
     mutation Unfollow($followeeId: ID!) {
   unfollow(followeeId: $followeeId) {
+    follow
     ...UserParts
   }
 }
