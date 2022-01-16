@@ -243,7 +243,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
               alignItems="center"
             >
               <Box w="90%" mt={4}>
-                <Button _text={{ fontSize: 16 }}>トークする</Button>
+                <Button _text={{ fontSize: 16 }}>トークに参加する 🚀</Button>
               </Box>
             </Box>
           </MotiView>

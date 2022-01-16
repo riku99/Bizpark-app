@@ -2,6 +2,7 @@ query Follows($cursor: String, $q: String) {
   follows(first: 30, after: $cursor, q: $q) {
     edges {
       node {
+        follow
         ...UserParts
       }
       cursor

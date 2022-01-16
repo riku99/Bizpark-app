@@ -6,18 +6,24 @@ import { FollowButton } from "src/components/FollowButton";
 import { RootNavigationProp } from "src/types";
 import { useNavigation } from "@react-navigation/native";
 
-type Props = { id: string };
+type Props = {
+  id: string;
+  loading?: boolean;
+  name: string;
+  imageUrl: string | null;
+  follow: boolean;
+};
 
-export const FollowUserCard = ({ id }: Props) => {
+export const FollowUserCard = ({
+  id,
+  loading,
+  name,
+  imageUrl,
+  follow,
+}: Props) => {
   const { readUserFragment } = useUserCacheFragment();
-  const cacheData = readUserFragment({ id });
+  // const cacheData = readUserFragment({ id });
   const navigation = useNavigation<RootNavigationProp<any>>();
-
-  if (!cacheData) {
-    return null;
-  }
-
-  const { name, imageUrl, follow } = cacheData;
 
   return (
     <Pressable

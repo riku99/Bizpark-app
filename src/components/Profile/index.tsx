@@ -18,6 +18,7 @@ type Props = {
   socials: { type: SocialIconProps["type"]; value: string | null }[];
   follow?: boolean;
   isMe: boolean;
+  loading?: boolean;
 };
 
 export const Profile = ({
@@ -28,6 +29,7 @@ export const Profile = ({
   socials,
   follow,
   isMe,
+  loading,
 }: Props) => {
   const navigation = useNavigation<RootNavigationProp<any>>();
 
@@ -121,7 +123,7 @@ export const Profile = ({
               <Text fontWeight="bold">編集</Text>
             </Pressable>
           ) : (
-            <FollowButton userId={id} follow={follow} />
+            <FollowButton userId={id} follow={follow} loading={loading} />
           )}
 
           <ContentsCard

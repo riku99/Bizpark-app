@@ -7,5 +7,4 @@ fragment UserParts on User {
   twitter
   linkedin
   instagram
-  follow
 }

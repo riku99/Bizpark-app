@@ -12,9 +12,10 @@ import * as Haptics from "expo-haptics";
 type Props = {
   userId: string;
   follow?: boolean;
+  loading?: boolean;
 } & ComponentProps<typeof Pressable>;
 
-export const FollowButton = ({ userId, follow, ...props }: Props) => {
+export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
   const toast = useToast();
   const [followMutation] = useFollowMutation();
   const [unfollowMutation] = useUnfollowMutation();
@@ -58,21 +59,22 @@ export const FollowButton = ({ userId, follow, ...props }: Props) => {
       position="absolute"
       top="4"
       right="3"
-      borderWidth={isFollowing ? "1" : "0"}
-      borderColor={isFollowing ? borderColor : undefined}
-      bg={isFollowing ? undefined : "pink"}
+      borderWidth={isFollowing || loading ? "1" : "0"}
+      borderColor={isFollowing || loading ? borderColor : undefined}
+      bg={isFollowing || loading ? undefined : "pink"}
       px="2"
       py="1"
       borderRadius="2xl"
       onPress={onPress}
+      disabled={loading}
       {...props}
     >
       <Text
         fontWeight="bold"
-        color={isFollowing ? undefined : "textWhite"}
+        color={isFollowing || loading ? undefined : "textWhite"}
         fontSize="13"
       >
-        {isFollowing ? "フォロー中" : "フォローする"}
+        {loading ? "読み込み中" : isFollowing ? "フォロー中" : "フォローする"}
       </Text>
     </Pressable>
   );

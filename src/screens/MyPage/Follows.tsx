@@ -10,12 +10,20 @@ import { Indicator } from "src/components/Indicator";
 import { SerachBar } from "src/components/SearchBar";
 
 export const Follows = React.memo(() => {
-  const { data, refetch, fetchMore } = useFollowsQuery();
+  const { data, refetch, fetchMore, loading } = useFollowsQuery();
   const [refreshing, setRefreshing] = useState(false);
 
   const renderItem = useCallback(
     ({ item }: { item: UserEdge }) => {
-      return <FollowUserCard id={item.node.id} />;
+      return (
+        <FollowUserCard
+          id={item.node.id}
+          loading={loading}
+          name={item.node.name}
+          imageUrl={item.node.imageUrl}
+          follow={item.node.follow}
+        />
+      );
     },
     [data]
   );

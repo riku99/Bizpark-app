@@ -24,7 +24,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
   const { readUserFragment } = useUserCacheFragment();
   const cacheData = readUserFragment({ id });
-  const { refetch, data } = useUserQuery({
+  const { refetch, data, loading } = useUserQuery({
     variables: {
       id,
     },
@@ -82,7 +82,6 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     facebook,
     twitter,
     linkedin,
-    follow,
   } = cacheData;
   const socials: { type: SocialIconProps["type"]; value: string | null }[] = [
     { type: "facebook", value: facebook },
@@ -183,8 +182,9 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
           bio={bio}
           imageUrl={imageUrl}
           socials={socials}
-          follow={follow}
+          follow={data?.user.follow}
           isMe={isMe}
+          loading={loading}
         />
       </ScrollView>
 
