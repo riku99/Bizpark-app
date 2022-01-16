@@ -38,6 +38,7 @@ const Form = <T extends {}>({
               borderWidth: 0,
             }}
             onChangeText={onChange}
+            keyboardAppearance="light"
             {...inputProps}
           />
         )}

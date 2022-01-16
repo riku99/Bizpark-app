@@ -39,6 +39,7 @@ export const Mail = ({ onPress, type = "signup" }: Props) => {
       title={`メールアドレスで${type === "signup" ? "登録" : "ログイン"}`}
       icon={<MaterialIcons name="email" color="white" size={22} />}
       onPress={onPress}
+      titleColor="white"
     />
   );
 };
@@ -50,6 +51,7 @@ export const Apple = ({ onPress, type = "signup" }: Props) => {
       title={`Appleで${type === "signup" ? "登録" : "ログイン"}`}
       icon={<AntDesign name="apple1" color="white" size={22} />}
       onPress={onPress}
+      titleColor="white"
     />
   );
 };
