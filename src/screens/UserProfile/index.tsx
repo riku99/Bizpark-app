@@ -15,6 +15,7 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { InstaLikeModal } from "src/components/InstaLikeModal";
 import { useToast } from "react-native-toast-notifications";
 import { Alert } from "react-native";
+import { useUnblock, useBlock } from "src/hooks/users";
 
 type Props = RootNavigationScreenProp<"UserProfile">;
 
@@ -31,8 +32,8 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const { colors } = useTheme();
-  const [blockMutation] = useBlockMutation();
-  const [unblockMutation] = useUnBlockMutation();
+  const [blockMutation] = useBlock();
+  const [unblockMutation] = useUnblock();
   const toast = useToast();
   const iconColor = useColorModeValue(colors.textBlack, colors.textWhite);
   const {

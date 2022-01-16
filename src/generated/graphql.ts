@@ -407,7 +407,7 @@ export type BlockMutationVariables = Exact<{
 }>;
 
 
-export type BlockMutation = { __typename?: 'Mutation', block: { __typename?: 'User', id: string, blocking?: boolean | null | undefined, follow: boolean } };
+export type BlockMutation = { __typename?: 'Mutation', block: { __typename?: 'User', blocking?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined, follow: boolean } };
 
 export type CreateNewsPickMutationVariables = Exact<{
   input: CreateNewsPickInput;
@@ -667,12 +667,11 @@ ${PageInfoPartsFragmentDoc}`;
 export const BlockDocument = gql`
     mutation Block($blockTo: ID!) {
   block(blockTo: $blockTo) {
-    id
     blocking
-    follow
+    ...UserParts
   }
 }
-    `;
+    ${UserPartsFragmentDoc}`;
 export type BlockMutationFn = Apollo.MutationFunction<BlockMutation, BlockMutationVariables>;
 
 /**

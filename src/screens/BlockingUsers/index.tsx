@@ -14,6 +14,7 @@ import { UserImage } from "src/components/UserImage";
 import { ListItem } from "src/components/ListItem";
 import { Alert } from "react-native";
 import { useToast } from "react-native-toast-notifications";
+import { useUnblock } from "src/hooks/users";
 
 type Props = RootNavigationScreenProp<"BlockingUsers">;
 
@@ -25,22 +26,7 @@ export const BlockingUsersScreen = ({ navigation }: Props) => {
   }, [navigation]);
 
   const { data } = useBlockingUsersQuery();
-  const [unblockMutation] = useUnBlockMutation({
-    update: (cache, result) => {
-      const queryData = cache.readQuery<BlockingUsersQueryResult["data"]>({
-        query: BlockingUsersDocument,
-      });
-
-      const newBlockingData = queryData.blockingUsers.filter(
-        (b) => b.id !== result.data.unblock.id
-      );
-
-      cache.writeQuery({
-        query: BlockingUsersDocument,
-        data: { blockingUsers: newBlockingData },
-      });
-    },
-  });
+  const [unblockMutation] = useUnblock();
   const toast = useToast();
 
   const renderItem = useCallback(
