@@ -33,6 +33,7 @@ import {
 } from "src/generated/graphql";
 import { spinnerVisibleVar } from "src/stores/spinner";
 import { useToast } from "react-native-toast-notifications";
+import { JoinButton } from "./JoinButton";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
@@ -243,7 +244,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
               alignItems="center"
             >
               <Box w="90%" mt={4}>
-                <Button _text={{ fontSize: 16 }}>トークに参加する 🚀</Button>
+                <JoinButton thoughtId={id} />
               </Box>
             </Box>
           </MotiView>
