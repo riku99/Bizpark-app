@@ -1,11 +1,19 @@
 import React, { useLayoutEffect, useCallback } from "react";
 import { Box, Button } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
-import { useBlockingUsersQuery, User } from "src/generated/graphql";
+import {
+  useBlockingUsersQuery,
+  User,
+  useUnBlockMutation,
+  BlockingUsersDocument,
+  BlockingUsersQueryResult,
+} from "src/generated/graphql";
 import { Indicator } from "src/components/Indicator";
 import { FlatList, StyleSheet } from "react-native";
 import { UserImage } from "src/components/UserImage";
 import { ListItem } from "src/components/ListItem";
+import { Alert } from "react-native";
+import { useToast } from "react-native-toast-notifications";
 
 type Props = RootNavigationScreenProp<"BlockingUsers">;
 
@@ -17,20 +25,64 @@ export const BlockingUsersScreen = ({ navigation }: Props) => {
   }, [navigation]);
 
   const { data } = useBlockingUsersQuery();
+  const [unblockMutation] = useUnBlockMutation({
+    update: (cache, result) => {
+      const queryData = cache.readQuery<BlockingUsersQueryResult["data"]>({
+        query: BlockingUsersDocument,
+      });
 
-  const renderItem = useCallback(({ item }: { item: User }) => {
-    return (
-      <ListItem
-        title={item.name}
-        ItemLeft={<UserImage uri={item.imageUrl} size="10" />}
-        ItemRight={
-          <Button py="0" h="7">
-            解除
-          </Button>
-        }
-      />
-    );
-  }, []);
+      const newBlockingData = queryData.blockingUsers.filter(
+        (b) => b.id !== result.data.unblock.id
+      );
+
+      cache.writeQuery({
+        query: BlockingUsersDocument,
+        data: { blockingUsers: newBlockingData },
+      });
+    },
+  });
+  const toast = useToast();
+
+  const renderItem = useCallback(
+    ({ item }: { item: User }) => {
+      return (
+        <ListItem
+          title={item.name}
+          ItemLeft={<UserImage uri={item.imageUrl} size="10" />}
+          ItemRight={
+            <Button
+              py="0"
+              h="7"
+              onPress={() => {
+                Alert.alert("ブロックを解除", "解除してよろしいですか?", [
+                  {
+                    text: "キャンセル",
+                    style: "cancel",
+                  },
+                  {
+                    text: "解除",
+                    style: "destructive",
+                    onPress: async () => {
+                      await unblockMutation({
+                        variables: {
+                          blockedUserId: item.id,
+                        },
+                      });
+
+                      toast.show("解除しました", { type: "success" });
+                    },
+                  },
+                ]);
+              }}
+            >
+              解除
+            </Button>
+          }
+        />
+      );
+    },
+    [unblockMutation, toast]
+  );
 
   if (!data) {
     return <Indicator style={{ marginTop: 10 }} />;
