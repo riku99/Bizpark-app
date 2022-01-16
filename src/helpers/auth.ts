@@ -1,6 +1,6 @@
 import auth from "@react-native-firebase/auth";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-import { storageKeys, setMeVar } from "src/stores/me";
+import { storageKeys, meVar } from "src/stores/me";
 import { GoogleSignin } from "@react-native-google-signin/google-signin";
 import { spinnerVisibleVar } from "src/stores/spinner";
 
@@ -20,16 +20,10 @@ export const signOut = async () => {
   spinnerVisibleVar(true);
   await auth().signOut();
 
-  setMeVar({
-    loggedIn: false,
-    id: null,
-    name: null,
-    bio: null,
-    imageUrl: null,
-  });
+  meVar.loggedIn(false);
+  meVar.id(null);
 
   await AsyncStorage.removeItem(storageKeys.id);
-  await AsyncStorage.removeItem(storageKeys.name);
   await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(false));
 
   spinnerVisibleVar(false);
