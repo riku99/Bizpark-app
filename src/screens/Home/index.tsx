@@ -12,6 +12,7 @@ import { AddButton } from "src/components/AddButton";
 import { CreatingToast } from "src/components/CreatingToast";
 import { useReactiveVar } from "@apollo/client";
 import { creatingThoughtVar } from "src/stores/thought";
+import { Follow } from "./Follow";
 
 type Props = RootNavigationScreenProp<"Tab">;
 
@@ -47,8 +48,15 @@ export const HomeScreen = ({ navigation }: Props) => {
       <TopTab.Navigator
         screenOptions={{
           lazy: true,
-          // tabBarScrollEnabled: true,
+          tabBarScrollEnabled: true,
           ...defaultScreenStyle,
+          tabBarLabelStyle: {
+            fontSize: 12,
+            fontWeight: "bold",
+          },
+          tabBarItemStyle: {
+            width: 90,
+          },
         }}
         style={style}
         sceneContainerStyle={sceneContainerStyle}
@@ -57,12 +65,35 @@ export const HomeScreen = ({ navigation }: Props) => {
           name="Business"
           component={Business}
           options={{
-            tabBarLabel: "Business",
+            tabBarLabel: "ビジネス",
           }}
         />
-        <TopTab.Screen name="Politics" component={Politics} />
-        <TopTab.Screen name="Economy" component={Economy} />
-        <TopTab.Screen name="Society" component={Society} />
+        <TopTab.Screen
+          name="Politics"
+          component={Politics}
+          options={{ tabBarLabel: "政治" }}
+        />
+        <TopTab.Screen
+          name="Economy"
+          component={Economy}
+          options={{
+            tabBarLabel: "金融・経済",
+          }}
+        />
+        <TopTab.Screen
+          name="Society"
+          component={Society}
+          options={{
+            tabBarLabel: "社会",
+          }}
+        />
+        <TopTab.Screen
+          name="Follow"
+          component={Follow}
+          options={{
+            tabBarLabel: "フォロー",
+          }}
+        />
       </TopTab.Navigator>
       <Button
         position="absolute"
