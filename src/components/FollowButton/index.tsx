@@ -7,6 +7,7 @@ import {
 } from "src/generated/graphql";
 import { useToast } from "react-native-toast-notifications";
 import { getGraphQLErrorCode } from "src/utils";
+import * as Haptics from "expo-haptics";
 
 type Props = {
   userId: string;
@@ -24,6 +25,7 @@ export const FollowButton = ({ userId, follow, ...props }: Props) => {
   const borderColor = useColorModeValue("textBlack", "textWhite");
 
   const onPress = async () => {
+    Haptics.selectionAsync();
     try {
       if (!isFollowing) {
         setIsFollowing(true);

@@ -25,7 +25,9 @@ export const SettingsScreen = ({ navigation }: Props) => {
     {
       Icon: <MaterialIcons name="account-box" size={24} color={iconColor} />,
       title: "アカウント",
-      onPress: () => {},
+      onPress: () => {
+        navigation.navigate("AccountSettings");
+      },
     },
     {
       Icon: <Feather name="users" size={24} color={iconColor} />,
