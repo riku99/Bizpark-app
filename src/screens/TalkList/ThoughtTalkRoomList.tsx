@@ -1,8 +1,15 @@
 import React, { useCallback } from "react";
-import { Box, FlatList, HStack, Pressable } from "native-base";
+import {
+  Box,
+  FlatList,
+  HStack,
+  Pressable,
+  Text,
+  Divider,
+  useColorModeValue,
+} from "native-base";
 import {
   useGetThoughtTalkRoomsQuery,
-  ThoughtTalkRoom,
   GetThoughtTalkRoomsQueryResult,
 } from "src/generated/graphql";
 import { UserImages } from "src/components/UserImages";
@@ -11,6 +18,7 @@ type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 
 export const ThoughtTalkRoomList = React.memo(() => {
   const { data } = useGetThoughtTalkRoomsQuery();
+  const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
     let images: string[] = [];
@@ -23,10 +31,25 @@ export const ThoughtTalkRoomList = React.memo(() => {
     }
 
     return (
-      <Pressable>
-        <HStack py="4" px="4" alignItems="center">
-          <UserImages data={images} imageSize="8" />
+      <Pressable
+        px="4"
+        _pressed={{
+          bg: pressedColor,
+        }}
+      >
+        <HStack alignItems="center" py="4">
+          <Box w="76%">
+            <Text h="7" fontWeight="bold" fontSize="14">
+              {item.thought.title ? item.thought.title : item.thought.text}
+            </Text>
+
+            <Text>textextextextテキスト</Text>
+            <UserImages data={images} imageSize="8" mt="2" />
+          </Box>
+          {/* バッジ */}
         </HStack>
+
+        <Divider />
       </Pressable>
     );
   }, []);
