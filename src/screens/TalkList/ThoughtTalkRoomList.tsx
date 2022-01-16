@@ -1,5 +1,5 @@
 import React, { useCallback } from "react";
-import { Box, FlatList } from "native-base";
+import { Box, FlatList, HStack, Pressable } from "native-base";
 import {
   useGetThoughtTalkRoomsQuery,
   ThoughtTalkRoom,
@@ -23,9 +23,11 @@ export const ThoughtTalkRoomList = React.memo(() => {
     }
 
     return (
-      <Box>
-        <UserImages data={images} imageSize="9" />
-      </Box>
+      <Pressable>
+        <HStack py="4" px="4" alignItems="center">
+          <UserImages data={images} imageSize="8" />
+        </HStack>
+      </Pressable>
     );
   }, []);
 

@@ -1,5 +1,5 @@
 import React, { ComponentProps } from "react";
-import { HStack } from "native-base";
+import { Box, HStack } from "native-base";
 import { UserImage } from "../UserImage";
 
 type Props = {
@@ -18,7 +18,14 @@ export const UserImages = ({
     <HStack {...props}>
       {data.map((d, idx) => (
         <React.Fragment key={idx}>
-          <UserImage uri={d} size={imageSize} style={imageStyle} />
+          <Box
+            zIndex={data.length - idx}
+            style={{
+              transform: idx !== 0 ? [{ translateX: idx * -10 }] : undefined,
+            }}
+          >
+            <UserImage uri={d} size={imageSize} style={imageStyle} />
+          </Box>
         </React.Fragment>
       ))}
     </HStack>
