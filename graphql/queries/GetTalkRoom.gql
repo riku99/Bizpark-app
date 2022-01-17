@@ -1,5 +1,5 @@
-query GetThoughtTalkRooms {
-  thoughtTalkRooms {
+query GetThoughtTalkRoom($id: ID!) {
+  thoughtTalkRoom(id: $id) {
     id
     createdAt
     members {
@@ -12,8 +12,6 @@ query GetThoughtTalkRooms {
     }
     thought {
       id
-      title
-      text
     }
     messages {
       id
@@ -22,6 +20,7 @@ query GetThoughtTalkRooms {
       sender {
         id
         name
+        imageUrl
       }
     }
   }

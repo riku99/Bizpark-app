@@ -52,7 +52,8 @@ export type CreateUserInput = {
 export enum CustomErrorResponseCode {
   AlreadyUnBloking = 'ALREADY_UN_BLOKING',
   AlreadyUserExisting = 'ALREADY_USER_EXISTING',
-  InvalidRequest = 'INVALID_REQUEST'
+  InvalidRequest = 'INVALID_REQUEST',
+  NotFound = 'NOT_FOUND'
 }
 
 export type DeleteNewsPickInput = {
@@ -273,6 +274,7 @@ export type Query = {
   news?: Maybe<NewsConnection>;
   pickedNews: NewsConnection;
   pickedThoughts: ThoughtsConnection;
+  thoughtTalkRoom: ThoughtTalkRoom;
   thoughtTalkRooms: Array<Maybe<ThoughtTalkRoom>>;
   thoughts: ThoughtsConnection;
   user: User;
@@ -303,6 +305,11 @@ export type QueryPickedNewsArgs = {
 export type QueryPickedThoughtsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first: Scalars['Int'];
+};
+
+
+export type QueryThoughtTalkRoomArgs = {
+  id: Scalars['ID'];
 };
 
 
@@ -564,10 +571,17 @@ export type FollowsQueryVariables = Exact<{
 
 export type FollowsQuery = { __typename?: 'Query', follows: { __typename?: 'UserConnection', edges: Array<{ __typename?: 'UserEdge', cursor: string, node: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
+export type GetThoughtTalkRoomQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetThoughtTalkRoomQuery = { __typename?: 'Query', thoughtTalkRoom: { __typename?: 'ThoughtTalkRoom', id: string, createdAt: string, members: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined>, thought: { __typename?: 'Thought', id: string }, messages: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, sender: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } } | null | undefined> } };
+
 export type GetThoughtTalkRoomsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetThoughtTalkRoomsQuery = { __typename?: 'Query', thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: string, createdAt: string, members: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined } | null | undefined>, thought: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string }, messages: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined> } | null | undefined> };
+export type GetThoughtTalkRoomsQuery = { __typename?: 'Query', thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: string, createdAt: string, members: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined>, thought: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string }, messages: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, sender: { __typename?: 'User', id: string, name: string } } | null | undefined> } | null | undefined> };
 
 export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1356,6 +1370,63 @@ export function useFollowsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Fo
 export type FollowsQueryHookResult = ReturnType<typeof useFollowsQuery>;
 export type FollowsLazyQueryHookResult = ReturnType<typeof useFollowsLazyQuery>;
 export type FollowsQueryResult = Apollo.QueryResult<FollowsQuery, FollowsQueryVariables>;
+export const GetThoughtTalkRoomDocument = gql`
+    query GetThoughtTalkRoom($id: ID!) {
+  thoughtTalkRoom(id: $id) {
+    id
+    createdAt
+    members {
+      id
+      user {
+        id
+        name
+        imageUrl
+      }
+    }
+    thought {
+      id
+    }
+    messages {
+      id
+      text
+      createdAt
+      sender {
+        id
+        name
+        imageUrl
+      }
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetThoughtTalkRoomQuery__
+ *
+ * To run a query within a React component, call `useGetThoughtTalkRoomQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetThoughtTalkRoomQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetThoughtTalkRoomQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetThoughtTalkRoomQuery(baseOptions: Apollo.QueryHookOptions<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>(GetThoughtTalkRoomDocument, options);
+      }
+export function useGetThoughtTalkRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>(GetThoughtTalkRoomDocument, options);
+        }
+export type GetThoughtTalkRoomQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomQuery>;
+export type GetThoughtTalkRoomLazyQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomLazyQuery>;
+export type GetThoughtTalkRoomQueryResult = Apollo.QueryResult<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>;
 export const GetThoughtTalkRoomsDocument = gql`
     query GetThoughtTalkRooms {
   thoughtTalkRooms {
@@ -1364,7 +1435,9 @@ export const GetThoughtTalkRoomsDocument = gql`
     members {
       id
       user {
-        ...UserParts
+        id
+        name
+        imageUrl
       }
     }
     thought {
@@ -1377,12 +1450,13 @@ export const GetThoughtTalkRoomsDocument = gql`
       text
       createdAt
       sender {
-        ...UserParts
+        id
+        name
       }
     }
   }
 }
-    ${UserPartsFragmentDoc}`;
+    `;
 
 /**
  * __useGetThoughtTalkRoomsQuery__
