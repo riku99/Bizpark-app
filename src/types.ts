@@ -52,8 +52,10 @@ export type RootStackParamList = {
   UserProfile: {
     id: string;
   };
-  // Settings
   Settings: undefined;
+  TalkRoom: {
+    id: string;
+  };
 } & SettingsParamList;
 
 export type RootNavigationScreenProp<

@@ -13,6 +13,8 @@ import {
   GetThoughtTalkRoomsQueryResult,
 } from "src/generated/graphql";
 import { UserImages } from "src/components/UserImages";
+import { RootNavigationProp } from "src/types";
+import { useNavigation } from "@react-navigation/native";
 
 type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 
@@ -20,6 +22,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
   const { data } = useGetThoughtTalkRoomsQuery();
   const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
   const textGray = useColorModeValue("lt.textGray", "dt.textGray");
+  const navigation = useNavigation<RootNavigationProp<"Tab">>();
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
     let images: string[] = [];
@@ -36,6 +39,11 @@ export const ThoughtTalkRoomList = React.memo(() => {
         px="4"
         _pressed={{
           bg: pressedColor,
+        }}
+        onPress={() => {
+          navigation.navigate("TalkRoom", {
+            id: item.id,
+          });
         }}
       >
         <HStack alignItems="center" py="4" justifyContent="space-between">
