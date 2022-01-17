@@ -15,10 +15,12 @@ export const colors = {
     bg: "#1c1917",
     darkGray: "#292524",
     pressed: "#211d1b",
+    textGray: "#c4c4c4",
   },
   lt: {
     bg: "#fcfcfc",
     pressed: "#f5f5f5",
+    textGray: "#6e6a6a",
   },
   pink: "#ff937d",
   purple: "#4444ff",

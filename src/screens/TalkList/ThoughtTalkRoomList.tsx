@@ -19,11 +19,12 @@ type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 export const ThoughtTalkRoomList = React.memo(() => {
   const { data } = useGetThoughtTalkRoomsQuery();
   const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
+  const textGray = useColorModeValue("lt.textGray", "dt.textGray");
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
     let images: string[] = [];
 
-    for (let i = 0; i <= 5; i++) {
+    for (let i = 0; i <= 7; i++) {
       const member = item.members[i];
       if (member) {
         images.push(member.user.imageUrl);
@@ -37,16 +38,20 @@ export const ThoughtTalkRoomList = React.memo(() => {
           bg: pressedColor,
         }}
       >
-        <HStack alignItems="center" py="4">
+        <HStack alignItems="center" py="4" justifyContent="space-between">
           <Box w="76%">
             <Text h="7" fontWeight="bold" fontSize="14">
               {item.thought.title ? item.thought.title : item.thought.text}
             </Text>
 
-            <Text>textextextextテキスト</Text>
-            <UserImages data={images} imageSize="8" mt="2" />
+            <Text color={textGray} h="7">
+              {item.messages.length ? item.messages[0].text : ""}
+            </Text>
+            <UserImages data={images} imageSize="8" mt="1" />
           </Box>
+
           {/* バッジ */}
+          <Box bg="pink" w="3" h="3" borderRadius="full" />
         </HStack>
 
         <Divider />

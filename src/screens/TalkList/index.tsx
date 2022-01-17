@@ -6,6 +6,7 @@ import { NewsTalkRoomList } from "./NewsTalkRoomList";
 import { OneOnOneTalkRoomList } from "./OneOnOneTalkRoomList";
 import { useTopTabBarStyle } from "src/hooks/theme";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { useSafeAreaInsets } from "react-native-safe-area-context";
 
 type Props = RootNavigationScreenProp<"Tab">;
 
@@ -15,6 +16,7 @@ export const TalkListScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "",
+      headerShown: false,
       headerShadowVisible: false,
     });
   }, []);
@@ -25,6 +27,8 @@ export const TalkListScreen = ({ navigation }: Props) => {
     sceneContainerStyle,
   } = useTopTabBarStyle();
 
+  const { top } = useSafeAreaInsets();
+
   return (
     <>
       <TopTab.Navigator
@@ -32,7 +36,10 @@ export const TalkListScreen = ({ navigation }: Props) => {
           lazy: true,
           ...defaultScreenStyle,
         }}
-        style={style}
+        style={{
+          marginTop: top,
+          ...style,
+        }}
         sceneContainerStyle={sceneContainerStyle}
       >
         <TopTab.Screen
