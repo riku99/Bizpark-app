@@ -581,7 +581,7 @@ export type GetThoughtTalkRoomQuery = { __typename?: 'Query', thoughtTalkRoom: {
 export type GetThoughtTalkRoomsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetThoughtTalkRoomsQuery = { __typename?: 'Query', thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: string, createdAt: string, members: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined>, thought: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string }, messages: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, sender: { __typename?: 'User', id: string, name: string } } | null | undefined> } | null | undefined> };
+export type GetThoughtTalkRoomsQuery = { __typename?: 'Query', thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: string, createdAt: string, members: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined>, thought: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string }, messages: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, sender: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } } | null | undefined> } | null | undefined> };
 
 export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1452,6 +1452,7 @@ export const GetThoughtTalkRoomsDocument = gql`
       sender {
         id
         name
+        imageUrl
       }
     }
   }

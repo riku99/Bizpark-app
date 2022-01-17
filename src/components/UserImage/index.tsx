@@ -1,7 +1,6 @@
 import React, { ComponentProps } from "react";
 import { Image } from "src/components/Image";
-
-const noUserImageUrl = "https://storage.googleapis.com/bizpark-dev/no-user.png";
+import { NO_USER_IMAGE_URL } from "src/constants";
 
 type Props = {
   uri?: string | null;
@@ -11,7 +10,7 @@ export const UserImage = ({ uri, size, ...props }: Props) => {
   return (
     <Image
       source={{
-        uri: uri ?? noUserImageUrl,
+        uri: uri ?? NO_USER_IMAGE_URL,
       }}
       size={size}
       borderRadius="full"

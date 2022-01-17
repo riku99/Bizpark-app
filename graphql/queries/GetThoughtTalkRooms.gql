@@ -22,6 +22,7 @@ query GetThoughtTalkRooms {
       sender {
         id
         name
+        imageUrl
       }
     }
   }

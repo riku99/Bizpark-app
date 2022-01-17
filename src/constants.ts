@@ -14,3 +14,6 @@ export const socialIcons: SocialIconProps["type"][] = [
 
 export const INSTAGRAM_BASE_URL = "https://www.instagram.com";
 export const TWITTER_BASE_URL = "https://twitter.com";
+
+export const NO_USER_IMAGE_URL =
+  "https://storage.googleapis.com/bizpark-dev/no-user.png";
