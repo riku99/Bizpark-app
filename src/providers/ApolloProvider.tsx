@@ -3,6 +3,7 @@ import {
   InMemoryCache,
   ApolloProvider as ApolloProviderBase,
   from,
+  split,
 } from "@apollo/client";
 import { onError } from "@apollo/client/link/error";
 import { setContext } from "@apollo/client/link/context";
@@ -15,6 +16,8 @@ import { signOut } from "src/helpers/auth";
 import { relayStylePagination } from "@apollo/client/utilities";
 import { createUploadLink } from "apollo-upload-client";
 import { useCustomToast } from "src/hooks/toast";
+import { WebSocketLink } from "@apollo/client/link/ws";
+import { getMainDefinition } from "@apollo/client/utilities";
 
 type Props = {
   children: JSX.Element;
@@ -23,6 +26,33 @@ type Props = {
 const uploadLink = createUploadLink({
   uri: "http://localhost:4000/graphql",
 });
+
+const wsLink = setContext(async () => {
+  const currentUser = auth().currentUser;
+  const idToken = await currentUser?.getIdToken();
+
+  return new WebSocketLink({
+    uri: "ws://localhost:4000/subscriptions",
+    options: {
+      reconnect: true,
+      connectionParams: {
+        authToken: idToken,
+      },
+    },
+  });
+});
+
+const splitLink = split(
+  ({ query }) => {
+    const definition = getMainDefinition(query);
+    return (
+      definition.kind === "OperationDefinition" &&
+      definition.operation === "subscription"
+    );
+  },
+  wsLink,
+  uploadLink
+);
 
 const authLink = setContext(async (_, { headers }) => {
   const currentUser = auth().currentUser;
@@ -104,7 +134,7 @@ export const ApolloProvider = ({ children }: Props) => {
   });
 
   const client = new ApolloClient({
-    link: from([errorLink, authLink, uploadLink]),
+    link: from([errorLink, authLink, splitLink]),
     cache,
   });
 
