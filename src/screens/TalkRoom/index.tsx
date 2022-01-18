@@ -9,6 +9,7 @@ import {
   useGetThoughtTalkRoomQuery,
   useMeQuery,
   useOnThoughtTalkRoomMessageCreatedSubscription,
+  useCreateThoughtTalkRoomMessageMutation,
 } from "src/generated/graphql";
 import { GiftedChat, IMessage, Bubble } from "react-native-gifted-chat";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -23,6 +24,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const {
     data: { me },
   } = useMeQuery();
+  const [createMessageMutation] = useCreateThoughtTalkRoomMessageMutation();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -38,7 +40,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   });
 
   const queryData = useMemo(() => {
-    console.log("memo👀");
     const queryResult = client.cache.readQuery<
       GetThoughtTalkRoomsQueryResult["data"]
     >({
@@ -49,15 +50,14 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   }, [data]);
 
   useEffect(() => {
-    console.log("🌙 list query data is");
-    console.log(queryData.messages);
+    // console.log("🌙 list query data is");
+    // console.log(queryData.messages);
   }, [queryData]);
 
   const [messages, setMessages] = useState([]);
 
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
-    console.log("set message 🆗");
     if (queryData) {
       const im: IMessage[] = queryData.messages.map((message) => ({
         _id: message.id,
@@ -77,12 +77,25 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const {
     data: messageData,
     error,
+    loading,
   } = useOnThoughtTalkRoomMessageCreatedSubscription();
-  console.log(messageData);
+  console.log(error);
+  console.log(loading);
   if (messageData) {
     console.log("updated message!");
     console.log(messageData);
   }
+
+  const onSendPress = async (message: IMessage[]) => {
+    await createMessageMutation({
+      variables: {
+        input: {
+          text: message[0].text,
+          roomId: id,
+        },
+      },
+    });
+  };
 
   return (
     <BaseChat
@@ -90,6 +103,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
       user={{
         _id: me.id,
       }}
+      onSend={onSendPress}
     />
   );
 };

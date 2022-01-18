@@ -666,7 +666,7 @@ export type UserThoughtsQuery = { __typename?: 'Query', userThoughts: { __typena
 export type OnThoughtTalkRoomMessageCreatedSubscriptionVariables = Exact<{ [key: string]: never; }>;
 
 
-export type OnThoughtTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', thoughtTalkRoomMessageCreated?: { __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined };
+export type OnThoughtTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', thoughtTalkRoomMessageCreated?: { __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } } | null | undefined };
 
 export const NewsFieldsFragmentDoc = gql`
     fragment NewsFields on News {
@@ -1878,12 +1878,14 @@ export const OnThoughtTalkRoomMessageCreatedDocument = gql`
     text
     createdAt
     sender {
-      ...UserParts
+      id
+      name
+      imageUrl
     }
     roomId
   }
 }
-    ${UserPartsFragmentDoc}`;
+    `;
 
 /**
  * __useOnThoughtTalkRoomMessageCreatedSubscription__
