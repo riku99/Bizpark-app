@@ -1,0 +1,10 @@
+mutation CreateThoughtTalkRoomMessage(
+  $input: CreateThoughtTalkRoomMessageInput!
+) {
+  createThoughtTalkRoomMessage(input: $input) {
+    id
+    text
+    createdAt
+    roomId
+  }
+}

@@ -1,0 +1,11 @@
+subscription OnThoughtTalkRoomMessageCreated {
+  thoughtTalkRoomMessageCreated {
+    id
+    text
+    createdAt
+    sender {
+      ...UserParts
+    }
+    roomId
+  }
+}
