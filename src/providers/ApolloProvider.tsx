@@ -27,19 +27,14 @@ const uploadLink = createUploadLink({
   uri: "http://localhost:4000/graphql",
 });
 
-const wsLink = setContext(async () => {
-  const currentUser = auth().currentUser;
-  const idToken = await currentUser?.getIdToken();
-
-  return new WebSocketLink({
-    uri: "ws://localhost:4000/subscriptions",
-    options: {
-      reconnect: true,
-      connectionParams: {
-        authToken: idToken,
-      },
-    },
-  });
+const wsLink = new WebSocketLink({
+  uri: "ws://localhost:4000/subscriptions",
+  options: {
+    reconnect: true,
+    // connectionParams: {
+    //   authToken: idToken,
+    // },
+  },
 });
 
 const splitLink = split(

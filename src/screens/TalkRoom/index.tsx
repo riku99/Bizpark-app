@@ -8,6 +8,7 @@ import {
   GetThoughtTalkRoomQuery,
   useGetThoughtTalkRoomQuery,
   useMeQuery,
+  useOnThoughtTalkRoomMessageCreatedSubscription,
 } from "src/generated/graphql";
 import { GiftedChat, IMessage, Bubble } from "react-native-gifted-chat";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -72,6 +73,16 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
       setMessages(im);
     }
   }, []);
+
+  const {
+    data: messageData,
+    error,
+  } = useOnThoughtTalkRoomMessageCreatedSubscription();
+  console.log(messageData);
+  if (messageData) {
+    console.log("updated message!");
+    console.log(messageData);
+  }
 
   return (
     <BaseChat
