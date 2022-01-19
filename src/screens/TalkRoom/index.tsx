@@ -74,17 +74,19 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     }
   }, []);
 
-  const {
-    data: messageData,
-    error,
-    loading,
-  } = useOnThoughtTalkRoomMessageCreatedSubscription();
-  console.log(error);
-  console.log(loading);
-  if (messageData) {
-    console.log("updated message!");
-    console.log(messageData);
-  }
+  // const {
+  //   data: messageData,
+  //   error,
+  //   loading,
+  // } = useOnThoughtTalkRoomMessageCreatedSubscription({
+  //   onSubscriptionData: (data) => {
+  //     console.log("data");
+  //     console.log(data);
+  //   },
+  //   onSubscriptionComplete: () => {
+  //     console.log("comp");
+  //   },
+  // });
 
   const onSendPress = async (message: IMessage[]) => {
     await createMessageMutation({

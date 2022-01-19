@@ -4,7 +4,12 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { meVar, storageKeys, getMeStorageData } from "src/stores/me";
 import { useReactiveVar, useApolloClient } from "@apollo/client";
 import SplashScreen from "react-native-splash-screen";
-import { useInitialDataLazyQuery } from "src/generated/graphql";
+import {
+  useInitialDataLazyQuery,
+  OnThoughtTalkRoomMessageCreatedDocument,
+  ThoughtTalkRoomMessage,
+  OnThoughtTalkRoomMessageCreatedSubscription,
+} from "src/generated/graphql";
 import Spinner from "react-native-loading-spinner-overlay";
 import { spinnerVisibleVar } from "src/stores/spinner";
 import FastImage from "react-native-fast-image";
@@ -58,8 +63,47 @@ export const Root = () => {
   useEffect(() => {
     (async function () {
       if (checkedLogin && loggedIn && !called) {
-        const { data } = await initialDataQuery();
+        const { data, subscribeToMore } = await initialDataQuery();
         if (data) {
+          const unsubscribe = subscribeToMore<OnThoughtTalkRoomMessageCreatedSubscription>(
+            {
+              document: OnThoughtTalkRoomMessageCreatedDocument,
+              updateQuery: (prev, { subscriptionData }) => {
+                if (!subscriptionData) {
+                  return prev;
+                }
+
+                const roomId =
+                  subscriptionData.data.thoughtTalkRoomMessageCreated.roomId;
+                const rooms = prev.thoughtTalkRooms;
+                const targetRoom = rooms.find((r) => r.id === roomId);
+
+                if (!targetRoom) {
+                  return prev;
+                }
+
+                const newRoomData = {
+                  ...targetRoom,
+                  messages: [
+                    subscriptionData.data.thoughtTalkRoomMessageCreated,
+                    ...targetRoom.messages,
+                  ],
+                };
+
+                console.log(newRoomData.messages[0]);
+
+                const filtered = rooms.filter((r) => r.id !== roomId);
+                const newTalkListData = [newRoomData, ...filtered];
+
+                console.log(newTalkListData[0].messages[0]);
+
+                return {
+                  ...prev,
+                  thoughtTalkRooms: newTalkListData,
+                };
+              },
+            }
+          );
           meVar.loggedIn(true);
           meVar.id(data.me.id);
           if (data.me.imageUrl) {

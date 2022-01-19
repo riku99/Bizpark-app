@@ -80,6 +80,11 @@ const cache = new InMemoryCache({
             return incoming;
           },
         },
+        thoughtTalkRooms: {
+          merge: (existing = [], incoming) => {
+            return incoming;
+          },
+        },
       },
     },
   },

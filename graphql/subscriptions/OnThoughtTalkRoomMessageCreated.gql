@@ -4,9 +4,10 @@ subscription OnThoughtTalkRoomMessageCreated {
     text
     createdAt
     sender {
-      id
-      name
-      imageUrl
+      # id
+      # name
+      # imageUrl
+      ...UserParts
     }
     roomId
   }

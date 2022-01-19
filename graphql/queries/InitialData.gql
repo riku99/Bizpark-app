@@ -30,6 +30,7 @@ query InitialData {
       sender {
         ...UserParts
       }
+      roomId
     }
   }
 }
