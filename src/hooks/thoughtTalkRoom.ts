@@ -1,19 +1,18 @@
 import {
-  useGetThoughtTalkRoomsQuery,
   useGetThoughtTalkRoomsLazyQuery,
   OnThoughtTalkRoomMessageCreatedDocument,
   OnThoughtTalkRoomMessageCreatedSubscription,
 } from "src/generated/graphql";
-import { useCallback, useEffect } from "react";
+import { useEffect } from "react";
 import { gotInitialDataVar } from "src/stores/initialData";
-import { useReactiveVar, useApolloClient } from "@apollo/client";
+import { useReactiveVar } from "@apollo/client";
 
 export const useToughtTalkRoomsWithSubsciption = () => {
   const [query] = useGetThoughtTalkRoomsLazyQuery();
   const gotInitialData = useReactiveVar(gotInitialDataVar);
   useEffect(() => {
     (async function () {
-      if (gotInitialDataVar) {
+      if (gotInitialData) {
         const { subscribeToMore } = await query();
 
         const unsubscribe = subscribeToMore<OnThoughtTalkRoomMessageCreatedSubscription>(
@@ -41,6 +40,10 @@ export const useToughtTalkRoomsWithSubsciption = () => {
                 ],
               };
 
+              // console.log(
+              //   JSON.stringify(newRoomData.messages.slice(0, 2), null, 2)
+              // );
+
               const filtered = rooms.filter((r) => r.id !== roomId);
               const newTalkListData = [newRoomData, ...filtered];
 
@@ -51,7 +54,10 @@ export const useToughtTalkRoomsWithSubsciption = () => {
           }
         );
 
-        return unsubscribe;
+        return () => {
+          console.log("🍺 unsubscribe thoughtTalkRoomMessageSubscription");
+          unsubscribe();
+        };
       }
     })();
   }, [gotInitialData]);

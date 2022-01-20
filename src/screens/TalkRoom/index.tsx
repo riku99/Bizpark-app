@@ -32,14 +32,14 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation]);
 
-  const { data } = useGetThoughtTalkRoomQuery({
+  const { data: talkRoomData } = useGetThoughtTalkRoomQuery({
     variables: {
       id,
     },
-    fetchPolicy: "network-only",
+    // fetchPolicy: "network-only",
   });
 
-  const queryData = useMemo(() => {
+  const queryCacheData = useMemo(() => {
     const queryResult = client.cache.readQuery<
       GetThoughtTalkRoomsQueryResult["data"]
     >({
@@ -47,19 +47,14 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     });
 
     return queryResult.thoughtTalkRooms.find((t) => t.id === id);
-  }, [data]);
+  }, [client]);
 
-  useEffect(() => {
-    // console.log("🌙 list query data is");
-    // console.log(queryData.messages);
-  }, [queryData]);
-
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState<IMessage[]>([]);
 
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
-    if (queryData) {
-      const im: IMessage[] = queryData.messages.map((message) => ({
+    if (queryCacheData) {
+      const im: IMessage[] = queryCacheData.messages.map((message) => ({
         _id: message.id,
         text: message.text,
         createdAt: new Date(Number(message.createdAt)),
@@ -74,19 +69,28 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     }
   }, []);
 
-  // const {
-  //   data: messageData,
-  //   error,
-  //   loading,
-  // } = useOnThoughtTalkRoomMessageCreatedSubscription({
-  //   onSubscriptionData: (data) => {
-  //     console.log("data");
-  //     console.log(data);
-  //   },
-  //   onSubscriptionComplete: () => {
-  //     console.log("comp");
-  //   },
-  // });
+  useEffect(() => {
+    if (talkRoomData && messages.length) {
+      const newMessageData = talkRoomData.thoughtTalkRoom.messages[0];
+      if (messages[0]._id !== newMessageData.id) {
+        setMessages((currentData) => {
+          const { id, text, createdAt, sender } = newMessageData;
+          const newIMessageData: IMessage = {
+            _id: id,
+            text,
+            createdAt: new Date(Number(createdAt)),
+            user: {
+              _id: sender.id,
+              name: sender.name,
+              avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
+            },
+          };
+
+          return [newIMessageData, ...currentData];
+        });
+      }
+    }
+  }, [talkRoomData, messages]);
 
   const onSendPress = async (message: IMessage[]) => {
     await createMessageMutation({
