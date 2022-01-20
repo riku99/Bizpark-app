@@ -36,7 +36,8 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       id,
     },
-    // fetchPolicy: "network-only",
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "cache-first",
   });
 
   const queryCacheData = useMemo(() => {
