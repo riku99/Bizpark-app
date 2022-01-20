@@ -10,27 +10,6 @@ query InitialData {
     linkedin
   }
   thoughtTalkRooms: thoughtTalkRooms {
-    id
-    createdAt
-    members {
-      id
-      user {
-        ...UserParts
-      }
-    }
-    thought {
-      id
-      title
-      text
-    }
-    messages {
-      id
-      text
-      createdAt
-      sender {
-        ...UserParts
-      }
-      roomId
-    }
+    ...ThoughtTalkRoomsParts
   }
 }

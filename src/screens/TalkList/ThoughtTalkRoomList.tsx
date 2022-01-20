@@ -34,6 +34,8 @@ export const ThoughtTalkRoomList = React.memo(() => {
       }
     }
 
+    console.log(item.allMessageSeen);
+
     return (
       <Pressable
         px="4"
@@ -59,7 +61,9 @@ export const ThoughtTalkRoomList = React.memo(() => {
           </Box>
 
           {/* バッジ */}
-          <Box bg="pink" w="3" h="3" borderRadius="full" />
+          {!item.allMessageSeen && (
+            <Box bg="pink" w="3" h="3" borderRadius="full" />
+          )}
         </HStack>
 
         <Divider />
