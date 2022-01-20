@@ -4,12 +4,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { meVar, storageKeys, getMeStorageData } from "src/stores/me";
 import { useReactiveVar, useApolloClient } from "@apollo/client";
 import SplashScreen from "react-native-splash-screen";
-import {
-  useInitialDataLazyQuery,
-  OnThoughtTalkRoomMessageCreatedDocument,
-  ThoughtTalkRoomMessage,
-  OnThoughtTalkRoomMessageCreatedSubscription,
-} from "src/generated/graphql";
+import { useInitialDataLazyQuery } from "src/generated/graphql";
 import Spinner from "react-native-loading-spinner-overlay";
 import { spinnerVisibleVar } from "src/stores/spinner";
 import FastImage from "react-native-fast-image";
