@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
-import { MyPage } from "src/screens/MyPage";
 import { MyPageStack } from "./MyPage";
 import { TalkListScreen } from "src/screens/TalkList";
 import { NewsScreen } from "src/screens/News";
