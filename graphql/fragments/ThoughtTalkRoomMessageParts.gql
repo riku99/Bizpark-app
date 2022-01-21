@@ -1,0 +1,9 @@
+fragment ThoughtTalkRoomMessageParts on ThoughtTalkRoomMessage {
+  id
+  text
+  createdAt
+  sender {
+    ...UserParts
+  }
+  roomId
+}

@@ -1,13 +1,12 @@
 import React, { useLayoutEffect, useMemo, useEffect, useState } from "react";
 import { RootNavigationScreenProp } from "src/types";
-import { useApolloClient } from "@apollo/client";
+import { useApolloClient, gql } from "@apollo/client";
 import {
-  GetThoughtTalkRoomsDocument,
-  GetThoughtTalkRoomsQueryResult,
   useGetThoughtTalkRoomQuery,
   useMeQuery,
   useCreateThoughtTalkRoomMessageMutation,
   useCreateUserThoughtTalkRoomMessageSeenMutation,
+  ThoughtTalkRoomPartsFragment,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -43,15 +42,38 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     nextFetchPolicy: "cache-first",
   });
 
+  // ここ「一回のみのアクセス」でいいのならFragmentの方が都合いい
   const queryCacheData = useMemo(() => {
-    const queryResult = client.cache.readQuery<
-      GetThoughtTalkRoomsQueryResult["data"]
-    >({
-      query: GetThoughtTalkRoomsDocument,
-    });
+    const fragmentResult = client.cache.readFragment<ThoughtTalkRoomPartsFragment>(
+      {
+        id: client.cache.identify({
+          __typename: "ThoughtTalkRoom",
+          id,
+        }),
+        fragment: gql`
+          fragment TalkRoomMessage on ThoughtTalkRoom {
+            messages {
+              id
+              text
+              createdAt
+              sender {
+                id
+                name
+                imageUrl
+              }
+              roomId
+            }
+          }
+        `,
+      }
+    );
 
-    return queryResult.thoughtTalkRooms.find((t) => t.id === id);
+    return fragmentResult;
   }, [client]);
+
+  useEffect(() => {
+    console.log("queryCacheDataの変更がありました");
+  }, [queryCacheData]);
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -77,33 +99,39 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   // Subscriptionで更新されたデータ追加;
   useEffect(() => {
     if (talkRoomData) {
-      const subscribedMessage = talkRoomData.thoughtTalkRoom.messages[0];
+      const talkRoomDataMessages = talkRoomData.thoughtTalkRoom.messages;
+      if (talkRoomDataMessages.length) {
+        const subscribedMessage = talkRoomData.thoughtTalkRoom.messages[0];
 
-      // 自分で送信したメッセージのサブスクライブは無視する
-      if (subscribedMessage.sender.id === me.id) {
-        return;
-      }
-
-      setMessages((currentData) => {
-        const { id, text, createdAt, sender } = subscribedMessage;
-
-        if (currentData.length && currentData[0]._id === subscribedMessage.id) {
-          return currentData;
+        // 自分で送信したメッセージのサブスクライブは無視する
+        if (subscribedMessage.sender.id === me.id) {
+          return;
         }
 
-        const newIMessageData: IMessage = {
-          _id: id,
-          text,
-          createdAt: new Date(Number(createdAt)),
-          user: {
-            _id: sender.id,
-            name: sender.name,
-            avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
-          },
-        };
+        setMessages((currentData) => {
+          const { id, text, createdAt, sender } = subscribedMessage;
 
-        return [newIMessageData, ...currentData];
-      });
+          if (
+            currentData.length &&
+            currentData[0]._id === subscribedMessage.id
+          ) {
+            return currentData;
+          }
+
+          const newIMessageData: IMessage = {
+            _id: id,
+            text,
+            createdAt: new Date(Number(createdAt)),
+            user: {
+              _id: sender.id,
+              name: sender.name,
+              avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
+            },
+          };
+
+          return [newIMessageData, ...currentData];
+        });
+      }
     }
   }, [talkRoomData, setMessages]);
 

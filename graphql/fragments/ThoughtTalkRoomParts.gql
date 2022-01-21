@@ -1,4 +1,4 @@
-fragment ThoughtTalkRoomsParts on ThoughtTalkRoom {
+fragment ThoughtTalkRoomParts on ThoughtTalkRoom {
   id
   createdAt
   allMessageSeen
@@ -14,12 +14,6 @@ fragment ThoughtTalkRoomsParts on ThoughtTalkRoom {
     text
   }
   messages {
-    id
-    text
-    createdAt
-    sender {
-      ...UserParts
-    }
-    roomId
+    ...ThoughtTalkRoomMessageParts
   }
 }
