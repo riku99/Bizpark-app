@@ -10,6 +10,7 @@ import {
   useMeQuery,
   useOnThoughtTalkRoomMessageCreatedSubscription,
   useCreateThoughtTalkRoomMessageMutation,
+  useCreateUserThoughtTalkRoomMessageSeenMutation,
 } from "src/generated/graphql";
 import { GiftedChat, IMessage, Bubble } from "react-native-gifted-chat";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
@@ -25,6 +26,9 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     data: { me },
   } = useMeQuery();
   const [createMessageMutation] = useCreateThoughtTalkRoomMessageMutation();
+  const [
+    createSeenMutation,
+  ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -50,6 +54,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     return queryResult.thoughtTalkRooms.find((t) => t.id === id);
   }, [client]);
 
+  // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
 
   // 初回キャッシュのデータからのみここでセット
@@ -70,6 +75,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     }
   }, []);
 
+  // Subscriptionで更新されたデータ追加
   useEffect(() => {
     if (talkRoomData && messages.length) {
       const newMessageData = talkRoomData.thoughtTalkRoom.messages[0];
@@ -92,6 +98,29 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
       }
     }
   }, [talkRoomData, messages]);
+
+  // 既読の作成
+  useEffect(() => {
+    (async function () {
+      console.log(messages.length);
+      if (messages.length) {
+        console.log("👀 create seen");
+        const firstData = messages[0];
+        try {
+          await createSeenMutation({
+            variables: {
+              input: {
+                messageId: firstData._id as string,
+                roomId: id,
+              },
+            },
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    })();
+  }, [messages]);
 
   const onSendPress = async (message: IMessage[]) => {
     await createMessageMutation({

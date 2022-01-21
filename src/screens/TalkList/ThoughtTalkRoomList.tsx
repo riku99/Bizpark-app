@@ -34,8 +34,6 @@ export const ThoughtTalkRoomList = React.memo(() => {
       }
     }
 
-    console.log(item.allMessageSeen);
-
     return (
       <Pressable
         px="4"
@@ -54,7 +52,11 @@ export const ThoughtTalkRoomList = React.memo(() => {
               {item.thought.title ? item.thought.title : item.thought.text}
             </Text>
 
-            <Text color={textGray} h="7">
+            <Text
+              color={item.allMessageSeen ? textGray : undefined}
+              h="7"
+              fontWeight={!item.allMessageSeen ? "bold" : undefined}
+            >
               {item.messages.length ? item.messages[0].text : ""}
             </Text>
             <UserImages data={images} imageSize="8" mt="1" />

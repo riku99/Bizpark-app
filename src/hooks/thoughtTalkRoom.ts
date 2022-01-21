@@ -23,8 +23,6 @@ export const useToughtTalkRoomsWithSubsciption = () => {
                 return prev;
               }
 
-              console.log(subscriptionData);
-
               const roomId =
                 subscriptionData.data.thoughtTalkRoomMessageCreated.roomId;
               const rooms = prev.thoughtTalkRooms;
@@ -36,6 +34,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
 
               const newRoomData = {
                 ...targetRoom,
+                allMessageSeen: false,
                 messages: [
                   subscriptionData.data.thoughtTalkRoomMessageCreated,
                   ...targetRoom.messages,

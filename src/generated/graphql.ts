@@ -54,6 +54,11 @@ export type CreateUserInput = {
   name: Scalars['String'];
 };
 
+export type CreateUserThoughtTalkRoomMessageSeenInput = {
+  messageId: Scalars['ID'];
+  roomId: Scalars['ID'];
+};
+
 export enum CustomErrorResponseCode {
   AlreadyUnBloking = 'ALREADY_UN_BLOKING',
   AlreadyUserExisting = 'ALREADY_USER_EXISTING',
@@ -132,6 +137,7 @@ export type Mutation = {
   createThought: CreateThoughtResponse;
   createThoughtTalkRoomMessage: ThoughtTalkRoomMessage;
   createUser: Me;
+  createUserThoughtTalkRoomMessageSeen: ThoughtTalkRoom;
   deleteNewsPick: NewsPick;
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
@@ -173,6 +179,11 @@ export type MutationCreateThoughtTalkRoomMessageArgs = {
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
+};
+
+
+export type MutationCreateUserThoughtTalkRoomMessageSeenArgs = {
+  input: CreateUserThoughtTalkRoomMessageSeenInput;
 };
 
 
@@ -380,11 +391,11 @@ export type ThoughtEdge = {
 export type ThoughtTalkRoom = {
   __typename?: 'ThoughtTalkRoom';
   allMessageSeen?: Maybe<Scalars['Boolean']>;
-  createdAt: Scalars['String'];
+  createdAt?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
-  members: Array<Maybe<ThoughtTalkRoomMember>>;
-  messages: Array<Maybe<ThoughtTalkRoomMessage>>;
-  thought: Thought;
+  members?: Maybe<Array<Maybe<ThoughtTalkRoomMember>>>;
+  messages?: Maybe<Array<Maybe<ThoughtTalkRoomMessage>>>;
+  thought?: Maybe<Thought>;
   updatedAt?: Maybe<Scalars['String']>;
 };
 
@@ -462,7 +473,7 @@ export type PageInfoPartsFragment = { __typename?: 'PageInfo', hasNextPage: bool
 
 export type ThoughtPartsFragment = { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> };
 
-export type ThoughtTalkRoomsPartsFragment = { __typename?: 'ThoughtTalkRoom', id: string, createdAt: string, allMessageSeen?: boolean | null | undefined, members: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined } | null | undefined>, thought: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string }, messages: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined> };
+export type ThoughtTalkRoomsPartsFragment = { __typename?: 'ThoughtTalkRoom', id: string, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string } | null | undefined, messages?: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined> | null | undefined };
 
 export type ThoughtsConnectionPartsFragment = { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } };
 
@@ -510,6 +521,13 @@ export type CreateUserMutationVariables = Exact<{
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'Me', id: string, name: string } };
 
+export type CreateUserThoughtTalkRoomMessageSeenMutationVariables = Exact<{
+  input: CreateUserThoughtTalkRoomMessageSeenInput;
+}>;
+
+
+export type CreateUserThoughtTalkRoomMessageSeenMutation = { __typename?: 'Mutation', createUserThoughtTalkRoomMessageSeen: { __typename?: 'ThoughtTalkRoom', id: string, allMessageSeen?: boolean | null | undefined } };
+
 export type DeleteNewsPickMutationVariables = Exact<{
   input: DeleteNewsPickInput;
 }>;
@@ -543,7 +561,7 @@ export type JoinThoughtTalkMutationVariables = Exact<{
 }>;
 
 
-export type JoinThoughtTalkMutation = { __typename?: 'Mutation', joinThoughtTalk: { __typename?: 'ThoughtTalkRoom', id: string, createdAt: string, members: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined } | null | undefined>, thought: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string }, messages: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined> } };
+export type JoinThoughtTalkMutation = { __typename?: 'Mutation', joinThoughtTalk: { __typename?: 'ThoughtTalkRoom', id: string, createdAt?: string | null | undefined, members?: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string } | null | undefined, messages?: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined> | null | undefined } };
 
 export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -603,17 +621,17 @@ export type GetThoughtTalkRoomQueryVariables = Exact<{
 }>;
 
 
-export type GetThoughtTalkRoomQuery = { __typename?: 'Query', thoughtTalkRoom: { __typename?: 'ThoughtTalkRoom', id: string, createdAt: string, members: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined>, thought: { __typename?: 'Thought', id: string }, messages: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } } | null | undefined> } };
+export type GetThoughtTalkRoomQuery = { __typename?: 'Query', thoughtTalkRoom: { __typename?: 'ThoughtTalkRoom', id: string, createdAt?: string | null | undefined, members?: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, thought?: { __typename?: 'Thought', id: string } | null | undefined, messages?: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } } | null | undefined> | null | undefined } };
 
 export type GetThoughtTalkRoomsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetThoughtTalkRoomsQuery = { __typename?: 'Query', thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: string, createdAt: string, allMessageSeen?: boolean | null | undefined, members: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined } | null | undefined>, thought: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string }, messages: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined> } | null | undefined> };
+export type GetThoughtTalkRoomsQuery = { __typename?: 'Query', thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: string, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string } | null | undefined, messages?: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined> | null | undefined } | null | undefined> };
 
 export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type InitialDataQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined }, thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: string, createdAt: string, allMessageSeen?: boolean | null | undefined, members: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined } | null | undefined>, thought: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string }, messages: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined> } | null | undefined> };
+export type InitialDataQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined }, thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: string, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string } | null | undefined, messages?: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined> | null | undefined } | null | undefined> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -994,6 +1012,40 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const CreateUserThoughtTalkRoomMessageSeenDocument = gql`
+    mutation CreateUserThoughtTalkRoomMessageSeen($input: CreateUserThoughtTalkRoomMessageSeenInput!) {
+  createUserThoughtTalkRoomMessageSeen(input: $input) {
+    id
+    allMessageSeen
+  }
+}
+    `;
+export type CreateUserThoughtTalkRoomMessageSeenMutationFn = Apollo.MutationFunction<CreateUserThoughtTalkRoomMessageSeenMutation, CreateUserThoughtTalkRoomMessageSeenMutationVariables>;
+
+/**
+ * __useCreateUserThoughtTalkRoomMessageSeenMutation__
+ *
+ * To run a mutation, you first call `useCreateUserThoughtTalkRoomMessageSeenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserThoughtTalkRoomMessageSeenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserThoughtTalkRoomMessageSeenMutation, { data, loading, error }] = useCreateUserThoughtTalkRoomMessageSeenMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateUserThoughtTalkRoomMessageSeenMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserThoughtTalkRoomMessageSeenMutation, CreateUserThoughtTalkRoomMessageSeenMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserThoughtTalkRoomMessageSeenMutation, CreateUserThoughtTalkRoomMessageSeenMutationVariables>(CreateUserThoughtTalkRoomMessageSeenDocument, options);
+      }
+export type CreateUserThoughtTalkRoomMessageSeenMutationHookResult = ReturnType<typeof useCreateUserThoughtTalkRoomMessageSeenMutation>;
+export type CreateUserThoughtTalkRoomMessageSeenMutationResult = Apollo.MutationResult<CreateUserThoughtTalkRoomMessageSeenMutation>;
+export type CreateUserThoughtTalkRoomMessageSeenMutationOptions = Apollo.BaseMutationOptions<CreateUserThoughtTalkRoomMessageSeenMutation, CreateUserThoughtTalkRoomMessageSeenMutationVariables>;
 export const DeleteNewsPickDocument = gql`
     mutation DeleteNewsPick($input: DeleteNewsPickInput!) {
   deleteNewsPick(input: $input) {

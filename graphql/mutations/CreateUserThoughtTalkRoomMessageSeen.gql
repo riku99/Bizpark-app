@@ -1,0 +1,8 @@
+mutation CreateUserThoughtTalkRoomMessageSeen(
+  $input: CreateUserThoughtTalkRoomMessageSeenInput!
+) {
+  createUserThoughtTalkRoomMessageSeen(input: $input) {
+    id
+    allMessageSeen
+  }
+}
