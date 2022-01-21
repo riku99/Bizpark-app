@@ -1,23 +1,22 @@
 import React, { useLayoutEffect, useMemo, useEffect, useState } from "react";
-import { Box } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { useApolloClient } from "@apollo/client";
 import {
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQueryResult,
-  GetThoughtTalkRoomQuery,
   useGetThoughtTalkRoomQuery,
   useMeQuery,
-  useOnThoughtTalkRoomMessageCreatedSubscription,
   useCreateThoughtTalkRoomMessageMutation,
   useCreateUserThoughtTalkRoomMessageSeenMutation,
 } from "src/generated/graphql";
-import { GiftedChat, IMessage, Bubble } from "react-native-gifted-chat";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
 import { NO_USER_IMAGE_URL } from "src/constants";
+import { createRandomStr } from "src/utils";
 
 type Props = RootNavigationScreenProp<"TalkRoom">;
+
+const isTmp = (str: string) => str.slice(0, 3) === "tmp";
 
 export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
@@ -75,36 +74,43 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     }
   }, []);
 
-  // Subscriptionで更新されたデータ追加
+  // Subscriptionで更新されたデータ追加;
   useEffect(() => {
-    if (talkRoomData && messages.length) {
-      const newMessageData = talkRoomData.thoughtTalkRoom.messages[0];
-      if (messages[0]._id !== newMessageData.id) {
-        setMessages((currentData) => {
-          const { id, text, createdAt, sender } = newMessageData;
-          const newIMessageData: IMessage = {
-            _id: id,
-            text,
-            createdAt: new Date(Number(createdAt)),
-            user: {
-              _id: sender.id,
-              name: sender.name,
-              avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
-            },
-          };
+    if (talkRoomData) {
+      const subscribedMessage = talkRoomData.thoughtTalkRoom.messages[0];
 
-          return [newIMessageData, ...currentData];
-        });
+      // 自分で送信したメッセージのサブスクライブは無視する
+      if (subscribedMessage.sender.id === me.id) {
+        return;
       }
+
+      setMessages((currentData) => {
+        const { id, text, createdAt, sender } = subscribedMessage;
+
+        if (currentData.length && currentData[0]._id === subscribedMessage.id) {
+          return currentData;
+        }
+
+        const newIMessageData: IMessage = {
+          _id: id,
+          text,
+          createdAt: new Date(Number(createdAt)),
+          user: {
+            _id: sender.id,
+            name: sender.name,
+            avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
+          },
+        };
+
+        return [newIMessageData, ...currentData];
+      });
     }
-  }, [talkRoomData, messages]);
+  }, [talkRoomData, setMessages]);
 
   // 既読の作成
   useEffect(() => {
     (async function () {
-      console.log(messages.length);
-      if (messages.length) {
-        console.log("👀 create seen");
+      if (messages.length && !isTmp(messages[0]._id as string)) {
         const firstData = messages[0];
         try {
           await createSeenMutation({
@@ -122,15 +128,58 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     })();
   }, [messages]);
 
-  const onSendPress = async (message: IMessage[]) => {
-    await createMessageMutation({
-      variables: {
-        input: {
-          text: message[0].text,
-          roomId: id,
+  const onSendPress = async (inputMessages: IMessage[]) => {
+    const newMessageData = inputMessages[0];
+
+    const tempId = "tmp" + createRandomStr();
+
+    setMessages((currentData) => {
+      const { text, createdAt } = newMessageData;
+      const newTempIMessageData: IMessage = {
+        _id: tempId,
+        text,
+        createdAt: new Date(Number(createdAt)),
+        user: {
+          _id: me.id,
+          name: me.name,
+          avatar: me.imageUrl ?? NO_USER_IMAGE_URL,
         },
-      },
+      };
+
+      return [newTempIMessageData, ...currentData];
     });
+    try {
+      const { data } = await createMessageMutation({
+        variables: {
+          input: {
+            text: inputMessages[0].text,
+            roomId: id,
+          },
+        },
+      });
+
+      const messageData = data.createThoughtTalkRoomMessage;
+
+      const newIMessageData: IMessage = {
+        _id: messageData.id,
+        text: messageData.text,
+        createdAt: new Date(Number(messageData.createdAt)),
+        user: {
+          _id: me.id,
+          name: me.name,
+          avatar: me.imageUrl,
+        },
+      };
+
+      setMessages((currentData) => {
+        const prev = currentData.filter((c) => c._id !== tempId);
+        return [newIMessageData, ...prev];
+      });
+    } catch (e) {
+      setMessages((c) => {
+        return c.filter((_c) => _c._id !== tempId);
+      });
+    }
   };
 
   return (
