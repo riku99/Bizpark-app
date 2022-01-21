@@ -1,4 +1,3 @@
-import { Box } from "native-base";
 import React, { useLayoutEffect } from "react";
 import { RootNavigationScreenProp } from "src/types";
 import { ThoughtTalkRoomList } from "./ThoughtTalkRoomList";

@@ -4,9 +4,12 @@ import { MyPage } from "src/screens/MyPage";
 import { MyPageStack } from "./MyPage";
 import { TalkListScreen } from "src/screens/TalkList";
 import { NewsScreen } from "src/screens/News";
-import { useColorModeValue, useTheme } from "native-base";
-import React from "react";
+import { useColorModeValue, useTheme, Box } from "native-base";
+import React, { useMemo } from "react";
 import { HomeStack } from "./Home";
+import { useGetThoughtTalkRoomsQuery } from "src/generated/graphql";
+import { Badge } from "src/components/Badge";
+import { StyleSheet } from "react-native";
 
 type TabParamList = {
   Home: undefined;
@@ -19,6 +22,20 @@ const Tab = createBottomTabNavigator<TabParamList>();
 
 export const BottomTab = () => {
   const { colors } = useTheme();
+
+  const { data } = useGetThoughtTalkRoomsQuery({
+    fetchPolicy: "cache-only",
+  });
+
+  const talkTabBadge = useMemo(() => {
+    if (data) {
+      const hasNotSeenMessageRoom = data.thoughtTalkRooms.filter(
+        (room) => !room.allMessageSeen
+      );
+
+      return !!hasNotSeenMessageRoom.length;
+    }
+  }, [data]);
 
   return (
     <Tab.Navigator
@@ -62,7 +79,10 @@ export const BottomTab = () => {
         component={TalkListScreen}
         options={{
           tabBarIcon: ({ color }) => (
-            <AntDesign name="message1" size={ICON_SIZE} color={color} />
+            <Box>
+              <AntDesign name="message1" size={ICON_SIZE} color={color} />
+              {talkTabBadge && <Badge containerStyle={styles.badge} />}
+            </Box>
           ),
           tabBarLabel: "トーク",
         }}
@@ -84,3 +104,11 @@ export const BottomTab = () => {
 };
 
 const ICON_SIZE = 24;
+
+const styles = StyleSheet.create({
+  badge: {
+    position: "absolute",
+    right: 0,
+    transform: [{ translateX: 10 }],
+  },
+});

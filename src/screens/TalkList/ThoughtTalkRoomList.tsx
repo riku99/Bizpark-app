@@ -15,6 +15,7 @@ import {
 import { UserImages } from "src/components/UserImages";
 import { RootNavigationProp } from "src/types";
 import { useNavigation } from "@react-navigation/native";
+import { Badge } from "src/components/Badge";
 
 type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 
@@ -63,9 +64,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
           </Box>
 
           {/* バッジ */}
-          {!item.allMessageSeen && (
-            <Box bg="pink" w="3" h="3" borderRadius="full" />
-          )}
+          {!item.allMessageSeen && <Badge size="3" />}
         </HStack>
 
         <Divider />
