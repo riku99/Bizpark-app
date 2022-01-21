@@ -11,6 +11,7 @@ import {
 import {
   useGetThoughtTalkRoomsQuery,
   GetThoughtTalkRoomsQueryResult,
+  useMeQuery,
 } from "src/generated/graphql";
 import { UserImages } from "src/components/UserImages";
 import { RootNavigationProp } from "src/types";
@@ -24,9 +25,12 @@ export const ThoughtTalkRoomList = React.memo(() => {
   const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
   const textGray = useColorModeValue("lt.textGray", "dt.textGray");
   const navigation = useNavigation<RootNavigationProp<"Tab">>();
+  const {
+    data: { me },
+  } = useMeQuery();
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
-    let images: string[] = [];
+    let images: string[] = [me.imageUrl]; // いっちゃん始めは自分のアイコン
 
     for (let i = 0; i <= 7; i++) {
       const member = item.members[i];
