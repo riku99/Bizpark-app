@@ -3,6 +3,8 @@ import {
   OnThoughtTalkRoomMessageCreatedDocument,
   OnThoughtTalkRoomMessageCreatedSubscription,
   ThoughtTalkRoomPartsFragment,
+  GetThoughtTalkRoomsDocument,
+  GetThoughtTalkRoomsQuery,
 } from "src/generated/graphql";
 import { useEffect, useCallback } from "react";
 import { gotInitialDataVar } from "src/stores/initialData";
@@ -88,4 +90,24 @@ export const useThoughtTalkRoomReadFragment = ({ id }: { id: string }) => {
       }
     `,
   });
+};
+
+export const useFindThoughtTalkRoomsByThoughtId = ({
+  thoughtId,
+}: {
+  thoughtId: string;
+}) => {
+  const client = useApolloClient();
+
+  const result = client.cache.readQuery<GetThoughtTalkRoomsQuery>({
+    query: GetThoughtTalkRoomsDocument,
+  });
+
+  if (result) {
+    const targetData = result.thoughtTalkRooms.find(
+      (t) => t.thought.id === thoughtId
+    );
+
+    return targetData;
+  }
 };

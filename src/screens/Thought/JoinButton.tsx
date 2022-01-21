@@ -7,48 +7,58 @@ import {
 } from "src/generated/graphql";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
-import { useApolloClient } from "@apollo/client";
+import { useFindThoughtTalkRoomsByThoughtId } from "src/hooks/thoughtTalkRoom";
 
 type Props = { thoughtId: string; contributorId: string };
 
 export const JoinButton = ({ thoughtId, contributorId }: Props) => {
   const [joinMutation] = useJoinThoughtTalkMutation();
   const navigation = useNavigation<RootNavigationProp<"Thought">>();
+  const existingData = useFindThoughtTalkRoomsByThoughtId({ thoughtId });
 
   const onPress = async () => {
+    let roomId: string | null = null;
     // まず既にローカルでデータ持ってるか確認
 
-    // ない場合サーバーにリクエスト
-    const { data } = await joinMutation({
-      variables: {
-        input: {
-          thoughtId,
-          contributorId,
+    if (existingData) {
+      console.log(existingData);
+      roomId = existingData.id;
+    } else {
+      // ない場合サーバーにリクエスト
+      const { data } = await joinMutation({
+        variables: {
+          input: {
+            thoughtId,
+            contributorId,
+          },
         },
-      },
-      update: (cache, { data: responseData }) => {
-        const queryData = cache.readQuery<GetThoughtTalkRoomsQuery>({
-          query: GetThoughtTalkRoomsDocument,
-        });
-
-        if (queryData) {
-          cache.writeQuery({
+        update: (cache, { data: responseData }) => {
+          const queryData = cache.readQuery<GetThoughtTalkRoomsQuery>({
             query: GetThoughtTalkRoomsDocument,
-            data: {
-              thoughtTalkRooms: [
-                responseData.joinThoughtTalk,
-                ...queryData.thoughtTalkRooms,
-              ],
-            },
           });
-        }
-      },
-    });
 
-    // 取得したidでルームに移動(メッセージを送っていなくても追加する。リロードしたらメッセージを送っていないルームは取得できないようにする)
-    if (data) {
+          if (queryData) {
+            cache.writeQuery({
+              query: GetThoughtTalkRoomsDocument,
+              data: {
+                thoughtTalkRooms: [
+                  responseData.joinThoughtTalk,
+                  ...queryData.thoughtTalkRooms,
+                ],
+              },
+            });
+          }
+        },
+      });
+
+      if (data) {
+        roomId = data.joinThoughtTalk.id;
+      }
+    }
+
+    if (roomId) {
       navigation.navigate("TalkRoom", {
-        id: data.joinThoughtTalk.id,
+        id: roomId,
       });
     }
   };
