@@ -1,25 +1,5 @@
 mutation JoinThoughtTalk($input: JoinTalkInput!) {
   joinThoughtTalk(input: $input) {
-    id
-    createdAt
-    members {
-      id
-      user {
-        ...UserParts
-      }
-    }
-    thought {
-      id
-      title
-      text
-    }
-    messages {
-      id
-      text
-      createdAt
-      sender {
-        ...UserParts
-      }
-    }
+    ...ThoughtTalkRoomParts
   }
 }

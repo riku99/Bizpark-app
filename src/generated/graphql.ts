@@ -563,7 +563,7 @@ export type JoinThoughtTalkMutationVariables = Exact<{
 }>;
 
 
-export type JoinThoughtTalkMutation = { __typename?: 'Mutation', joinThoughtTalk: { __typename?: 'ThoughtTalkRoom', id: string, createdAt?: string | null | undefined, members?: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string } | null | undefined, messages?: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined> | null | undefined } };
+export type JoinThoughtTalkMutation = { __typename?: 'Mutation', joinThoughtTalk: { __typename?: 'ThoughtTalkRoom', id: string, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string } | null | undefined, messages?: Array<{ __typename?: 'ThoughtTalkRoomMessage', id: string, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined> | null | undefined } };
 
 export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -1192,30 +1192,10 @@ export type FollowMutationOptions = Apollo.BaseMutationOptions<FollowMutation, F
 export const JoinThoughtTalkDocument = gql`
     mutation JoinThoughtTalk($input: JoinTalkInput!) {
   joinThoughtTalk(input: $input) {
-    id
-    createdAt
-    members {
-      id
-      user {
-        ...UserParts
-      }
-    }
-    thought {
-      id
-      title
-      text
-    }
-    messages {
-      id
-      text
-      createdAt
-      sender {
-        ...UserParts
-      }
-    }
+    ...ThoughtTalkRoomParts
   }
 }
-    ${UserPartsFragmentDoc}`;
+    ${ThoughtTalkRoomPartsFragmentDoc}`;
 export type JoinThoughtTalkMutationFn = Apollo.MutationFunction<JoinThoughtTalkMutation, JoinThoughtTalkMutationVariables>;
 
 /**

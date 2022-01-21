@@ -12,6 +12,7 @@ import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
 import { NO_USER_IMAGE_URL } from "src/constants";
 import { createRandomStr } from "src/utils";
+import { useThoughtTalkRoomReadFragment } from "src/hooks/thoughtTalkRoom";
 
 type Props = RootNavigationScreenProp<"TalkRoom">;
 
@@ -19,7 +20,6 @@ const isTmp = (str: string) => str.slice(0, 3) === "tmp";
 
 export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
-  const client = useApolloClient();
   const {
     data: { me },
   } = useMeQuery();
@@ -27,6 +27,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const [
     createSeenMutation,
   ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
+  const queryCacheData = useThoughtTalkRoomReadFragment({ id });
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -41,39 +42,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-first",
   });
-
-  // ここ「一回のみのアクセス」でいいのならFragmentの方が都合いい
-  const queryCacheData = useMemo(() => {
-    const fragmentResult = client.cache.readFragment<ThoughtTalkRoomPartsFragment>(
-      {
-        id: client.cache.identify({
-          __typename: "ThoughtTalkRoom",
-          id,
-        }),
-        fragment: gql`
-          fragment TalkRoomMessage on ThoughtTalkRoom {
-            messages {
-              id
-              text
-              createdAt
-              sender {
-                id
-                name
-                imageUrl
-              }
-              roomId
-            }
-          }
-        `,
-      }
-    );
-
-    return fragmentResult;
-  }, [client]);
-
-  useEffect(() => {
-    console.log("queryCacheDataの変更がありました");
-  }, [queryCacheData]);
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -139,6 +107,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     (async function () {
       if (messages.length && !isTmp(messages[0]._id as string)) {
+        console.log("👀 create seen data");
         const firstData = messages[0];
         try {
           await createSeenMutation({

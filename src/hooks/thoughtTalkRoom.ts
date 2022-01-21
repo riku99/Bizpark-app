@@ -2,10 +2,11 @@ import {
   useGetThoughtTalkRoomsLazyQuery,
   OnThoughtTalkRoomMessageCreatedDocument,
   OnThoughtTalkRoomMessageCreatedSubscription,
+  ThoughtTalkRoomPartsFragment,
 } from "src/generated/graphql";
-import { useEffect } from "react";
+import { useEffect, useCallback } from "react";
 import { gotInitialDataVar } from "src/stores/initialData";
-import { useReactiveVar } from "@apollo/client";
+import { useReactiveVar, useApolloClient, gql } from "@apollo/client";
 
 export const useToughtTalkRoomsWithSubsciption = () => {
   const [query] = useGetThoughtTalkRoomsLazyQuery();
@@ -62,4 +63,29 @@ export const useToughtTalkRoomsWithSubsciption = () => {
       }
     })();
   }, [gotInitialData]);
+};
+
+export const useThoughtTalkRoomReadFragment = ({ id }: { id: string }) => {
+  const client = useApolloClient();
+  return client.cache.readFragment<ThoughtTalkRoomPartsFragment>({
+    id: client.cache.identify({
+      __typename: "ThoughtTalkRoom",
+      id,
+    }),
+    fragment: gql`
+      fragment ThoughtTalkRoomMessage on ThoughtTalkRoom {
+        messages {
+          id
+          text
+          createdAt
+          sender {
+            id
+            name
+            imageUrl
+          }
+          roomId
+        }
+      }
+    `,
+  });
 };
