@@ -1,0 +1,5 @@
+mutation GetOutThoughtTalkRoomMember(
+  $input: DeleteThoughtTalkRoomMemberInput!
+) {
+  deleteThoughtTalkRoomMember(input: $input)
+}

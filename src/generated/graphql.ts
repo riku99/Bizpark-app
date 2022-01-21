@@ -79,6 +79,10 @@ export type DeleteThoughtResponse = {
   id: Scalars['ID'];
 };
 
+export type DeleteThoughtTalkRoomMemberInput = {
+  roomId: Scalars['ID'];
+};
+
 export type Follow = {
   __typename?: 'Follow';
   followeeId: Scalars['ID'];
@@ -141,6 +145,7 @@ export type Mutation = {
   deleteNewsPick: NewsPick;
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
+  deleteThoughtTalkRoomMember?: Maybe<Scalars['Boolean']>;
   follow: User;
   joinThoughtTalk: ThoughtTalkRoom;
   signOut: SignOutResponse;
@@ -199,6 +204,11 @@ export type MutationDeletePickArgs = {
 
 export type MutationDeleteThoughtArgs = {
   input: DeleteThoughtInput;
+};
+
+
+export type MutationDeleteThoughtTalkRoomMemberArgs = {
+  input: DeleteThoughtTalkRoomMemberInput;
 };
 
 
@@ -557,6 +567,13 @@ export type FollowMutationVariables = Exact<{
 
 
 export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+
+export type GetOutThoughtTalkRoomMemberMutationVariables = Exact<{
+  input: DeleteThoughtTalkRoomMemberInput;
+}>;
+
+
+export type GetOutThoughtTalkRoomMemberMutation = { __typename?: 'Mutation', deleteThoughtTalkRoomMember?: boolean | null | undefined };
 
 export type JoinThoughtTalkMutationVariables = Exact<{
   input: JoinTalkInput;
@@ -1189,6 +1206,37 @@ export function useFollowMutation(baseOptions?: Apollo.MutationHookOptions<Follo
 export type FollowMutationHookResult = ReturnType<typeof useFollowMutation>;
 export type FollowMutationResult = Apollo.MutationResult<FollowMutation>;
 export type FollowMutationOptions = Apollo.BaseMutationOptions<FollowMutation, FollowMutationVariables>;
+export const GetOutThoughtTalkRoomMemberDocument = gql`
+    mutation GetOutThoughtTalkRoomMember($input: DeleteThoughtTalkRoomMemberInput!) {
+  deleteThoughtTalkRoomMember(input: $input)
+}
+    `;
+export type GetOutThoughtTalkRoomMemberMutationFn = Apollo.MutationFunction<GetOutThoughtTalkRoomMemberMutation, GetOutThoughtTalkRoomMemberMutationVariables>;
+
+/**
+ * __useGetOutThoughtTalkRoomMemberMutation__
+ *
+ * To run a mutation, you first call `useGetOutThoughtTalkRoomMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGetOutThoughtTalkRoomMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [getOutThoughtTalkRoomMemberMutation, { data, loading, error }] = useGetOutThoughtTalkRoomMemberMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetOutThoughtTalkRoomMemberMutation(baseOptions?: Apollo.MutationHookOptions<GetOutThoughtTalkRoomMemberMutation, GetOutThoughtTalkRoomMemberMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GetOutThoughtTalkRoomMemberMutation, GetOutThoughtTalkRoomMemberMutationVariables>(GetOutThoughtTalkRoomMemberDocument, options);
+      }
+export type GetOutThoughtTalkRoomMemberMutationHookResult = ReturnType<typeof useGetOutThoughtTalkRoomMemberMutation>;
+export type GetOutThoughtTalkRoomMemberMutationResult = Apollo.MutationResult<GetOutThoughtTalkRoomMemberMutation>;
+export type GetOutThoughtTalkRoomMemberMutationOptions = Apollo.BaseMutationOptions<GetOutThoughtTalkRoomMemberMutation, GetOutThoughtTalkRoomMemberMutationVariables>;
 export const JoinThoughtTalkDocument = gql`
     mutation JoinThoughtTalk($input: JoinTalkInput!) {
   joinThoughtTalk(input: $input) {
