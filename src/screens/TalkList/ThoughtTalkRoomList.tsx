@@ -13,6 +13,8 @@ import {
   GetThoughtTalkRoomsQueryResult,
   useMeQuery,
   useGetOutThoughtTalkRoomMemberMutation,
+  GetThoughtTalkRoomsDocument,
+  GetThoughtTalkRoomsQuery,
 } from "src/generated/graphql";
 import { UserImages } from "src/components/UserImages";
 import { RootNavigationProp } from "src/types";
@@ -21,6 +23,7 @@ import { Badge } from "src/components/Badge";
 import { InstaLikeModal } from "src/components/InstaLikeModal";
 import { Alert } from "react-native";
 import { useToast } from "react-native-toast-notifications";
+import * as Haptics from "expo-haptics";
 
 type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 
@@ -62,6 +65,24 @@ export const ThoughtTalkRoomList = React.memo(() => {
                         roomId: modalData.roomId,
                       },
                     },
+                    update: (cache) => {
+                      const queryResult = cache.readQuery<GetThoughtTalkRoomsQuery>(
+                        {
+                          query: GetThoughtTalkRoomsDocument,
+                        }
+                      );
+
+                      if (queryResult) {
+                        const filteredData = queryResult.thoughtTalkRooms.filter(
+                          (t) => t.id !== modalData.roomId
+                        );
+
+                        cache.writeQuery({
+                          query: GetThoughtTalkRoomsDocument,
+                          data: { thoughtTalkRooms: filteredData },
+                        });
+                      }
+                    },
                   });
 
                   setModalData(null);
@@ -82,7 +103,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
 
     for (let i = 0; i <= 7; i++) {
       const member = item.members[i];
-      if (member) {
+      if (member && member.user.id !== me.id) {
         images.push(member.user.imageUrl);
       }
     }
@@ -99,7 +120,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
           });
         }}
         onLongPress={() => {
-          console.log("longpress");
+          Haptics.selectionAsync();
           setModalData({ roomId: item.id });
         }}
       >
