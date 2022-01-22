@@ -13,16 +13,16 @@ query GetThoughtTalkRoom($id: ID!) {
     thought {
       id
     }
-    messages {
-      id
-      text
-      createdAt
-      sender {
-        id
-        name
-        imageUrl
+    messages(first: 20) {
+      edges {
+        node {
+          ...ThoughtTalkRoomMessageParts
+        }
+        cursor
       }
-      roomId
+      pageInfo {
+        ...PageInfoParts
+      }
     }
   }
 }

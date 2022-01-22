@@ -101,6 +101,7 @@ export const ApolloProvider = ({ children }: Props) => {
 
       console.log("This log is output from errorLink");
       console.error(code);
+      console.log(firstError.message);
 
       if (error.networkError) {
         toast.show("ネットワークに接続されていません");

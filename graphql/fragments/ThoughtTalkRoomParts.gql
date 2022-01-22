@@ -13,7 +13,15 @@ fragment ThoughtTalkRoomParts on ThoughtTalkRoom {
     title
     text
   }
-  messages {
-    ...ThoughtTalkRoomMessageParts
+  messages(first: 20) {
+    edges {
+      node {
+        ...ThoughtTalkRoomMessageParts
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
   }
 }
