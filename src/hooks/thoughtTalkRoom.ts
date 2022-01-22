@@ -76,16 +76,26 @@ export const useThoughtTalkRoomReadFragment = ({ id }: { id: string }) => {
     }),
     fragment: gql`
       fragment ThoughtTalkRoomMessage on ThoughtTalkRoom {
-        messages {
-          id
-          text
-          createdAt
-          sender {
-            id
-            name
-            imageUrl
+        messages(first: 20) {
+          edges {
+            node {
+              id
+              text
+              createdAt
+              sender {
+                id
+                name
+                imageUrl
+              }
+              roomId
+            }
           }
-          roomId
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
+          }
         }
       }
     `,

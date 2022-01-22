@@ -10,11 +10,11 @@ import {
 } from "native-base";
 import {
   useGetThoughtTalkRoomsQuery,
-  GetThoughtTalkRoomsQueryResult,
   useMeQuery,
   useGetOutThoughtTalkRoomMemberMutation,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,
+  GetThoughtTalkRoomsQueryResult,
 } from "src/generated/graphql";
 import { UserImages } from "src/components/UserImages";
 import { RootNavigationProp } from "src/types";
@@ -24,6 +24,7 @@ import { InstaLikeModal } from "src/components/InstaLikeModal";
 import { Alert } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import * as Haptics from "expo-haptics";
+import { logJson } from "src/utils";
 
 type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 
@@ -99,7 +100,10 @@ export const ThoughtTalkRoomList = React.memo(() => {
   ];
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
+    logJson(item);
     let images: string[] = [me.imageUrl]; // いっちゃん始めは自分のアイコン
+
+    const { edges } = item.messages;
 
     for (let i = 0; i <= 7; i++) {
       const member = item.members[i];
@@ -135,7 +139,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
               h="7"
               fontWeight={!item.allMessageSeen ? "bold" : undefined}
             >
-              {item.messages.length ? item.messages[0].text : ""}
+              {edges.length ? edges[0].node.text : ""}
             </Text>
             <UserImages data={images} imageSize="8" mt="1" />
           </Box>

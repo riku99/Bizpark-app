@@ -13,6 +13,7 @@ import { BaseChat } from "src/components/BaseChat";
 import { NO_USER_IMAGE_URL } from "src/constants";
 import { createRandomStr } from "src/utils";
 import { useThoughtTalkRoomReadFragment } from "src/hooks/thoughtTalkRoom";
+import { logJson } from "src/utils";
 
 type Props = RootNavigationScreenProp<"TalkRoom">;
 
@@ -35,95 +36,98 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation]);
 
-  const { data: talkRoomData } = useGetThoughtTalkRoomQuery({
-    variables: {
-      id,
-    },
-    fetchPolicy: "network-only",
-    nextFetchPolicy: "cache-first",
-  });
+  // const { data: talkRoomData } = useGetThoughtTalkRoomQuery({
+  //   variables: {
+  //     id,
+  //   },
+  //   fetchPolicy: "network-only",
+  //   nextFetchPolicy: "cache-first",
+  // });
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
 
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
+    logJson(queryCacheData);
     if (queryCacheData) {
-      const im: IMessage[] = queryCacheData.messages.map((message) => ({
-        _id: message.id,
-        text: message.text,
-        createdAt: new Date(Number(message.createdAt)),
-        user: {
-          _id: message.sender.id,
-          name: message.sender.name,
-          avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
-        },
-      }));
+      const im: IMessage[] = queryCacheData.messages.edges.map(
+        ({ node: message }) => ({
+          _id: message.id,
+          text: message.text,
+          createdAt: new Date(Number(message.createdAt)),
+          user: {
+            _id: message.sender.id,
+            name: message.sender.name,
+            avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
+          },
+        })
+      );
 
       setMessages(im);
     }
   }, []);
 
   // Subscriptionで更新されたデータ追加;
-  useEffect(() => {
-    if (talkRoomData) {
-      const talkRoomDataMessages = talkRoomData.thoughtTalkRoom.messages;
-      if (talkRoomDataMessages.length) {
-        const subscribedMessage = talkRoomData.thoughtTalkRoom.messages[0];
+  // useEffect(() => {
+  //   if (talkRoomData) {
+  //     const talkRoomDataMessages = talkRoomData.thoughtTalkRoom.messages;
+  //     if (talkRoomDataMessages.edges.length) {
+  //       const subscribedMessage = talkRoomData.thoughtTalkRoom.messages[0];
 
-        // 自分で送信したメッセージのサブスクライブは無視する
-        if (subscribedMessage.sender.id === me.id) {
-          return;
-        }
+  //       // 自分で送信したメッセージのサブスクライブは無視する
+  //       if (subscribedMessage.sender.id === me.id) {
+  //         return;
+  //       }
 
-        setMessages((currentData) => {
-          const { id, text, createdAt, sender } = subscribedMessage;
+  //       setMessages((currentData) => {
+  //         const { id, text, createdAt, sender } = subscribedMessage;
 
-          if (
-            currentData.length &&
-            currentData[0]._id === subscribedMessage.id
-          ) {
-            return currentData;
-          }
+  //         if (
+  //           currentData.length &&
+  //           currentData[0]._id === subscribedMessage.id
+  //         ) {
+  //           return currentData;
+  //         }
 
-          const newIMessageData: IMessage = {
-            _id: id,
-            text,
-            createdAt: new Date(Number(createdAt)),
-            user: {
-              _id: sender.id,
-              name: sender.name,
-              avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
-            },
-          };
+  //         const newIMessageData: IMessage = {
+  //           _id: id,
+  //           text,
+  //           createdAt: new Date(Number(createdAt)),
+  //           user: {
+  //             _id: sender.id,
+  //             name: sender.name,
+  //             avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
+  //           },
+  //         };
 
-          return [newIMessageData, ...currentData];
-        });
-      }
-    }
-  }, [talkRoomData, setMessages]);
+  //         return [newIMessageData, ...currentData];
+  //       });
+  //     }
+  //   }
+  // }, [talkRoomData, setMessages]);
 
   // 既読の作成
-  useEffect(() => {
-    (async function () {
-      if (messages.length && !isTmp(messages[0]._id as string)) {
-        console.log("👀 create seen data");
-        const firstData = messages[0];
-        try {
-          await createSeenMutation({
-            variables: {
-              input: {
-                messageId: firstData._id as string,
-                roomId: id,
-              },
-            },
-          });
-        } catch (e) {
-          console.log(e);
-        }
-      }
-    })();
-  }, [messages]);
+  // useEffect(() => {
+  //   (async function () {
+  //     if (messages.length && !isTmp(messages[0]._id as string)) {
+  //       console.log("👀 create seen data");
+  //       const firstData = messages[0];
+  //       try {
+  //         await createSeenMutation({
+  //           variables: {
+  //             input: {
+  //               messageId: Number(firstData._id),
+  //               roomId: id,
+  //             },
+  //           },
+  //         });
+  //       } catch (e) {
+  //         console.log(e);
+  //       }
+  //     }
+  //   })();
+  // }, [messages]);
 
   const onSendPress = async (inputMessages: IMessage[]) => {
     const newMessageData = inputMessages[0];
