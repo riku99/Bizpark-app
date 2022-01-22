@@ -112,7 +112,6 @@ export const BaseChat = React.memo(({ ...props }: Props) => {
 
   const infiniteLoad = useCallback(() => {
     if (!infiniteLoading) {
-      console.log("loading!!!");
       setInfiniteLoading(true);
       setTimeout(() => {
         setInfiniteLoading(false);
