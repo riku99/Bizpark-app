@@ -35,18 +35,25 @@ export const useToughtTalkRoomsWithSubsciption = () => {
                 return prev;
               }
 
+              const newEdge = {
+                node: subscriptionData.data.thoughtTalkRoomMessageCreated,
+                cursor: subscriptionData.data.thoughtTalkRoomMessageCreated.id.toString(),
+              };
+
+              const newConnection = {
+                ...targetRoom.messages,
+                edges: [newEdge, ...targetRoom.messages.edges],
+                pageInfo: {
+                  ...targetRoom.messages.pageInfo,
+                  startCursor: newEdge.node.id.toString(),
+                },
+              };
+
               const newRoomData = {
                 ...targetRoom,
                 allMessageSeen: false,
-                messages: [
-                  subscriptionData.data.thoughtTalkRoomMessageCreated,
-                  ...targetRoom.messages,
-                ],
+                messages: newConnection,
               };
-
-              // console.log(
-              //   JSON.stringify(newRoomData.messages.slice(0, 2), null, 2)
-              // );
 
               const filtered = rooms.filter((r) => r.id !== roomId);
               const newTalkListData = [newRoomData, ...filtered];

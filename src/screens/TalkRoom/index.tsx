@@ -49,7 +49,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
-    logJson(queryCacheData);
     if (queryCacheData) {
       const im: IMessage[] = queryCacheData.messages.edges.map(
         ({ node: message }) => ({
