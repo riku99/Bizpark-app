@@ -36,13 +36,13 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation]);
 
-  // const { data: talkRoomData } = useGetThoughtTalkRoomQuery({
-  //   variables: {
-  //     id,
-  //   },
-  //   fetchPolicy: "network-only",
-  //   nextFetchPolicy: "cache-first",
-  // });
+  const { data: talkRoomData } = useGetThoughtTalkRoomQuery({
+    variables: {
+      id,
+    },
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "cache-first",
+  });
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -108,26 +108,26 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   // }, [talkRoomData, setMessages]);
 
   // 既読の作成
-  // useEffect(() => {
-  //   (async function () {
-  //     if (messages.length && !isTmp(messages[0]._id as string)) {
-  //       console.log("👀 create seen data");
-  //       const firstData = messages[0];
-  //       try {
-  //         await createSeenMutation({
-  //           variables: {
-  //             input: {
-  //               messageId: Number(firstData._id),
-  //               roomId: id,
-  //             },
-  //           },
-  //         });
-  //       } catch (e) {
-  //         console.log(e);
-  //       }
-  //     }
-  //   })();
-  // }, [messages]);
+  useEffect(() => {
+    (async function () {
+      if (messages.length && !isTmp(messages[0]._id.toString() as string)) {
+        console.log("👀 create seen data");
+        const firstData = messages[0];
+        try {
+          await createSeenMutation({
+            variables: {
+              input: {
+                messageId: Number(firstData._id),
+                roomId: id,
+              },
+            },
+          });
+        } catch (e) {
+          console.log(e);
+        }
+      }
+    })();
+  }, [messages]);
 
   const onSendPress = async (inputMessages: IMessage[]) => {
     const newMessageData = inputMessages[0];
