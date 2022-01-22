@@ -11,8 +11,8 @@ import {
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColorModeValue, Text } from "native-base";
 import { StyleSheet, NativeScrollEvent } from "react-native";
-import { logJson } from "src/utils";
 import { Indicator } from "src/components/Indicator";
+import { INITIAL_MESSAGE_COUNT } from "src/constants";
 
 type Props = {} & ComponentProps<typeof GiftedChat>;
 
@@ -98,7 +98,7 @@ export const BaseChat = React.memo(({ ...props }: Props) => {
   }, []);
 
   const renderLoadEarlier = useCallback(() => {
-    return <Indicator style={{ marginTop: 10 }} />;
+    return <Indicator style={{ marginTop: 10, marginBottom: 10 }} />;
   }, []);
 
   const closeToTop = useCallback((nativeEvent: NativeScrollEvent) => {
@@ -125,9 +125,7 @@ export const BaseChat = React.memo(({ ...props }: Props) => {
       alignTop
       placeholder="メッセージを入力"
       bottomOffset={bottom}
-      // infiniteScroll
       loadEarlier={infiniteLoading}
-      // isLoadingEarlier
       renderTime={() => null}
       renderBubble={renderBubble}
       renderMessageText={renderMessageText}
@@ -135,13 +133,13 @@ export const BaseChat = React.memo(({ ...props }: Props) => {
       renderComposer={renderComposer}
       renderSend={renderSend}
       renderLoadEarlier={renderLoadEarlier}
-      // onLoadEarlier={() => {
-      //   // console.log("load!");
-      // }}
       listViewProps={{
         scrollEventThrottle: 400,
         onScroll: ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
-          if (closeToTop(nativeEvent)) {
+          if (
+            props.messages.length >= INITIAL_MESSAGE_COUNT &&
+            closeToTop(nativeEvent)
+          ) {
             infiniteLoad();
           }
         },

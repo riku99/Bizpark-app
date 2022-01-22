@@ -17,3 +17,5 @@ export const TWITTER_BASE_URL = "https://twitter.com";
 
 export const NO_USER_IMAGE_URL =
   "https://storage.googleapis.com/bizpark-dev/no-user.png";
+
+export const INITIAL_MESSAGE_COUNT = 20;
