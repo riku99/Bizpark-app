@@ -1,12 +1,10 @@
 import React, { useLayoutEffect, useMemo, useEffect, useState } from "react";
 import { RootNavigationScreenProp } from "src/types";
-import { useApolloClient, gql } from "@apollo/client";
 import {
   useGetThoughtTalkRoomQuery,
   useMeQuery,
   useCreateThoughtTalkRoomMessageMutation,
   useCreateUserThoughtTalkRoomMessageSeenMutation,
-  ThoughtTalkRoomPartsFragment,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -68,43 +66,43 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   }, []);
 
   // Subscriptionで更新されたデータ追加;
-  // useEffect(() => {
-  //   if (talkRoomData) {
-  //     const talkRoomDataMessages = talkRoomData.thoughtTalkRoom.messages;
-  //     if (talkRoomDataMessages.edges.length) {
-  //       const subscribedMessage = talkRoomData.thoughtTalkRoom.messages[0];
+  useEffect(() => {
+    if (talkRoomData) {
+      const talkRoomMessageEdges = talkRoomData.thoughtTalkRoom.messages.edges;
+      if (talkRoomMessageEdges.length) {
+        const subscribedMessage = talkRoomMessageEdges[0].node;
 
-  //       // 自分で送信したメッセージのサブスクライブは無視する
-  //       if (subscribedMessage.sender.id === me.id) {
-  //         return;
-  //       }
+        // 自分で送信したメッセージのサブスクライブは無視する
+        if (subscribedMessage.sender.id === me.id) {
+          return;
+        }
 
-  //       setMessages((currentData) => {
-  //         const { id, text, createdAt, sender } = subscribedMessage;
+        setMessages((currentData) => {
+          const { id, text, createdAt, sender } = subscribedMessage;
 
-  //         if (
-  //           currentData.length &&
-  //           currentData[0]._id === subscribedMessage.id
-  //         ) {
-  //           return currentData;
-  //         }
+          if (
+            currentData.length &&
+            currentData[0]._id === subscribedMessage.id
+          ) {
+            return currentData;
+          }
 
-  //         const newIMessageData: IMessage = {
-  //           _id: id,
-  //           text,
-  //           createdAt: new Date(Number(createdAt)),
-  //           user: {
-  //             _id: sender.id,
-  //             name: sender.name,
-  //             avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
-  //           },
-  //         };
+          const newIMessageData: IMessage = {
+            _id: id,
+            text,
+            createdAt: new Date(Number(createdAt)),
+            user: {
+              _id: sender.id,
+              name: sender.name,
+              avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
+            },
+          };
 
-  //         return [newIMessageData, ...currentData];
-  //       });
-  //     }
-  //   }
-  // }, [talkRoomData, setMessages]);
+          return [newIMessageData, ...currentData];
+        });
+      }
+    }
+  }, [talkRoomData, setMessages]);
 
   // 既読の作成
   useEffect(() => {
