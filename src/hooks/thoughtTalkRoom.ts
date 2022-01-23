@@ -77,7 +77,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
         };
       }
     })();
-  }, [gotInitialData]);
+  }, [gotInitialData, meId]);
 };
 
 export const useThoughtTalkRoomReadFragment = ({ id }: { id: string }) => {

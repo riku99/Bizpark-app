@@ -134,6 +134,8 @@ export const ApolloProvider = ({ children }: Props) => {
         ]);
         return;
       }
+
+      console.log(error);
     } catch (e) {
       console.log(e);
     }

@@ -119,7 +119,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   useEffect(() => {
     (async function () {
       if (latestMessage && latestMessage.user._id !== me.id) {
-        console.log("👀 create seen");
         try {
           await createSeenMutation({
             variables: {

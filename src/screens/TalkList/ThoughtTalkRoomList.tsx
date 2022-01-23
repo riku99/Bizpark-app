@@ -15,6 +15,7 @@ import {
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,
   GetThoughtTalkRoomsQueryResult,
+  CustomErrorResponseCode,
 } from "src/generated/graphql";
 import { UserImages } from "src/components/UserImages";
 import { RootNavigationProp } from "src/types";
@@ -25,6 +26,7 @@ import { Alert } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import * as Haptics from "expo-haptics";
 import { logJson } from "src/utils";
+import { getGraphQLErrorCode, getGraphQLError } from "src/utils";
 
 type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 
@@ -72,12 +74,10 @@ export const ThoughtTalkRoomList = React.memo(() => {
                           query: GetThoughtTalkRoomsDocument,
                         }
                       );
-
                       if (queryResult) {
                         const filteredData = queryResult.thoughtTalkRooms.filter(
                           (t) => t.id !== modalData.roomId
                         );
-
                         cache.writeQuery({
                           query: GetThoughtTalkRoomsDocument,
                           data: { thoughtTalkRooms: filteredData },
@@ -86,10 +86,14 @@ export const ThoughtTalkRoomList = React.memo(() => {
                     },
                   });
 
-                  setModalData(null);
                   toast.show("削除しました", { type: "success" });
                 } catch (e) {
-                  console.log(e);
+                  const error = getGraphQLError(e, 0);
+                  if (error?.code === CustomErrorResponseCode.InvalidRequest) {
+                    toast.show(error.message, { type: "danger" });
+                  }
+                } finally {
+                  setModalData(null);
                 }
               }
             },
