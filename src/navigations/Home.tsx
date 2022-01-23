@@ -34,7 +34,7 @@ export const HomeStack = React.memo(() => {
         headerShadowVisible: false,
       }}
     >
-      <Stack.Screen name="Home" component={HomeScreen} />
+      <Stack.Screen name="HomeMain" component={HomeScreen} />
       <Stack.Screen name="UserProfile" component={UserProfileScreen} />
     </Stack.Navigator>
   );
