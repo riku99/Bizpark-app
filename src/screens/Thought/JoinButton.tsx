@@ -18,7 +18,7 @@ export const JoinButton = ({ thoughtId, contributorId }: Props) => {
   const existingData = useFindThoughtTalkRoomsByThoughtId({ thoughtId });
 
   const onPress = async () => {
-    let roomId: string | null = null;
+    let roomId: number | null = null;
 
     // 既にローカルでデータ持ってるか確認
     if (existingData) {

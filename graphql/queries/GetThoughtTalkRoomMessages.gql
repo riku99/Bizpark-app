@@ -1,4 +1,4 @@
-query GetThoughtTalkRoomMessages($id: ID!, $messageCursor: String) {
+query GetThoughtTalkRoomMessages($id: Int!, $messageCursor: String) {
   thoughtTalkRoom(id: $id) {
     id
     messages(first: 20, after: $messageCursor) {

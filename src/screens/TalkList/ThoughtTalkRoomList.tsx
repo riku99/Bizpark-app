@@ -25,8 +25,7 @@ import { InstaLikeModal } from "src/components/InstaLikeModal";
 import { Alert } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import * as Haptics from "expo-haptics";
-import { logJson } from "src/utils";
-import { getGraphQLErrorCode, getGraphQLError } from "src/utils";
+import { getGraphQLError, logJson } from "src/utils";
 
 type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 
@@ -40,7 +39,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
     data: { me },
   } = useMeQuery();
   const toast = useToast();
-  const [modalData, setModalData] = useState<{ roomId: string } | null>(null);
+  const [modalData, setModalData] = useState<{ roomId: number } | null>(null);
 
   const closeModal = () => {
     setModalData(null);
@@ -103,58 +102,61 @@ export const ThoughtTalkRoomList = React.memo(() => {
     },
   ];
 
-  const renderItem = useCallback(({ item }: { item: Item }) => {
-    let images: string[] = [me.imageUrl]; // いっちゃん始めは自分のアイコン
+  const renderItem = useCallback(
+    ({ item }: { item: Item }) => {
+      let images: string[] = [me.imageUrl]; // いっちゃん始めは自分のアイコン
 
-    const { edges } = item.messages;
+      const { edges } = item.messages;
 
-    for (let i = 0; i <= 7; i++) {
-      const member = item.members[i];
-      if (member && member.user.id !== me.id) {
-        images.push(member.user.imageUrl);
+      for (let i = 0; i <= 7; i++) {
+        const member = item.members[i];
+        if (member && member.user.id !== me.id) {
+          images.push(member.user.imageUrl);
+        }
       }
-    }
 
-    return (
-      <Pressable
-        px="4"
-        _pressed={{
-          bg: pressedColor,
-        }}
-        onPress={() => {
-          navigation.navigate("TalkRoom", {
-            id: item.id,
-          });
-        }}
-        onLongPress={() => {
-          Haptics.selectionAsync();
-          setModalData({ roomId: item.id });
-        }}
-      >
-        <HStack alignItems="center" py="4" justifyContent="space-between">
-          <Box w="76%">
-            <Text h="7" fontWeight="bold" fontSize="14">
-              {item.thought.title ? item.thought.title : item.thought.text}
-            </Text>
+      return (
+        <Pressable
+          px="4"
+          _pressed={{
+            bg: pressedColor,
+          }}
+          onPress={() => {
+            navigation.navigate("TalkRoom", {
+              id: item.id,
+            });
+          }}
+          onLongPress={() => {
+            Haptics.selectionAsync();
+            setModalData({ roomId: item.id });
+          }}
+        >
+          <HStack alignItems="center" py="4" justifyContent="space-between">
+            <Box w="76%">
+              <Text h="7" fontWeight="bold" fontSize="14">
+                {item.thought.title ? item.thought.title : item.thought.text}
+              </Text>
 
-            <Text
-              color={item.allMessageSeen ? textGray : undefined}
-              h="7"
-              fontWeight={!item.allMessageSeen ? "bold" : undefined}
-            >
-              {edges.length ? edges[0].node.text : ""}
-            </Text>
-            <UserImages data={images} imageSize="8" mt="1" />
-          </Box>
+              <Text
+                color={item.allMessageSeen ? textGray : undefined}
+                h="7"
+                fontWeight={!item.allMessageSeen ? "bold" : undefined}
+              >
+                {edges.length ? edges[0].node.text : ""}
+              </Text>
+              <UserImages data={images} imageSize="8" mt="1" />
+            </Box>
 
-          {/* バッジ */}
-          {!item.allMessageSeen && <Badge size="3" />}
-        </HStack>
+            {/* バッジ */}
+            {!item.allMessageSeen && <Badge size="3" />}
+          </HStack>
 
-        <Divider />
-      </Pressable>
-    );
-  }, []);
+          <Divider />
+        </Pressable>
+      );
+    },
+    [pressedColor, textGray]
+  );
 
   if (!data) {
     return <></>;

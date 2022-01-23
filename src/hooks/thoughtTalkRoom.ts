@@ -80,7 +80,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
   }, [gotInitialData, meId]);
 };
 
-export const useThoughtTalkRoomReadFragment = ({ id }: { id: string }) => {
+export const useThoughtTalkRoomReadFragment = ({ id }: { id: number }) => {
   const client = useApolloClient();
   return client.cache.readFragment<ThoughtTalkRoomPartsFragment>({
     id: client.cache.identify({

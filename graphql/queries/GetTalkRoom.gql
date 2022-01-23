@@ -1,28 +1,5 @@
-query GetThoughtTalkRoom($id: ID!) {
+query GetThoughtTalkRoom($id: Int!) {
   thoughtTalkRoom(id: $id) {
-    id
-    createdAt
-    members {
-      id
-      user {
-        id
-        name
-        imageUrl
-      }
-    }
-    thought {
-      id
-    }
-    messages(first: 20) {
-      edges {
-        node {
-          ...ThoughtTalkRoomMessageParts
-        }
-        cursor
-      }
-      pageInfo {
-        ...PageInfoParts
-      }
-    }
+    ...ThoughtTalkRoomParts
   }
 }

@@ -54,7 +54,7 @@ export type RootStackParamList = {
   };
   Settings: undefined;
   TalkRoom: {
-    id: string;
+    id: number;
   };
 } & SettingsParamList;
 
