@@ -9,13 +9,15 @@ import {
 import { useEffect, useCallback } from "react";
 import { gotInitialDataVar } from "src/stores/initialData";
 import { useReactiveVar, useApolloClient, gql } from "@apollo/client";
+import { meVar } from "src/stores/me";
 
 export const useToughtTalkRoomsWithSubsciption = () => {
   const [query] = useGetThoughtTalkRoomsLazyQuery();
   const gotInitialData = useReactiveVar(gotInitialDataVar);
+  const meId = useReactiveVar(meVar.id);
   useEffect(() => {
     (async function () {
-      if (gotInitialData) {
+      if (gotInitialData && meId) {
         const { subscribeToMore } = await query();
 
         const unsubscribe = subscribeToMore<OnThoughtTalkRoomMessageCreatedSubscription>(
@@ -49,9 +51,13 @@ export const useToughtTalkRoomsWithSubsciption = () => {
                 },
               };
 
+              const isMySentData =
+                subscriptionData.data.thoughtTalkRoomMessageCreated.sender
+                  .id === meId;
+
               const newRoomData = {
                 ...targetRoom,
-                allMessageSeen: false,
+                allMessageSeen: isMySentData ? true : false,
                 messages: newConnection,
               };
 

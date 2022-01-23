@@ -47,6 +47,13 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
+  const [latestMessage, setLatestMessage] = useState<IMessage | null>(null);
+
+  useEffect(() => {
+    if (messages.length && !isTmp(messages[0]._id.toString() as string)) {
+      setLatestMessage(messages[0]);
+    }
+  }, [messages]);
 
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
@@ -83,6 +90,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
         setMessages((currentData) => {
           const { id, text, createdAt, sender } = subscribedMessage;
 
+          // fetchMoreとかでキャッシュ更新するとこのEffectも呼ばれる。ただ、新しいメッセージを作成する必要はないので現在のデータをリターン
           if (
             currentData.length &&
             currentData[0]._id === subscribedMessage.id
@@ -107,17 +115,26 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     }
   }, [talkRoomData, setMessages]);
 
+  // useEffect(() => {
+  //   console.log("fetchMoreの後に呼ばれたくない");
+  // }, [messages]);
+
+  // useEffect(() => {
+  //   if (latestMessage && latestMessage.user._id !== me.id) {
+  //     console.log("既読作る");
+  //   }
+  // }, [latestMessage]);
+
   // 既読の作成
   useEffect(() => {
     (async function () {
-      if (messages.length && !isTmp(messages[0]._id.toString() as string)) {
-        console.log("👀 create seen data");
-        const firstData = messages[0];
+      if (latestMessage && latestMessage.user._id !== me.id) {
+        console.log("👀 create seen");
         try {
           await createSeenMutation({
             variables: {
               input: {
-                messageId: Number(firstData._id),
+                messageId: Number(latestMessage._id),
                 roomId: id,
               },
             },
@@ -127,7 +144,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
         }
       }
     })();
-  }, [messages]);
+  }, [latestMessage]);
 
   const onSendPress = async (inputMessages: IMessage[]) => {
     const newMessageData = inputMessages[0];
