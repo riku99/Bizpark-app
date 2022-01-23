@@ -115,16 +115,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     }
   }, [talkRoomData, setMessages]);
 
-  // useEffect(() => {
-  //   console.log("fetchMoreの後に呼ばれたくない");
-  // }, [messages]);
-
-  // useEffect(() => {
-  //   if (latestMessage && latestMessage.user._id !== me.id) {
-  //     console.log("既読作る");
-  //   }
-  // }, [latestMessage]);
-
   // 既読の作成
   useEffect(() => {
     (async function () {
