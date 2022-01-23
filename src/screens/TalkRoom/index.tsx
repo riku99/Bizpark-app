@@ -5,6 +5,7 @@ import {
   useMeQuery,
   useCreateThoughtTalkRoomMessageMutation,
   useCreateUserThoughtTalkRoomMessageSeenMutation,
+  useGetThoughtTalkRoomMessagesQuery,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -34,13 +35,17 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation]);
 
-  const { data: talkRoomData } = useGetThoughtTalkRoomQuery({
+  const { data: talkRoomData, fetchMore } = useGetThoughtTalkRoomMessagesQuery({
     variables: {
       id,
     },
     fetchPolicy: "network-only",
     nextFetchPolicy: "cache-first",
   });
+
+  if (talkRoomData) {
+    console.log(talkRoomData.thoughtTalkRoom);
+  }
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -179,6 +184,8 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
       });
     }
   };
+
+  const infiniteLoad = async () => {};
 
   return (
     <BaseChat

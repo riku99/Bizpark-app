@@ -666,6 +666,13 @@ export type GetThoughtTalkRoomQueryVariables = Exact<{
 
 export type GetThoughtTalkRoomQuery = { __typename?: 'Query', thoughtTalkRoom: { __typename?: 'ThoughtTalkRoom', id: string, createdAt?: string | null | undefined, members?: Array<{ __typename?: 'ThoughtTalkRoomMember', id: string, user?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined> | null | undefined, thought?: { __typename?: 'Thought', id: string } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
 
+export type GetThoughtTalkRoomMessagesQueryVariables = Exact<{
+  id: Scalars['ID'];
+}>;
+
+
+export type GetThoughtTalkRoomMessagesQuery = { __typename?: 'Query', thoughtTalkRoom: { __typename?: 'ThoughtTalkRoom', id: string, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: string | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+
 export type GetThoughtTalkRoomsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1645,6 +1652,53 @@ export function useGetThoughtTalkRoomLazyQuery(baseOptions?: Apollo.LazyQueryHoo
 export type GetThoughtTalkRoomQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomQuery>;
 export type GetThoughtTalkRoomLazyQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomLazyQuery>;
 export type GetThoughtTalkRoomQueryResult = Apollo.QueryResult<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>;
+export const GetThoughtTalkRoomMessagesDocument = gql`
+    query GetThoughtTalkRoomMessages($id: ID!) {
+  thoughtTalkRoom(id: $id) {
+    id
+    messages(first: 20) {
+      edges {
+        node {
+          ...ThoughtTalkRoomMessageParts
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+  }
+}
+    ${ThoughtTalkRoomMessagePartsFragmentDoc}
+${PageInfoPartsFragmentDoc}`;
+
+/**
+ * __useGetThoughtTalkRoomMessagesQuery__
+ *
+ * To run a query within a React component, call `useGetThoughtTalkRoomMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetThoughtTalkRoomMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetThoughtTalkRoomMessagesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetThoughtTalkRoomMessagesQuery(baseOptions: Apollo.QueryHookOptions<GetThoughtTalkRoomMessagesQuery, GetThoughtTalkRoomMessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetThoughtTalkRoomMessagesQuery, GetThoughtTalkRoomMessagesQueryVariables>(GetThoughtTalkRoomMessagesDocument, options);
+      }
+export function useGetThoughtTalkRoomMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThoughtTalkRoomMessagesQuery, GetThoughtTalkRoomMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetThoughtTalkRoomMessagesQuery, GetThoughtTalkRoomMessagesQueryVariables>(GetThoughtTalkRoomMessagesDocument, options);
+        }
+export type GetThoughtTalkRoomMessagesQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomMessagesQuery>;
+export type GetThoughtTalkRoomMessagesLazyQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomMessagesLazyQuery>;
+export type GetThoughtTalkRoomMessagesQueryResult = Apollo.QueryResult<GetThoughtTalkRoomMessagesQuery, GetThoughtTalkRoomMessagesQueryVariables>;
 export const GetThoughtTalkRoomsDocument = gql`
     query GetThoughtTalkRooms {
   thoughtTalkRooms {
