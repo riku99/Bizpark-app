@@ -14,9 +14,11 @@ import { StyleSheet, NativeScrollEvent } from "react-native";
 import { Indicator } from "src/components/Indicator";
 import { INITIAL_MESSAGE_COUNT } from "src/constants";
 
-type Props = {} & ComponentProps<typeof GiftedChat>;
+type Props = { infiniteLoad?: () => Promise<void> } & ComponentProps<
+  typeof GiftedChat
+>;
 
-export const BaseChat = React.memo(({ ...props }: Props) => {
+export const BaseChat = React.memo(({ infiniteLoad, ...props }: Props) => {
   const { bottom } = useSafeAreaInsets();
   const bubbleRight = useColorModeValue("#4444ff", "#4444ff");
   const bubbleLeft = useColorModeValue("#e0e0e0", "#525252");
@@ -110,14 +112,13 @@ export const BaseChat = React.memo(({ ...props }: Props) => {
     );
   }, []);
 
-  const infiniteLoad = useCallback(() => {
-    if (!infiniteLoading) {
+  const onCloseToTop = useCallback(async () => {
+    if (!infiniteLoading && infiniteLoad) {
       setInfiniteLoading(true);
-      setTimeout(() => {
-        setInfiniteLoading(false);
-      }, 5000);
+      await infiniteLoad();
+      setInfiniteLoading(false);
     }
-  }, [infiniteLoading]);
+  }, [infiniteLoading, infiniteLoad]);
 
   return (
     <GiftedChat
@@ -139,7 +140,7 @@ export const BaseChat = React.memo(({ ...props }: Props) => {
             props.messages.length >= INITIAL_MESSAGE_COUNT &&
             closeToTop(nativeEvent)
           ) {
-            infiniteLoad();
+            onCloseToTop();
           }
         },
       }}

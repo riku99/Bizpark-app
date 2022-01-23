@@ -6,6 +6,7 @@ import {
   useCreateThoughtTalkRoomMessageMutation,
   useCreateUserThoughtTalkRoomMessageSeenMutation,
   useGetThoughtTalkRoomMessagesQuery,
+  GetThoughtTalkRoomMessagesQuery,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -13,6 +14,7 @@ import { NO_USER_IMAGE_URL } from "src/constants";
 import { createRandomStr } from "src/utils";
 import { useThoughtTalkRoomReadFragment } from "src/hooks/thoughtTalkRoom";
 import { logJson } from "src/utils";
+import { btoa } from "react-native-quick-base64";
 
 type Props = RootNavigationScreenProp<"TalkRoom">;
 
@@ -27,7 +29,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const [
     createSeenMutation,
   ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
-  const queryCacheData = useThoughtTalkRoomReadFragment({ id });
+  const fragmentCacheData = useThoughtTalkRoomReadFragment({ id });
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -39,21 +41,17 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       id,
     },
-    fetchPolicy: "network-only",
-    nextFetchPolicy: "cache-first",
+    // fetchPolicy: "network-only",
+    // nextFetchPolicy: "cache-first",
   });
-
-  if (talkRoomData) {
-    console.log(talkRoomData.thoughtTalkRoom);
-  }
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
 
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
-    if (queryCacheData) {
-      const im: IMessage[] = queryCacheData.messages.edges.map(
+    if (fragmentCacheData) {
+      const im: IMessage[] = fragmentCacheData.messages.edges.map(
         ({ node: message }) => ({
           _id: message.id,
           text: message.text,
@@ -185,7 +183,42 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const infiniteLoad = async () => {};
+  const infiniteLoad = async () => {
+    if (talkRoomData) {
+      const { pageInfo } = talkRoomData.thoughtTalkRoom.messages;
+      if (pageInfo.hasNextPage) {
+        const { endCursor } = pageInfo;
+
+        const { data: fetchData } = await fetchMore<
+          GetThoughtTalkRoomMessagesQuery,
+          { messageCursor: string }
+        >({
+          variables: {
+            messageCursor: endCursor ? btoa(endCursor) : null,
+          },
+        });
+
+        if (fetchData) {
+          const im: IMessage[] = fetchData.thoughtTalkRoom.messages.edges.map(
+            ({ node: message }) => ({
+              _id: message.id,
+              text: message.text,
+              createdAt: new Date(Number(message.createdAt)),
+              user: {
+                _id: message.sender.id,
+                name: message.sender.name,
+                avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
+              },
+            })
+          );
+
+          setMessages((currentMessages) => {
+            return [...currentMessages, ...im];
+          });
+        }
+      }
+    }
+  };
 
   return (
     <BaseChat
@@ -194,6 +227,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
         _id: me.id,
       }}
       onSend={onSendPress}
+      infiniteLoad={infiniteLoad}
     />
   );
 };

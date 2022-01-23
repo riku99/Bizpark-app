@@ -668,6 +668,7 @@ export type GetThoughtTalkRoomQuery = { __typename?: 'Query', thoughtTalkRoom: {
 
 export type GetThoughtTalkRoomMessagesQueryVariables = Exact<{
   id: Scalars['ID'];
+  messageCursor?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -1653,10 +1654,10 @@ export type GetThoughtTalkRoomQueryHookResult = ReturnType<typeof useGetThoughtT
 export type GetThoughtTalkRoomLazyQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomLazyQuery>;
 export type GetThoughtTalkRoomQueryResult = Apollo.QueryResult<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>;
 export const GetThoughtTalkRoomMessagesDocument = gql`
-    query GetThoughtTalkRoomMessages($id: ID!) {
+    query GetThoughtTalkRoomMessages($id: ID!, $messageCursor: String) {
   thoughtTalkRoom(id: $id) {
     id
-    messages(first: 20) {
+    messages(first: 20, after: $messageCursor) {
       edges {
         node {
           ...ThoughtTalkRoomMessageParts
@@ -1685,6 +1686,7 @@ ${PageInfoPartsFragmentDoc}`;
  * const { data, loading, error } = useGetThoughtTalkRoomMessagesQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      messageCursor: // value for 'messageCursor'
  *   },
  * });
  */

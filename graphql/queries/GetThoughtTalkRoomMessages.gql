@@ -1,7 +1,7 @@
-query GetThoughtTalkRoomMessages($id: ID!) {
+query GetThoughtTalkRoomMessages($id: ID!, $messageCursor: String) {
   thoughtTalkRoom(id: $id) {
     id
-    messages(first: 20) {
+    messages(first: 20, after: $messageCursor) {
       edges {
         node {
           ...ThoughtTalkRoomMessageParts
