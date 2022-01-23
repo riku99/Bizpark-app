@@ -365,6 +365,10 @@ export type Subscription = {
   thoughtTalkRoomMessageCreated?: Maybe<ThoughtTalkRoomMessage>;
 };
 
+export type SubscriptionThoughtTalkRoomMessageCreatedArgs = {
+  roomIds: Array<InputMaybe<Scalars["Int"]>>;
+};
+
 export type Thought = {
   __typename?: "Thought";
   contributor?: Maybe<User>;
@@ -1665,7 +1669,7 @@ export type UserThoughtsQuery = {
 };
 
 export type OnThoughtTalkRoomMessageCreatedSubscriptionVariables = Exact<{
-  [key: string]: never;
+  roomIds: Array<InputMaybe<Scalars["Int"]>> | InputMaybe<Scalars["Int"]>;
 }>;
 
 export type OnThoughtTalkRoomMessageCreatedSubscription = {
@@ -3514,8 +3518,8 @@ export type UserThoughtsQueryResult = Apollo.QueryResult<
   UserThoughtsQueryVariables
 >;
 export const OnThoughtTalkRoomMessageCreatedDocument = gql`
-  subscription OnThoughtTalkRoomMessageCreated {
-    thoughtTalkRoomMessageCreated {
+  subscription OnThoughtTalkRoomMessageCreated($roomIds: [Int]!) {
+    thoughtTalkRoomMessageCreated(roomIds: $roomIds) {
       id
       text
       createdAt
@@ -3540,11 +3544,12 @@ export const OnThoughtTalkRoomMessageCreatedDocument = gql`
  * @example
  * const { data, loading, error } = useOnThoughtTalkRoomMessageCreatedSubscription({
  *   variables: {
+ *      roomIds: // value for 'roomIds'
  *   },
  * });
  */
 export function useOnThoughtTalkRoomMessageCreatedSubscription(
-  baseOptions?: Apollo.SubscriptionHookOptions<
+  baseOptions: Apollo.SubscriptionHookOptions<
     OnThoughtTalkRoomMessageCreatedSubscription,
     OnThoughtTalkRoomMessageCreatedSubscriptionVariables
   >

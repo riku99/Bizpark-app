@@ -1,83 +1,101 @@
 import {
-  useGetThoughtTalkRoomsLazyQuery,
   OnThoughtTalkRoomMessageCreatedDocument,
   OnThoughtTalkRoomMessageCreatedSubscription,
   ThoughtTalkRoomPartsFragment,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,
+  OnThoughtTalkRoomMessageCreatedSubscriptionVariables,
+  useGetThoughtTalkRoomsQuery,
 } from "src/generated/graphql";
-import { useEffect, useCallback } from "react";
+import { useEffect, useCallback, useMemo } from "react";
 import { gotInitialDataVar } from "src/stores/initialData";
 import { useReactiveVar, useApolloClient, gql } from "@apollo/client";
 import { meVar } from "src/stores/me";
 
 export const useToughtTalkRoomsWithSubsciption = () => {
-  const [query] = useGetThoughtTalkRoomsLazyQuery();
   const gotInitialData = useReactiveVar(gotInitialDataVar);
   const meId = useReactiveVar(meVar.id);
+  const {
+    data: talkRoomsData,
+    subscribeToMore,
+  } = useGetThoughtTalkRoomsQuery();
+
+  const subscriptionVariables = useMemo(() => {
+    if (!talkRoomsData?.thoughtTalkRooms.length) {
+      return [];
+    }
+
+    return talkRoomsData.thoughtTalkRooms.map((t) => t.id);
+  }, [talkRoomsData]);
+
+  console.log(subscriptionVariables);
+
   useEffect(() => {
+    let unsubscribe: () => void;
     (async function () {
       if (gotInitialData && meId) {
-        const { subscribeToMore } = await query();
+        unsubscribe = subscribeToMore<
+          OnThoughtTalkRoomMessageCreatedSubscription,
+          OnThoughtTalkRoomMessageCreatedSubscriptionVariables
+        >({
+          document: OnThoughtTalkRoomMessageCreatedDocument,
+          variables: { roomIds: subscriptionVariables },
+          updateQuery: (prev, { subscriptionData }) => {
+            if (!subscriptionData) {
+              return prev;
+            }
 
-        const unsubscribe = subscribeToMore<OnThoughtTalkRoomMessageCreatedSubscription>(
-          {
-            document: OnThoughtTalkRoomMessageCreatedDocument,
-            updateQuery: (prev, { subscriptionData }) => {
-              if (!subscriptionData) {
-                return prev;
-              }
+            const roomId =
+              subscriptionData.data.thoughtTalkRoomMessageCreated.roomId;
+            const rooms = prev.thoughtTalkRooms;
+            const targetRoom = rooms.find((r) => r.id === roomId);
 
-              const roomId =
-                subscriptionData.data.thoughtTalkRoomMessageCreated.roomId;
-              const rooms = prev.thoughtTalkRooms;
-              const targetRoom = rooms.find((r) => r.id === roomId);
+            if (!targetRoom) {
+              return prev;
+            }
 
-              if (!targetRoom) {
-                return prev;
-              }
+            const newEdge = {
+              node: subscriptionData.data.thoughtTalkRoomMessageCreated,
+              cursor: subscriptionData.data.thoughtTalkRoomMessageCreated.id.toString(),
+            };
 
-              const newEdge = {
-                node: subscriptionData.data.thoughtTalkRoomMessageCreated,
-                cursor: subscriptionData.data.thoughtTalkRoomMessageCreated.id.toString(),
-              };
+            const newConnection = {
+              ...targetRoom.messages,
+              edges: [newEdge, ...targetRoom.messages.edges],
+              pageInfo: {
+                ...targetRoom.messages.pageInfo,
+                startCursor: newEdge.node.id.toString(),
+              },
+            };
 
-              const newConnection = {
-                ...targetRoom.messages,
-                edges: [newEdge, ...targetRoom.messages.edges],
-                pageInfo: {
-                  ...targetRoom.messages.pageInfo,
-                  startCursor: newEdge.node.id.toString(),
-                },
-              };
+            const isMySentData =
+              subscriptionData.data.thoughtTalkRoomMessageCreated.sender.id ===
+              meId;
 
-              const isMySentData =
-                subscriptionData.data.thoughtTalkRoomMessageCreated.sender
-                  .id === meId;
+            const newRoomData = {
+              ...targetRoom,
+              allMessageSeen: isMySentData ? true : false,
+              messages: newConnection,
+            };
 
-              const newRoomData = {
-                ...targetRoom,
-                allMessageSeen: isMySentData ? true : false,
-                messages: newConnection,
-              };
+            const filtered = rooms.filter((r) => r.id !== roomId);
+            const newTalkListData = [newRoomData, ...filtered];
 
-              const filtered = rooms.filter((r) => r.id !== roomId);
-              const newTalkListData = [newRoomData, ...filtered];
-
-              return {
-                thoughtTalkRooms: newTalkListData,
-              };
-            },
-          }
-        );
-
-        return () => {
-          console.log("🍺 unsubscribe thoughtTalkRoomMessageSubscription");
-          unsubscribe();
-        };
+            return {
+              thoughtTalkRooms: newTalkListData,
+            };
+          },
+        });
       }
     })();
-  }, [gotInitialData, meId]);
+
+    if (unsubscribe) {
+      return () => {
+        console.log("🍺 unsubscribe thoughtTalkRoomMessageSubscription");
+        unsubscribe();
+      };
+    }
+  }, [gotInitialData, meId, subscriptionVariables]);
 };
 
 export const useThoughtTalkRoomReadFragment = ({ id }: { id: number }) => {
