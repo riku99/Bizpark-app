@@ -15,10 +15,11 @@ import { logJson } from "src/utils";
 
 export const useToughtTalkRoomsWithSubsciption = () => {
   const gotInitialData = useReactiveVar(gotInitialDataVar);
-  const meId = useReactiveVar(meVar.id);
+  const myId = useReactiveVar(meVar.id);
   const {
     data: talkRoomsData,
     subscribeToMore,
+    refetch,
   } = useGetThoughtTalkRoomsQuery();
 
   const subscriptionVariables = useMemo(() => {
@@ -30,34 +31,35 @@ export const useToughtTalkRoomsWithSubsciption = () => {
   }, [talkRoomsData?.thoughtTalkRooms.length]);
 
   useEffect(() => {
-    console.log("subscriptionVariablesが変更されました");
-  }, [subscriptionVariables]);
-
-  useEffect(() => {
     let unsubscribe: () => void;
     (async function () {
-      if (gotInitialData && meId) {
-        console.log("subscribe");
+      if (gotInitialData && myId) {
         unsubscribe = subscribeToMore<
           OnThoughtTalkRoomMessageCreatedSubscription,
           OnThoughtTalkRoomMessageCreatedSubscriptionVariables
         >({
           document: OnThoughtTalkRoomMessageCreatedDocument,
-          variables: { roomIds: subscriptionVariables, userId: meId },
+          variables: { roomIds: subscriptionVariables, userId: myId },
           updateQuery: (prev, { subscriptionData }) => {
             if (!subscriptionData) {
               return prev;
             }
 
-            logJson(subscriptionData);
-
             const roomId =
               subscriptionData.data.thoughtTalkRoomMessageCreated.roomId;
             const rooms = prev.thoughtTalkRooms;
             const targetRoom = rooms.find((r) => r.id === roomId);
+            const {
+              contributor,
+            } = subscriptionData.data.thoughtTalkRoomMessageCreated.talkRoom.thought;
 
             if (!targetRoom) {
-              return prev;
+              if (contributor.id === myId) {
+                refetch();
+                return;
+              } else {
+                return prev;
+              }
             }
 
             const newEdge = {
@@ -76,7 +78,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
 
             const isMySentData =
               subscriptionData.data.thoughtTalkRoomMessageCreated.sender.id ===
-              meId;
+              myId;
 
             const newRoomData = {
               ...targetRoom,
@@ -101,7 +103,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
         unsubscribe();
       };
     }
-  }, [gotInitialData, meId, subscriptionVariables]);
+  }, [gotInitialData, myId, subscriptionVariables]);
 };
 
 export const useThoughtTalkRoomReadFragment = ({ id }: { id: number }) => {
