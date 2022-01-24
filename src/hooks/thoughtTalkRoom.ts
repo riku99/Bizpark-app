@@ -26,20 +26,23 @@ export const useToughtTalkRoomsWithSubsciption = () => {
     }
 
     return talkRoomsData.thoughtTalkRooms.map((t) => t.id);
-  }, [talkRoomsData]);
+  }, [talkRoomsData?.thoughtTalkRooms.length]);
 
-  console.log(subscriptionVariables);
+  useEffect(() => {
+    console.log("subscriptionVariablesが変更されました");
+  }, [subscriptionVariables]);
 
   useEffect(() => {
     let unsubscribe: () => void;
     (async function () {
       if (gotInitialData && meId) {
+        console.log("subscribe");
         unsubscribe = subscribeToMore<
           OnThoughtTalkRoomMessageCreatedSubscription,
           OnThoughtTalkRoomMessageCreatedSubscriptionVariables
         >({
           document: OnThoughtTalkRoomMessageCreatedDocument,
-          variables: { roomIds: subscriptionVariables },
+          variables: { roomIds: subscriptionVariables, userId: meId },
           updateQuery: (prev, { subscriptionData }) => {
             if (!subscriptionData) {
               return prev;

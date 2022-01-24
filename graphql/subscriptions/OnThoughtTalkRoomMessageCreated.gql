@@ -1,5 +1,5 @@
-subscription OnThoughtTalkRoomMessageCreated($roomIds: [Int]!) {
-  thoughtTalkRoomMessageCreated(roomIds: $roomIds) {
+subscription OnThoughtTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
+  thoughtTalkRoomMessageCreated(roomIds: $roomIds, userId: $userId) {
     id
     text
     createdAt
