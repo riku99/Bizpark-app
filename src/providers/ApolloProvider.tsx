@@ -31,9 +31,13 @@ const wsLink = new WebSocketLink({
   uri: "ws://localhost:4000/graphql",
   options: {
     reconnect: true,
-    // connectionParams: {
-    //   authToken: idToken,
-    // },
+    connectionParams: async () => {
+      const currentUser = auth().currentUser;
+      const idToken = await currentUser.getIdToken();
+      return {
+        authToken: `Bearer ${idToken}`,
+      };
+    },
   },
 });
 

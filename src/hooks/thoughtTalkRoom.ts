@@ -11,6 +11,7 @@ import { useEffect, useCallback, useMemo } from "react";
 import { gotInitialDataVar } from "src/stores/initialData";
 import { useReactiveVar, useApolloClient, gql } from "@apollo/client";
 import { meVar } from "src/stores/me";
+import { logJson } from "src/utils";
 
 export const useToughtTalkRoomsWithSubsciption = () => {
   const gotInitialData = useReactiveVar(gotInitialDataVar);
@@ -47,6 +48,8 @@ export const useToughtTalkRoomsWithSubsciption = () => {
             if (!subscriptionData) {
               return prev;
             }
+
+            logJson(subscriptionData);
 
             const roomId =
               subscriptionData.data.thoughtTalkRoomMessageCreated.roomId;

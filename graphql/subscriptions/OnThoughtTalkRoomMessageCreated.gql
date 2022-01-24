@@ -7,5 +7,21 @@ subscription OnThoughtTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
       ...UserParts
     }
     roomId
+    talkRoom {
+      id
+      updatedAt
+      createdAt
+      allMessageSeen
+      thought {
+        id
+        title
+        text
+        contributor {
+          id
+          name
+          imageUrl
+        }
+      }
+    }
   }
 }

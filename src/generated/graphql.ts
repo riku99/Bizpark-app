@@ -441,6 +441,7 @@ export type ThoughtTalkRoomMessage = {
   id: Scalars['Int'];
   roomId?: Maybe<Scalars['Int']>;
   sender: User;
+  talkRoom?: Maybe<ThoughtTalkRoom>;
   text: Scalars['String'];
 };
 
@@ -747,7 +748,7 @@ export type OnThoughtTalkRoomMessageCreatedSubscriptionVariables = Exact<{
 }>;
 
 
-export type OnThoughtTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', thoughtTalkRoomMessageCreated?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } | null | undefined };
+export type OnThoughtTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', thoughtTalkRoomMessageCreated?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined }, talkRoom?: { __typename?: 'ThoughtTalkRoom', id: number, updatedAt?: string | null | undefined, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined } | null | undefined };
 
 export const NewsFieldsFragmentDoc = gql`
     fragment NewsFields on News {
@@ -2031,6 +2032,22 @@ export const OnThoughtTalkRoomMessageCreatedDocument = gql`
       ...UserParts
     }
     roomId
+    talkRoom {
+      id
+      updatedAt
+      createdAt
+      allMessageSeen
+      thought {
+        id
+        title
+        text
+        contributor {
+          id
+          name
+          imageUrl
+        }
+      }
+    }
   }
 }
     ${UserPartsFragmentDoc}`;
