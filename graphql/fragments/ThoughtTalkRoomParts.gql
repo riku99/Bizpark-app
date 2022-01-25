@@ -2,10 +2,26 @@ fragment ThoughtTalkRoomParts on ThoughtTalkRoom {
   id
   createdAt
   allMessageSeen
+  # members {
+  #   id
+  #   user {
+  #     ...UserParts
+  #   }
+  # }
   members {
-    id
-    user {
-      ...UserParts
+    edges {
+      node {
+        id
+        user {
+          id
+          name
+          imageUrl
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
     }
   }
   thought {
