@@ -65,7 +65,10 @@ export const JoinButton = ({ thoughtId, contributorId }: Props) => {
 
     if (roomId) {
       navigation.navigate("TalkRoom", {
-        id: roomId,
+        screen: "TalkRoomMain",
+        params: {
+          id: roomId,
+        },
       });
     }
   };

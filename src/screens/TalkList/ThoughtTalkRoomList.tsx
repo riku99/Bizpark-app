@@ -123,7 +123,10 @@ export const ThoughtTalkRoomList = React.memo(() => {
           }}
           onPress={() => {
             navigation.navigate("TalkRoom", {
-              id: item.id,
+              screen: "TalkRoomMain",
+              params: {
+                id: item.id,
+              },
             });
           }}
           onLongPress={() => {

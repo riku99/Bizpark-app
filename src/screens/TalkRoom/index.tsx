@@ -24,7 +24,7 @@ import { btoa } from "react-native-quick-base64";
 import { UserImages } from "src/components/UserImages";
 import { Pressable } from "native-base";
 
-type Props = RootNavigationScreenProp<"TalkRoom">;
+type Props = RootNavigationScreenProp<"TalkRoomMain">;
 
 const isTmp = (str: string) => str.slice(0, 3) === "tmp";
 
