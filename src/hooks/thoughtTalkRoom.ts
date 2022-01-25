@@ -117,11 +117,22 @@ export const useThoughtTalkRoomReadFragment = ({ id }: { id: number }) => {
       fragment ThoughtTalkRoomF on ThoughtTalkRoom {
         id
         members {
-          id
-          user {
-            id
-            name
-            imageUrl
+          edges {
+            node {
+              id
+              user {
+                id
+                name
+                imageUrl
+              }
+            }
+            cursor
+          }
+          pageInfo {
+            hasNextPage
+            hasPreviousPage
+            startCursor
+            endCursor
           }
         }
         messages(first: 20) {

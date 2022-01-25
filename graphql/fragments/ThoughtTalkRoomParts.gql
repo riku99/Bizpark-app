@@ -2,12 +2,6 @@ fragment ThoughtTalkRoomParts on ThoughtTalkRoom {
   id
   createdAt
   allMessageSeen
-  # members {
-  #   id
-  #   user {
-  #     ...UserParts
-  #   }
-  # }
   members {
     edges {
       node {

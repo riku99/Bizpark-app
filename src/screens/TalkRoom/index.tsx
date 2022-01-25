@@ -50,7 +50,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const renderHeaderTitle = useCallback(() => {
     const urls = [
       me.imageUrl,
-      ...fragmentCacheData.members.map((member) => member.user.imageUrl),
+      ...fragmentCacheData.members.edges.map((edge) => edge.node.user.imageUrl),
     ];
 
     return (

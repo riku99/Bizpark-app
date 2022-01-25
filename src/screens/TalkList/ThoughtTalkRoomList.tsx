@@ -109,9 +109,9 @@ export const ThoughtTalkRoomList = React.memo(() => {
       const { edges } = item.messages;
 
       for (let i = 0; i <= 7; i++) {
-        const member = item.members[i];
-        if (member && member.user.id !== me.id) {
-          images.push(member.user.imageUrl);
+        const member = item.members.edges[i];
+        if (member && member.node.user.id !== me.id) {
+          images.push(member.node.user.imageUrl);
         }
       }
 
