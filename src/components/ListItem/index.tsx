@@ -22,9 +22,10 @@ export const ListItem = ({
         bg: useColorModeValue("lt.pressed", "dt.pressed"),
       }}
       px="4"
+      py="4"
       {...props}
     >
-      <HStack justifyContent="space-between" alignItems="center" py="4">
+      <HStack justifyContent="space-between" alignItems="center">
         <HStack alignItems="center">
           {ItemLeft && ItemLeft}
           <Text fontWeight="bold" ml={ItemLeft ? "4" : 0} {...titleStyle}>
