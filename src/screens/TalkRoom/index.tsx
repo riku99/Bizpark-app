@@ -1,4 +1,10 @@
-import React, { useLayoutEffect, useMemo, useEffect, useState } from "react";
+import React, {
+  useLayoutEffect,
+  useMemo,
+  useEffect,
+  useState,
+  useCallback,
+} from "react";
 import { RootNavigationScreenProp } from "src/types";
 import {
   useGetThoughtTalkRoomQuery,
@@ -15,6 +21,8 @@ import { createRandomStr } from "src/utils";
 import { useThoughtTalkRoomReadFragment } from "src/hooks/thoughtTalkRoom";
 import { logJson } from "src/utils";
 import { btoa } from "react-native-quick-base64";
+import { UserImages } from "src/components/UserImages";
+import { Pressable } from "native-base";
 
 type Props = RootNavigationScreenProp<"TalkRoom">;
 
@@ -31,12 +39,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
   const fragmentCacheData = useThoughtTalkRoomReadFragment({ id });
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: "",
-    });
-  }, [navigation]);
-
   const { data: talkRoomData, fetchMore } = useGetThoughtTalkRoomMessagesQuery({
     variables: {
       id,
@@ -44,6 +46,25 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     // fetchPolicy: "network-only",
     // nextFetchPolicy: "cache-first",
   });
+
+  const renderHeaderTitle = useCallback(() => {
+    const urls = [
+      me.imageUrl,
+      ...fragmentCacheData.members.map((member) => member.user.imageUrl),
+    ];
+
+    return (
+      <Pressable>
+        <UserImages data={urls} imageSize="6" />
+      </Pressable>
+    );
+  }, [fragmentCacheData]);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: renderHeaderTitle,
+    });
+  }, [navigation, renderHeaderTitle]);
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);

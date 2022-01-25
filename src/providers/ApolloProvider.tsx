@@ -118,7 +118,6 @@ export const ApolloProvider = ({ children }: Props) => {
       }
 
       if (code === "INTERNAL_SERVER_ERROR") {
-        // console.log(error.graphQLErrors[0].message);
         someErrorToast();
         return;
       }

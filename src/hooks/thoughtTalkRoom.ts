@@ -114,7 +114,16 @@ export const useThoughtTalkRoomReadFragment = ({ id }: { id: number }) => {
       id,
     }),
     fragment: gql`
-      fragment ThoughtTalkRoomMessage on ThoughtTalkRoom {
+      fragment ThoughtTalkRoomF on ThoughtTalkRoom {
+        id
+        members {
+          id
+          user {
+            id
+            name
+            imageUrl
+          }
+        }
         messages(first: 20) {
           edges {
             node {
