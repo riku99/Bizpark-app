@@ -54,7 +54,13 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     ];
 
     return (
-      <Pressable>
+      <Pressable
+        onPress={() => {
+          navigation.navigate("TalkRoomMembers", {
+            talkRoomId: id,
+          });
+        }}
+      >
         <UserImages data={urls} imageSize="6" />
       </Pressable>
     );
