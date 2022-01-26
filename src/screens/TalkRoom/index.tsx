@@ -37,6 +37,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const [
     createSeenMutation,
   ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
+
   const fragmentCacheData = useThoughtTalkRoomReadFragment({ id });
 
   const { data: talkRoomData, fetchMore } = useGetThoughtTalkRoomMessagesQuery({

@@ -22,6 +22,9 @@ fragment ThoughtTalkRoomParts on ThoughtTalkRoom {
     id
     title
     text
+    contributor {
+      id
+    }
   }
   messages(first: 20) {
     edges {

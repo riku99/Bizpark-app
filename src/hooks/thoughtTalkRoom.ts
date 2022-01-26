@@ -156,6 +156,12 @@ export const useThoughtTalkRoomReadFragment = ({ id }: { id: number }) => {
             endCursor
           }
         }
+        thought {
+          id
+          contributor {
+            id
+          }
+        }
       }
     `,
   });

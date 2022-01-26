@@ -1,16 +1,19 @@
 import React, { useLayoutEffect, useCallback } from "react";
-import { Box, Pressable, Text } from "native-base";
+import { Box, Pressable, Text, HStack } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import {
   useGetThoughtTalkRoomMembersQuery,
   ThoughtTalkRoomMemberEdge,
+  useMeQuery,
 } from "src/generated/graphql";
 import { Indicator } from "src/components/Indicator";
 import { InfiniteFlatList } from "src/components/InfiniteFlatList";
 import { ListItem } from "src/components/ListItem";
 import { UserImage } from "src/components/UserImage";
 import { btoa } from "react-native-quick-base64";
-import { SafeAreaView } from "react-native";
+import { SafeAreaView, StyleSheet } from "react-native";
+import { useThoughtTalkRoomReadFragment } from "src/hooks/thoughtTalkRoom";
+import { MotiView } from "moti";
 
 type Props = RootNavigationScreenProp<"TalkRoomMembers">;
 
@@ -18,14 +21,26 @@ type Item = ThoughtTalkRoomMemberEdge;
 
 export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
   const { talkRoomId } = route.params;
+  const fragmentCacheData = useThoughtTalkRoomReadFragment({ id: talkRoomId });
+  const {
+    data: { me },
+  } = useMeQuery();
+  const myData = fragmentCacheData.thought.contributor.id === me.id;
+
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "参加したメンバー",
-      headerRight: () => (
-        <Pressable>
-          <Text fontWeight="bold">編集</Text>
-        </Pressable>
-      ),
+      headerRight: () => {
+        if (!myData) {
+          return null;
+        }
+
+        return (
+          <Pressable>
+            <Text>編集</Text>
+          </Pressable>
+        );
+      },
     });
   }, [navigation]);
 
@@ -83,3 +98,15 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
     </SafeAreaView>
   );
 };
+
+const LIST_ITEM_LEFT_WIDTH = 40;
+
+const styles = StyleSheet.create({
+  listItemContainerLeft: {
+    width: LIST_ITEM_LEFT_WIDTH,
+    backgroundColor: "red",
+  },
+  listItemContainer: {
+    transform: [{ translateX: -LIST_ITEM_LEFT_WIDTH }],
+  },
+});
