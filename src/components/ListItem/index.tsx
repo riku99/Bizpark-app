@@ -18,6 +18,7 @@ export const ListItem = ({
 }: Props) => {
   return (
     <Pressable
+      bg={useColorModeValue("lt.bg", "dt.bg")}
       _pressed={{
         bg: useColorModeValue("lt.pressed", "dt.pressed"),
       }}

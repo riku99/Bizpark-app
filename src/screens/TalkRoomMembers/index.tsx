@@ -27,7 +27,7 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "参加したメンバー",
+      title: "参加しているメンバー",
       headerRight: () => {
         if (!myData) {
           return null;
