@@ -104,13 +104,13 @@ export const ThoughtTalkRoomList = React.memo(() => {
 
   const renderItem = useCallback(
     ({ item }: { item: Item }) => {
-      let images: string[] = [me.imageUrl]; // いっちゃん始めは自分のアイコン
+      let images: string[] = []; // いっちゃん始めは自分のアイコン
 
       const { edges } = item.messages;
 
       for (let i = 0; i <= 7; i++) {
         const member = item.members.edges[i];
-        if (member && member.node.user.id !== me.id) {
+        if (member) {
           images.push(member.node.user.imageUrl);
         }
       }
