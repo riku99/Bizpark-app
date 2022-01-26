@@ -2,6 +2,8 @@ import React, { ComponentProps } from "react";
 import { Box, HStack } from "native-base";
 import { UserImage } from "../UserImage";
 
+export const TRANSLATE_IMAGE_X = 10;
+
 type Props = {
   data: (string | null)[];
   imageSize: ComponentProps<typeof UserImage>["size"];
@@ -21,7 +23,10 @@ export const UserImages = ({
           <Box
             zIndex={data.length - idx}
             style={{
-              transform: idx !== 0 ? [{ translateX: idx * -10 }] : undefined,
+              transform:
+                idx !== 0
+                  ? [{ translateX: idx * -TRANSLATE_IMAGE_X }]
+                  : undefined,
             }}
           >
             <UserImage uri={d} size={imageSize} style={imageStyle} />

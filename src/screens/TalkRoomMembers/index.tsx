@@ -9,6 +9,8 @@ import { Indicator } from "src/components/Indicator";
 import { InfiniteFlatList } from "src/components/InfiniteFlatList";
 import { ListItem } from "src/components/ListItem";
 import { UserImage } from "src/components/UserImage";
+import { btoa } from "react-native-quick-base64";
+import { SafeAreaView } from "react-native";
 
 type Props = RootNavigationScreenProp<"TalkRoomMembers">;
 
@@ -27,7 +29,7 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation]);
 
-  const { data, fetchMore } = useGetThoughtTalkRoomMembersQuery({
+  const { data: membersData, fetchMore } = useGetThoughtTalkRoomMembersQuery({
     variables: {
       talkRoomId,
     },
@@ -41,24 +43,43 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
         title={user.name}
         ItemLeft={<UserImage uri={user.imageUrl} size="8" />}
         py="3"
+        onPress={() => {
+          navigation.navigate("UserProfile", {
+            id: item.node.user.id,
+          });
+        }}
       />
     );
   }, []);
 
-  const infiniteLoad = async () => {};
+  const infiniteLoad = async () => {
+    if (membersData) {
+      const { pageInfo } = membersData.thoughtTalkRoom.members;
 
-  if (!data) {
+      if (pageInfo.hasNextPage) {
+        const { endCursor } = pageInfo;
+
+        await fetchMore({
+          variables: {
+            after: endCursor ? btoa(endCursor) : null,
+          },
+        });
+      }
+    }
+  };
+
+  if (!membersData) {
     return <Indicator style={{ marginTop: 10 }} />;
   }
 
   return (
-    <Box flex={1}>
+    <SafeAreaView style={{ flex: 1 }}>
       <InfiniteFlatList<Item>
-        data={data.thoughtTalkRoom.members.edges}
+        data={membersData.thoughtTalkRoom.members.edges}
         renderItem={renderItem}
         infiniteLoad={infiniteLoad}
         keyExtractor={(item) => item.node.id.toString()}
       />
-    </Box>
+    </SafeAreaView>
   );
 };

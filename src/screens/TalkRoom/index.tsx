@@ -21,7 +21,7 @@ import { createRandomStr } from "src/utils";
 import { useThoughtTalkRoomReadFragment } from "src/hooks/thoughtTalkRoom";
 import { logJson } from "src/utils";
 import { btoa } from "react-native-quick-base64";
-import { UserImages } from "src/components/UserImages";
+import { UserImages, TRANSLATE_IMAGE_X } from "src/components/UserImages";
 import { Pressable } from "native-base";
 
 type Props = RootNavigationScreenProp<"TalkRoomMain">;
@@ -59,8 +59,17 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
             talkRoomId: id,
           });
         }}
+        alignItems="center"
       >
-        <UserImages data={urls} imageSize="6" />
+        <UserImages
+          data={urls}
+          imageSize="6"
+          style={{
+            transform: [
+              { translateX: (urls.length - 1) * (TRANSLATE_IMAGE_X / 2) },
+            ],
+          }}
+        />
       </Pressable>
     );
   }, [fragmentCacheData]);
