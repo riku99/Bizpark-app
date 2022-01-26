@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useCallback } from "react";
-import { Box, Pressable, Text, HStack } from "native-base";
+import { Box, Pressable, Text } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import {
   useGetThoughtTalkRoomMembersQuery,
@@ -8,12 +8,10 @@ import {
 } from "src/generated/graphql";
 import { Indicator } from "src/components/Indicator";
 import { InfiniteFlatList } from "src/components/InfiniteFlatList";
-import { ListItem } from "src/components/ListItem";
-import { UserImage } from "src/components/UserImage";
 import { btoa } from "react-native-quick-base64";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { useThoughtTalkRoomReadFragment } from "src/hooks/thoughtTalkRoom";
-import { MotiView } from "moti";
+import { MemberListItem } from "./MemberListItem";
 
 type Props = RootNavigationScreenProp<"TalkRoomMembers">;
 
@@ -52,19 +50,7 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
   });
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
-    const { user } = item.node;
-    return (
-      <ListItem
-        title={user.name}
-        ItemLeft={<UserImage uri={user.imageUrl} size="8" />}
-        py="3"
-        onPress={() => {
-          navigation.navigate("UserProfile", {
-            id: item.node.user.id,
-          });
-        }}
-      />
-    );
+    return <MemberListItem item={item} />;
   }, []);
 
   const infiniteLoad = async () => {
@@ -101,12 +87,4 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
 
 const LIST_ITEM_LEFT_WIDTH = 40;
 
-const styles = StyleSheet.create({
-  listItemContainerLeft: {
-    width: LIST_ITEM_LEFT_WIDTH,
-    backgroundColor: "red",
-  },
-  listItemContainer: {
-    transform: [{ translateX: -LIST_ITEM_LEFT_WIDTH }],
-  },
-});
+const styles = StyleSheet.create({});
