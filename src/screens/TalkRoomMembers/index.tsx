@@ -20,7 +20,7 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
   const { talkRoomId } = route.params;
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "メンバー",
+      title: "参加したメンバー",
       headerRight: () => (
         <Pressable>
           <Text fontWeight="bold">編集</Text>

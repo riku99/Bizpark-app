@@ -1,6 +1,5 @@
 import React, {
   useLayoutEffect,
-  useMemo,
   useEffect,
   useState,
   useCallback,
@@ -23,6 +22,7 @@ import { logJson } from "src/utils";
 import { btoa } from "react-native-quick-base64";
 import { UserImages, TRANSLATE_IMAGE_X } from "src/components/UserImages";
 import { Pressable } from "native-base";
+import { HeaderBackButton } from "@react-navigation/elements";
 
 type Props = RootNavigationScreenProp<"TalkRoomMain">;
 
@@ -59,7 +59,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
             talkRoomId: id,
           });
         }}
-        alignItems="center"
       >
         <UserImages
           data={urls}
@@ -77,7 +76,13 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: renderHeaderTitle,
-      headerBackVisible: true,
+      headerLeft: () => (
+        <HeaderBackButton
+          onPress={() => {
+            navigation.goBack();
+          }}
+        />
+      ),
     });
   }, [navigation, renderHeaderTitle]);
 
