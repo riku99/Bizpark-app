@@ -11,7 +11,7 @@ import {
 import {
   useGetThoughtTalkRoomsQuery,
   useMeQuery,
-  useGetOutThoughtTalkRoomMemberMutation,
+  useGetOutThoughtTalkRoomMutation,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,
   GetThoughtTalkRoomsQueryResult,
@@ -31,7 +31,7 @@ type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 
 export const ThoughtTalkRoomList = React.memo(() => {
   const { data } = useGetThoughtTalkRoomsQuery();
-  const [getOutMutation] = useGetOutThoughtTalkRoomMemberMutation();
+  const [getOutMutation] = useGetOutThoughtTalkRoomMutation();
   const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
   const textGray = useColorModeValue("lt.textGray", "dt.textGray");
   const navigation = useNavigation<RootNavigationProp<"Tab">>();

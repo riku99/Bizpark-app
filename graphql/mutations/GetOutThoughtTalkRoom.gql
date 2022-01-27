@@ -1,0 +1,3 @@
+mutation GetOutThoughtTalkRoom($input: GetOutThoughtTalkRoomInput!) {
+  getOutThoughtTalkRoom(input: $input)
+}
