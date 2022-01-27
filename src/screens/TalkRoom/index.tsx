@@ -11,18 +11,21 @@ import {
   useCreateThoughtTalkRoomMessageMutation,
   useCreateUserThoughtTalkRoomMessageSeenMutation,
   GetThoughtTalkRoomMessagesQuery,
+  CustomErrorResponseCode,
+  useGetThoughtTalkRoomsLazyQuery,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
 import { NO_USER_IMAGE_URL } from "src/constants";
 import { createRandomStr } from "src/utils";
 import { useThoughtTalkRoomReadFragment } from "src/hooks/thoughtTalkRoom";
-import { logJson } from "src/utils";
+import { logJson, getGraphQLError } from "src/utils";
 import { btoa } from "react-native-quick-base64";
 import { UserImages, TRANSLATE_IMAGE_X } from "src/components/UserImages";
 import { Pressable } from "native-base";
 import { HeaderBackButton } from "@react-navigation/elements";
 import { Indicator } from "src/components/Indicator";
+import { Alert } from "react-native";
 
 type Props = RootNavigationScreenProp<"TalkRoomMain">;
 
@@ -37,6 +40,9 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const [
     createSeenMutation,
   ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
+  const [getThougtTalkRoomsQuery] = useGetThoughtTalkRoomsLazyQuery({
+    fetchPolicy: "network-only",
+  });
 
   const fragmentCacheData = useThoughtTalkRoomReadFragment({ id });
 
@@ -229,6 +235,20 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
         return [newIMessageData, ...prev];
       });
     } catch (e) {
+      const error = getGraphQLError(e, 0);
+
+      if (error?.code === CustomErrorResponseCode.InvalidRequest) {
+        Alert.alert(error.message, "", [
+          {
+            text: "OK",
+            onPress: async () => {
+              navigation.goBack();
+              await getThougtTalkRoomsQuery();
+            },
+          },
+        ]);
+      }
+
       setMessages((c) => {
         return c.filter((_c) => _c._id !== tempId);
       });

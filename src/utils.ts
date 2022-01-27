@@ -5,14 +5,18 @@ export const getGraphQLErrorCode = (error: any) => {
 };
 
 export const getGraphQLError = (error: ErrorResponse, index: number) => {
-  const gqlError = error.graphQLErrors[index];
-  if (!gqlError) {
+  if (error?.graphQLErrors?.length) {
+    const gqlError = error.graphQLErrors[index];
+    if (!gqlError) {
+      return null;
+    }
+    return {
+      code: gqlError.extensions.code as string,
+      message: gqlError.message as string,
+    };
+  } else {
     return null;
   }
-  return {
-    code: gqlError.extensions.code as string,
-    message: gqlError.message as string,
-  };
 };
 
 export const createRandomStr = () =>

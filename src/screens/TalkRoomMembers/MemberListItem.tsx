@@ -87,7 +87,7 @@ export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
   const onDeletePress = () => {
     Alert.alert(
       "ユーザーをトークから削除",
-      `${item.node.user.name}をトークから削除しますか?`,
+      `${item.node.user.name}をトークから削除しますか?\n削除されたユーザーは再度トークに参加することが可能です。トークに参加させたくない場合はブロックしてください`,
       [
         {
           text: "キャンセル",
