@@ -52,9 +52,9 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
       return <></>;
     }
 
-    const urls = talkRoomData.thoughtTalkRoom.members.edges.map(
-      (edge) => edge.node.user.imageUrl
-    );
+    const urls = talkRoomData.thoughtTalkRoom.members.edges
+      .slice(0, 7)
+      .map((edge) => edge.node.user.imageUrl);
 
     return (
       <Pressable
