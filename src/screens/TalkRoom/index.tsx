@@ -22,6 +22,7 @@ import { btoa } from "react-native-quick-base64";
 import { UserImages, TRANSLATE_IMAGE_X } from "src/components/UserImages";
 import { Pressable } from "native-base";
 import { HeaderBackButton } from "@react-navigation/elements";
+import { Indicator } from "src/components/Indicator";
 
 type Props = RootNavigationScreenProp<"TalkRoomMain">;
 
@@ -49,7 +50,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
   const renderHeaderTitle = useCallback(() => {
     if (!talkRoomData) {
-      return <></>;
+      return <Indicator />;
     }
 
     const urls = talkRoomData.thoughtTalkRoom.members.edges

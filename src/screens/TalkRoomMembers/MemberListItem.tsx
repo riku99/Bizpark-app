@@ -15,6 +15,8 @@ import {
   useDeleteThoughtTalkRoomMemberMutation,
   useGetThoughtTalkRoomQuery,
   useMeQuery,
+  GetThoughtTalkRoomsDocument,
+  GetThoughtTalkRoomsQuery,
 } from "src/generated/graphql";
 import { ListItem } from "src/components/ListItem";
 import { UserImage } from "src/components/UserImage";
@@ -104,6 +106,42 @@ export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
                     userId: user.id,
                     roomId: talkRoomId,
                   },
+                },
+                update: (cache, { data: responseData }) => {
+                  const queryResult = cache.readQuery<GetThoughtTalkRoomsQuery>(
+                    {
+                      query: GetThoughtTalkRoomsDocument,
+                    }
+                  );
+
+                  if (queryResult) {
+                    const newTalkRooms = queryResult.thoughtTalkRooms.map(
+                      (room) => {
+                        if (room.id !== talkRoomId) {
+                          return room;
+                        }
+
+                        const newMembers = room.members.edges.filter(
+                          (edge) => edge.node.user.id !== user.id
+                        );
+
+                        return {
+                          ...room,
+                          members: {
+                            ...room.members,
+                            edges: newMembers,
+                          },
+                        };
+                      }
+                    );
+
+                    cache.writeQuery({
+                      query: GetThoughtTalkRoomsDocument,
+                      data: {
+                        thoughtTalkRooms: newTalkRooms,
+                      },
+                    });
+                  }
                 },
               });
             } catch (e) {
