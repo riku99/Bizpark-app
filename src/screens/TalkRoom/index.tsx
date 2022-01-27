@@ -48,7 +48,11 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   });
 
   const renderHeaderTitle = useCallback(() => {
-    const urls = fragmentCacheData.members.edges.map(
+    if (!talkRoomData) {
+      return <></>;
+    }
+
+    const urls = talkRoomData.thoughtTalkRoom.members.edges.map(
       (edge) => edge.node.user.imageUrl
     );
 
@@ -71,7 +75,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
         />
       </Pressable>
     );
-  }, [fragmentCacheData]);
+  }, [talkRoomData]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

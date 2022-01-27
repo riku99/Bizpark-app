@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Box, Pressable } from "native-base";
 import {
   PanGestureHandler,
@@ -43,6 +43,8 @@ export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
   const navigation = useNavigation<RootNavigationProp<"TalkRoomMembers">>();
 
   const [deleteMemberMutation] = useDeleteThoughtTalkRoomMemberMutation();
+
+  const [iconVisible, setIconVisible] = useState(true);
 
   const translateX = useSharedValue(0);
   const itemHeight = useSharedValue(DEFAULT_ITEM_HEIGHT);
@@ -95,6 +97,7 @@ export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
           onPress: async () => {
             try {
               itemHeight.value = withTiming(0);
+              setIconVisible(false);
               await deleteMemberMutation({
                 variables: {
                   input: {
@@ -105,6 +108,7 @@ export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
               });
             } catch (e) {
               itemHeight.value = withTiming(DEFAULT_ITEM_HEIGHT);
+              setIconVisible(true);
               console.log(e);
             }
           },
@@ -121,9 +125,11 @@ export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
     <Animated.View style={[rItemContainerStyle]}>
       {/* 削除 */}
       <Animated.View style={[styles.deleteContainer, rItemContainerStyle]}>
-        <Pressable onPress={onDeletePress}>
-          <Feather name="delete" size={24} color="red" />
-        </Pressable>
+        {iconVisible && (
+          <Pressable onPress={onDeletePress}>
+            <Feather name="delete" size={24} color="red" />
+          </Pressable>
+        )}
       </Animated.View>
 
       <PanGestureHandler

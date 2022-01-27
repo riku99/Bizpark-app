@@ -19,26 +19,13 @@ type Item = ThoughtTalkRoomMemberEdge;
 
 export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
   const { talkRoomId } = route.params;
-  const fragmentCacheData = useThoughtTalkRoomReadFragment({ id: talkRoomId });
   const {
     data: { me },
   } = useMeQuery();
-  const myData = fragmentCacheData.thought.contributor.id === me.id;
 
   useLayoutEffect(() => {
     navigation.setOptions({
       title: "参加しているメンバー",
-      headerRight: () => {
-        if (!myData) {
-          return null;
-        }
-
-        return (
-          <Pressable>
-            <Text>編集</Text>
-          </Pressable>
-        );
-      },
     });
   }, [navigation]);
 
