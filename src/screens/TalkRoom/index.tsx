@@ -26,6 +26,8 @@ import { Pressable } from "native-base";
 import { HeaderBackButton } from "@react-navigation/elements";
 import { Indicator } from "src/components/Indicator";
 import { Alert } from "react-native";
+import { DotsHorizontal } from "src/components/DotsHorizontal";
+import { Menu } from "./Menu";
 
 type Props = RootNavigationScreenProp<"TalkRoomMain">;
 
@@ -43,9 +45,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const [getThougtTalkRoomsQuery] = useGetThoughtTalkRoomsLazyQuery({
     fetchPolicy: "network-only",
   });
-
   const fragmentCacheData = useThoughtTalkRoomReadFragment({ id });
-
   const { data: talkRoomData, fetchMore } = useGetThoughtTalkRoomQuery({
     variables: {
       id,
@@ -53,6 +53,8 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     // fetchPolicy: "network-only",
     // nextFetchPolicy: "cache-first",
   });
+
+  const [modalVisible, setModalVisible] = useState(false);
 
   const renderHeaderTitle = useCallback(() => {
     if (!talkRoomData) {
@@ -84,6 +86,21 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     );
   }, [talkRoomData]);
 
+  const renderHeaderRight = useCallback(() => {
+    if (!talkRoomData) {
+      return null;
+    }
+
+    const isMyShareData =
+      talkRoomData.thoughtTalkRoom.thought.contributor.id === me.id;
+
+    if (!isMyShareData) {
+      return null;
+    }
+
+    return <DotsHorizontal onPress={() => setModalVisible(true)} />;
+  }, [talkRoomData, me]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: renderHeaderTitle,
@@ -94,8 +111,9 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
           }}
         />
       ),
+      headerRight: renderHeaderRight,
     });
-  }, [navigation, renderHeaderTitle]);
+  }, [navigation, renderHeaderTitle, renderHeaderRight]);
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -293,13 +311,22 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   };
 
   return (
-    <BaseChat
-      messages={messages}
-      user={{
-        _id: me.id,
-      }}
-      onSend={onSendPress}
-      infiniteLoad={infiniteLoad}
-    />
+    <>
+      <BaseChat
+        messages={messages}
+        user={{
+          _id: me.id,
+        }}
+        onSend={onSendPress}
+        infiniteLoad={infiniteLoad}
+      />
+
+      <Menu
+        isVisible={modalVisible}
+        closeMenu={() => {
+          setModalVisible(false);
+        }}
+      />
+    </>
   );
 };

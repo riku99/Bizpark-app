@@ -3,7 +3,7 @@ import { View, StyleSheet } from "react-native";
 import Modal from "react-native-modal";
 import { Box, useColorModeValue, Pressable, Text, Divider } from "native-base";
 
-type ListItem = {
+export type ListItem = {
   title: string;
   color?: string;
   onPress: () => void;

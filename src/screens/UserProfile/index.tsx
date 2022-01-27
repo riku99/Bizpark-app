@@ -2,12 +2,7 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { ScrollView, useColorModeValue, useTheme } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { useUserCacheFragment } from "src/hooks/users";
-import {
-  useUserQuery,
-  useBlockMutation,
-  useUnBlockMutation,
-  useMeQuery,
-} from "src/generated/graphql";
+import { useUserQuery, useMeQuery } from "src/generated/graphql";
 import { SocialIconProps } from "react-native-elements";
 import { Profile } from "src/components/Profile";
 import { RefreshControl } from "src/components/RefreshControl";
