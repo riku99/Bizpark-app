@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Box } from "native-base";
+import React from "react";
+import { Box, Pressable } from "native-base";
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
@@ -16,7 +16,8 @@ import { UserImage } from "src/components/UserImage";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
 import { StyleSheet, Dimensions } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
+import { Alert } from "react-native";
 
 type Props = {
   item: ThoughtTalkRoomMemberEdge;
@@ -25,17 +26,10 @@ type Props = {
 export const MemberListItem = React.memo(({ item }: Props) => {
   const { user } = item.node;
 
-  const [itemHeight, setItemHeight] = useState(56);
-
   const navigation = useNavigation<RootNavigationProp<"TalkRoomMembers">>();
 
   const translateX = useSharedValue(0);
-  const rItemHeight = useSharedValue(itemHeight);
-
-  useEffect(() => {
-    rItemHeight.value = itemHeight;
-    console.log(itemHeight);
-  }, [itemHeight]);
+  const itemHeight = useSharedValue(DEFAULT_ITEM_HEIGHT);
 
   const rStyle = useAnimatedStyle(() => {
     return {
@@ -47,32 +41,22 @@ export const MemberListItem = React.memo(({ item }: Props) => {
     };
   });
 
-  const rIconStyle = useAnimatedStyle(() => {
-    const opacity = withTiming(
-      translateX.value < TRANSRATE_X_THRESHOLD ? 1 : 0
-    );
-    return {
-      opacity,
-    };
-  });
-
   const rItemContainerStyle = useAnimatedStyle(() => {
     return {
-      height: rItemHeight.value,
+      height: itemHeight.value,
     };
   });
 
   const panGestureHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>(
     {
-      onStart: () => {},
-      onActive: (event) => {
+      onStart: (_, ctx) => {},
+      onActive: (event, ctx) => {
         translateX.value = event.translationX;
       },
-      onEnd: () => {
-        const shouldBeDismissed = translateX.value < TRANSRATE_X_THRESHOLD;
+      onEnd: (event, ctx) => {
+        const shouldBeDismissed = translateX.value < -DELETE_CONTAINER_WIDTH;
         if (shouldBeDismissed) {
-          translateX.value = withTiming(-SCREEN_WIDTH);
-          rItemHeight.value = withTiming(0);
+          translateX.value = withTiming(-DELETE_CONTAINER_WIDTH);
         } else {
           translateX.value = withTiming(0);
         }
@@ -80,17 +64,33 @@ export const MemberListItem = React.memo(({ item }: Props) => {
     }
   );
 
+  const onDeletePress = () => {
+    Alert.alert(
+      "ユーザーをトークから削除",
+      `${item.node.user.name}をトークから削除しますか?`,
+      [
+        {
+          text: "キャンセル",
+          style: "cancel",
+        },
+        {
+          text: "削除",
+          style: "destructive",
+          onPress: async () => {
+            itemHeight.value = withTiming(0);
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <Animated.View style={[rItemContainerStyle]}>
       {/* 削除 */}
-      <Animated.View
-        style={[
-          styles.deleteContainer,
-          { height: itemHeight, width: itemHeight },
-          rIconStyle,
-        ]}
-      >
-        <AntDesign name="minuscircle" size={24} color="red" />
+      <Animated.View style={[styles.deleteContainer, rItemContainerStyle]}>
+        <Pressable onPress={onDeletePress}>
+          <Feather name="delete" size={24} color="red" />
+        </Pressable>
       </Animated.View>
 
       <PanGestureHandler onGestureEvent={panGestureHandler}>
@@ -104,7 +104,6 @@ export const MemberListItem = React.memo(({ item }: Props) => {
                 id: item.node.user.id,
               });
             }}
-            onLayout={(e) => setItemHeight(e.nativeEvent.layout.height)}
           />
         </Animated.View>
       </PanGestureHandler>
@@ -112,14 +111,15 @@ export const MemberListItem = React.memo(({ item }: Props) => {
   );
 });
 
-const { width: SCREEN_WIDTH } = Dimensions.get("screen");
-const TRANSRATE_X_THRESHOLD = -SCREEN_WIDTH * 0.3;
+const DELETE_CONTAINER_WIDTH = 90;
+const DEFAULT_ITEM_HEIGHT = 56;
 
 const styles = StyleSheet.create({
   itemContainer: {},
   deleteContainer: {
     position: "absolute",
-    right: "5%",
+    right: 0,
+    width: DELETE_CONTAINER_WIDTH,
     justifyContent: "center",
     alignItems: "center",
   },
