@@ -40,7 +40,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
   const fragmentCacheData = useThoughtTalkRoomReadFragment({ id });
 
-  const { data: talkRoomData, fetchMore } = useGetThoughtTalkRoomMessagesQuery({
+  const { data: talkRoomData, fetchMore } = useGetThoughtTalkRoomQuery({
     variables: {
       id,
     },

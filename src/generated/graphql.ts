@@ -704,6 +704,7 @@ export type FollowsQuery = { __typename?: 'Query', follows: { __typename?: 'User
 
 export type GetThoughtTalkRoomQueryVariables = Exact<{
   id: Scalars['Int'];
+  messageCursor?: InputMaybe<Scalars['String']>;
 }>;
 
 
@@ -1694,12 +1695,50 @@ export type FollowsQueryHookResult = ReturnType<typeof useFollowsQuery>;
 export type FollowsLazyQueryHookResult = ReturnType<typeof useFollowsLazyQuery>;
 export type FollowsQueryResult = Apollo.QueryResult<FollowsQuery, FollowsQueryVariables>;
 export const GetThoughtTalkRoomDocument = gql`
-    query GetThoughtTalkRoom($id: Int!) {
+    query GetThoughtTalkRoom($id: Int!, $messageCursor: String) {
   thoughtTalkRoom(id: $id) {
-    ...ThoughtTalkRoomParts
+    id
+    createdAt
+    allMessageSeen
+    members {
+      edges {
+        node {
+          id
+          user {
+            id
+            name
+            imageUrl
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+    thought {
+      id
+      title
+      text
+      contributor {
+        id
+      }
+    }
+    messages(first: 20, after: $messageCursor) {
+      edges {
+        node {
+          ...ThoughtTalkRoomMessageParts
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
   }
 }
-    ${ThoughtTalkRoomPartsFragmentDoc}`;
+    ${PageInfoPartsFragmentDoc}
+${ThoughtTalkRoomMessagePartsFragmentDoc}`;
 
 /**
  * __useGetThoughtTalkRoomQuery__
@@ -1714,6 +1753,7 @@ export const GetThoughtTalkRoomDocument = gql`
  * const { data, loading, error } = useGetThoughtTalkRoomQuery({
  *   variables: {
  *      id: // value for 'id'
+ *      messageCursor: // value for 'messageCursor'
  *   },
  * });
  */

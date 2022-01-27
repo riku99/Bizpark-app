@@ -1,5 +1,0 @@
-query GetThoughtTalkRoom($id: Int!) {
-  thoughtTalkRoom(id: $id) {
-    ...ThoughtTalkRoomParts
-  }
-}
