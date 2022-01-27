@@ -93,8 +93,8 @@ const cache = new InMemoryCache({
     },
     ThoughtTalkRoom: {
       fields: {
-        messages: relayStylePagination(["id"]),
-        members: relayStylePagination(["talkRoomId"]),
+        messages: relayStylePagination(),
+        members: relayStylePagination(),
       },
     },
   },
