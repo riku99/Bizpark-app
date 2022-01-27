@@ -10,7 +10,10 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import { ThoughtTalkRoomMemberEdge } from "src/generated/graphql";
+import {
+  ThoughtTalkRoomMemberEdge,
+  useDeleteThoughtTalkRoomMemberMutation,
+} from "src/generated/graphql";
 import { ListItem } from "src/components/ListItem";
 import { UserImage } from "src/components/UserImage";
 import { useNavigation } from "@react-navigation/native";
@@ -21,12 +24,15 @@ import { Alert } from "react-native";
 
 type Props = {
   item: ThoughtTalkRoomMemberEdge;
+  talkRoomId: number;
 };
 
-export const MemberListItem = React.memo(({ item }: Props) => {
+export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
   const { user } = item.node;
 
   const navigation = useNavigation<RootNavigationProp<"TalkRoomMembers">>();
+
+  const [deleteMemberMutation] = useDeleteThoughtTalkRoomMemberMutation();
 
   const translateX = useSharedValue(0);
   const itemHeight = useSharedValue(DEFAULT_ITEM_HEIGHT);
@@ -77,7 +83,20 @@ export const MemberListItem = React.memo(({ item }: Props) => {
           text: "削除",
           style: "destructive",
           onPress: async () => {
-            itemHeight.value = withTiming(0);
+            try {
+              itemHeight.value = withTiming(0);
+              await deleteMemberMutation({
+                variables: {
+                  input: {
+                    userId: user.id,
+                    roomId: talkRoomId,
+                  },
+                },
+              });
+            } catch (e) {
+              itemHeight.value = withTiming(DEFAULT_ITEM_HEIGHT);
+              console.log(e);
+            }
           },
         },
       ]
@@ -93,7 +112,10 @@ export const MemberListItem = React.memo(({ item }: Props) => {
         </Pressable>
       </Animated.View>
 
-      <PanGestureHandler onGestureEvent={panGestureHandler}>
+      <PanGestureHandler
+        onGestureEvent={panGestureHandler}
+        activeOffsetX={[-1, 1]}
+      >
         <Animated.View style={[rStyle]}>
           <ListItem
             title={user.name}

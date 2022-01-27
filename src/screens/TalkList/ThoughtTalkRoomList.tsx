@@ -104,7 +104,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
 
   const renderItem = useCallback(
     ({ item }: { item: Item }) => {
-      let images: string[] = []; // いっちゃん始めは自分のアイコン
+      let images: string[] = [];
 
       const { edges } = item.messages;
 

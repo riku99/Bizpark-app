@@ -1,0 +1,7 @@
+mutation DeleteThoughtTalkRoomMember(
+  $input: DeleteThoughtTalkRoomMemberInput!
+) {
+  deleteThoughtTalkRoomMember(input: $input) {
+    id
+  }
+}

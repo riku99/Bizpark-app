@@ -79,6 +79,11 @@ export type DeleteThoughtResponse = {
   id: Scalars['ID'];
 };
 
+export type DeleteThoughtTalkRoomMemberInput = {
+  roomId: Scalars['Int'];
+  userId: Scalars['ID'];
+};
+
 export type Follow = {
   __typename?: 'Follow';
   followeeId: Scalars['ID'];
@@ -151,6 +156,7 @@ export type Mutation = {
   deleteNewsPick: NewsPick;
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
+  deleteThoughtTalkRoomMember: ThoughtTalkRoom;
   follow: User;
   getOutThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
   joinThoughtTalk: ThoughtTalkRoom;
@@ -210,6 +216,11 @@ export type MutationDeletePickArgs = {
 
 export type MutationDeleteThoughtArgs = {
   input: DeleteThoughtInput;
+};
+
+
+export type MutationDeleteThoughtTalkRoomMemberArgs = {
+  input: DeleteThoughtTalkRoomMemberInput;
 };
 
 
@@ -609,6 +620,13 @@ export type DeleteThoughtMutationVariables = Exact<{
 
 
 export type DeleteThoughtMutation = { __typename?: 'Mutation', deleteThought: { __typename?: 'DeleteThoughtResponse', id: string } };
+
+export type DeleteThoughtTalkRoomMemberMutationVariables = Exact<{
+  input: DeleteThoughtTalkRoomMemberInput;
+}>;
+
+
+export type DeleteThoughtTalkRoomMemberMutation = { __typename?: 'Mutation', deleteThoughtTalkRoomMember: { __typename?: 'ThoughtTalkRoom', id: number } };
 
 export type FollowMutationVariables = Exact<{
   followeeId: Scalars['ID'];
@@ -1261,6 +1279,39 @@ export function useDeleteThoughtMutation(baseOptions?: Apollo.MutationHookOption
 export type DeleteThoughtMutationHookResult = ReturnType<typeof useDeleteThoughtMutation>;
 export type DeleteThoughtMutationResult = Apollo.MutationResult<DeleteThoughtMutation>;
 export type DeleteThoughtMutationOptions = Apollo.BaseMutationOptions<DeleteThoughtMutation, DeleteThoughtMutationVariables>;
+export const DeleteThoughtTalkRoomMemberDocument = gql`
+    mutation DeleteThoughtTalkRoomMember($input: DeleteThoughtTalkRoomMemberInput!) {
+  deleteThoughtTalkRoomMember(input: $input) {
+    id
+  }
+}
+    `;
+export type DeleteThoughtTalkRoomMemberMutationFn = Apollo.MutationFunction<DeleteThoughtTalkRoomMemberMutation, DeleteThoughtTalkRoomMemberMutationVariables>;
+
+/**
+ * __useDeleteThoughtTalkRoomMemberMutation__
+ *
+ * To run a mutation, you first call `useDeleteThoughtTalkRoomMemberMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteThoughtTalkRoomMemberMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteThoughtTalkRoomMemberMutation, { data, loading, error }] = useDeleteThoughtTalkRoomMemberMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteThoughtTalkRoomMemberMutation(baseOptions?: Apollo.MutationHookOptions<DeleteThoughtTalkRoomMemberMutation, DeleteThoughtTalkRoomMemberMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteThoughtTalkRoomMemberMutation, DeleteThoughtTalkRoomMemberMutationVariables>(DeleteThoughtTalkRoomMemberDocument, options);
+      }
+export type DeleteThoughtTalkRoomMemberMutationHookResult = ReturnType<typeof useDeleteThoughtTalkRoomMemberMutation>;
+export type DeleteThoughtTalkRoomMemberMutationResult = Apollo.MutationResult<DeleteThoughtTalkRoomMemberMutation>;
+export type DeleteThoughtTalkRoomMemberMutationOptions = Apollo.BaseMutationOptions<DeleteThoughtTalkRoomMemberMutation, DeleteThoughtTalkRoomMemberMutationVariables>;
 export const FollowDocument = gql`
     mutation Follow($followeeId: ID!) {
   follow(followeeId: $followeeId) {

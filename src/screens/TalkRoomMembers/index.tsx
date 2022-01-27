@@ -50,7 +50,7 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
   });
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
-    return <MemberListItem item={item} />;
+    return <MemberListItem item={item} talkRoomId={talkRoomId} />;
   }, []);
 
   const infiniteLoad = async () => {
