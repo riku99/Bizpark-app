@@ -10,7 +10,6 @@ import {
   useMeQuery,
   useCreateThoughtTalkRoomMessageMutation,
   useCreateUserThoughtTalkRoomMessageSeenMutation,
-  useGetThoughtTalkRoomMessagesQuery,
   GetThoughtTalkRoomMessagesQuery,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";

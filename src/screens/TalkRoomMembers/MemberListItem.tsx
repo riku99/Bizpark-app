@@ -13,6 +13,8 @@ import Animated, {
 import {
   ThoughtTalkRoomMemberEdge,
   useDeleteThoughtTalkRoomMemberMutation,
+  useGetThoughtTalkRoomQuery,
+  useMeQuery,
 } from "src/generated/graphql";
 import { ListItem } from "src/components/ListItem";
 import { UserImage } from "src/components/UserImage";
@@ -29,6 +31,14 @@ type Props = {
 
 export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
   const { user } = item.node;
+
+  const { data: talkRoomData } = useGetThoughtTalkRoomQuery({
+    variables: {
+      id: talkRoomId,
+    },
+  });
+
+  const { data: meData } = useMeQuery();
 
   const navigation = useNavigation<RootNavigationProp<"TalkRoomMembers">>();
 
@@ -103,6 +113,10 @@ export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
     );
   };
 
+  const enabled =
+    meData.me.id === talkRoomData.thoughtTalkRoom.thought.contributor.id &&
+    user.id !== meData.me.id;
+
   return (
     <Animated.View style={[rItemContainerStyle]}>
       {/* 削除 */}
@@ -115,6 +129,7 @@ export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
       <PanGestureHandler
         onGestureEvent={panGestureHandler}
         activeOffsetX={[-1, 1]}
+        enabled={enabled}
       >
         <Animated.View style={[rStyle]}>
           <ListItem
