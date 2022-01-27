@@ -242,8 +242,8 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
           {
             text: "OK",
             onPress: async () => {
-              navigation.goBack();
               await getThougtTalkRoomsQuery();
+              navigation.goBack();
             },
           },
         ]);

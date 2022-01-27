@@ -9,6 +9,8 @@ import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
 import { useFindThoughtTalkRoomsByThoughtId } from "src/hooks/thoughtTalkRoom";
 import { spinnerVisibleVar } from "src/stores/spinner";
+import { getGraphQLError } from "src/utils";
+import { useToast } from "react-native-toast-notifications";
 
 type Props = { thoughtId: string; contributorId: string };
 
@@ -16,6 +18,8 @@ export const JoinButton = ({ thoughtId, contributorId }: Props) => {
   const [joinMutation] = useJoinThoughtTalkMutation();
   const navigation = useNavigation<RootNavigationProp<"Thought">>();
   const existingData = useFindThoughtTalkRoomsByThoughtId({ thoughtId });
+
+  const toast = useToast();
 
   const onPress = async () => {
     let roomId: number | null = null;
@@ -57,7 +61,10 @@ export const JoinButton = ({ thoughtId, contributorId }: Props) => {
           roomId = data.joinThoughtTalk.id;
         }
       } catch (e) {
-        console.log(e);
+        const result = getGraphQLError(e, 0);
+        if (result) {
+          toast.show(result.message, { type: "danger" });
+        }
       } finally {
         spinnerVisibleVar(false);
       }
