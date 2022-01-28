@@ -11,19 +11,27 @@ import { MotiView } from "moti";
 import { Overlay } from "src/components/Overlay";
 import { StyleSheet } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import * as Clipboard from "expo-clipboard";
+import { IMessage } from "react-native-gifted-chat";
 
 type Props = {
-  onBackdropPress: () => void;
+  message: IMessage;
+  close: () => void;
 } & ComponentProps<typeof Box>;
 
-export const BottomContents = ({ onBackdropPress, ...props }: Props) => {
+export const BottomContents = ({ message, close, ...props }: Props) => {
   const { bottom } = useSafeAreaInsets();
   const { colors } = useTheme();
 
   const bg = useColorModeValue(colors.lt.bg, colors.dt.bg);
 
+  const onCopyPress = () => {
+    Clipboard.setString(message.text);
+    close();
+  };
+
   return (
-    <Overlay onBackdropPress={onBackdropPress}>
+    <Overlay onBackdropPress={close}>
       <MotiView
         style={[
           styles.bottomContents,
@@ -46,7 +54,12 @@ export const BottomContents = ({ onBackdropPress, ...props }: Props) => {
           )}
         </Pressable>
 
-        <Pressable flex={1} justifyContent="center" alignItems="center">
+        <Pressable
+          flex={1}
+          justifyContent="center"
+          alignItems="center"
+          onPress={onCopyPress}
+        >
           {(props) => (
             <Text
               fontWeight="bold"

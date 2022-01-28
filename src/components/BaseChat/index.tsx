@@ -152,7 +152,11 @@ export const BaseChat = React.memo(({ infiniteLoad, ...props }: Props) => {
       />
 
       {!!longPressedMessage && (
-        <BottomContents onBackdropPress={() => setLongPressedMessage(null)} />
+        <BottomContents
+          onBackdropPress={() => setLongPressedMessage(null)}
+          close={() => setLongPressedMessage(null)}
+          message={longPressedMessage}
+        />
       )}
     </>
   );
