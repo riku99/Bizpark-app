@@ -7,21 +7,37 @@ import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoo
 import { spinnerVisibleVar } from "src/stores/spinner";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
+import { useToast } from "react-native-toast-notifications";
 
 type Props = {
   isVisible: boolean;
   closeMenu: () => void;
   talkRoomId: number;
+  isMyThuoghtTalkRoomData: boolean;
 };
 
-export const Menu = ({ isVisible, closeMenu, talkRoomId }: Props) => {
+export const Menu = ({
+  isVisible,
+  closeMenu,
+  talkRoomId,
+  isMyThuoghtTalkRoomData,
+}: Props) => {
   const [deleteTalkRoomMutation] = useDeleteThoughtTalkRoomMutation();
 
   const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
 
   const navigation = useNavigation<RootNavigationProp<"TalkRoom">>();
 
-  const menuList: ListItem[] = [
+  const toast = useToast();
+
+  const baseMenuList: ListItem[] = [
+    {
+      title: "元の投稿を見る",
+      onPress: () => {},
+    },
+  ];
+
+  const meMenuList: ListItem[] = [
     {
       title: "トークルームを解散",
       color: "red",
@@ -49,6 +65,7 @@ export const Menu = ({ isVisible, closeMenu, talkRoomId }: Props) => {
                     update: () => {
                       deleteThoghtTalkRoom({ talkRoomId });
                       navigation.goBack();
+                      toast.show("解散しました", { type: "success" });
                     },
                   });
                 } catch (e) {
@@ -63,10 +80,7 @@ export const Menu = ({ isVisible, closeMenu, talkRoomId }: Props) => {
         );
       },
     },
-    {
-      title: "元の投稿を見る",
-      onPress: () => {},
-    },
+    ...baseMenuList,
   ];
 
   return (
@@ -74,7 +88,7 @@ export const Menu = ({ isVisible, closeMenu, talkRoomId }: Props) => {
       isVisible={isVisible}
       onBackdropPress={closeMenu}
       onCancel={closeMenu}
-      list={menuList}
+      list={isMyThuoghtTalkRoomData ? meMenuList : baseMenuList}
     />
   );
 };

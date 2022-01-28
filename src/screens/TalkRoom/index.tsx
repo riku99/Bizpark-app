@@ -13,7 +13,6 @@ import {
   useCreateUserThoughtTalkRoomMessageSeenMutation,
   GetThoughtTalkRoomMessagesQuery,
   CustomErrorResponseCode,
-  useGetThoughtTalkRoomsLazyQuery,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -45,10 +44,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const [
     createSeenMutation,
   ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
-
-  const [getThougtTalkRoomsQuery] = useGetThoughtTalkRoomsLazyQuery({
-    fetchPolicy: "network-only",
-  });
 
   const fragmentCacheData = useThoughtTalkRoomReadFragment({ id });
 
@@ -269,7 +264,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
           {
             text: "OK",
             onPress: async () => {
-              await getThougtTalkRoomsQuery();
+              deleteThoghtTalkRoom({ talkRoomId: id });
               navigation.goBack();
             },
           },
@@ -336,6 +331,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
           setModalVisible(false);
         }}
         talkRoomId={id}
+        isMyThuoghtTalkRoomData={isMyThuoghtTalkRoomData}
       />
     </>
   );
