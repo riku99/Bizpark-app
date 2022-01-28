@@ -26,6 +26,7 @@ import { Alert } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import * as Haptics from "expo-haptics";
 import { getGraphQLError, logJson } from "src/utils";
+import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoom";
 
 type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 
@@ -45,59 +46,54 @@ export const ThoughtTalkRoomList = React.memo(() => {
     setModalData(null);
   };
 
+  const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
+
   const modalList = [
     {
-      title: "削除",
+      title: "トークから抜ける",
       color: "red",
       onPress: () => {
-        Alert.alert("トークルームを削除", "本当に削除してよろしいですか?", [
-          {
-            text: "キャンセル",
-            style: "cancel",
-          },
-          {
-            text: "削除",
-            style: "destructive",
-            onPress: async () => {
-              if (modalList) {
-                try {
-                  await getOutMutation({
-                    variables: {
-                      input: {
-                        roomId: modalData.roomId,
-                      },
-                    },
-                    update: (cache) => {
-                      const queryResult = cache.readQuery<GetThoughtTalkRoomsQuery>(
-                        {
-                          query: GetThoughtTalkRoomsDocument,
-                        }
-                      );
-                      if (queryResult) {
-                        const filteredData = queryResult.thoughtTalkRooms.filter(
-                          (t) => t.id !== modalData.roomId
-                        );
-                        cache.writeQuery({
-                          query: GetThoughtTalkRoomsDocument,
-                          data: { thoughtTalkRooms: filteredData },
-                        });
-                      }
-                    },
-                  });
-
-                  toast.show("削除しました", { type: "success" });
-                } catch (e) {
-                  const error = getGraphQLError(e, 0);
-                  if (error?.code === CustomErrorResponseCode.InvalidRequest) {
-                    toast.show(error.message, { type: "danger" });
-                  }
-                } finally {
-                  setModalData(null);
-                }
-              }
+        Alert.alert(
+          "トークから抜ける",
+          "このトークルームは表示されなくなります。トークから抜けてよろしいですか?",
+          [
+            {
+              text: "キャンセル",
+              style: "cancel",
             },
-          },
-        ]);
+            {
+              text: "抜ける",
+              style: "destructive",
+              onPress: async () => {
+                if (modalList) {
+                  try {
+                    await getOutMutation({
+                      variables: {
+                        input: {
+                          roomId: modalData.roomId,
+                        },
+                      },
+                      update: () => {
+                        deleteThoghtTalkRoom({ talkRoomId: modalData.roomId });
+                      },
+                    });
+
+                    toast.show("削除しました", { type: "success" });
+                  } catch (e) {
+                    const error = getGraphQLError(e, 0);
+                    if (
+                      error?.code === CustomErrorResponseCode.InvalidRequest
+                    ) {
+                      toast.show(error.message, { type: "danger" });
+                    }
+                  } finally {
+                    setModalData(null);
+                  }
+                }
+              },
+            },
+          ]
+        );
       },
     },
   ];

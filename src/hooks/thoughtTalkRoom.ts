@@ -186,3 +186,31 @@ export const useFindThoughtTalkRoomsByThoughtId = ({
     return targetData;
   }
 };
+
+// ThougtTalkRoomsから特定のアイテムを消す
+export const useDeleteThoughtTalkRoomsItemFromCache = () => {
+  const { cache } = useApolloClient();
+
+  const deleteThoghtTalkRoom = useCallback(
+    ({ talkRoomId }: { talkRoomId: number }) => {
+      const queryResult = cache.readQuery<GetThoughtTalkRoomsQuery>({
+        query: GetThoughtTalkRoomsDocument,
+      });
+
+      if (queryResult) {
+        const filteredData = queryResult.thoughtTalkRooms.filter(
+          (t) => t.id !== talkRoomId
+        );
+        cache.writeQuery({
+          query: GetThoughtTalkRoomsDocument,
+          data: { thoughtTalkRooms: filteredData },
+        });
+      }
+    },
+    []
+  );
+
+  return {
+    deleteThoghtTalkRoom,
+  };
+};
