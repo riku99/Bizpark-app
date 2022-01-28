@@ -1,10 +1,14 @@
 import { ErrorResponse } from "@apollo/client/link/error";
+import { ApolloError } from "@apollo/client";
 
 export const getGraphQLErrorCode = (error: any) => {
   return error.graphQLErrors[0].extensions.code;
 };
 
-export const getGraphQLError = (error: ErrorResponse, index: number) => {
+export const getGraphQLError = (
+  error: ErrorResponse | ApolloError,
+  index: number
+) => {
   if (error?.graphQLErrors?.length) {
     const gqlError = error.graphQLErrors[index];
     if (!gqlError) {

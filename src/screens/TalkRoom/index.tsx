@@ -27,6 +27,7 @@ import { Alert } from "react-native";
 import { DotsHorizontal } from "src/components/DotsHorizontal";
 import { Menu } from "./Menu";
 import { HeaderTitle } from "./HeaderTitle";
+import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoom";
 
 type Props = RootNavigationScreenProp<"TalkRoomMain">;
 
@@ -34,24 +35,54 @@ const isTmp = (str: string) => str.slice(0, 3) === "tmp";
 
 export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
+
   const {
     data: { me },
   } = useMeQuery();
+
   const [createMessageMutation] = useCreateThoughtTalkRoomMessageMutation();
+
   const [
     createSeenMutation,
   ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
+
   const [getThougtTalkRoomsQuery] = useGetThoughtTalkRoomsLazyQuery({
     fetchPolicy: "network-only",
   });
+
   const fragmentCacheData = useThoughtTalkRoomReadFragment({ id });
-  const { data: talkRoomData, fetchMore } = useGetThoughtTalkRoomQuery({
+
+  const {
+    data: talkRoomData,
+    fetchMore,
+    error: talkRoomError,
+  } = useGetThoughtTalkRoomQuery({
     variables: {
       id,
     },
     // fetchPolicy: "network-only",
     // nextFetchPolicy: "cache-first",
   });
+
+  const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
+
+  useEffect(() => {
+    if (talkRoomError) {
+      const e = getGraphQLError(talkRoomError, 0);
+      if (e.code === CustomErrorResponseCode.NotFound) {
+        Alert.alert(e.message, "", [
+          {
+            text: "OK",
+            style: "cancel",
+            onPress: () => {
+              deleteThoghtTalkRoom({ talkRoomId: id });
+              navigation.goBack();
+            },
+          },
+        ]);
+      }
+    }
+  }, [talkRoomError]);
 
   const [modalVisible, setModalVisible] = useState(false);
 
