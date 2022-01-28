@@ -1,6 +1,5 @@
 import React from "react";
 import { Pressable, useColorModeValue } from "native-base";
-import { MotiView } from "moti";
 import { StyleSheet } from "react-native";
 
 type Props = { children: JSX.Element; onBackdropPress?: () => void };
