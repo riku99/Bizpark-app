@@ -3,6 +3,7 @@ import React, {
   useEffect,
   useState,
   useCallback,
+  useMemo,
 } from "react";
 import { RootNavigationScreenProp } from "src/types";
 import {
@@ -28,6 +29,7 @@ import { Indicator } from "src/components/Indicator";
 import { Alert } from "react-native";
 import { DotsHorizontal } from "src/components/DotsHorizontal";
 import { Menu } from "./Menu";
+import { HeaderTitle } from "./HeaderTitle";
 
 type Props = RootNavigationScreenProp<"TalkRoomMain">;
 
@@ -56,50 +58,27 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const renderHeaderTitle = useCallback(() => {
-    if (!talkRoomData) {
-      return <Indicator />;
+  // このトークルームの元の投稿が自分のものかどうか
+  const isMyThuoghtTalkRoomData = useMemo(() => {
+    if (!talkRoomData || !me) {
+      return false;
     }
 
-    const urls = talkRoomData.thoughtTalkRoom.members.edges
-      .slice(0, 7)
-      .map((edge) => edge.node.user.imageUrl);
+    return talkRoomData.thoughtTalkRoom.thought.contributor.id === me.id;
+  }, [talkRoomData, me]);
 
+  const renderHeaderTitle = useCallback(() => {
     return (
-      <Pressable
+      <HeaderTitle
+        talkRoomData={talkRoomData}
         onPress={() => {
           navigation.navigate("TalkRoomMembers", {
             talkRoomId: id,
           });
         }}
-      >
-        <UserImages
-          data={urls}
-          imageSize="6"
-          style={{
-            transform: [
-              { translateX: (urls.length - 1) * (TRANSLATE_IMAGE_X / 2) },
-            ],
-          }}
-        />
-      </Pressable>
+      />
     );
-  }, [talkRoomData]);
-
-  const renderHeaderRight = useCallback(() => {
-    if (!talkRoomData) {
-      return null;
-    }
-
-    const isMyShareData =
-      talkRoomData.thoughtTalkRoom.thought.contributor.id === me.id;
-
-    if (!isMyShareData) {
-      return null;
-    }
-
-    return <DotsHorizontal onPress={() => setModalVisible(true)} />;
-  }, [talkRoomData, me]);
+  }, [talkRoomData, navigation]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -111,9 +90,11 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
           }}
         />
       ),
-      headerRight: renderHeaderRight,
+      headerRight: () => (
+        <DotsHorizontal onPress={() => setModalVisible(true)} />
+      ),
     });
-  }, [navigation, renderHeaderTitle, renderHeaderRight]);
+  }, [navigation, renderHeaderTitle]);
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -326,6 +307,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
         closeMenu={() => {
           setModalVisible(false);
         }}
+        talkRoomId={id}
       />
     </>
   );

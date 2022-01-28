@@ -1,0 +1,3 @@
+mutation DeleteThoughtTalkRoom($input: DeleteThoughtTalkRoomInput!) {
+  deleteThoughtTalkRoom(input: $input)
+}
