@@ -9,10 +9,13 @@ import {
   Send,
 } from "react-native-gifted-chat";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useColorModeValue, Text } from "native-base";
+import { useColorModeValue, Text, Box } from "native-base";
 import { StyleSheet, NativeScrollEvent } from "react-native";
 import { Indicator } from "src/components/Indicator";
 import { INITIAL_MESSAGE_COUNT } from "src/constants";
+import { Overlay } from "react-native-elements";
+import { CustomBubble } from "./CustomBubble";
+import { BottomContents } from "./BottomContents";
 
 type Props = { infiniteLoad?: () => Promise<void> } & ComponentProps<
   typeof GiftedChat
@@ -28,17 +31,17 @@ export const BaseChat = React.memo(({ infiniteLoad, ...props }: Props) => {
   const keyboard = useColorModeValue("light", "dark");
   const [infiniteLoading, setInfiniteLoading] = useState(false);
 
+  const [longPressedMessage, setLongPressedMessage] = useState<IMessage | null>(
+    null
+  );
+
+  const onBubbleLongPress = (im: IMessage) => {
+    setLongPressedMessage(im);
+  };
+
   const renderBubble = useCallback(
     (props) => {
-      return (
-        <Bubble
-          {...props}
-          wrapperStyle={{
-            left: { backgroundColor: bubbleLeft, paddingVertical: 4 },
-            right: { backgroundColor: bubbleRight, paddingVertical: 4 },
-          }}
-        />
-      );
+      return <CustomBubble setMessage={setLongPressedMessage} {...props} />;
     },
     [bubbleLeft, bubbleRight]
   );
@@ -121,31 +124,37 @@ export const BaseChat = React.memo(({ infiniteLoad, ...props }: Props) => {
   }, [infiniteLoading, infiniteLoad]);
 
   return (
-    <GiftedChat
-      alignTop
-      placeholder="メッセージを入力"
-      bottomOffset={bottom}
-      loadEarlier={infiniteLoading}
-      renderTime={() => null}
-      renderBubble={renderBubble}
-      renderMessageText={renderMessageText}
-      renderInputToolbar={renderInputToolbar}
-      renderComposer={renderComposer}
-      renderSend={renderSend}
-      renderLoadEarlier={renderLoadEarlier}
-      listViewProps={{
-        scrollEventThrottle: 400,
-        onScroll: ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
-          if (
-            props.messages.length >= INITIAL_MESSAGE_COUNT &&
-            closeToTop(nativeEvent)
-          ) {
-            onCloseToTop();
-          }
-        },
-      }}
-      {...props}
-    />
+    <>
+      <GiftedChat
+        alignTop
+        placeholder="メッセージを入力"
+        bottomOffset={bottom}
+        loadEarlier={infiniteLoading}
+        renderTime={() => null}
+        renderBubble={renderBubble}
+        renderMessageText={renderMessageText}
+        renderInputToolbar={renderInputToolbar}
+        renderComposer={renderComposer}
+        renderSend={renderSend}
+        renderLoadEarlier={renderLoadEarlier}
+        listViewProps={{
+          scrollEventThrottle: 400,
+          onScroll: ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
+            if (
+              props.messages.length >= INITIAL_MESSAGE_COUNT &&
+              closeToTop(nativeEvent)
+            ) {
+              onCloseToTop();
+            }
+          },
+        }}
+        {...props}
+      />
+
+      {!!longPressedMessage && (
+        <BottomContents onBackdropPress={() => setLongPressedMessage(null)} />
+      )}
+    </>
   );
 });
 
