@@ -17,9 +17,15 @@ import { IMessage } from "react-native-gifted-chat";
 type Props = {
   message: IMessage;
   close: () => void;
+  setReplyMessage: (message: IMessage) => void;
 } & ComponentProps<typeof Box>;
 
-export const BottomContents = ({ message, close, ...props }: Props) => {
+export const BottomContents = ({
+  message,
+  close,
+  setReplyMessage,
+  ...props
+}: Props) => {
   const { bottom } = useSafeAreaInsets();
   const { colors } = useTheme();
 
@@ -27,6 +33,11 @@ export const BottomContents = ({ message, close, ...props }: Props) => {
 
   const onCopyPress = () => {
     Clipboard.setString(message.text);
+    close();
+  };
+
+  const onReplyPress = () => {
+    setReplyMessage(message);
     close();
   };
 
@@ -41,7 +52,12 @@ export const BottomContents = ({ message, close, ...props }: Props) => {
         animate={{ translateY: 0 }}
         transition={{ type: "timing", duration: 200 }}
       >
-        <Pressable flex={1} justifyContent="center" alignItems="center">
+        <Pressable
+          flex={1}
+          justifyContent="center"
+          alignItems="center"
+          onPress={onReplyPress}
+        >
           {(props) => (
             <Text
               fontWeight="bold"
