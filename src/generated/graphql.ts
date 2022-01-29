@@ -44,6 +44,7 @@ export type CreateThoughtResponse = {
 };
 
 export type CreateThoughtTalkRoomMessageInput = {
+  replyTo?: InputMaybe<Scalars['Int']>;
   roomId: Scalars['Int'];
   text: Scalars['String'];
 };
@@ -478,6 +479,7 @@ export type ThoughtTalkRoomMessage = {
   __typename?: 'ThoughtTalkRoomMessage';
   createdAt: Scalars['String'];
   id: Scalars['Int'];
+  replyMessage?: Maybe<ThoughtTalkRoomMessage>;
   roomId?: Maybe<Scalars['Int']>;
   sender: User;
   talkRoom?: Maybe<ThoughtTalkRoom>;

@@ -20,7 +20,9 @@ export const useToughtTalkRoomsWithSubsciption = () => {
     data: talkRoomsData,
     subscribeToMore,
     refetch,
-  } = useGetThoughtTalkRoomsQuery();
+  } = useGetThoughtTalkRoomsQuery({
+    fetchPolicy: "cache-only",
+  });
 
   const subscriptionVariables = useMemo(() => {
     if (!talkRoomsData?.thoughtTalkRooms.length) {

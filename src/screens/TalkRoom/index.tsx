@@ -61,6 +61,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
   const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
 
+  // トークルームが見つからなかった時の処理
   useEffect(() => {
     if (talkRoomError) {
       const e = getGraphQLError(talkRoomError, 0);
@@ -122,6 +123,8 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [latestMessage, setLatestMessage] = useState<IMessage | null>(null);
+
+  const [replyMessage, setReplyMessage] = useState<IMessage | null>(null);
 
   useEffect(() => {
     if (messages.length && !isTmp(messages[0]._id.toString() as string)) {
@@ -209,6 +212,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     })();
   }, [latestMessage]);
 
+  // メッセージ送信
   const onSendPress = async (inputMessages: IMessage[]) => {
     const newMessageData = inputMessages[0];
 
@@ -235,6 +239,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
           input: {
             text: inputMessages[0].text,
             roomId: id,
+            replyTo: replyMessage ? Number(replyMessage._id) : null,
           },
         },
       });
@@ -318,6 +323,8 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     <>
       <BaseChat
         messages={messages}
+        replyMessage={replyMessage}
+        setReplyMessage={setReplyMessage}
         user={{
           _id: me.id,
         }}
