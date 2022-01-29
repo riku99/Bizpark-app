@@ -22,7 +22,7 @@ import { ListItem } from "src/components/ListItem";
 import { UserImage } from "src/components/UserImage";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
-import { StyleSheet, Dimensions } from "react-native";
+import { StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
 
