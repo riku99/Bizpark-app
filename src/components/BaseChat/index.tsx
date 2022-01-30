@@ -1,4 +1,11 @@
-import React, { ComponentProps, useCallback, useEffect, useState } from "react";
+import React, {
+  ComponentProps,
+  useCallback,
+  useEffect,
+  useState,
+  useLayoutEffect,
+  useRef,
+} from "react";
 import {
   GiftedChat,
   IMessage,
@@ -8,6 +15,8 @@ import {
   InputToolbar,
   Bubble,
 } from "react-native-gifted-chat";
+import { MIN_COMPOSER_HEIGHT } from "react-native-gifted-chat/lib/Constant";
+import { useUpdateLayoutEffect } from "react-native-gifted-chat/lib/hooks/useUpdateLayoutEffect";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColorModeValue, Text, Box, HStack } from "native-base";
 import {
@@ -41,6 +50,12 @@ export const BaseChat = React.memo(
     const rightReplyMessageTextColor = useColorModeValue("#e3e3e3", "#d1d1d1");
     const [infiniteLoading, setInfiniteLoading] = useState(false);
 
+    const isInitialMount = useRef(true);
+
+    useEffect(() => {
+      isInitialMount.current = false;
+    }, []);
+
     const {
       data: { me },
     } = useMeQuery();
@@ -50,55 +65,31 @@ export const BaseChat = React.memo(
       setLongPressedMessage,
     ] = useState<IMessage | null>(null);
 
-    const [keyboardHeight, setKeyboardHeight] = useState(0);
-
-    useEffect(() => {
-      const willShowListener = Keyboard.addListener("keyboardWillShow", (e) => {
-        setKeyboardHeight(e.endCoordinates.height);
-      });
-
-      const willHideListener = Keyboard.addListener("keyboardWillHide", () => {
-        setKeyboardHeight(0);
-      });
-
-      return () => {
-        willShowListener.remove();
-        willHideListener.remove();
-      };
-    }, []);
-
     const [messageContainerHeight, setMessageContainerHeight] = useState<
       number | null
     >(null);
 
+    // GftedChatから渡されるheight
+    const [giftedChatMessageHeight, setGiftedChatMessageHeight] = useState<
+      number | null
+    >(null);
+
     const headerH = useHeaderHeight();
+
+    const MAX_MESSAGE_HEIGHT =
+      SCREEN_HEIGHT - INPUT_CONTAINER_HEIGHT - headerH - bottom;
+
     useEffect(() => {
-      const commonMessageHeight =
-        SCREEN_HEIGHT - INPUT_CONTAINER_HEIGHT - headerH;
-      if (!replyMessage) {
-        if (!keyboardHeight) {
-          const _h = commonMessageHeight - bottom;
-          setMessageContainerHeight(_h);
+      if (giftedChatMessageHeight) {
+        if (!replyMessage) {
+          setMessageContainerHeight(giftedChatMessageHeight);
         } else {
-          const _h =
-            commonMessageHeight - keyboardHeight - PADDING_BOTTOM_FROM_KEYBOARD;
-          setMessageContainerHeight(_h);
-        }
-      } else {
-        if (!keyboardHeight) {
-          const _h =
-            commonMessageHeight - bottom - REPLY_MESSAGE_CONTAINER_HEIGHT;
-          setMessageContainerHeight(_h);
-        } else {
-          const _h =
-            commonMessageHeight -
-            keyboardHeight -
-            REPLY_MESSAGE_CONTAINER_HEIGHT -
-            PADDING_BOTTOM_FROM_KEYBOARD;
-          setMessageContainerHeight(_h);
+          setMessageContainerHeight(
+            giftedChatMessageHeight - REPLY_MESSAGE_CONTAINER_HEIGHT
+          );
         }
       }
-    }, [replyMessage, keyboardHeight]);
+    }, [giftedChatMessageHeight, messageContainerHeight, replyMessage]);
 
     const renderBubble = useCallback((props) => {
       return <CustomBubble setMessage={setLongPressedMessage} {...props} />;
@@ -182,41 +173,44 @@ export const BaseChat = React.memo(
       return <Indicator style={{ marginTop: 10, marginBottom: 10 }} />;
     }, []);
 
-    const renderCustomView = (props) => {
-      const replyMessage = props.currentMessage.replyMessage;
+    const renderCustomView = useCallback(
+      (props) => {
+        const replyMessage = props.currentMessage.replyMessage;
 
-      if (!replyMessage) {
-        return null;
-      }
+        if (!replyMessage) {
+          return null;
+        }
 
-      const isMySendData = props.currentMessage.user._id === me.id;
+        const isMySendData = props.currentMessage.user._id === me.id;
 
-      const textColor = isMySendData
-        ? rightReplyMessageTextColor
-        : leftReplyMesageTextColor;
+        const textColor = isMySendData
+          ? rightReplyMessageTextColor
+          : leftReplyMesageTextColor;
 
-      return (
-        <HStack px="2" pt="2" mb="1">
-          {/* 引用ラベル */}
-          <Box
-            bg="lightGray"
-            style={{
-              width: 5,
-              borderRadius: 10,
-              height: "100%",
-              marginRight: 8,
-            }}
-          />
+        return (
+          <HStack px="2" pt="2" mb="1">
+            {/* 引用ラベル */}
+            <Box
+              bg="lightGray"
+              style={{
+                width: 5,
+                borderRadius: 10,
+                height: "100%",
+                marginRight: 8,
+              }}
+            />
 
-          <Box>
-            <Text color={textColor}>{replyMessage.user.name}</Text>
-            <Text color={textColor} mt="1">
-              {replyMessage.text}
-            </Text>
-          </Box>
-        </HStack>
-      );
-    };
+            <Box>
+              <Text color={textColor}>{replyMessage.user.name}</Text>
+              <Text color={textColor} mt="1">
+                {replyMessage.text}
+              </Text>
+            </Box>
+          </HStack>
+        );
+      },
+      [rightReplyMessageTextColor, leftReplyMesageTextColor]
+    );
 
     const closeToTop = useCallback((nativeEvent: NativeScrollEvent) => {
       return (
@@ -235,15 +229,25 @@ export const BaseChat = React.memo(
       }
     }, [infiniteLoading, infiniteLoad]);
 
+    const getMessageContainerHeight = (h: number) => {
+      setGiftedChatMessageHeight(h);
+    };
+
     return (
       <>
         <GiftedChat
+          getMessagesContainerHeight={getMessageContainerHeight}
           messagesContainerStyle={{
-            height: messageContainerHeight ?? undefined,
+            height:
+              messageContainerHeight &&
+              messageContainerHeight <= MAX_MESSAGE_HEIGHT
+                ? messageContainerHeight
+                : MAX_MESSAGE_HEIGHT,
           }}
+          locale="jp"
           alignTop
           placeholder="メッセージを入力"
-          bottomOffset={bottom}
+          bottomOffset={bottom - PADDING_BOTTOM_FROM_KEYBOARD}
           loadEarlier={infiniteLoading}
           renderTime={() => null}
           renderBubble={renderBubble}
@@ -284,6 +288,7 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
 const INPUT_PADDING_X = SCREEN_WIDTH * 0.03;
 const PADDING_BOTTOM_FROM_KEYBOARD = 5;
 const INPUT_CONTAINER_HEIGHT = 45;
+const DEFAULT_COMPOSER_HEIGHT = MIN_COMPOSER_HEIGHT;
 
 const styles = StyleSheet.create({
   sendContainer: {
