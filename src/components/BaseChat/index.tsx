@@ -15,11 +15,16 @@ import {
 } from "react-native-gifted-chat";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColorModeValue, Text, Box, HStack } from "native-base";
-import { StyleSheet, NativeScrollEvent, Dimensions } from "react-native";
+import {
+  StyleSheet,
+  NativeScrollEvent,
+  Dimensions,
+  Keyboard,
+} from "react-native";
 import { Indicator } from "src/components/Indicator";
 import { INITIAL_MESSAGE_COUNT } from "src/constants";
 import { CustomBubble } from "./CustomBubble";
-import { BottomContents } from "./BottomContents";
+import { BubbleActions } from "./BubbleActions";
 import { ReplyMessage, REPLY_MESSAGE_CONTAINER_HEIGHT } from "./ReplyMessage";
 import { useHeaderHeight } from "@react-navigation/elements";
 import { useMeQuery } from "src/generated/graphql";
@@ -40,6 +45,25 @@ export const BaseChat = React.memo(
     const leftReplyMesageTextColor = useColorModeValue("#4d4d4d", "#d1d1d1");
     const rightReplyMessageTextColor = useColorModeValue("#e3e3e3", "#d1d1d1");
     const [infiniteLoading, setInfiniteLoading] = useState(false);
+
+    const [keyboardHeight, setKeyboardHeight] = useState(0);
+    useEffect(() => {
+      const willShowListnener = Keyboard.addListener(
+        "keyboardWillShow",
+        (e) => {
+          setKeyboardHeight(e.endCoordinates.height);
+        }
+      );
+
+      const willHideListener = Keyboard.addListener("keyboardWillHide", (e) => {
+        setKeyboardHeight(0);
+      });
+
+      return () => {
+        willShowListnener.remove();
+        willHideListener.remove();
+      };
+    }, []);
 
     const isInitialMount = useRef(true);
 
@@ -227,6 +251,7 @@ export const BaseChat = React.memo(
     return (
       <>
         <GiftedChat
+          keyboardShouldPersistTaps="handled"
           getMessagesContainerHeight={getMessageContainerHeight}
           messagesContainerStyle={{
             height:
@@ -263,10 +288,11 @@ export const BaseChat = React.memo(
         />
 
         {!!longPressedMessage && (
-          <BottomContents
+          <BubbleActions
             close={() => setLongPressedMessage(null)}
             message={longPressedMessage}
             setReplyMessage={setReplyMessage}
+            keyboardHeight={keyboardHeight}
           />
         )}
       </>

@@ -18,16 +18,20 @@ type Props = {
   message: IMessage;
   close: () => void;
   setReplyMessage: (message: IMessage) => void;
+  keyboardHeight: number;
 } & ComponentProps<typeof Box>;
 
-export const BottomContents = ({
+export const BubbleActions = ({
   message,
   close,
   setReplyMessage,
+  keyboardHeight,
   ...props
 }: Props) => {
-  const { bottom } = useSafeAreaInsets();
+  const { bottom: safeBottom } = useSafeAreaInsets();
   const { colors } = useTheme();
+
+  const bottom = keyboardHeight ? 0 : safeBottom;
 
   const bg = useColorModeValue(colors.lt.bg, colors.dt.bg);
 
@@ -46,7 +50,7 @@ export const BottomContents = ({
       <MotiView
         style={[
           styles.bottomContents,
-          { height: 60 + bottom, backgroundColor: bg },
+          { height: 60 + bottom, backgroundColor: bg, bottom: keyboardHeight },
         ]}
         from={{ translateY: 60 + bottom }}
         animate={{ translateY: 0 }}
@@ -97,7 +101,6 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     position: "absolute",
-    bottom: 0,
     zIndex: 10,
   },
 });

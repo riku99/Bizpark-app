@@ -1,7 +1,6 @@
-import React, { useState, ComponentProps } from "react";
+import React, { ComponentProps } from "react";
 import { Bubble, IMessage } from "react-native-gifted-chat";
-import { Tooltip } from "react-native-elements";
-import { useColorModeValue, Text } from "native-base";
+import { useColorModeValue } from "native-base";
 
 type Props = {
   setMessage: (im: IMessage) => void;
