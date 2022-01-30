@@ -22,6 +22,7 @@ import { CustomBubble } from "./CustomBubble";
 import { BottomContents } from "./BottomContents";
 import { ReplyMessage, REPLY_MESSAGE_CONTAINER_HEIGHT } from "./ReplyMessage";
 import { useHeaderHeight } from "@react-navigation/elements";
+import { useMeQuery } from "src/generated/graphql";
 
 type Props = {
   infiniteLoad?: () => Promise<void>;
@@ -36,7 +37,13 @@ export const BaseChat = React.memo(
     const inputTextColor = useColorModeValue("black", "white");
     const keyboard = useColorModeValue("light", "dark");
     const inputContainerBg = useColorModeValue("#f0f0f0", "#292522");
+    const leftReplyMesageTextColor = useColorModeValue("#4d4d4d", "#d1d1d1");
+    const rightReplyMessageTextColor = useColorModeValue("#e3e3e3", "#d1d1d1");
     const [infiniteLoading, setInfiniteLoading] = useState(false);
+
+    const {
+      data: { me },
+    } = useMeQuery();
 
     const [
       longPressedMessage,
@@ -176,10 +183,37 @@ export const BaseChat = React.memo(
     }, []);
 
     const renderCustomView = (props) => {
-      console.log(props.currentMessage.replyMessage);
+      const replyMessage = props.currentMessage.replyMessage;
+
+      if (!replyMessage) {
+        return null;
+      }
+
+      const isMySendData = props.currentMessage.user._id === me.id;
+
+      const textColor = isMySendData
+        ? rightReplyMessageTextColor
+        : leftReplyMesageTextColor;
+
       return (
-        <HStack>
-          <Box bg="red" w="10" h="3" />
+        <HStack px="2" pt="2" mb="1">
+          {/* 引用ラベル */}
+          <Box
+            bg="lightGray"
+            style={{
+              width: 5,
+              borderRadius: 10,
+              height: "100%",
+              marginRight: 8,
+            }}
+          />
+
+          <Box>
+            <Text color={textColor}>{replyMessage.user.name}</Text>
+            <Text color={textColor} mt="1">
+              {replyMessage.text}
+            </Text>
+          </Box>
         </HStack>
       );
     };

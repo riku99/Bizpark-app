@@ -149,6 +149,15 @@ export const useThoughtTalkRoomReadFragment = ({ id }: { id: number }) => {
                 imageUrl
               }
               roomId
+              replyMessage {
+                id
+                text
+                createdAt
+                sender {
+                  id
+                  name
+                }
+              }
             }
           }
           pageInfo {

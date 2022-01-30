@@ -135,7 +135,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
     if (fragmentCacheData) {
-      // console.log(fragmentCacheData.messages.edges[0]);
+      // logJson(fragmentCacheData.messages.edges[2]);
       const im: IMessage[] = fragmentCacheData.messages.edges.map(
         ({ node: message }) => ({
           _id: message.id,
@@ -151,8 +151,8 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
                 id: message.replyMessage.id,
                 text: message.replyMessage.text,
                 user: {
-                  id: message.sender.id,
-                  name: message.sender.name,
+                  id: message.replyMessage.sender.id,
+                  name: message.replyMessage.sender.name,
                 },
               }
             : null,
