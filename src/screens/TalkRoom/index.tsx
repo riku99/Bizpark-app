@@ -176,7 +176,13 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
         }
 
         setMessages((currentData) => {
-          const { id, text, createdAt, sender } = subscribedMessage;
+          const {
+            id,
+            text,
+            createdAt,
+            sender,
+            replyMessage,
+          } = subscribedMessage;
 
           // fetchMoreとかでキャッシュ更新するとこのEffectも呼ばれる。ただ、新しいメッセージを作成する必要はないので現在のデータをリターン
           if (
@@ -195,6 +201,16 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
               name: sender.name,
               avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
             },
+            replyMessage: replyMessage
+              ? {
+                  id: replyMessage.id,
+                  text: replyMessage.text,
+                  user: {
+                    id: replyMessage.sender.id,
+                    name: replyMessage.sender.name,
+                  },
+                }
+              : null,
           };
 
           return [newIMessageData, ...currentData];
@@ -229,6 +245,8 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
     const tempId = "tmp" + createRandomStr();
 
+    setReplyMessage(null);
+
     setMessages((currentData) => {
       const { text, createdAt } = newMessageData;
       const newTempIMessageData: IMessage = {
@@ -240,10 +258,21 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
           name: me.name,
           avatar: me.imageUrl ?? NO_USER_IMAGE_URL,
         },
+        replyMessage: replyMessage
+          ? {
+              id: Number(replyMessage._id),
+              text: replyMessage.text,
+              user: {
+                id: replyMessage.user._id,
+                name: replyMessage.user.name,
+              },
+            }
+          : null,
       };
 
       return [newTempIMessageData, ...currentData];
     });
+
     try {
       const { data } = await createMessageMutation({
         variables: {
@@ -266,6 +295,16 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
           name: me.name,
           avatar: me.imageUrl,
         },
+        replyMessage: replyMessage
+          ? {
+              id: Number(replyMessage._id),
+              text: replyMessage.text,
+              user: {
+                id: replyMessage.user._id,
+                name: replyMessage.user.name,
+              },
+            }
+          : null,
       };
 
       setMessages((currentData) => {

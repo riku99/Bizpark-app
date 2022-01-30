@@ -3,7 +3,6 @@ import React, {
   useCallback,
   useEffect,
   useState,
-  useLayoutEffect,
   useRef,
 } from "react";
 import {
@@ -13,18 +12,10 @@ import {
   Composer,
   Send,
   InputToolbar,
-  Bubble,
 } from "react-native-gifted-chat";
-import { MIN_COMPOSER_HEIGHT } from "react-native-gifted-chat/lib/Constant";
-import { useUpdateLayoutEffect } from "react-native-gifted-chat/lib/hooks/useUpdateLayoutEffect";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { useColorModeValue, Text, Box, HStack } from "native-base";
-import {
-  StyleSheet,
-  NativeScrollEvent,
-  Dimensions,
-  Keyboard,
-} from "react-native";
+import { StyleSheet, NativeScrollEvent, Dimensions } from "react-native";
 import { Indicator } from "src/components/Indicator";
 import { INITIAL_MESSAGE_COUNT } from "src/constants";
 import { CustomBubble } from "./CustomBubble";
@@ -288,7 +279,6 @@ const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
 const INPUT_PADDING_X = SCREEN_WIDTH * 0.03;
 const PADDING_BOTTOM_FROM_KEYBOARD = 5;
 const INPUT_CONTAINER_HEIGHT = 45;
-const DEFAULT_COMPOSER_HEIGHT = MIN_COMPOSER_HEIGHT;
 
 const styles = StyleSheet.create({
   sendContainer: {
