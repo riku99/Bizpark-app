@@ -1,5 +1,5 @@
 import React, { ComponentProps } from "react";
-import { Box, HStack, Text } from "native-base";
+import { Box, HStack, Text, ScrollView } from "native-base";
 import { IMessage } from "react-native-gifted-chat";
 import { StyleSheet } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
@@ -26,12 +26,15 @@ export const ReplyMessage = ({
       justifyContent="space-between"
       borderTopWidth="0.3"
       borderTopColor="lightGray"
+      py="2"
       style={[styles.container, style]}
       {...restProps}
     >
-      <Box>
-        <Text>{replyMessage.user.name}さんに返信</Text>
-        <Text>{replyMessage.text}</Text>
+      <Box w="84%">
+        <ScrollView showsVerticalScrollIndicator={false}>
+          <Text>{replyMessage.user.name}さんに返信</Text>
+          <Text>{replyMessage.text}</Text>
+        </ScrollView>
       </Box>
 
       {/* close */}
