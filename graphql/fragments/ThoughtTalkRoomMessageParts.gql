@@ -6,4 +6,13 @@ fragment ThoughtTalkRoomMessageParts on ThoughtTalkRoomMessage {
     ...UserParts
   }
   roomId
+  replyMessage {
+    id
+    text
+    createdAt
+    sender {
+      id
+      name
+    }
+  }
 }

@@ -6,9 +6,10 @@ import {
   Composer,
   Send,
   InputToolbar,
+  Bubble,
 } from "react-native-gifted-chat";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useColorModeValue, Text, Box } from "native-base";
+import { useColorModeValue, Text, Box, HStack } from "native-base";
 import {
   StyleSheet,
   NativeScrollEvent,
@@ -174,6 +175,15 @@ export const BaseChat = React.memo(
       return <Indicator style={{ marginTop: 10, marginBottom: 10 }} />;
     }, []);
 
+    const renderCustomView = (props) => {
+      console.log(props.currentMessage.replyMessage);
+      return (
+        <HStack>
+          <Box bg="red" w="10" h="3" />
+        </HStack>
+      );
+    };
+
     const closeToTop = useCallback((nativeEvent: NativeScrollEvent) => {
       return (
         nativeEvent.contentSize.height -
@@ -208,6 +218,7 @@ export const BaseChat = React.memo(
           renderComposer={renderComposer}
           renderSend={renderSend}
           renderLoadEarlier={renderLoadEarlier}
+          renderCustomView={renderCustomView}
           listViewProps={{
             scrollEventThrottle: 400,
             onScroll: ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
