@@ -64,7 +64,6 @@ export const Root = () => {
       if (checkedLogin && loggedIn && !called) {
         const { data } = await initialDataQuery();
         if (data) {
-          gotInitialDataVar(true);
           meVar.loggedIn(true);
           meVar.id(data.me.id);
           if (data.me.imageUrl) {

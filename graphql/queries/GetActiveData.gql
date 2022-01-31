@@ -1,0 +1,5 @@
+query GetActiveData {
+  thoughtTalkRooms: thoughtTalkRooms {
+    ...ThoughtTalkRoomParts
+  }
+}

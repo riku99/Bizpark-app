@@ -135,7 +135,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
     if (fragmentCacheData) {
-      // logJson(fragmentCacheData.messages.edges[2]);
       const im: IMessage[] = fragmentCacheData.messages.edges.map(
         ({ node: message }) => ({
           _id: message.id,
@@ -333,10 +332,24 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   };
 
   const infiniteLoad = async () => {
-    if (talkRoomData) {
-      const { pageInfo } = talkRoomData.thoughtTalkRoom.messages;
+    // fetchで取得したデータを常に使うと、Subscriptionで取得したデータがデフォルトのfirstを超えている場合pageInfoのデータと実際に取得したいデータの辻褄が合わなくなるのでcacheのpageInfoの方も検証
+    if (talkRoomData && fragmentCacheData) {
+      const {
+        pageInfo: fetchInfo,
+        edges: fetchEdges,
+      } = talkRoomData.thoughtTalkRoom.messages;
+
+      const {
+        edges: cacheEdges,
+        pageInfo: cacheInfo,
+      } = fragmentCacheData.messages;
+
+      const pageInfo =
+        cacheEdges.length > fetchEdges.length ? cacheInfo : fetchInfo;
+
       if (pageInfo.hasNextPage) {
-        const { endCursor } = pageInfo;
+        // 基本CursorにはpageInfoのものを使っているが、メッセージはSubscriptionにより状態が更新されていくので messages のIDを使用
+        const endCursor = messages[messages.length - 1]._id.toString();
 
         const { data: fetchData } = await fetchMore<
           GetThoughtTalkRoomMessagesQuery,

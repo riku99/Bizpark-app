@@ -13,20 +13,13 @@ import { useReactiveVar, useApolloClient, gql } from "@apollo/client";
 import { meVar } from "src/stores/me";
 import { logJson } from "src/utils";
 import { AppState, AppStateStatus } from "react-native";
-
-export default function useFunctionAsState(fn) {
-  const [val, setVal] = useState(() => fn);
-
-  function setFunc(fn) {
-    setVal(() => fn);
-  }
-
-  return [val, setFunc];
-}
+import { useFunctionAsState } from "./func";
 
 export const useToughtTalkRoomsWithSubsciption = () => {
-  const gotInitialData = useReactiveVar(gotInitialDataVar);
+  // const gotInitialData = useReactiveVar(gotInitialDataVar);
   const myId = useReactiveVar(meVar.id);
+  // const loggedIn = useReactiveVar(meVar.loggedIn);
+
   const {
     data: talkRoomsData,
     subscribeToMore,
@@ -36,16 +29,6 @@ export const useToughtTalkRoomsWithSubsciption = () => {
   });
 
   const [isActive, setIsActive] = useState(true);
-  const [unsubscribe, setUnsubscribe] = useFunctionAsState(null);
-
-  useEffect(() => {
-    if (!isActive && unsubscribe) {
-      console.log("🍺 unsubscribe thoughtTalkRoomMessageSubscription");
-
-      unsubscribe();
-      setUnsubscribe(null);
-    }
-  }, [isActive, unsubscribe]);
 
   const subscriptionVariables = useMemo(() => {
     if (!talkRoomsData?.thoughtTalkRooms.length) {
@@ -57,8 +40,11 @@ export const useToughtTalkRoomsWithSubsciption = () => {
 
   // 実際にSubscriptionする
   const subscribe = useCallback(async () => {
-    if (gotInitialData && myId) {
+    if (myId) {
       console.log("⚡️ subscribe for ThoughtTalkRooms");
+
+      console.log(myId);
+      console.log(subscriptionVariables);
 
       const _unsubscribe = subscribeToMore<
         OnThoughtTalkRoomMessageCreatedSubscription,
@@ -121,45 +107,44 @@ export const useToughtTalkRoomsWithSubsciption = () => {
         },
       });
 
-      if (_unsubscribe) {
-        setUnsubscribe(() => _unsubscribe());
-      }
-
       return _unsubscribe;
     }
-  }, [gotInitialData, myId, subscriptionVariables, setUnsubscribe]);
-
-  const isInitialMount = useRef(true);
+  }, [myId, subscriptionVariables]);
 
   // Active時、非アクティブ時の処理
   useEffect(() => {
-    if (myId && gotInitialData) {
-      const onChange = async (nextState: AppStateStatus) => {
-        if (nextState === "active") {
-          setIsActive(true);
-          if (!isInitialMount.current) {
-            await subscribe();
-          }
-        } else {
-          setIsActive(false);
-        }
-      };
+    const onChange = async (nextState: AppStateStatus) => {
+      if (nextState === "active") {
+        setIsActive(true);
+      } else {
+        setIsActive(false);
+      }
+    };
 
-      AppState.addEventListener("change", onChange);
+    AppState.addEventListener("change", onChange);
 
-      return () => {
-        AppState.removeEventListener("change", onChange);
-      };
-    }
-  }, [subscribe]);
+    return () => {
+      AppState.removeEventListener("change", onChange);
+    };
+  }, [setIsActive]);
 
   useEffect(() => {
-    // 初回レンダリング時はonChangeではなくここでサブスク
+    let _unsubscribe: () => void | undefined;
+
     (async function () {
-      await subscribe();
-      isInitialMount.current = false;
+      if (isActive) {
+        _unsubscribe = await subscribe();
+      }
     })();
-  }, []);
+
+    // isActiveの変更によってここも実行される
+    return () => {
+      if (!!_unsubscribe) {
+        console.log("案サブスク");
+        _unsubscribe();
+      }
+    };
+  }, [subscribe, isActive]);
 };
 
 export const useThoughtTalkRoomReadFragment = ({ id }: { id: number }) => {

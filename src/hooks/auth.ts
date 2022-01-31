@@ -17,6 +17,7 @@ import { useApolloClient } from "@apollo/client";
 import { meVar, storageKeys } from "src/stores/me";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useColorMode } from "native-base";
+import { gotInitialDataVar } from "src/stores/initialData";
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
