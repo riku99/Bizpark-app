@@ -16,8 +16,6 @@ export const Root = () => {
   const myId = useReactiveVar(meVar.id);
   const spinnerVisible = useReactiveVar(spinnerVisibleVar);
 
-  useToughtTalkRoomsWithSubsciption();
-
   useEffect(() => {
     console.log("💓 My id is " + myId);
   }, [myId]);

@@ -18,7 +18,6 @@ import { createUploadLink } from "apollo-upload-client";
 import { useCustomToast } from "src/hooks/toast";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
-
 type Props = {
   children: JSX.Element;
 };
@@ -31,9 +30,11 @@ const wsLink = new WebSocketLink({
   uri: "ws://localhost:4000/graphql",
   options: {
     reconnect: true,
+    lazy: true,
     connectionParams: async () => {
       const currentUser = auth().currentUser;
       const idToken = await currentUser.getIdToken();
+
       return {
         authToken: `Bearer ${idToken}`,
       };

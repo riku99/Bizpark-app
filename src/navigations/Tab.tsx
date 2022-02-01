@@ -9,6 +9,7 @@ import { HomeStack } from "./Home";
 import { useGetThoughtTalkRoomsQuery } from "src/generated/graphql";
 import { Badge } from "src/components/Badge";
 import { StyleSheet } from "react-native";
+import { useToughtTalkRoomsWithSubsciption } from "src/hooks/thoughtTalkRoom";
 
 type TabParamList = {
   Home: undefined;
@@ -35,6 +36,8 @@ export const BottomTab = () => {
       return !!hasNotSeenMessageRoom.length;
     }
   }, [data]);
+
+  useToughtTalkRoomsWithSubsciption();
 
   return (
     <Tab.Navigator

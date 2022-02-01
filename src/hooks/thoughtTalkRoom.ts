@@ -7,18 +7,14 @@ import {
   OnThoughtTalkRoomMessageCreatedSubscriptionVariables,
   useGetThoughtTalkRoomsQuery,
 } from "src/generated/graphql";
-import { useEffect, useCallback, useMemo, useState, useRef } from "react";
-import { gotInitialDataVar } from "src/stores/initialData";
+import { useEffect, useCallback, useMemo, useState } from "react";
 import { useReactiveVar, useApolloClient, gql } from "@apollo/client";
 import { meVar } from "src/stores/me";
 import { logJson } from "src/utils";
 import { AppState, AppStateStatus } from "react-native";
-import { useFunctionAsState } from "./func";
 
 export const useToughtTalkRoomsWithSubsciption = () => {
-  // const gotInitialData = useReactiveVar(gotInitialDataVar);
   const myId = useReactiveVar(meVar.id);
-  // const loggedIn = useReactiveVar(meVar.loggedIn);
 
   const {
     data: talkRoomsData,
@@ -38,13 +34,26 @@ export const useToughtTalkRoomsWithSubsciption = () => {
     return talkRoomsData.thoughtTalkRooms.map((t) => t.id);
   }, [talkRoomsData?.thoughtTalkRooms.length]);
 
-  // 実際にSubscriptionする
-  const subscribe = useCallback(async () => {
-    if (myId) {
-      console.log("⚡️ subscribe for ThoughtTalkRooms");
+  // Active時、非アクティブ時の処理
+  useEffect(() => {
+    const onChange = async (nextState: AppStateStatus) => {
+      if (nextState === "active") {
+        setIsActive(true);
+      } else {
+        setIsActive(false);
+      }
+    };
 
-      console.log(myId);
-      console.log(subscriptionVariables);
+    AppState.addEventListener("change", onChange);
+
+    return () => {
+      AppState.removeEventListener("change", onChange);
+    };
+  }, [setIsActive]);
+
+  useEffect(() => {
+    if (isActive && myId) {
+      console.log("⚡️ subscribe for ThoughtTalkRooms");
 
       const _unsubscribe = subscribeToMore<
         OnThoughtTalkRoomMessageCreatedSubscription,
@@ -107,44 +116,15 @@ export const useToughtTalkRoomsWithSubsciption = () => {
         },
       });
 
-      return _unsubscribe;
+      // isActiveの変更によってここも実行される
+      return () => {
+        if (_unsubscribe) {
+          console.log("案サブスク");
+          _unsubscribe();
+        }
+      };
     }
-  }, [myId, subscriptionVariables]);
-
-  // Active時、非アクティブ時の処理
-  useEffect(() => {
-    const onChange = async (nextState: AppStateStatus) => {
-      if (nextState === "active") {
-        setIsActive(true);
-      } else {
-        setIsActive(false);
-      }
-    };
-
-    AppState.addEventListener("change", onChange);
-
-    return () => {
-      AppState.removeEventListener("change", onChange);
-    };
-  }, [setIsActive]);
-
-  useEffect(() => {
-    let _unsubscribe: () => void | undefined;
-
-    (async function () {
-      if (isActive) {
-        _unsubscribe = await subscribe();
-      }
-    })();
-
-    // isActiveの変更によってここも実行される
-    return () => {
-      if (!!_unsubscribe) {
-        console.log("案サブスク");
-        _unsubscribe();
-      }
-    };
-  }, [subscribe, isActive]);
+  }, [isActive, myId, subscriptionVariables, subscribeToMore]);
 };
 
 export const useThoughtTalkRoomReadFragment = ({ id }: { id: number }) => {
