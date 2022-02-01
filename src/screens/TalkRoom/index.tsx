@@ -162,57 +162,64 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     }
   }, []);
 
-  // Subscriptionで更新されたデータ追加;
+  // SubscriptionやActive時のデータの取得で新たに取得したメッセージ追加
   useEffect(() => {
     if (talkRoomData) {
       const talkRoomMessageEdges = talkRoomData.thoughtTalkRoom.messages.edges;
       if (talkRoomMessageEdges.length) {
-        const subscribedMessage = talkRoomMessageEdges[0].node;
+        const firstMessage = talkRoomMessageEdges[0].node;
 
         // 自分で送信したメッセージのサブスクライブは無視する
-        if (subscribedMessage.sender.id === me.id) {
+        if (firstMessage.sender.id === me.id) {
           return;
         }
 
         setMessages((currentData) => {
-          const {
-            id,
-            text,
-            createdAt,
-            sender,
-            replyMessage,
-          } = subscribedMessage;
-
           // fetchMoreとかでキャッシュ更新するとこのEffectも呼ばれる。ただ、新しいメッセージを作成する必要はないので現在のデータをリターン
-          if (
-            currentData.length &&
-            currentData[0]._id === subscribedMessage.id
-          ) {
+          if (currentData.length && currentData[0]._id === firstMessage.id) {
             return currentData;
           }
 
-          const newIMessageData: IMessage = {
-            _id: id,
-            text,
-            createdAt: new Date(Number(createdAt)),
-            user: {
-              _id: sender.id,
-              name: sender.name,
-              avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
-            },
-            replyMessage: replyMessage
-              ? {
-                  id: replyMessage.id,
-                  text: replyMessage.text,
-                  user: {
-                    id: replyMessage.sender.id,
-                    name: replyMessage.sender.name,
-                  },
-                }
-              : null,
-          };
+          const newIMessagesData: IMessage[] = [];
 
-          return [newIMessageData, ...currentData];
+          for (const messageEdge of talkRoomMessageEdges) {
+            if (messageEdge.node.id !== Number(currentData[0]._id)) {
+              const {
+                id,
+                text,
+                createdAt,
+                sender,
+                replyMessage,
+              } = messageEdge.node;
+
+              const IMssageData = {
+                _id: id,
+                text,
+                createdAt: new Date(Number(createdAt)),
+                user: {
+                  _id: sender.id,
+                  name: sender.name,
+                  avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
+                },
+                replyMessage: replyMessage
+                  ? {
+                      id: replyMessage.id,
+                      text: replyMessage.text,
+                      user: {
+                        id: replyMessage.sender.id,
+                        name: replyMessage.sender.name,
+                      },
+                    }
+                  : null,
+              };
+
+              newIMessagesData.push(IMssageData);
+            } else {
+              break;
+            }
+          }
+
+          return [...newIMessagesData, ...currentData];
         });
       }
     }
@@ -381,6 +388,12 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
       }
     }
   };
+
+  // useEffect(() => {
+  //   if (talkRoomData) {
+  //     console.log(talkRoomData.thoughtTalkRoom.messages.edges);
+  //   }
+  // }, [talkRoomData]);
 
   return (
     <>
