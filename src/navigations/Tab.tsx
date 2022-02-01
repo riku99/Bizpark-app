@@ -10,6 +10,7 @@ import { useGetThoughtTalkRoomsQuery } from "src/generated/graphql";
 import { Badge } from "src/components/Badge";
 import { StyleSheet } from "react-native";
 import { useToughtTalkRoomsWithSubsciption } from "src/hooks/thoughtTalkRoom";
+import { useActiveData } from "src/hooks/active";
 
 type TabParamList = {
   Home: undefined;
@@ -38,6 +39,7 @@ export const BottomTab = () => {
   }, [data]);
 
   useToughtTalkRoomsWithSubsciption();
+  useActiveData();
 
   return (
     <Tab.Navigator
