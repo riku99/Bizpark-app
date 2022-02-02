@@ -19,12 +19,12 @@ export type Scalars = {
 };
 
 export type CreateNewsPickInput = {
-  newsId: Scalars['ID'];
+  newsId: Scalars['Int'];
 };
 
 export type CreateNewsPickResponse = {
   __typename?: 'CreateNewsPickResponse';
-  id: Scalars['ID'];
+  id: Scalars['Int'];
 };
 
 export type CreatePickInput = {
@@ -68,7 +68,7 @@ export enum CustomErrorResponseCode {
 }
 
 export type DeleteNewsPickInput = {
-  newsId: Scalars['ID'];
+  newsId: Scalars['Int'];
 };
 
 export type DeleteThoughtInput = {
@@ -107,12 +107,6 @@ export type GetOutThoughtTalkRoomInput = {
   roomId: Scalars['Int'];
 };
 
-export type GetThoughtTalkRoomMessagesInput = {
-  after?: InputMaybe<Scalars['String']>;
-  first?: InputMaybe<Scalars['Int']>;
-  roomId: Scalars['Int'];
-};
-
 export type Image = {
   __typename?: 'Image';
   height?: Maybe<Scalars['Int']>;
@@ -130,6 +124,10 @@ export type ImageInput = {
 export type InitialResponse = {
   __typename?: 'InitialResponse';
   me: User;
+};
+
+export type JoinNewsTalkRoomInput = {
+  newsId: Scalars['Int'];
 };
 
 export type JoinTalkInput = {
@@ -165,6 +163,7 @@ export type Mutation = {
   deleteThoughtTalkRoomMember: ThoughtTalkRoom;
   follow: User;
   getOutThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
+  joinNewsTalkRoom: NewsTalkRoom;
   joinThoughtTalk: ThoughtTalkRoom;
   signOut: SignOutResponse;
   unblock: User;
@@ -245,6 +244,11 @@ export type MutationGetOutThoughtTalkRoomArgs = {
 };
 
 
+export type MutationJoinNewsTalkRoomArgs = {
+  input: JoinNewsTalkRoomInput;
+};
+
+
 export type MutationJoinThoughtTalkArgs = {
   input: JoinTalkInput;
 };
@@ -278,7 +282,7 @@ export type News = {
   __typename?: 'News';
   articleCreatedAt?: Maybe<Scalars['String']>;
   genre: NewsGenre;
-  id: Scalars['ID'];
+  id: Scalars['Int'];
   image?: Maybe<Scalars['String']>;
   link: Scalars['String'];
   picked: Scalars['Boolean'];
@@ -307,8 +311,27 @@ export enum NewsGenre {
 
 export type NewsPick = {
   __typename?: 'NewsPick';
-  id: Scalars['ID'];
-  newsId: Scalars['ID'];
+  id: Scalars['Int'];
+  newsId: Scalars['Int'];
+};
+
+export type NewsTalkRoom = TalkRoom & {
+  __typename?: 'NewsTalkRoom';
+  allMessageSeen?: Maybe<Scalars['Boolean']>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  news?: Maybe<News>;
+  updatedAt?: Maybe<Scalars['String']>;
+};
+
+export type NewsTalkRoomMessage = TalkRoomMessage & {
+  __typename?: 'NewsTalkRoomMessage';
+  createdAt: Scalars['String'];
+  id: Scalars['Int'];
+  roomId?: Maybe<Scalars['Int']>;
+  sender?: Maybe<User>;
+  talkRoom?: Maybe<NewsTalkRoom>;
+  text: Scalars['String'];
 };
 
 export type PageInfo = {
@@ -415,6 +438,21 @@ export type SubscriptionThoughtTalkRoomMessageCreatedArgs = {
   userId: Scalars['ID'];
 };
 
+export type TalkRoom = {
+  allMessageSeen?: Maybe<Scalars['Boolean']>;
+  createdAt?: Maybe<Scalars['String']>;
+  id: Scalars['Int'];
+  updatedAt?: Maybe<Scalars['String']>;
+};
+
+export type TalkRoomMessage = {
+  createdAt: Scalars['String'];
+  id: Scalars['Int'];
+  roomId?: Maybe<Scalars['Int']>;
+  sender?: Maybe<User>;
+  text: Scalars['String'];
+};
+
 export type Thought = {
   __typename?: 'Thought';
   contributor?: Maybe<User>;
@@ -432,7 +470,7 @@ export type ThoughtEdge = {
   node: Thought;
 };
 
-export type ThoughtTalkRoom = {
+export type ThoughtTalkRoom = TalkRoom & {
   __typename?: 'ThoughtTalkRoom';
   allMessageSeen?: Maybe<Scalars['Boolean']>;
   createdAt?: Maybe<Scalars['String']>;
@@ -475,7 +513,7 @@ export type ThoughtTalkRoomMemberEdge = {
   node?: Maybe<ThoughtTalkRoomMember>;
 };
 
-export type ThoughtTalkRoomMessage = {
+export type ThoughtTalkRoomMessage = TalkRoomMessage & {
   __typename?: 'ThoughtTalkRoomMessage';
   createdAt: Scalars['String'];
   id: Scalars['Int'];
@@ -545,11 +583,11 @@ export type UserEdge = {
   node: User;
 };
 
-export type NewsFieldsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
+export type NewsFieldsFragment = { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
 
-export type NewsConnectionPartsFragment = { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } };
+export type NewsConnectionPartsFragment = { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } };
 
-export type NewsPartsFragment = { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
+export type NewsPartsFragment = { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
 
 export type PageInfoPartsFragment = { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined };
 
@@ -575,7 +613,7 @@ export type CreateNewsPickMutationVariables = Exact<{
 }>;
 
 
-export type CreateNewsPickMutation = { __typename?: 'Mutation', createNewsPick: { __typename?: 'NewsPick', id: string, newsId: string } };
+export type CreateNewsPickMutation = { __typename?: 'Mutation', createNewsPick: { __typename?: 'NewsPick', id: number, newsId: number } };
 
 export type CreatePickMutationVariables = Exact<{
   input: CreatePickInput;
@@ -617,7 +655,7 @@ export type DeleteNewsPickMutationVariables = Exact<{
 }>;
 
 
-export type DeleteNewsPickMutation = { __typename?: 'Mutation', deleteNewsPick: { __typename?: 'NewsPick', id: string, newsId: string } };
+export type DeleteNewsPickMutation = { __typename?: 'Mutation', deleteNewsPick: { __typename?: 'NewsPick', id: number, newsId: number } };
 
 export type DeletePickMutationVariables = Exact<{
   thoughtId: Scalars['ID'];
@@ -660,6 +698,13 @@ export type GetOutThoughtTalkRoomMutationVariables = Exact<{
 
 
 export type GetOutThoughtTalkRoomMutation = { __typename?: 'Mutation', getOutThoughtTalkRoom?: boolean | null | undefined };
+
+export type JoinNewsTalkRoomMutationVariables = Exact<{
+  input: JoinNewsTalkRoomInput;
+}>;
+
+
+export type JoinNewsTalkRoomMutation = { __typename?: 'Mutation', joinNewsTalkRoom: { __typename?: 'NewsTalkRoom', id: number } };
 
 export type JoinThoughtTalkMutationVariables = Exact<{
   input: JoinTalkInput;
@@ -771,7 +816,7 @@ export type NewsQueryVariables = Exact<{
 }>;
 
 
-export type NewsQuery = { __typename?: 'Query', news?: { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
+export type NewsQuery = { __typename?: 'Query', news?: { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
 
 export type PickedThoughtsQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']>;
@@ -801,7 +846,7 @@ export type PickedNewsQueryVariables = Exact<{
 }>;
 
 
-export type PickedNewsQuery = { __typename?: 'Query', pickedNews: { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: string, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type PickedNewsQuery = { __typename?: 'Query', pickedNews: { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 export type UserThoughtsQueryVariables = Exact<{
   userId: Scalars['ID'];
@@ -1442,6 +1487,39 @@ export function useGetOutThoughtTalkRoomMutation(baseOptions?: Apollo.MutationHo
 export type GetOutThoughtTalkRoomMutationHookResult = ReturnType<typeof useGetOutThoughtTalkRoomMutation>;
 export type GetOutThoughtTalkRoomMutationResult = Apollo.MutationResult<GetOutThoughtTalkRoomMutation>;
 export type GetOutThoughtTalkRoomMutationOptions = Apollo.BaseMutationOptions<GetOutThoughtTalkRoomMutation, GetOutThoughtTalkRoomMutationVariables>;
+export const JoinNewsTalkRoomDocument = gql`
+    mutation JoinNewsTalkRoom($input: JoinNewsTalkRoomInput!) {
+  joinNewsTalkRoom(input: $input) {
+    id
+  }
+}
+    `;
+export type JoinNewsTalkRoomMutationFn = Apollo.MutationFunction<JoinNewsTalkRoomMutation, JoinNewsTalkRoomMutationVariables>;
+
+/**
+ * __useJoinNewsTalkRoomMutation__
+ *
+ * To run a mutation, you first call `useJoinNewsTalkRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useJoinNewsTalkRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [joinNewsTalkRoomMutation, { data, loading, error }] = useJoinNewsTalkRoomMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useJoinNewsTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<JoinNewsTalkRoomMutation, JoinNewsTalkRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<JoinNewsTalkRoomMutation, JoinNewsTalkRoomMutationVariables>(JoinNewsTalkRoomDocument, options);
+      }
+export type JoinNewsTalkRoomMutationHookResult = ReturnType<typeof useJoinNewsTalkRoomMutation>;
+export type JoinNewsTalkRoomMutationResult = Apollo.MutationResult<JoinNewsTalkRoomMutation>;
+export type JoinNewsTalkRoomMutationOptions = Apollo.BaseMutationOptions<JoinNewsTalkRoomMutation, JoinNewsTalkRoomMutationVariables>;
 export const JoinThoughtTalkDocument = gql`
     mutation JoinThoughtTalk($input: JoinTalkInput!) {
   joinThoughtTalk(input: $input) {

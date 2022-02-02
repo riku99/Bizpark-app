@@ -1,0 +1,5 @@
+mutation JoinNewsTalkRoom($input: JoinNewsTalkRoomInput!) {
+  joinNewsTalkRoom(input: $input) {
+    id
+  }
+}

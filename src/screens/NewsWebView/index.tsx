@@ -4,8 +4,7 @@ import { WebView } from "react-native-webview";
 import { useNewsCacheFragment } from "src/hooks/apollo";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { MotiView } from "moti";
-import { Box, Button } from "native-base";
-import { CloseButton } from "src/components/CloseButton";
+import { JoinTalkButton } from "./JoinTalkButton";
 
 type Props = RootNavigationScreenProp<"NewsWebView">;
 
@@ -20,6 +19,10 @@ export const NewsWebViewScreen = ({ navigation, route }: Props) => {
   const { readNewsFragment } = useNewsCacheFragment();
   const data = readNewsFragment({ id });
   const [talkButtonVisible, setTalkButtonVisible] = useState(true);
+
+  const onJoinTalkRoomCloseButtonPress = () => {
+    setTalkButtonVisible(false);
+  };
 
   if (!data) {
     return null;
@@ -43,24 +46,7 @@ export const NewsWebViewScreen = ({ navigation, route }: Props) => {
           animate={{ translateY: 0 }}
           transition={{ type: "timing", duration: 400 }}
         >
-          <Box
-            position="absolute"
-            w="90%"
-            alignItems="center"
-            alignSelf="center"
-            bottom={4}
-          >
-            <CloseButton
-              size={7}
-              style={styles.closeButton}
-              onPress={() => {
-                setTalkButtonVisible(false);
-              }}
-            />
-            <Button w="100%" _text={{ fontSize: 16 }}>
-              このニュースについてトークする
-            </Button>
-          </Box>
+          <JoinTalkButton onCloseButtonPress={onJoinTalkRoomCloseButtonPress} />
         </MotiView>
       )}
     </SafeAreaView>
