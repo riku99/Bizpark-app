@@ -704,7 +704,7 @@ export type JoinNewsTalkRoomMutationVariables = Exact<{
 }>;
 
 
-export type JoinNewsTalkRoomMutation = { __typename?: 'Mutation', joinNewsTalkRoom: { __typename?: 'NewsTalkRoom', id: number } };
+export type JoinNewsTalkRoomMutation = { __typename?: 'Mutation', joinNewsTalkRoom: { __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined } };
 
 export type JoinThoughtTalkMutationVariables = Exact<{
   input: JoinTalkInput;
@@ -1491,6 +1491,7 @@ export const JoinNewsTalkRoomDocument = gql`
     mutation JoinNewsTalkRoom($input: JoinNewsTalkRoomInput!) {
   joinNewsTalkRoom(input: $input) {
     id
+    allMessageSeen
   }
 }
     `;

@@ -16,6 +16,7 @@ export const NewsWebViewScreen = ({ navigation, route }: Props) => {
     });
   }, []);
 
+  // こことかクエリにできる(?)
   const { readNewsFragment } = useNewsCacheFragment();
   const data = readNewsFragment({ id });
   const [talkButtonVisible, setTalkButtonVisible] = useState(true);
@@ -46,7 +47,10 @@ export const NewsWebViewScreen = ({ navigation, route }: Props) => {
           animate={{ translateY: 0 }}
           transition={{ type: "timing", duration: 400 }}
         >
-          <JoinTalkButton onCloseButtonPress={onJoinTalkRoomCloseButtonPress} />
+          <JoinTalkButton
+            onCloseButtonPress={onJoinTalkRoomCloseButtonPress}
+            newsId={id}
+          />
         </MotiView>
       )}
     </SafeAreaView>

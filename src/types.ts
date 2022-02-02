@@ -43,7 +43,7 @@ export type RootStackParamList = {
   ThoughtWriting: undefined;
   ThoughtShare: ThoughtShare;
   NewsWebView: {
-    id: string;
+    id: number;
   };
   UserEdit: undefined;
   UserItemEdit: {

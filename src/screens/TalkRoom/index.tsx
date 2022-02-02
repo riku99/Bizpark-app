@@ -369,16 +369,29 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
         if (fetchData) {
           const im: IMessage[] = fetchData.thoughtTalkRoom.messages.edges.map(
-            ({ node: message }) => ({
-              _id: message.id,
-              text: message.text,
-              createdAt: new Date(Number(message.createdAt)),
-              user: {
-                _id: message.sender.id,
-                name: message.sender.name,
-                avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
-              },
-            })
+            ({ node: message }) => {
+              const { replyMessage } = message;
+              return {
+                _id: message.id,
+                text: message.text,
+                createdAt: new Date(Number(message.createdAt)),
+                user: {
+                  _id: message.sender.id,
+                  name: message.sender.name,
+                  avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
+                },
+                replyMessage: replyMessage
+                  ? {
+                      id: Number(replyMessage.id),
+                      text: replyMessage.text,
+                      user: {
+                        id: replyMessage.sender.id,
+                        name: replyMessage.sender.name,
+                      },
+                    }
+                  : null,
+              };
+            }
           );
 
           setMessages((currentMessages) => {
@@ -388,12 +401,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
       }
     }
   };
-
-  // useEffect(() => {
-  //   if (talkRoomData) {
-  //     console.log(talkRoomData.thoughtTalkRoom.messages.edges);
-  //   }
-  // }, [talkRoomData]);
 
   return (
     <>
