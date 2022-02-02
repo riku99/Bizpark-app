@@ -2,5 +2,24 @@ mutation JoinNewsTalkRoom($input: JoinNewsTalkRoomInput!) {
   joinNewsTalkRoom(input: $input) {
     id
     allMessageSeen
+    members {
+      edges {
+        node {
+          id
+          user {
+            id
+            name
+            imageUrl
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+    news {
+      id
+    }
   }
 }

@@ -1,0 +1,8 @@
+fragment TalkRoomMemberParts on TalkRoomMember {
+  id
+  user {
+    id
+    name
+    imageUrl
+  }
+}
