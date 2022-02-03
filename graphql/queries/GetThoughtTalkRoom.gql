@@ -8,23 +8,13 @@ query GetThoughtTalkRoom($id: Int!, $messageCursor: String) {
         node {
           id
           user {
-            id
-            name
-            imageUrl
+            ...UserParts
           }
         }
         cursor
       }
       pageInfo {
         ...PageInfoParts
-      }
-    }
-    thought {
-      id
-      title
-      text
-      contributor {
-        id
       }
     }
     messages(first: 20, after: $messageCursor) {

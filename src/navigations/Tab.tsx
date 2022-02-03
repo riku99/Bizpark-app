@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
 import { MyPageStack } from "./MyPage";
-import { TalkListScreen } from "src/screens/TalkList";
+import { TalkListScreen } from "src/screens/TalkRoomList";
 import { NewsScreen } from "src/screens/News";
 import { useColorModeValue, useTheme, Box } from "native-base";
 import React, { useMemo } from "react";

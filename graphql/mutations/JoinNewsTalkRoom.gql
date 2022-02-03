@@ -20,6 +20,7 @@ mutation JoinNewsTalkRoom($input: JoinNewsTalkRoomInput!) {
     }
     news {
       id
+      title
     }
   }
 }

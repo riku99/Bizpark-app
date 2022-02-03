@@ -13,6 +13,8 @@ import {
   useCreateUserThoughtTalkRoomMessageSeenMutation,
   GetThoughtTalkRoomMessagesQuery,
   CustomErrorResponseCode,
+  useGetThoughtTalkRoomMembersQuery,
+  useGetThoughtTalkRoomMembersLazyQuery,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -55,8 +57,15 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       id,
     },
+
     // fetchPolicy: "network-only",
     // nextFetchPolicy: "cache-first",
+  });
+
+  const { data: membersData } = useGetThoughtTalkRoomMembersQuery({
+    variables: {
+      talkRoomId: id,
+    },
   });
 
   const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
@@ -88,13 +97,14 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
       return false;
     }
 
-    return talkRoomData.thoughtTalkRoom.thought.contributor.id === me.id;
-  }, [talkRoomData, me]);
+    return fragmentCacheData.thought.contributor.id === me.id;
+  }, [fragmentCacheData, me]);
 
   const renderHeaderTitle = useCallback(() => {
     return (
       <HeaderTitle
-        talkRoomData={talkRoomData}
+        // talkRoomData={talkRoomData}
+        members={membersData?.thoughtTalkRoom.members}
         onPress={() => {
           navigation.navigate("TalkRoomMembers", {
             talkRoomId: id,
@@ -102,7 +112,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
         }}
       />
     );
-  }, [talkRoomData, navigation]);
+  }, [membersData, navigation]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -340,20 +350,23 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
   const infiniteLoad = async () => {
     // fetchで取得したデータを常に使うと、Subscriptionで取得したデータがデフォルトのfirstを超えている場合pageInfoのデータと実際に取得したいデータの辻褄が合わなくなるのでcacheのpageInfoの方も検証
-    if (talkRoomData && fragmentCacheData) {
-      const {
-        pageInfo: fetchInfo,
-        edges: fetchEdges,
-      } = talkRoomData.thoughtTalkRoom.messages;
+    if (fragmentCacheData) {
+      // const {
+      //   pageInfo: fetchInfo,
+      //   edges: fetchEdges,
+      // } = talkRoomData.thoughtTalkRoom.messages;
 
       const {
         edges: cacheEdges,
         pageInfo: cacheInfo,
       } = fragmentCacheData.messages;
 
-      const pageInfo =
-        cacheEdges.length > fetchEdges.length ? cacheInfo : fetchInfo;
+      // const pageInfo =
+      //   cacheEdges.length > fetchEdges.length ? cacheInfo : fetchInfo;
 
+      const pageInfo = cacheInfo;
+
+      console.log(pageInfo);
       if (pageInfo.hasNextPage) {
         // 基本CursorにはpageInfoのものを使っているが、メッセージはSubscriptionにより状態が更新されていくので messages のIDを使用
         const endCursor = messages[messages.length - 1]._id.toString();

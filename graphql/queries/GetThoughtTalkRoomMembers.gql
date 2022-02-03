@@ -1,4 +1,4 @@
-query GetThoughtTalkRoomMembers($talkRoomId: Int!, $after: String) {
+query GetThoughtTalkRoomMembersAndParent($talkRoomId: Int!, $after: String) {
   thoughtTalkRoom(id: $talkRoomId) {
     id
     members(first: 20, after: $after) {

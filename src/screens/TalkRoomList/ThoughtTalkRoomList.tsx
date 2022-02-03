@@ -12,8 +12,6 @@ import {
   useGetThoughtTalkRoomsQuery,
   useMeQuery,
   useGetOutThoughtTalkRoomMutation,
-  GetThoughtTalkRoomsDocument,
-  GetThoughtTalkRoomsQuery,
   GetThoughtTalkRoomsQueryResult,
   CustomErrorResponseCode,
 } from "src/generated/graphql";
