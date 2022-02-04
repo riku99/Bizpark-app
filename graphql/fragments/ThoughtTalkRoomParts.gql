@@ -17,12 +17,7 @@ fragment ThoughtTalkRoomParts on ThoughtTalkRoom {
     }
   }
   thought {
-    id
-    title
-    text
-    contributor {
-      id
-    }
+    ...ThoughtTalkRoomParentParts
   }
   messages(first: 20) {
     edges {

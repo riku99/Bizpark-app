@@ -1,32 +1,32 @@
-query GetThoughtTalkRoom($id: Int!, $messageCursor: String) {
-  thoughtTalkRoom(id: $id) {
-    id
-    createdAt
-    allMessageSeen
-    members {
-      edges {
-        node {
-          id
-          user {
-            ...UserParts
-          }
-        }
-        cursor
-      }
-      pageInfo {
-        ...PageInfoParts
-      }
-    }
-    messages(first: 20, after: $messageCursor) {
-      edges {
-        node {
-          ...ThoughtTalkRoomMessageParts
-        }
-        cursor
-      }
-      pageInfo {
-        ...PageInfoParts
-      }
-    }
-  }
-}
+# query GetThoughtTalkRoom($id: Int!, $messageCursor: String) {
+#   thoughtTalkRoom(id: $id) {
+#     id
+#     createdAt
+#     allMessageSeen
+#     members {
+#       edges {
+#         node {
+#           id
+#           user {
+#             ...UserParts
+#           }
+#         }
+#         cursor
+#       }
+#       pageInfo {
+#         ...PageInfoParts
+#       }
+#     }
+#     messages(first: 20, after: $messageCursor) {
+#       edges {
+#         node {
+#           ...ThoughtTalkRoomMessageParts
+#         }
+#         cursor
+#       }
+#       pageInfo {
+#         ...PageInfoParts
+#       }
+#     }
+#   }
+# }
