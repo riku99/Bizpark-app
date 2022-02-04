@@ -48,12 +48,12 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     createSeenMutation,
   ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
 
-  const fragmentCacheData = useThoughtTalkRoomReadFragment({ id });
-
+  // MessagesQueryもMembersQueryもParentQueryも基本全てキャッシュあるのでそこから取得されるが、messagesはキャッシュからじゃないとエラー出る可能性あるのでfetchPolicyを指定
   const { fetchMore, data: messagesData } = useGetThoughtTalkRoomMessagesQuery({
     variables: {
       id,
     },
+    fetchPolicy: "cache-only",
   });
 
   const { data: membersData } = useGetThoughtTalkRoomMembersQuery({
@@ -73,7 +73,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const [modalVisible, setModalVisible] = useState(false);
 
   // このトークルームの元の投稿が自分のものかどうか
-  const isMyThuoghtmessagesData = useMemo(() => {
+  const isMyThuoghtTalkRoomData = useMemo(() => {
     if (!thoughtData || !me) {
       return false;
     }
@@ -84,7 +84,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const renderHeaderTitle = useCallback(() => {
     return (
       <HeaderTitle
-        // messagesData={messagesData}
         members={membersData?.thoughtTalkRoom.members}
         onPress={() => {
           navigation.navigate("TalkRoomMembers", {
@@ -125,8 +124,8 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
-    if (fragmentCacheData) {
-      const im: IMessage[] = fragmentCacheData.messages.edges.map(
+    if (messagesData) {
+      const im: IMessage[] = messagesData.thoughtTalkRoom.messages.edges.map(
         ({ node: message }) => ({
           _id: message.id,
           text: message.text,
@@ -330,26 +329,11 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   };
 
   const infiniteLoad = async () => {
-    // fetchで取得したデータを常に使うと、Subscriptionで取得したデータがデフォルトのfirstを超えている場合pageInfoのデータと実際に取得したいデータの辻褄が合わなくなるのでcacheのpageInfoの方も検証
-    if (fragmentCacheData) {
-      // const {
-      //   pageInfo: fetchInfo,
-      //   edges: fetchEdges,
-      // } = messagesData.thoughtTalkRoom.messages;
-
-      const {
-        edges: cacheEdges,
-        pageInfo: cacheInfo,
-      } = fragmentCacheData.messages;
-
-      // const pageInfo =
-      //   cacheEdges.length > fetchEdges.length ? cacheInfo : fetchInfo;
-
-      const pageInfo = cacheInfo;
+    if (messagesData) {
+      const { pageInfo } = messagesData.thoughtTalkRoom.messages;
 
       if (pageInfo.hasNextPage) {
-        // 基本CursorにはpageInfoのものを使っているが、メッセージはSubscriptionにより状態が更新されていくので messages のIDを使用
-        const endCursor = messages[messages.length - 1]._id.toString();
+        const { endCursor } = pageInfo;
 
         const { data: fetchData } = await fetchMore<
           GetThoughtTalkRoomMessagesQuery,
@@ -361,7 +345,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
         });
 
         if (fetchData) {
-          console.log(fetchData);
           const im: IMessage[] = fetchData.thoughtTalkRoom.messages.edges.map(
             ({ node: message }) => {
               const { replyMessage } = message;
@@ -415,7 +398,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
           setModalVisible(false);
         }}
         talkRoomId={id}
-        isMyThuoghtmessagesData={isMyThuoghtmessagesData}
+        isMyThuoghtTalkRoomData={isMyThuoghtTalkRoomData}
       />
     </>
   );
