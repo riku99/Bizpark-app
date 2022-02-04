@@ -20,6 +20,7 @@ import {
   GetNewsTalkRoomMessagesQuery,
   NewsTalkRoomMessageEdge,
   ThoughtTalkRoomMessageEdge,
+  TalkRoomMessage,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -38,8 +39,6 @@ type Props =
       roomId: number;
       messageData: GetThoughtTalkRoomMessagesQueryResult["data"];
       messageFetchMore: GetThoughtTalkRoomMessagesQueryResult["fetchMore"];
-      // membersData: GetThoughtTalkRoomMembersQueryResult["data"];
-      // createMessage: ({}: {}) => {};
     }
   | {
       type: "News";
@@ -320,10 +319,41 @@ export const TalkRoom = (props: Props) => {
       if (pageInfo.hasNextPage) {
         const { endCursor } = pageInfo;
 
-        let messageEdges:
-          | ThoughtTalkRoomMessageEdge[]
-          | NewsTalkRoomMessageEdge[]
-          | undefined;
+        const setNewMessages = <
+          T extends ThoughtTalkRoomMessageEdge | NewsTalkRoomMessageEdge
+        >(
+          messageEdges: T[]
+        ) => {
+          if (messageEdges) {
+            const im: IMessage[] = messageEdges.map(({ node: message }) => {
+              const { replyMessage } = message;
+              return {
+                _id: message.id,
+                text: message.text,
+                createdAt: new Date(Number(message.createdAt)),
+                user: {
+                  _id: message.sender.id,
+                  name: message.sender.name,
+                  avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
+                },
+                replyMessage: replyMessage
+                  ? {
+                      id: Number(replyMessage.id),
+                      text: replyMessage.text,
+                      user: {
+                        id: replyMessage.sender.id,
+                        name: replyMessage.sender.name,
+                      },
+                    }
+                  : null,
+              };
+            });
+
+            setMessages((currentMessages) => {
+              return [...currentMessages, ...im];
+            });
+          }
+        };
 
         if (props.type === "Thought") {
           const { data } = await props.messageFetchMore<
@@ -335,7 +365,11 @@ export const TalkRoom = (props: Props) => {
             },
           });
 
-          messageEdges = data.thoughtTalkRoom.messages.edges;
+          const messageEdges = data.thoughtTalkRoom.messages.edges;
+
+          if (messageEdges) {
+            setNewMessages(messageEdges);
+          }
         }
 
         if (props.type === "News") {
@@ -348,37 +382,11 @@ export const TalkRoom = (props: Props) => {
             },
           });
 
-          messageEdges = data.newsTalkRoom.messages.edges;
-        }
+          const messageEdges = data.newsTalkRoom.messages.edges;
 
-        if (messageEdges) {
-          const im: IMessage[] = messageEdges.map(({ node: message }) => {
-            const { replyMessage } = message;
-            return {
-              _id: message.id,
-              text: message.text,
-              createdAt: new Date(Number(message.createdAt)),
-              user: {
-                _id: message.sender.id,
-                name: message.sender.name,
-                avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
-              },
-              replyMessage: replyMessage
-                ? {
-                    id: Number(replyMessage.id),
-                    text: replyMessage.text,
-                    user: {
-                      id: replyMessage.sender.id,
-                      name: replyMessage.sender.name,
-                    },
-                  }
-                : null,
-            };
-          });
-
-          setMessages((currentMessages) => {
-            return [...currentMessages, ...im];
-          });
+          if (messageEdges) {
+            setNewMessages(messageEdges);
+          }
         }
       }
     }
