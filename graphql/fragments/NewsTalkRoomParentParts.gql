@@ -1,0 +1,4 @@
+fragment NewsTalkRoomParentParts on News {
+  id
+  title
+}

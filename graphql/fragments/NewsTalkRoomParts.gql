@@ -1,0 +1,31 @@
+fragment NewsTalkRoomParts on NewsTalkRoom {
+  id
+  allMessageSeen
+  members {
+    edges {
+      node {
+        id
+        user {
+          ...UserParts
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
+  news {
+    ...NewsTalkRoomParentParts
+  }
+  messages {
+    edges {
+      node {
+        ...NewsTalkRoomMessageParts
+      }
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
+}

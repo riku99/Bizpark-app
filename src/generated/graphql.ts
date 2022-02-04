@@ -643,6 +643,12 @@ export type NewsConnectionPartsFragment = { __typename?: 'NewsConnection', edges
 
 export type NewsPartsFragment = { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
 
+export type NewsTalkRoomMessagePartsFragment = { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined };
+
+export type NewsTalkRoomParentPartsFragment = { __typename?: 'News', id: number, title: string };
+
+export type NewsTalkRoomPartsFragment = { __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
+
 export type PageInfoPartsFragment = { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined };
 
 export type ThoughtPartsFragment = { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> };
@@ -760,7 +766,7 @@ export type JoinNewsTalkRoomMutationVariables = Exact<{
 }>;
 
 
-export type JoinNewsTalkRoomMutation = { __typename?: 'Mutation', joinNewsTalkRoom: { __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type JoinNewsTalkRoomMutation = { __typename?: 'Mutation', joinNewsTalkRoom: { __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
 
 export type JoinThoughtTalkMutationVariables = Exact<{
   input: JoinTalkInput;
@@ -977,6 +983,68 @@ export const UserPartsFragmentDoc = gql`
   instagram
 }
     `;
+export const NewsTalkRoomParentPartsFragmentDoc = gql`
+    fragment NewsTalkRoomParentParts on News {
+  id
+  title
+}
+    `;
+export const NewsTalkRoomMessagePartsFragmentDoc = gql`
+    fragment NewsTalkRoomMessageParts on NewsTalkRoomMessage {
+  id
+  text
+  createdAt
+  sender {
+    ...UserParts
+  }
+  roomId
+  replyMessage {
+    id
+    text
+    createdAt
+    sender {
+      id
+      name
+    }
+  }
+}
+    ${UserPartsFragmentDoc}`;
+export const NewsTalkRoomPartsFragmentDoc = gql`
+    fragment NewsTalkRoomParts on NewsTalkRoom {
+  id
+  allMessageSeen
+  members {
+    edges {
+      node {
+        id
+        user {
+          ...UserParts
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
+  news {
+    ...NewsTalkRoomParentParts
+  }
+  messages {
+    edges {
+      node {
+        ...NewsTalkRoomMessageParts
+      }
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
+}
+    ${UserPartsFragmentDoc}
+${PageInfoPartsFragmentDoc}
+${NewsTalkRoomParentPartsFragmentDoc}
+${NewsTalkRoomMessagePartsFragmentDoc}`;
 export const ThoughtTalkRoomParentPartsFragmentDoc = gql`
     fragment ThoughtTalkRoomParentParts on Thought {
   id
@@ -1550,57 +1618,10 @@ export type GetOutThoughtTalkRoomMutationOptions = Apollo.BaseMutationOptions<Ge
 export const JoinNewsTalkRoomDocument = gql`
     mutation JoinNewsTalkRoom($input: JoinNewsTalkRoomInput!) {
   joinNewsTalkRoom(input: $input) {
-    id
-    allMessageSeen
-    members {
-      edges {
-        node {
-          id
-          user {
-            id
-            name
-            imageUrl
-          }
-        }
-        cursor
-      }
-      pageInfo {
-        ...PageInfoParts
-      }
-    }
-    news {
-      id
-      title
-    }
-    messages {
-      edges {
-        node {
-          id
-          text
-          createdAt
-          sender {
-            ...UserParts
-          }
-          roomId
-          replyMessage {
-            id
-            text
-            createdAt
-            sender {
-              id
-              name
-            }
-          }
-        }
-      }
-      pageInfo {
-        ...PageInfoParts
-      }
-    }
+    ...NewsTalkRoomParts
   }
 }
-    ${PageInfoPartsFragmentDoc}
-${UserPartsFragmentDoc}`;
+    ${NewsTalkRoomPartsFragmentDoc}`;
 export type JoinNewsTalkRoomMutationFn = Apollo.MutationFunction<JoinNewsTalkRoomMutation, JoinNewsTalkRoomMutationVariables>;
 
 /**

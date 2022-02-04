@@ -2,7 +2,6 @@ import React, { useCallback, useState } from "react";
 import { Box, FlatList, useColorModeValue } from "native-base";
 import {
   useGetThoughtTalkRoomsQuery,
-  useMeQuery,
   useGetOutThoughtTalkRoomMutation,
   GetThoughtTalkRoomsQueryResult,
   CustomErrorResponseCode,
@@ -25,9 +24,6 @@ export const ThoughtTalkRoomList = React.memo(() => {
   const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
   const textGray = useColorModeValue("lt.textGray", "dt.textGray");
   const navigation = useNavigation<RootNavigationProp<"Tab">>();
-  const {
-    data: { me },
-  } = useMeQuery();
   const toast = useToast();
   const [modalData, setModalData] = useState<{ roomId: number } | null>(null);
 
