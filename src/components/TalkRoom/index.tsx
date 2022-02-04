@@ -12,10 +12,14 @@ import {
   useCreateUserThoughtTalkRoomMessageSeenMutation,
   GetThoughtTalkRoomMessagesQuery,
   CustomErrorResponseCode,
-  useGetThoughtTalkRoomMembersQuery,
-  useGetThoughtTalkRoomMessagesQuery,
-  useGetThoughtTalkRoomParentQuery,
   PageInfo,
+  GetThoughtTalkRoomMessagesQueryHookResult,
+  GetThoughtTalkRoomMessagesQueryResult,
+  GetThoughtTalkRoomMembersQueryResult,
+  GetNewsTalkRoomMessagesQueryResult,
+  GetNewsTalkRoomMessagesQuery,
+  NewsTalkRoomMessageEdge,
+  ThoughtTalkRoomMessageEdge,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -23,19 +27,33 @@ import { NO_USER_IMAGE_URL } from "src/constants";
 import { createRandomStr } from "src/utils";
 import { logJson, getGraphQLError } from "src/utils";
 import { btoa } from "react-native-quick-base64";
-import { HeaderBackButton } from "@react-navigation/elements";
 import { Alert } from "react-native";
-import { DotsHorizontal } from "src/components/DotsHorizontal";
-import { Menu } from "./Menu";
-import { HeaderTitle } from "./HeaderTitle";
 import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoom";
+import { useNavigation } from "@react-navigation/native";
+import { RootNavigationProp } from "src/types";
 
-type Props = RootNavigationScreenProp<"TalkRoomMain">;
+type Props =
+  | {
+      type: "Thought";
+      roomId: number;
+      messageData: GetThoughtTalkRoomMessagesQueryResult["data"];
+      messageFetchMore: GetThoughtTalkRoomMessagesQueryResult["fetchMore"];
+      // membersData: GetThoughtTalkRoomMembersQueryResult["data"];
+      // createMessage: ({}: {}) => {};
+    }
+  | {
+      type: "News";
+      roomId: number;
+      messageData: GetNewsTalkRoomMessagesQueryResult["data"];
+      messageFetchMore: GetNewsTalkRoomMessagesQueryResult["fetchMore"];
+    };
 
 const isTmp = (str: string) => str.slice(0, 3) === "tmp";
 
-export const TalkRoom = ({ navigation, route }: Props) => {
-  const { id } = route.params;
+export const TalkRoom = (props: Props) => {
+  const { roomId } = props;
+
+  const navigation = useNavigation<RootNavigationProp<"ThoughtTalkRoom">>();
 
   const {
     data: { me },
@@ -47,35 +65,20 @@ export const TalkRoom = ({ navigation, route }: Props) => {
     createSeenMutation,
   ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
 
-  // MessagesQueryもMembersQueryもParentQueryも基本全てキャッシュあるのでそこから取得されるが、messagesはキャッシュからじゃないとエラー出る可能性あるのでfetchPolicyを指定
-  const { fetchMore, data: messagesData } = useGetThoughtTalkRoomMessagesQuery({
-    variables: {
-      id,
-    },
-    fetchPolicy: "cache-only",
-  });
-
-  const { data: membersData } = useGetThoughtTalkRoomMembersQuery({
-    variables: {
-      talkRoomId: id,
-    },
-  });
-
-  const { data: thoughtData } = useGetThoughtTalkRoomParentQuery({
-    variables: {
-      id,
-    },
-  });
-
   const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
 
   const [pageInfo, setPageInfo] = useState<PageInfo>(
-    messagesData?.thoughtTalkRoom.messages.pageInfo
+    props.type === "Thought"
+      ? props.messageData?.thoughtTalkRoom.messages.pageInfo
+      : props.messageData.newsTalkRoom.messages.pageInfo
   );
 
   useEffect(() => {
-    if (messagesData) {
-      const newMessageInfo = messagesData.thoughtTalkRoom.messages.pageInfo;
+    if (props.messageData) {
+      const newMessageInfo =
+        props.type === "Thought"
+          ? props.messageData.thoughtTalkRoom.messages.pageInfo
+          : props.messageData.newsTalkRoom.messages.pageInfo;
 
       setPageInfo((currentInfo) => {
         // トークルームを開いたままActiveになるとキャッシュのPageInfoも更新される。その更新されたものを使用すると無限ローディングでダブるのでチェック
@@ -86,47 +89,7 @@ export const TalkRoom = ({ navigation, route }: Props) => {
         }
       });
     }
-  }, [messagesData]);
-
-  const [modalVisible, setModalVisible] = useState(false);
-
-  // このトークルームの元の投稿が自分のものかどうか
-  const isMyThuoghtTalkRoomData = useMemo(() => {
-    if (!thoughtData || !me) {
-      return false;
-    }
-
-    return thoughtData.thoughtTalkRoom.thought.contributor.id === me.id;
-  }, [thoughtData, me]);
-
-  const renderHeaderTitle = useCallback(() => {
-    return (
-      <HeaderTitle
-        members={membersData?.thoughtTalkRoom.members}
-        onPress={() => {
-          navigation.navigate("TalkRoomMembers", {
-            talkRoomId: id,
-          });
-        }}
-      />
-    );
-  }, [membersData, navigation]);
-
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      headerTitle: renderHeaderTitle,
-      headerLeft: () => (
-        <HeaderBackButton
-          onPress={() => {
-            navigation.goBack();
-          }}
-        />
-      ),
-      headerRight: () => (
-        <DotsHorizontal onPress={() => setModalVisible(true)} />
-      ),
-    });
-  }, [navigation, renderHeaderTitle]);
+  }, [props.messageData]);
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -142,29 +105,32 @@ export const TalkRoom = ({ navigation, route }: Props) => {
 
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
-    if (messagesData) {
-      const im: IMessage[] = messagesData.thoughtTalkRoom.messages.edges.map(
-        ({ node: message }) => ({
-          _id: message.id,
-          text: message.text,
-          createdAt: new Date(Number(message.createdAt)),
-          user: {
-            _id: message.sender.id,
-            name: message.sender.name,
-            avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
-          },
-          replyMessage: message.replyMessage
-            ? {
-                id: message.replyMessage.id,
-                text: message.replyMessage.text,
-                user: {
-                  id: message.replyMessage.sender.id,
-                  name: message.replyMessage.sender.name,
-                },
-              }
-            : null,
-        })
-      );
+    if (props.messageData) {
+      const edges =
+        props.type === "Thought"
+          ? props.messageData.thoughtTalkRoom.messages.edges
+          : props.messageData.newsTalkRoom.messages.edges;
+
+      const im: IMessage[] = edges.map(({ node: message }) => ({
+        _id: message.id,
+        text: message.text,
+        createdAt: new Date(Number(message.createdAt)),
+        user: {
+          _id: message.sender.id,
+          name: message.sender.name,
+          avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
+        },
+        replyMessage: message.replyMessage
+          ? {
+              id: message.replyMessage.id,
+              text: message.replyMessage.text,
+              user: {
+                id: message.replyMessage.sender.id,
+                name: message.replyMessage.sender.name,
+              },
+            }
+          : null,
+      }));
 
       setMessages(im);
     }
@@ -172,10 +138,13 @@ export const TalkRoom = ({ navigation, route }: Props) => {
 
   // SubscriptionやActive時のデータの取得で新たに取得したメッセージ追加
   useEffect(() => {
-    if (messagesData) {
-      const talkRoomMessageEdges = messagesData.thoughtTalkRoom.messages.edges;
-      if (talkRoomMessageEdges.length) {
-        const firstMessage = talkRoomMessageEdges[0].node;
+    if (props.messageData) {
+      const messageEdges =
+        props.type === "Thought"
+          ? props.messageData.thoughtTalkRoom.messages.edges
+          : props.messageData.newsTalkRoom.messages.edges;
+      if (messageEdges.length) {
+        const firstMessage = messageEdges[0].node;
 
         // 自分で送信したメッセージのサブスクライブは無視する
         if (firstMessage.sender.id === me.id) {
@@ -188,9 +157,9 @@ export const TalkRoom = ({ navigation, route }: Props) => {
             return currentData;
           }
 
-          const newIMessagesData: IMessage[] = [];
+          const newMessageData: IMessage[] = [];
 
-          for (const messageEdge of talkRoomMessageEdges) {
+          for (const messageEdge of messageEdges) {
             if (messageEdge.node.id !== Number(currentData[0]._id)) {
               const {
                 id,
@@ -221,17 +190,17 @@ export const TalkRoom = ({ navigation, route }: Props) => {
                   : null,
               };
 
-              newIMessagesData.push(IMssageData);
+              newMessageData.push(IMssageData);
             } else {
               break;
             }
           }
 
-          return [...newIMessagesData, ...currentData];
+          return [...newMessageData, ...currentData];
         });
       }
     }
-  }, [messagesData, setMessages]);
+  }, [props.messageData, setMessages]);
 
   // 既読の作成
   useEffect(() => {
@@ -242,7 +211,7 @@ export const TalkRoom = ({ navigation, route }: Props) => {
             variables: {
               input: {
                 messageId: Number(latestMessage._id),
-                roomId: id,
+                roomId,
               },
             },
           });
@@ -292,7 +261,7 @@ export const TalkRoom = ({ navigation, route }: Props) => {
         variables: {
           input: {
             text: inputMessages[0].text,
-            roomId: id,
+            roomId,
             replyTo: replyMessage ? Number(replyMessage._id) : null,
           },
         },
@@ -333,7 +302,7 @@ export const TalkRoom = ({ navigation, route }: Props) => {
           {
             text: "OK",
             onPress: async () => {
-              deleteThoghtTalkRoom({ talkRoomId: id });
+              deleteThoghtTalkRoom({ talkRoomId: roomId });
               navigation.goBack();
             },
           },
@@ -351,41 +320,61 @@ export const TalkRoom = ({ navigation, route }: Props) => {
       if (pageInfo.hasNextPage) {
         const { endCursor } = pageInfo;
 
-        const { data: fetchData } = await fetchMore<
-          GetThoughtTalkRoomMessagesQuery,
-          { messageCursor: string }
-        >({
-          variables: {
-            messageCursor: endCursor ? btoa(endCursor) : null,
-          },
-        });
+        let messageEdges:
+          | ThoughtTalkRoomMessageEdge[]
+          | NewsTalkRoomMessageEdge[]
+          | undefined;
 
-        if (fetchData) {
-          const im: IMessage[] = fetchData.thoughtTalkRoom.messages.edges.map(
-            ({ node: message }) => {
-              const { replyMessage } = message;
-              return {
-                _id: message.id,
-                text: message.text,
-                createdAt: new Date(Number(message.createdAt)),
-                user: {
-                  _id: message.sender.id,
-                  name: message.sender.name,
-                  avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
-                },
-                replyMessage: replyMessage
-                  ? {
-                      id: Number(replyMessage.id),
-                      text: replyMessage.text,
-                      user: {
-                        id: replyMessage.sender.id,
-                        name: replyMessage.sender.name,
-                      },
-                    }
-                  : null,
-              };
-            }
-          );
+        if (props.type === "Thought") {
+          const { data } = await props.messageFetchMore<
+            GetThoughtTalkRoomMessagesQuery,
+            { messageCursor: string }
+          >({
+            variables: {
+              messageCursor: endCursor ? btoa(endCursor) : null,
+            },
+          });
+
+          messageEdges = data.thoughtTalkRoom.messages.edges;
+        }
+
+        if (props.type === "News") {
+          const { data } = await props.messageFetchMore<
+            GetNewsTalkRoomMessagesQuery,
+            { messageCursor: string }
+          >({
+            variables: {
+              messageCursor: endCursor ? btoa(endCursor) : null,
+            },
+          });
+
+          messageEdges = data.newsTalkRoom.messages.edges;
+        }
+
+        if (messageEdges) {
+          const im: IMessage[] = messageEdges.map(({ node: message }) => {
+            const { replyMessage } = message;
+            return {
+              _id: message.id,
+              text: message.text,
+              createdAt: new Date(Number(message.createdAt)),
+              user: {
+                _id: message.sender.id,
+                name: message.sender.name,
+                avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
+              },
+              replyMessage: replyMessage
+                ? {
+                    id: Number(replyMessage.id),
+                    text: replyMessage.text,
+                    user: {
+                      id: replyMessage.sender.id,
+                      name: replyMessage.sender.name,
+                    },
+                  }
+                : null,
+            };
+          });
 
           setMessages((currentMessages) => {
             return [...currentMessages, ...im];
@@ -406,15 +395,6 @@ export const TalkRoom = ({ navigation, route }: Props) => {
         }}
         onSend={onSendPress}
         infiniteLoad={infiniteLoad}
-      />
-
-      <Menu
-        isVisible={modalVisible}
-        closeMenu={() => {
-          setModalVisible(false);
-        }}
-        talkRoomId={id}
-        isMyThuoghtTalkRoomData={isMyThuoghtTalkRoomData}
       />
     </>
   );

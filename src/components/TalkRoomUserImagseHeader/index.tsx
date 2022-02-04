@@ -1,10 +1,7 @@
 import React from "react";
 import { Pressable } from "native-base";
 import { UserImages, TRANSLATE_IMAGE_X } from "src/components/UserImages";
-import {
-  GetThoughtTalkRoomQuery,
-  ThoughtTalkRoomMemberConnection,
-} from "src/generated/graphql";
+import { ThoughtTalkRoomMemberConnection } from "src/generated/graphql";
 import { Indicator } from "src/components/Indicator";
 
 type Props = {
@@ -13,7 +10,7 @@ type Props = {
   onPress: () => void;
 };
 
-export const HeaderTitle = ({ members, onPress }: Props) => {
+export const TalkRoomUserImagesHeader = ({ members, onPress }: Props) => {
   if (!members) {
     return <Indicator />;
   }
