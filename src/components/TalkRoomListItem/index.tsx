@@ -41,7 +41,13 @@ export const TalkRoomListItem = ({
     >
       <HStack alignItems="center" py="4" justifyContent="space-between">
         <Box w="76%">
-          <Text h="7" fontWeight="bold" fontSize="14">
+          <Text
+            h="7"
+            fontWeight="bold"
+            fontSize="14"
+            ellipsizeMode="tail"
+            numberOfLines={1}
+          >
             {title}
           </Text>
 
@@ -49,6 +55,8 @@ export const TalkRoomListItem = ({
             color={allMessageSeen ? textGray : undefined}
             h="7"
             fontWeight={!allMessageSeen ? "bold" : undefined}
+            ellipsizeMode="tail"
+            numberOfLines={1}
           >
             {text}
           </Text>
