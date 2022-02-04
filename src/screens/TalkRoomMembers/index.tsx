@@ -10,7 +10,6 @@ import { Indicator } from "src/components/Indicator";
 import { InfiniteFlatList } from "src/components/InfiniteFlatList";
 import { btoa } from "react-native-quick-base64";
 import { SafeAreaView, StyleSheet } from "react-native";
-import { useThoughtTalkRoomReadFragment } from "src/hooks/thoughtTalkRoom";
 import { MemberListItem } from "./MemberListItem";
 
 type Props = RootNavigationScreenProp<"TalkRoomMembers">;

@@ -17,6 +17,7 @@ import {
   useMeQuery,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,
+  useGetThoughtTalkRoomParentQuery,
 } from "src/generated/graphql";
 import { ListItem } from "src/components/ListItem";
 import { UserImage } from "src/components/UserImage";
@@ -25,7 +26,6 @@ import { RootNavigationProp } from "src/types";
 import { StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
 import { Alert } from "react-native";
-import { useThoughtTalkRoomReadFragment } from "src/hooks/thoughtTalkRoom";
 
 type Props = {
   item: ThoughtTalkRoomMemberEdge;
@@ -35,7 +35,11 @@ type Props = {
 export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
   const { user } = item.node;
 
-  const talkRoomData = useThoughtTalkRoomReadFragment({ id: talkRoomId });
+  const { data: talkRoomData } = useGetThoughtTalkRoomParentQuery({
+    variables: {
+      id: talkRoomId,
+    },
+  });
 
   const { data: meData } = useMeQuery();
 
@@ -153,7 +157,7 @@ export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
   };
 
   const enabled =
-    meData.me.id === talkRoomData.thought.contributor.id &&
+    meData.me.id === talkRoomData?.thoughtTalkRoom.thought.contributor.id &&
     user.id !== meData.me.id;
 
   return (

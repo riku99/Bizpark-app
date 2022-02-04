@@ -21,7 +21,6 @@ import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
 import { NO_USER_IMAGE_URL } from "src/constants";
 import { createRandomStr } from "src/utils";
-import { useThoughtTalkRoomReadFragment } from "src/hooks/thoughtTalkRoom";
 import { logJson, getGraphQLError } from "src/utils";
 import { btoa } from "react-native-quick-base64";
 import { HeaderBackButton } from "@react-navigation/elements";
