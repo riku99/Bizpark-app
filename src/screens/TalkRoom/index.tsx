@@ -15,6 +15,7 @@ import {
   CustomErrorResponseCode,
   useGetThoughtTalkRoomMembersQuery,
   useGetThoughtTalkRoomMessagesQuery,
+  useGetThoughtTalkRoomParentQuery,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -61,39 +62,24 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     },
   });
 
-  // console.log(membersData);
+  const { data: thoughtData } = useGetThoughtTalkRoomParentQuery({
+    variables: {
+      id,
+    },
+  });
 
   const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
-
-  // トークルームが見つからなかった時の処理
-  // useEffect(() => {
-  //   if (talkRoomError) {
-  //     const e = getGraphQLError(talkRoomError, 0);
-  //     if (e.code === CustomErrorResponseCode.NotFound) {
-  //       Alert.alert(e.message, "", [
-  //         {
-  //           text: "OK",
-  //           style: "cancel",
-  //           onPress: () => {
-  //             deleteThoghtTalkRoom({ talkRoomId: id });
-  //             navigation.goBack();
-  //           },
-  //         },
-  //       ]);
-  //     }
-  //   }
-  // }, [talkRoomError]);
 
   const [modalVisible, setModalVisible] = useState(false);
 
   // このトークルームの元の投稿が自分のものかどうか
   const isMyThuoghtmessagesData = useMemo(() => {
-    if (!fragmentCacheData || !me) {
+    if (!thoughtData || !me) {
       return false;
     }
 
-    return fragmentCacheData.thought.contributor.id === me.id;
-  }, [fragmentCacheData, me]);
+    return thoughtData.thoughtTalkRoom.thought.contributor.id === me.id;
+  }, [thoughtData, me]);
 
   const renderHeaderTitle = useCallback(() => {
     return (

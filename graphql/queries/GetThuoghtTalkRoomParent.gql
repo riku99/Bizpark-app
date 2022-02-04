@@ -1,0 +1,13 @@
+query GetThoughtTalkRoomParent($id: Int!) {
+  thoughtTalkRoom(id: $id) {
+    id
+    thought {
+      id
+      title
+      text
+      contributor {
+        id
+      }
+    }
+  }
+}
