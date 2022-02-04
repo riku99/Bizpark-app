@@ -90,6 +90,14 @@ const cache = new InMemoryCache({
             return incoming;
           },
         },
+        thoughtTalkRoom: {
+          read: (_, { args, toReference }) => {
+            return toReference({
+              __typename: "ThoughtTalkRoom",
+              id: args.id,
+            });
+          },
+        },
       },
     },
     ThoughtTalkRoom: {

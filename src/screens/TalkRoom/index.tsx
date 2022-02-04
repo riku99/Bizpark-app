@@ -14,7 +14,7 @@ import {
   GetThoughtTalkRoomMessagesQuery,
   CustomErrorResponseCode,
   useGetThoughtTalkRoomMembersQuery,
-  useGetThoughtTalkRoomMembersLazyQuery,
+  useGetThoughtTalkRoomMessagesQuery,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -49,17 +49,10 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
   const fragmentCacheData = useThoughtTalkRoomReadFragment({ id });
 
-  const {
-    data: talkRoomData,
-    fetchMore,
-    error: talkRoomError,
-  } = useGetThoughtTalkRoomQuery({
+  const { fetchMore, data: messagesData } = useGetThoughtTalkRoomMessagesQuery({
     variables: {
       id,
     },
-
-    // fetchPolicy: "network-only",
-    // nextFetchPolicy: "cache-first",
   });
 
   const { data: membersData } = useGetThoughtTalkRoomMembersQuery({
@@ -68,32 +61,34 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     },
   });
 
+  // console.log(membersData);
+
   const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
 
   // トークルームが見つからなかった時の処理
-  useEffect(() => {
-    if (talkRoomError) {
-      const e = getGraphQLError(talkRoomError, 0);
-      if (e.code === CustomErrorResponseCode.NotFound) {
-        Alert.alert(e.message, "", [
-          {
-            text: "OK",
-            style: "cancel",
-            onPress: () => {
-              deleteThoghtTalkRoom({ talkRoomId: id });
-              navigation.goBack();
-            },
-          },
-        ]);
-      }
-    }
-  }, [talkRoomError]);
+  // useEffect(() => {
+  //   if (talkRoomError) {
+  //     const e = getGraphQLError(talkRoomError, 0);
+  //     if (e.code === CustomErrorResponseCode.NotFound) {
+  //       Alert.alert(e.message, "", [
+  //         {
+  //           text: "OK",
+  //           style: "cancel",
+  //           onPress: () => {
+  //             deleteThoghtTalkRoom({ talkRoomId: id });
+  //             navigation.goBack();
+  //           },
+  //         },
+  //       ]);
+  //     }
+  //   }
+  // }, [talkRoomError]);
 
   const [modalVisible, setModalVisible] = useState(false);
 
   // このトークルームの元の投稿が自分のものかどうか
-  const isMyThuoghtTalkRoomData = useMemo(() => {
-    if (!talkRoomData || !me) {
+  const isMyThuoghtmessagesData = useMemo(() => {
+    if (!fragmentCacheData || !me) {
       return false;
     }
 
@@ -103,7 +98,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   const renderHeaderTitle = useCallback(() => {
     return (
       <HeaderTitle
-        // talkRoomData={talkRoomData}
+        // messagesData={messagesData}
         members={membersData?.thoughtTalkRoom.members}
         onPress={() => {
           navigation.navigate("TalkRoomMembers", {
@@ -174,8 +169,8 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
   // SubscriptionやActive時のデータの取得で新たに取得したメッセージ追加
   useEffect(() => {
-    if (talkRoomData) {
-      const talkRoomMessageEdges = talkRoomData.thoughtTalkRoom.messages.edges;
+    if (messagesData) {
+      const talkRoomMessageEdges = messagesData.thoughtTalkRoom.messages.edges;
       if (talkRoomMessageEdges.length) {
         const firstMessage = talkRoomMessageEdges[0].node;
 
@@ -233,7 +228,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
         });
       }
     }
-  }, [talkRoomData, setMessages]);
+  }, [messagesData, setMessages]);
 
   // 既読の作成
   useEffect(() => {
@@ -354,7 +349,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
       // const {
       //   pageInfo: fetchInfo,
       //   edges: fetchEdges,
-      // } = talkRoomData.thoughtTalkRoom.messages;
+      // } = messagesData.thoughtTalkRoom.messages;
 
       const {
         edges: cacheEdges,
@@ -366,7 +361,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
 
       const pageInfo = cacheInfo;
 
-      console.log(pageInfo);
       if (pageInfo.hasNextPage) {
         // 基本CursorにはpageInfoのものを使っているが、メッセージはSubscriptionにより状態が更新されていくので messages のIDを使用
         const endCursor = messages[messages.length - 1]._id.toString();
@@ -381,6 +375,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
         });
 
         if (fetchData) {
+          console.log(fetchData);
           const im: IMessage[] = fetchData.thoughtTalkRoom.messages.edges.map(
             ({ node: message }) => {
               const { replyMessage } = message;
@@ -434,7 +429,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
           setModalVisible(false);
         }}
         talkRoomId={id}
-        isMyThuoghtTalkRoomData={isMyThuoghtTalkRoomData}
+        isMyThuoghtmessagesData={isMyThuoghtmessagesData}
       />
     </>
   );
