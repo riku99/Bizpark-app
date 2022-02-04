@@ -12,4 +12,7 @@ query InitialData {
   thoughtTalkRooms: thoughtTalkRooms {
     ...ThoughtTalkRoomParts
   }
+  newsTalkRooms: newsTalkRooms {
+    ...NewsTalkRoomParts
+  }
 }
