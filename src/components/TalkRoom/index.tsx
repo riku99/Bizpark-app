@@ -34,7 +34,7 @@ type Props = RootNavigationScreenProp<"TalkRoomMain">;
 
 const isTmp = (str: string) => str.slice(0, 3) === "tmp";
 
-export const TalkRoomScreen = ({ navigation, route }: Props) => {
+export const TalkRoom = ({ navigation, route }: Props) => {
   const { id } = route.params;
 
   const {
@@ -55,6 +55,20 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     fetchPolicy: "cache-only",
   });
 
+  const { data: membersData } = useGetThoughtTalkRoomMembersQuery({
+    variables: {
+      talkRoomId: id,
+    },
+  });
+
+  const { data: thoughtData } = useGetThoughtTalkRoomParentQuery({
+    variables: {
+      id,
+    },
+  });
+
+  const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
+
   const [pageInfo, setPageInfo] = useState<PageInfo>(
     messagesData?.thoughtTalkRoom.messages.pageInfo
   );
@@ -73,20 +87,6 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
       });
     }
   }, [messagesData]);
-
-  const { data: membersData } = useGetThoughtTalkRoomMembersQuery({
-    variables: {
-      talkRoomId: id,
-    },
-  });
-
-  const { data: thoughtData } = useGetThoughtTalkRoomParentQuery({
-    variables: {
-      id,
-    },
-  });
-
-  const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
 
   const [modalVisible, setModalVisible] = useState(false);
 

@@ -101,8 +101,8 @@ export const ThoughtTalkRoomList = React.memo(() => {
       const allMessageSeen = item.allMessageSeen;
 
       const onPress = () => {
-        navigation.navigate("TalkRoom", {
-          screen: "TalkRoomMain",
+        navigation.navigate("ThoughtTalkRoom", {
+          screen: "ThoughtTalkRoomMain",
           params: {
             id: item.id,
           },

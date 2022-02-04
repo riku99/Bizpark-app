@@ -1,21 +1,21 @@
 import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { TalkRoomScreen } from "src/screens/TalkRoom";
+import { ThoughtTalkRoomScreen } from "src/screens/ThoughtTalkRoom";
 import { useNavigationHeaderStyle } from "src/hooks/theme";
 import { TalkRoomMembersScreen } from "src/screens/TalkRoomMembers";
 
-export type TalkRoomStackParamList = {
-  TalkRoomMain: {
+export type ThoughtTalkRoomStackParamList = {
+  ThoughtTalkRoomMain: {
     id: number;
   };
-  TalkRoomMembers: {
+  ThoughtTalkRoomMembers: {
     talkRoomId: number;
   };
 };
 
-const Stack = createNativeStackNavigator<TalkRoomStackParamList>();
+const Stack = createNativeStackNavigator<ThoughtTalkRoomStackParamList>();
 
-export const TalkRoomStack = React.memo(() => {
+export const ThoughtTalkRoomStack = React.memo(() => {
   const { headerStyle, headerTitleStyle } = useNavigationHeaderStyle();
 
   return (
@@ -27,8 +27,14 @@ export const TalkRoomStack = React.memo(() => {
         headerShadowVisible: false,
       }}
     >
-      <Stack.Screen name="TalkRoomMain" component={TalkRoomScreen} />
-      <Stack.Screen name="TalkRoomMembers" component={TalkRoomMembersScreen} />
+      <Stack.Screen
+        name="ThoughtTalkRoomMain"
+        component={ThoughtTalkRoomScreen}
+      />
+      <Stack.Screen
+        name="ThoughtTalkRoomMembers"
+        component={TalkRoomMembersScreen}
+      />
     </Stack.Navigator>
   );
 });
