@@ -13,7 +13,6 @@ import Animated, {
 import {
   ThoughtTalkRoomMemberEdge,
   useDeleteThoughtTalkRoomMemberMutation,
-  useGetThoughtTalkRoomQuery,
   useMeQuery,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,

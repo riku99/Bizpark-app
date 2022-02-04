@@ -21,10 +21,6 @@ export const JoinTalkButton = ({ onCloseButtonPress, newsId }: Props) => {
           },
         },
       });
-
-      if (data) {
-        console.log(data.joinNewsTalkRoom);
-      }
     } catch (e) {
       console.log(e);
     }

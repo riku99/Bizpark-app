@@ -22,5 +22,30 @@ mutation JoinNewsTalkRoom($input: JoinNewsTalkRoomInput!) {
       id
       title
     }
+    messages {
+      edges {
+        node {
+          id
+          text
+          createdAt
+          sender {
+            ...UserParts
+          }
+          roomId
+          replyMessage {
+            id
+            text
+            createdAt
+            sender {
+              id
+              name
+            }
+          }
+        }
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
   }
 }
