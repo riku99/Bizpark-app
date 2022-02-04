@@ -7,7 +7,6 @@ import React, {
 } from "react";
 import { RootNavigationScreenProp } from "src/types";
 import {
-  useGetThoughtTalkRoomQuery,
   useMeQuery,
   useCreateThoughtTalkRoomMessageMutation,
   useCreateUserThoughtTalkRoomMessageSeenMutation,
@@ -16,6 +15,7 @@ import {
   useGetThoughtTalkRoomMembersQuery,
   useGetThoughtTalkRoomMessagesQuery,
   useGetThoughtTalkRoomParentQuery,
+  PageInfo,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -55,6 +55,25 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
     },
     fetchPolicy: "cache-only",
   });
+
+  const [pageInfo, setPageInfo] = useState<PageInfo>(
+    messagesData?.thoughtTalkRoom.messages.pageInfo
+  );
+
+  useEffect(() => {
+    if (messagesData) {
+      const newMessageInfo = messagesData.thoughtTalkRoom.messages.pageInfo;
+
+      setPageInfo((currentInfo) => {
+        // トークルームを開いたままActiveになるとキャッシュのPageInfoも更新される。その更新されたものを使用すると無限ローディングでダブるのでチェック
+        if (Number(newMessageInfo.endCursor) < Number(currentInfo.endCursor)) {
+          return newMessageInfo;
+        } else {
+          return currentInfo;
+        }
+      });
+    }
+  }, [messagesData]);
 
   const { data: membersData } = useGetThoughtTalkRoomMembersQuery({
     variables: {
@@ -329,9 +348,7 @@ export const TalkRoomScreen = ({ navigation, route }: Props) => {
   };
 
   const infiniteLoad = async () => {
-    if (messagesData) {
-      const { pageInfo } = messagesData.thoughtTalkRoom.messages;
-
+    if (pageInfo) {
       if (pageInfo.hasNextPage) {
         const { endCursor } = pageInfo;
 
