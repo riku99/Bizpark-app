@@ -6,6 +6,7 @@ import { RootNavigationScreenProp } from "src/types";
 import {
   useGetNewsTalkRoomMessagesQuery,
   useMeQuery,
+  useCreateNewsTalkRoomMessageMutation,
 } from "src/generated/graphql";
 import { TalkRoomMessage } from "src/components/TalkRoomMessage";
 
@@ -37,6 +38,8 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     fetchPolicy: "cache-only",
   });
 
+  const [createMessageMutation] = useCreateNewsTalkRoomMessageMutation();
+
   return (
     <>
       <TalkRoomMessage
@@ -44,6 +47,7 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
         roomId={id}
         messageData={messageData}
         messageFetchMore={fetchMore}
+        createMessage={createMessageMutation}
       />
     </>
   );

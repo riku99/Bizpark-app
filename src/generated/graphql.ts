@@ -27,6 +27,12 @@ export type CreateNewsPickResponse = {
   id: Scalars['Int'];
 };
 
+export type CreateNewsTalkRoomMessageInput = {
+  replyTo?: InputMaybe<Scalars['Int']>;
+  talkRoomId: Scalars['Int'];
+  text: Scalars['String'];
+};
+
 export type CreatePickInput = {
   thoughtId: Scalars['String'];
 };
@@ -151,6 +157,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   block: User;
   createNewsPick: NewsPick;
+  createNewsTalkRoomMessage: NewsTalkRoomMessage;
   createPick: Pick;
   createThought: CreateThoughtResponse;
   createThoughtTalkRoomMessage?: Maybe<ThoughtTalkRoomMessage>;
@@ -181,6 +188,11 @@ export type MutationBlockArgs = {
 
 export type MutationCreateNewsPickArgs = {
   input: CreateNewsPickInput;
+};
+
+
+export type MutationCreateNewsTalkRoomMessageArgs = {
+  input: CreateNewsTalkRoomMessageInput;
 };
 
 
@@ -683,6 +695,13 @@ export type CreateNewsPickMutationVariables = Exact<{
 
 
 export type CreateNewsPickMutation = { __typename?: 'Mutation', createNewsPick: { __typename?: 'NewsPick', id: number, newsId: number } };
+
+export type CreateNewsTalkRoomMessageMutationVariables = Exact<{
+  input: CreateNewsTalkRoomMessageInput;
+}>;
+
+
+export type CreateNewsTalkRoomMessageMutation = { __typename?: 'Mutation', createNewsTalkRoomMessage: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
 
 export type CreatePickMutationVariables = Exact<{
   input: CreatePickInput;
@@ -1235,6 +1254,39 @@ export function useCreateNewsPickMutation(baseOptions?: Apollo.MutationHookOptio
 export type CreateNewsPickMutationHookResult = ReturnType<typeof useCreateNewsPickMutation>;
 export type CreateNewsPickMutationResult = Apollo.MutationResult<CreateNewsPickMutation>;
 export type CreateNewsPickMutationOptions = Apollo.BaseMutationOptions<CreateNewsPickMutation, CreateNewsPickMutationVariables>;
+export const CreateNewsTalkRoomMessageDocument = gql`
+    mutation CreateNewsTalkRoomMessage($input: CreateNewsTalkRoomMessageInput!) {
+  createNewsTalkRoomMessage(input: $input) {
+    ...NewsTalkRoomMessageParts
+  }
+}
+    ${NewsTalkRoomMessagePartsFragmentDoc}`;
+export type CreateNewsTalkRoomMessageMutationFn = Apollo.MutationFunction<CreateNewsTalkRoomMessageMutation, CreateNewsTalkRoomMessageMutationVariables>;
+
+/**
+ * __useCreateNewsTalkRoomMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateNewsTalkRoomMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateNewsTalkRoomMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createNewsTalkRoomMessageMutation, { data, loading, error }] = useCreateNewsTalkRoomMessageMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateNewsTalkRoomMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateNewsTalkRoomMessageMutation, CreateNewsTalkRoomMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateNewsTalkRoomMessageMutation, CreateNewsTalkRoomMessageMutationVariables>(CreateNewsTalkRoomMessageDocument, options);
+      }
+export type CreateNewsTalkRoomMessageMutationHookResult = ReturnType<typeof useCreateNewsTalkRoomMessageMutation>;
+export type CreateNewsTalkRoomMessageMutationResult = Apollo.MutationResult<CreateNewsTalkRoomMessageMutation>;
+export type CreateNewsTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<CreateNewsTalkRoomMessageMutation, CreateNewsTalkRoomMessageMutationVariables>;
 export const CreatePickDocument = gql`
     mutation CreatePick($input: CreatePickInput!) {
   createPick(input: $input) {

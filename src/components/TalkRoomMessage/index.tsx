@@ -13,6 +13,7 @@ import {
   NewsTalkRoomMessage,
   CreateThoughtTalkRoomMessageMutationFn,
   CreateUserThoughtTalkRoomMessageSeenMutationFn,
+  CreateNewsTalkRoomMessageMutationFn,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -38,6 +39,7 @@ type Props = (
       roomId: number;
       messageData: GetNewsTalkRoomMessagesQueryResult["data"];
       messageFetchMore: GetNewsTalkRoomMessagesQueryResult["fetchMore"];
+      createMessage: CreateNewsTalkRoomMessageMutationFn;
     }
 ) & {
   deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
@@ -95,7 +97,7 @@ export const TalkRoomMessage = (props: Props) => {
     T extends ThoughtTalkRoomMessage | NewsTalkRoomMessage
   >(
     message: T
-  ) => {
+  ): IMessage => {
     const { replyMessage } = message;
 
     return {
@@ -238,12 +240,19 @@ export const TalkRoomMessage = (props: Props) => {
 
     try {
       let mutationResult: Awaited<
-        ReturnType<CreateThoughtTalkRoomMessageMutationFn>
+        ReturnType<
+          | CreateThoughtTalkRoomMessageMutationFn
+          | CreateNewsTalkRoomMessageMutationFn
+        >
       >;
+
+      let newIMessageData: IMessage;
 
       switch (props.type) {
         case "Thought":
-          mutationResult = await props.createMessage({
+          const {
+            data: createdThoughtTalkRoomMessageData,
+          } = await props.createMessage({
             variables: {
               input: {
                 text: inputMessages[0].text,
@@ -253,17 +262,38 @@ export const TalkRoomMessage = (props: Props) => {
             },
           });
 
+          if (createdThoughtTalkRoomMessageData) {
+            newIMessageData = createNewIMessage(
+              createdThoughtTalkRoomMessageData.createThoughtTalkRoomMessage
+            );
+          }
+          break;
+
+        case "News":
+          const {
+            data: createdNewsTalkRoomMessageData,
+          } = await props.createMessage({
+            variables: {
+              input: {
+                text: inputMessages[0].text,
+                talkRoomId: roomId,
+                replyTo: replyMessage ? Number(replyMessage._id) : null,
+              },
+            },
+          });
+
+          if (createdNewsTalkRoomMessageData) {
+            newIMessageData = createNewIMessage(
+              createdNewsTalkRoomMessageData.createNewsTalkRoomMessage
+            );
+          }
           break;
 
         default:
           break;
       }
 
-      if (mutationResult.data) {
-        const newIMessageData = createNewIMessage(
-          mutationResult.data.createThoughtTalkRoomMessage
-        );
-
+      if (newIMessageData) {
         setMessages((currentData) => {
           const prev = currentData.filter((c) => c._id !== tempId);
           return [newIMessageData, ...prev];
