@@ -23,6 +23,10 @@ import {
   TalkRoomMessage,
   ThoughtTalkRoomMessage,
   NewsTalkRoomMessage,
+  CreateThoughtTalkRoomMessageMutation,
+  CreateThoughtTalkRoomMessageMutationFn,
+  CreateThoughtTalkRoomMessageMutationResult,
+  CreateThoughtTalkRoomMessageMutationHookResult,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -34,6 +38,7 @@ import { Alert } from "react-native";
 import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoom";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
+import { FetchResult } from "@apollo/client";
 
 type Props =
   | {
@@ -41,6 +46,7 @@ type Props =
       roomId: number;
       messageData: GetThoughtTalkRoomMessagesQueryResult["data"];
       messageFetchMore: GetThoughtTalkRoomMessagesQueryResult["fetchMore"];
+      createMessage: CreateThoughtTalkRoomMessageMutationFn;
     }
   | {
       type: "News";
@@ -60,8 +66,6 @@ export const TalkRoom = (props: Props) => {
     data: { me },
   } = useMeQuery();
 
-  const [createMessageMutation] = useCreateThoughtTalkRoomMessageMutation();
-
   const [
     createSeenMutation,
   ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
@@ -71,7 +75,7 @@ export const TalkRoom = (props: Props) => {
   const [pageInfo, setPageInfo] = useState<PageInfo>(
     props.type === "Thought"
       ? props.messageData?.thoughtTalkRoom.messages.pageInfo
-      : props.messageData.newsTalkRoom.messages.pageInfo
+      : props.messageData?.newsTalkRoom.messages.pageInfo
   );
 
   useEffect(() => {
@@ -244,24 +248,38 @@ export const TalkRoom = (props: Props) => {
     });
 
     try {
-      const { data } = await createMessageMutation({
-        variables: {
-          input: {
-            text: inputMessages[0].text,
-            roomId,
-            replyTo: replyMessage ? Number(replyMessage._id) : null,
-          },
-        },
-      });
+      let mutationResult: Awaited<
+        ReturnType<CreateThoughtTalkRoomMessageMutationFn>
+      >;
 
-      const newIMessageData = createNewIMessage(
-        data.createThoughtTalkRoomMessage
-      );
+      switch (props.type) {
+        case "Thought":
+          mutationResult = await props.createMessage({
+            variables: {
+              input: {
+                text: inputMessages[0].text,
+                roomId,
+                replyTo: replyMessage ? Number(replyMessage._id) : null,
+              },
+            },
+          });
 
-      setMessages((currentData) => {
-        const prev = currentData.filter((c) => c._id !== tempId);
-        return [newIMessageData, ...prev];
-      });
+          break;
+
+        default:
+          break;
+      }
+
+      if (mutationResult.data) {
+        const newIMessageData = createNewIMessage(
+          mutationResult.data.createThoughtTalkRoomMessage
+        );
+
+        setMessages((currentData) => {
+          const prev = currentData.filter((c) => c._id !== tempId);
+          return [newIMessageData, ...prev];
+        });
+      }
     } catch (e) {
       const error = getGraphQLError(e, 0);
 
