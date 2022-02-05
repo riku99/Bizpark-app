@@ -7,6 +7,7 @@ import {
   useGetNewsTalkRoomMessagesQuery,
   useMeQuery,
   useCreateNewsTalkRoomMessageMutation,
+  useCreateUserNewsTalkRoomMessageSeenMutation,
 } from "src/generated/graphql";
 import { TalkRoomMessage } from "src/components/TalkRoomMessage";
 
@@ -40,6 +41,8 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
 
   const [createMessageMutation] = useCreateNewsTalkRoomMessageMutation();
 
+  const [createSeenMutation] = useCreateUserNewsTalkRoomMessageSeenMutation();
+
   return (
     <>
       <TalkRoomMessage
@@ -48,6 +51,7 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
         messageData={messageData}
         messageFetchMore={fetchMore}
         createMessage={createMessageMutation}
+        createSeen={createSeenMutation}
       />
     </>
   );

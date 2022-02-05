@@ -14,6 +14,7 @@ import {
   CreateThoughtTalkRoomMessageMutationFn,
   CreateUserThoughtTalkRoomMessageSeenMutationFn,
   CreateNewsTalkRoomMessageMutationFn,
+  CreateUserNewsTalkRoomMessageSeenMutationFn,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -40,6 +41,7 @@ type Props = (
       messageData: GetNewsTalkRoomMessagesQueryResult["data"];
       messageFetchMore: GetNewsTalkRoomMessagesQueryResult["fetchMore"];
       createMessage: CreateNewsTalkRoomMessageMutationFn;
+      createSeen: CreateUserNewsTalkRoomMessageSeenMutationFn;
     }
 ) & {
   deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
@@ -193,6 +195,16 @@ export const TalkRoomMessage = (props: Props) => {
                 },
               });
               break;
+
+            case "News":
+              await props.createSeen({
+                variables: {
+                  input: {
+                    messageId: Number(latestMessage._id),
+                    talkRoomId: roomId,
+                  },
+                },
+              });
 
             default:
               break;

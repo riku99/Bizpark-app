@@ -61,6 +61,11 @@ export type CreateUserInput = {
   name: Scalars['String'];
 };
 
+export type CreateUserNewsTalkRoomMessageSeenInput = {
+  messageId: Scalars['Int'];
+  talkRoomId: Scalars['Int'];
+};
+
 export type CreateUserThoughtTalkRoomMessageSeenInput = {
   messageId: Scalars['Int'];
   roomId: Scalars['Int'];
@@ -162,6 +167,7 @@ export type Mutation = {
   createThought: CreateThoughtResponse;
   createThoughtTalkRoomMessage?: Maybe<ThoughtTalkRoomMessage>;
   createUser: Me;
+  createUserNewsTalkRoomMessageSeen: NewsTalkRoom;
   createUserThoughtTalkRoomMessageSeen: ThoughtTalkRoom;
   deleteNewsPick: NewsPick;
   deletePick: Pick;
@@ -213,6 +219,11 @@ export type MutationCreateThoughtTalkRoomMessageArgs = {
 
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
+};
+
+
+export type MutationCreateUserNewsTalkRoomMessageSeenArgs = {
+  input: CreateUserNewsTalkRoomMessageSeenInput;
 };
 
 
@@ -730,6 +741,13 @@ export type CreateUserMutationVariables = Exact<{
 
 
 export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'Me', id: string, name: string } };
+
+export type CreateUserNewsTalkRoomMessageSeenMutationVariables = Exact<{
+  input: CreateUserNewsTalkRoomMessageSeenInput;
+}>;
+
+
+export type CreateUserNewsTalkRoomMessageSeenMutation = { __typename?: 'Mutation', createUserNewsTalkRoomMessageSeen: { __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined } };
 
 export type CreateUserThoughtTalkRoomMessageSeenMutationVariables = Exact<{
   input: CreateUserThoughtTalkRoomMessageSeenInput;
@@ -1421,6 +1439,40 @@ export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<C
 export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
 export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
 export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
+export const CreateUserNewsTalkRoomMessageSeenDocument = gql`
+    mutation CreateUserNewsTalkRoomMessageSeen($input: CreateUserNewsTalkRoomMessageSeenInput!) {
+  createUserNewsTalkRoomMessageSeen(input: $input) {
+    id
+    allMessageSeen
+  }
+}
+    `;
+export type CreateUserNewsTalkRoomMessageSeenMutationFn = Apollo.MutationFunction<CreateUserNewsTalkRoomMessageSeenMutation, CreateUserNewsTalkRoomMessageSeenMutationVariables>;
+
+/**
+ * __useCreateUserNewsTalkRoomMessageSeenMutation__
+ *
+ * To run a mutation, you first call `useCreateUserNewsTalkRoomMessageSeenMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateUserNewsTalkRoomMessageSeenMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createUserNewsTalkRoomMessageSeenMutation, { data, loading, error }] = useCreateUserNewsTalkRoomMessageSeenMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateUserNewsTalkRoomMessageSeenMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserNewsTalkRoomMessageSeenMutation, CreateUserNewsTalkRoomMessageSeenMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateUserNewsTalkRoomMessageSeenMutation, CreateUserNewsTalkRoomMessageSeenMutationVariables>(CreateUserNewsTalkRoomMessageSeenDocument, options);
+      }
+export type CreateUserNewsTalkRoomMessageSeenMutationHookResult = ReturnType<typeof useCreateUserNewsTalkRoomMessageSeenMutation>;
+export type CreateUserNewsTalkRoomMessageSeenMutationResult = Apollo.MutationResult<CreateUserNewsTalkRoomMessageSeenMutation>;
+export type CreateUserNewsTalkRoomMessageSeenMutationOptions = Apollo.BaseMutationOptions<CreateUserNewsTalkRoomMessageSeenMutation, CreateUserNewsTalkRoomMessageSeenMutationVariables>;
 export const CreateUserThoughtTalkRoomMessageSeenDocument = gql`
     mutation CreateUserThoughtTalkRoomMessageSeen($input: CreateUserThoughtTalkRoomMessageSeenInput!) {
   createUserThoughtTalkRoomMessageSeen(input: $input) {
