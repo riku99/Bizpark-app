@@ -5,11 +5,15 @@ import {
   GetNewsTalkRoomsQueryResult,
 } from "src/generated/graphql";
 import { TalkRoomListItem } from "src/components/TalkRoomListItem";
+import { useNavigation } from "@react-navigation/native";
+import { RootNavigationProp } from "src/types";
 
 type Item = GetNewsTalkRoomsQueryResult["data"]["newsTalkRooms"][number];
 
 export const NewsTalkRoomList = React.memo(() => {
   const { data: talkRoomData } = useGetNewsTalkRoomsQuery();
+
+  const navigation = useNavigation<RootNavigationProp<"Tab">>();
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
     let userImageUrls: string[] = [];
@@ -27,7 +31,14 @@ export const NewsTalkRoomList = React.memo(() => {
     const text = edges.length ? edges[0].node.text : "";
     const allMessageSeen = item.allMessageSeen;
 
-    const onPress = () => {};
+    const onPress = () => {
+      navigation.navigate("NewsTalkRoom", {
+        screen: "NewsTalkRoomMain",
+        params: {
+          id: item.id,
+        },
+      });
+    };
 
     const onLongPress = () => {};
 

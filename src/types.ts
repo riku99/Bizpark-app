@@ -2,9 +2,10 @@ import {
   NativeStackScreenProps,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
+import { NavigatorScreenParams } from "@react-navigation/native";
 import { SettingsParamList } from "src/navigations/Settings";
 import { ThoughtTalkRoomStackParamList } from "src/navigations/ThoughtTalkRoom";
-import { NavigatorScreenParams } from "@react-navigation/native";
+import { NewsTalkRoomStackParamList } from "src/navigations/NewsTalkRoom";
 
 type ThoughtShare = {
   title?: string;
@@ -56,6 +57,7 @@ export type RootStackParamList = {
   };
   Settings: undefined;
   ThoughtTalkRoom: NavigatorScreenParams<ThoughtTalkRoomStackParamList>;
+  NewsTalkRoom: NavigatorScreenParams<NewsTalkRoomStackParamList>;
 } & SettingsParamList &
   ThoughtTalkRoomStackParamList;
 

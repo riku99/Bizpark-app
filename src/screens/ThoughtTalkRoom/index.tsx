@@ -1,5 +1,5 @@
 import React, { useMemo, useState, useLayoutEffect, useCallback } from "react";
-import { TalkRoom } from "src/components/TalkRoom";
+import { TalkRoomMessage } from "src/components/TalkRoomMessage";
 import { RootNavigationScreenProp } from "src/types";
 import {
   useGetThoughtTalkRoomMessagesQuery,
@@ -92,7 +92,7 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
 
   return (
     <>
-      <TalkRoom
+      <TalkRoomMessage
         type="Thought"
         roomId={id}
         messageData={messageData}

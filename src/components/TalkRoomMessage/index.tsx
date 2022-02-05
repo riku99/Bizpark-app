@@ -1,32 +1,17 @@
-import React, {
-  useLayoutEffect,
-  useEffect,
-  useState,
-  useCallback,
-  useMemo,
-} from "react";
-import { RootNavigationScreenProp } from "src/types";
+import React, { useEffect, useState } from "react";
 import {
   useMeQuery,
-  useCreateThoughtTalkRoomMessageMutation,
-  useCreateUserThoughtTalkRoomMessageSeenMutation,
   GetThoughtTalkRoomMessagesQuery,
   CustomErrorResponseCode,
   PageInfo,
-  GetThoughtTalkRoomMessagesQueryHookResult,
   GetThoughtTalkRoomMessagesQueryResult,
-  GetThoughtTalkRoomMembersQueryResult,
   GetNewsTalkRoomMessagesQueryResult,
   GetNewsTalkRoomMessagesQuery,
   NewsTalkRoomMessageEdge,
   ThoughtTalkRoomMessageEdge,
-  TalkRoomMessage,
   ThoughtTalkRoomMessage,
   NewsTalkRoomMessage,
-  CreateThoughtTalkRoomMessageMutation,
   CreateThoughtTalkRoomMessageMutationFn,
-  CreateThoughtTalkRoomMessageMutationResult,
-  CreateThoughtTalkRoomMessageMutationHookResult,
   CreateUserThoughtTalkRoomMessageSeenMutationFn,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
@@ -36,10 +21,8 @@ import { createRandomStr } from "src/utils";
 import { logJson, getGraphQLError } from "src/utils";
 import { btoa } from "react-native-quick-base64";
 import { Alert } from "react-native";
-import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoom";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
-import { FetchResult } from "@apollo/client";
 
 type Props = (
   | {
@@ -62,7 +45,7 @@ type Props = (
 
 const isTmp = (str: string) => str.slice(0, 3) === "tmp";
 
-export const TalkRoom = (props: Props) => {
+export const TalkRoomMessage = (props: Props) => {
   const { roomId } = props;
 
   const navigation = useNavigation<RootNavigationProp<"ThoughtTalkRoom">>();
