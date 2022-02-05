@@ -13,6 +13,7 @@ import { Menu } from "./Menu";
 import { DotsHorizontal } from "src/components/DotsHorizontal";
 import { HeaderBackButton } from "@react-navigation/elements";
 import { TalkRoomUserImagesHeader } from "src/components/TalkRoomUserImagseHeader";
+import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoom";
 
 type Props = RootNavigationScreenProp<"ThoughtTalkRoomMain">;
 
@@ -43,6 +44,8 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
   const [
     createSeenMutation,
   ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
+
+  const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
 
   const renderHeaderTitle = useCallback(() => {
     return (
@@ -96,6 +99,7 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
         messageFetchMore={fetchMore}
         createMessage={createMessageMutation}
         createSeen={createSeenMutation}
+        deleteTalkRoomFromCache={deleteThoghtTalkRoom}
       />
 
       <Menu

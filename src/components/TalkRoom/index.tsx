@@ -41,7 +41,7 @@ import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
 import { FetchResult } from "@apollo/client";
 
-type Props =
+type Props = (
   | {
       type: "Thought";
       roomId: number;
@@ -55,7 +55,10 @@ type Props =
       roomId: number;
       messageData: GetNewsTalkRoomMessagesQueryResult["data"];
       messageFetchMore: GetNewsTalkRoomMessagesQueryResult["fetchMore"];
-    };
+    }
+) & {
+  deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
+};
 
 const isTmp = (str: string) => str.slice(0, 3) === "tmp";
 
@@ -67,8 +70,6 @@ export const TalkRoom = (props: Props) => {
   const {
     data: { me },
   } = useMeQuery();
-
-  const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
 
   const [pageInfo, setPageInfo] = useState<PageInfo>(
     props.type === "Thought"
@@ -288,12 +289,13 @@ export const TalkRoom = (props: Props) => {
     } catch (e) {
       const error = getGraphQLError(e, 0);
 
+      // トークルームが削除されている or メンバーから削除されている場合はキャッシュからトークルーム消す
       if (error?.code === CustomErrorResponseCode.InvalidRequest) {
         Alert.alert(error.message, "", [
           {
             text: "OK",
             onPress: async () => {
-              deleteThoghtTalkRoom({ talkRoomId: roomId });
+              props.deleteTalkRoomFromCache({ talkRoomId: roomId });
               navigation.goBack();
             },
           },
