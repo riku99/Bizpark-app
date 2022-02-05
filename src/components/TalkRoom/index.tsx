@@ -27,6 +27,7 @@ import {
   CreateThoughtTalkRoomMessageMutationFn,
   CreateThoughtTalkRoomMessageMutationResult,
   CreateThoughtTalkRoomMessageMutationHookResult,
+  CreateUserThoughtTalkRoomMessageSeenMutationFn,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -47,6 +48,7 @@ type Props =
       messageData: GetThoughtTalkRoomMessagesQueryResult["data"];
       messageFetchMore: GetThoughtTalkRoomMessagesQueryResult["fetchMore"];
       createMessage: CreateThoughtTalkRoomMessageMutationFn;
+      createSeen: CreateUserThoughtTalkRoomMessageSeenMutationFn;
     }
   | {
       type: "News";
@@ -65,10 +67,6 @@ export const TalkRoom = (props: Props) => {
   const {
     data: { me },
   } = useMeQuery();
-
-  const [
-    createSeenMutation,
-  ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
 
   const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
 
@@ -198,14 +196,21 @@ export const TalkRoom = (props: Props) => {
     (async function () {
       if (latestMessage && latestMessage.user._id !== me.id) {
         try {
-          await createSeenMutation({
-            variables: {
-              input: {
-                messageId: Number(latestMessage._id),
-                roomId,
-              },
-            },
-          });
+          switch (props.type) {
+            case "Thought":
+              await props.createSeen({
+                variables: {
+                  input: {
+                    messageId: Number(latestMessage._id),
+                    roomId,
+                  },
+                },
+              });
+              break;
+
+            default:
+              break;
+          }
         } catch (e) {
           console.log(e);
         }
@@ -360,17 +365,15 @@ export const TalkRoom = (props: Props) => {
   };
 
   return (
-    <>
-      <BaseChat
-        messages={messages}
-        replyMessage={replyMessage}
-        setReplyMessage={setReplyMessage}
-        user={{
-          _id: me.id,
-        }}
-        onSend={onSendPress}
-        infiniteLoad={infiniteLoad}
-      />
-    </>
+    <BaseChat
+      messages={messages}
+      replyMessage={replyMessage}
+      setReplyMessage={setReplyMessage}
+      user={{
+        _id: me.id,
+      }}
+      onSend={onSendPress}
+      infiniteLoad={infiniteLoad}
+    />
   );
 };

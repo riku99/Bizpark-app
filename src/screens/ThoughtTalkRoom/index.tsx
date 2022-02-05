@@ -7,6 +7,7 @@ import {
   useGetThoughtTalkRoomParentQuery,
   useMeQuery,
   useCreateThoughtTalkRoomMessageMutation,
+  useCreateUserThoughtTalkRoomMessageSeenMutation,
 } from "src/generated/graphql";
 import { Menu } from "./Menu";
 import { DotsHorizontal } from "src/components/DotsHorizontal";
@@ -38,6 +39,10 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
   });
 
   const [createMessageMutation] = useCreateThoughtTalkRoomMessageMutation();
+
+  const [
+    createSeenMutation,
+  ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
 
   const renderHeaderTitle = useCallback(() => {
     return (
@@ -90,6 +95,7 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
         messageData={messageData}
         messageFetchMore={fetchMore}
         createMessage={createMessageMutation}
+        createSeen={createSeenMutation}
       />
 
       <Menu
