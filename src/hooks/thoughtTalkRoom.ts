@@ -102,7 +102,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
 
           const newRoomData = {
             ...targetRoom,
-            allMessageSeen: isMySentData ? true : false,
+            allMessageSeen: isMySentData,
             messages: newConnection,
           };
 

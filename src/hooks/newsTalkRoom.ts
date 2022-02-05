@@ -12,11 +12,7 @@ import { AppState, AppStateStatus } from "react-native";
 export const useNewsTalkRoomsWithSusbscription = () => {
   const myId = useReactiveVar(meVar.id);
 
-  const {
-    data: talkRoomsData,
-    subscribeToMore,
-    refetch,
-  } = useGetNewsTalkRoomsQuery({
+  const { data: talkRoomsData, subscribeToMore } = useGetNewsTalkRoomsQuery({
     fetchPolicy: "cache-only",
   });
 
@@ -59,9 +55,55 @@ export const useNewsTalkRoomsWithSusbscription = () => {
         document: OnNewsTalkRoomMessageCreatedDocument,
         variables: { roomIds: talkRoomIds, userId: myId },
         updateQuery: (prev, { subscriptionData }) => {
-          console.log(subscriptionData);
+          if (!subscriptionData) {
+            return prev;
+          }
 
-          return prev;
+          const currentRooms = prev.newsTalkRooms;
+
+          const targetTalkRoomId =
+            subscriptionData.data.newsTalkRoomMessageCreated.roomId;
+
+          const targetRoom = currentRooms.find(
+            (r) => r.id === targetTalkRoomId
+          );
+
+          if (!targetRoom) {
+            return prev;
+          }
+
+          const newMessageEdge = {
+            node: subscriptionData.data.newsTalkRoomMessageCreated,
+            cursor: subscriptionData.data.newsTalkRoomMessageCreated.id.toString(),
+          };
+
+          const newMessageConnection = {
+            ...targetRoom.messages,
+            edges: [newMessageEdge, ...targetRoom.messages.edges],
+            pageInfo: {
+              ...targetRoom.messages.pageInfo,
+              startCursor: newMessageEdge.node.id.toString(),
+            },
+          };
+
+          const isMySentData =
+            subscriptionData.data.newsTalkRoomMessageCreated.sender.id === myId;
+
+          const newRoomData = {
+            ...targetRoom,
+            allMessageSeen: isMySentData,
+            messages: newMessageConnection,
+          };
+
+          const filteredRooms = currentRooms.filter(
+            (r) => r.id !== targetTalkRoomId
+          );
+
+          const newTalkRoomList = [newRoomData, ...filteredRooms];
+
+          return {
+            newsTalkRooms: newTalkRoomList,
+          };
         },
       });
 

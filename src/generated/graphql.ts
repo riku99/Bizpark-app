@@ -987,7 +987,7 @@ export type OnNewsTalkRoomMessageCreatedSubscriptionVariables = Exact<{
 }>;
 
 
-export type OnNewsTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', newsTalkRoomMessageCreated: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
+export type OnNewsTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', newsTalkRoomMessageCreated: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, talkRoom?: { __typename?: 'NewsTalkRoom', id: number, updatedAt?: string | null | undefined, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, news?: { __typename?: 'News', id: number, title: string } | null | undefined } | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
 
 export type OnThoughtTalkRoomMessageCreatedSubscriptionVariables = Exact<{
   roomIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
@@ -2697,6 +2697,16 @@ export const OnNewsTalkRoomMessageCreatedDocument = gql`
     subscription OnNewsTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
   newsTalkRoomMessageCreated(roomIds: $roomIds, userId: $userId) {
     ...NewsTalkRoomMessageParts
+    talkRoom {
+      id
+      updatedAt
+      createdAt
+      allMessageSeen
+      news {
+        id
+        title
+      }
+    }
   }
 }
     ${NewsTalkRoomMessagePartsFragmentDoc}`;
