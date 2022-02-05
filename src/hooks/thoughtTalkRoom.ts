@@ -35,7 +35,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
 
   // Active時、非アクティブ時の処理
   useEffect(() => {
-    const onChange = async (nextState: AppStateStatus) => {
+    const onChange = (nextState: AppStateStatus) => {
       if (nextState === "active") {
         setIsActive(true);
       } else {

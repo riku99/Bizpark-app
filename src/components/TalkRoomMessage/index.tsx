@@ -211,6 +211,21 @@ export const TalkRoomMessage = (props: Props) => {
           }
         } catch (e) {
           console.log(e);
+          const gqlError = getGraphQLError(e, 0);
+          if (
+            gqlError &&
+            gqlError.code === CustomErrorResponseCode.InvalidRequest
+          ) {
+            Alert.alert(gqlError.message, "", [
+              {
+                text: "OK",
+                onPress: async () => {
+                  props.deleteTalkRoomFromCache({ talkRoomId: roomId });
+                  navigation.goBack();
+                },
+              },
+            ]);
+          }
         }
       }
     })();
@@ -251,13 +266,6 @@ export const TalkRoomMessage = (props: Props) => {
     });
 
     try {
-      let mutationResult: Awaited<
-        ReturnType<
-          | CreateThoughtTalkRoomMessageMutationFn
-          | CreateNewsTalkRoomMessageMutationFn
-        >
-      >;
-
       let newIMessageData: IMessage;
 
       switch (props.type) {

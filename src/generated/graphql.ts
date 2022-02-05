@@ -506,7 +506,14 @@ export type SubImage = {
 
 export type Subscription = {
   __typename?: 'Subscription';
+  newsTalkRoomMessageCreated: NewsTalkRoomMessage;
   thoughtTalkRoomMessageCreated?: Maybe<ThoughtTalkRoomMessage>;
+};
+
+
+export type SubscriptionNewsTalkRoomMessageCreatedArgs = {
+  roomIds: Array<InputMaybe<Scalars['Int']>>;
+  userId: Scalars['ID'];
 };
 
 
@@ -973,6 +980,14 @@ export type UserThoughtsQueryVariables = Exact<{
 
 
 export type UserThoughtsQuery = { __typename?: 'Query', userThoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'Image', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+
+export type OnNewsTalkRoomMessageCreatedSubscriptionVariables = Exact<{
+  roomIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
+  userId: Scalars['ID'];
+}>;
+
+
+export type OnNewsTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', newsTalkRoomMessageCreated: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
 
 export type OnThoughtTalkRoomMessageCreatedSubscriptionVariables = Exact<{
   roomIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
@@ -2678,6 +2693,37 @@ export function useUserThoughtsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type UserThoughtsQueryHookResult = ReturnType<typeof useUserThoughtsQuery>;
 export type UserThoughtsLazyQueryHookResult = ReturnType<typeof useUserThoughtsLazyQuery>;
 export type UserThoughtsQueryResult = Apollo.QueryResult<UserThoughtsQuery, UserThoughtsQueryVariables>;
+export const OnNewsTalkRoomMessageCreatedDocument = gql`
+    subscription OnNewsTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
+  newsTalkRoomMessageCreated(roomIds: $roomIds, userId: $userId) {
+    ...NewsTalkRoomMessageParts
+  }
+}
+    ${NewsTalkRoomMessagePartsFragmentDoc}`;
+
+/**
+ * __useOnNewsTalkRoomMessageCreatedSubscription__
+ *
+ * To run a query within a React component, call `useOnNewsTalkRoomMessageCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnNewsTalkRoomMessageCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnNewsTalkRoomMessageCreatedSubscription({
+ *   variables: {
+ *      roomIds: // value for 'roomIds'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useOnNewsTalkRoomMessageCreatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OnNewsTalkRoomMessageCreatedSubscription, OnNewsTalkRoomMessageCreatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnNewsTalkRoomMessageCreatedSubscription, OnNewsTalkRoomMessageCreatedSubscriptionVariables>(OnNewsTalkRoomMessageCreatedDocument, options);
+      }
+export type OnNewsTalkRoomMessageCreatedSubscriptionHookResult = ReturnType<typeof useOnNewsTalkRoomMessageCreatedSubscription>;
+export type OnNewsTalkRoomMessageCreatedSubscriptionResult = Apollo.SubscriptionResult<OnNewsTalkRoomMessageCreatedSubscription>;
 export const OnThoughtTalkRoomMessageCreatedDocument = gql`
     subscription OnThoughtTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
   thoughtTalkRoomMessageCreated(roomIds: $roomIds, userId: $userId) {

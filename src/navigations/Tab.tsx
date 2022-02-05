@@ -15,6 +15,7 @@ import { Badge } from "src/components/Badge";
 import { StyleSheet } from "react-native";
 import { useToughtTalkRoomsWithSubsciption } from "src/hooks/thoughtTalkRoom";
 import { useActiveData } from "src/hooks/active";
+import { useNewsTalkRoomsWithSusbscription } from "src/hooks/newsTalkRoom";
 
 type TabParamList = {
   Home: undefined;
@@ -55,8 +56,9 @@ export const BottomTab = () => {
     );
   }, [thoughtTalkRoomData, newsTalkRoomsData]);
 
-  useToughtTalkRoomsWithSubsciption();
   useActiveData();
+  useToughtTalkRoomsWithSubsciption();
+  useNewsTalkRoomsWithSusbscription();
 
   return (
     <Tab.Navigator

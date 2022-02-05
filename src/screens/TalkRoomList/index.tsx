@@ -59,7 +59,7 @@ export const TalkListScreen = ({ navigation }: Props) => {
           name="OneOnOneTalkRoomList"
           component={OneOnOneTalkRoomList}
           options={{
-            tabBarLabel: "個人",
+            tabBarLabel: "ユーザー",
           }}
         />
       </TopTab.Navigator>
