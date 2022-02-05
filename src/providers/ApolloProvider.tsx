@@ -98,6 +98,14 @@ const cache = new InMemoryCache({
             });
           },
         },
+        newsTalkRoom: {
+          read: (_, { args, toReference }) => {
+            return toReference({
+              __typename: "NewsTalkRoom",
+              id: args.id,
+            });
+          },
+        },
       },
     },
     ThoughtTalkRoom: {

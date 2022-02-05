@@ -18,11 +18,12 @@ fragment NewsTalkRoomParts on NewsTalkRoom {
   news {
     ...NewsTalkRoomParentParts
   }
-  messages {
+  messages(first: 20) {
     edges {
       node {
         ...NewsTalkRoomMessageParts
       }
+      cursor
     }
     pageInfo {
       ...PageInfoParts
