@@ -703,7 +703,7 @@ export type CreateThoughtTalkRoomMessageMutationVariables = Exact<{
 }>;
 
 
-export type CreateThoughtTalkRoomMessageMutation = { __typename?: 'Mutation', createThoughtTalkRoomMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined } | null | undefined };
+export type CreateThoughtTalkRoomMessageMutation = { __typename?: 'Mutation', createThoughtTalkRoomMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } | null | undefined };
 
 export type CreateUserMutationVariables = Exact<{
   input: CreateUserInput;
@@ -1304,13 +1304,10 @@ export type CreateThoughtMutationOptions = Apollo.BaseMutationOptions<CreateThou
 export const CreateThoughtTalkRoomMessageDocument = gql`
     mutation CreateThoughtTalkRoomMessage($input: CreateThoughtTalkRoomMessageInput!) {
   createThoughtTalkRoomMessage(input: $input) {
-    id
-    text
-    createdAt
-    roomId
+    ...ThoughtTalkRoomMessageParts
   }
 }
-    `;
+    ${ThoughtTalkRoomMessagePartsFragmentDoc}`;
 export type CreateThoughtTalkRoomMessageMutationFn = Apollo.MutationFunction<CreateThoughtTalkRoomMessageMutation, CreateThoughtTalkRoomMessageMutationVariables>;
 
 /**

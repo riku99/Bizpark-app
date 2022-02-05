@@ -21,6 +21,8 @@ import {
   NewsTalkRoomMessageEdge,
   ThoughtTalkRoomMessageEdge,
   TalkRoomMessage,
+  ThoughtTalkRoomMessage,
+  NewsTalkRoomMessage,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -102,6 +104,36 @@ export const TalkRoom = (props: Props) => {
     }
   }, [messages]);
 
+  // チャットに表示するためのメッセージデータの作成
+  const createNewIMessage = <
+    T extends ThoughtTalkRoomMessage | NewsTalkRoomMessage
+  >(
+    message: T
+  ) => {
+    const { replyMessage } = message;
+
+    return {
+      _id: message.id,
+      text: message.text,
+      createdAt: new Date(Number(message.createdAt)),
+      user: {
+        _id: message.sender.id,
+        name: message.sender.name,
+        avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
+      },
+      replyMessage: replyMessage
+        ? {
+            id: Number(replyMessage.id),
+            text: replyMessage.text,
+            user: {
+              id: replyMessage.sender.id,
+              name: replyMessage.sender.name,
+            },
+          }
+        : null,
+    };
+  };
+
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
     if (props.messageData) {
@@ -110,26 +142,9 @@ export const TalkRoom = (props: Props) => {
           ? props.messageData.thoughtTalkRoom.messages.edges
           : props.messageData.newsTalkRoom.messages.edges;
 
-      const im: IMessage[] = edges.map(({ node: message }) => ({
-        _id: message.id,
-        text: message.text,
-        createdAt: new Date(Number(message.createdAt)),
-        user: {
-          _id: message.sender.id,
-          name: message.sender.name,
-          avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
-        },
-        replyMessage: message.replyMessage
-          ? {
-              id: message.replyMessage.id,
-              text: message.replyMessage.text,
-              user: {
-                id: message.replyMessage.sender.id,
-                name: message.replyMessage.sender.name,
-              },
-            }
-          : null,
-      }));
+      const im: IMessage[] = edges.map((edge: typeof edges[number]) =>
+        createNewIMessage(edge.node)
+      );
 
       setMessages(im);
     }
@@ -160,36 +175,9 @@ export const TalkRoom = (props: Props) => {
 
           for (const messageEdge of messageEdges) {
             if (messageEdge.node.id !== Number(currentData[0]._id)) {
-              const {
-                id,
-                text,
-                createdAt,
-                sender,
-                replyMessage,
-              } = messageEdge.node;
+              const IMessageData = createNewIMessage(messageEdge.node);
 
-              const IMssageData = {
-                _id: id,
-                text,
-                createdAt: new Date(Number(createdAt)),
-                user: {
-                  _id: sender.id,
-                  name: sender.name,
-                  avatar: sender.imageUrl ?? NO_USER_IMAGE_URL,
-                },
-                replyMessage: replyMessage
-                  ? {
-                      id: replyMessage.id,
-                      text: replyMessage.text,
-                      user: {
-                        id: replyMessage.sender.id,
-                        name: replyMessage.sender.name,
-                      },
-                    }
-                  : null,
-              };
-
-              newMessageData.push(IMssageData);
+              newMessageData.push(IMessageData);
             } else {
               break;
             }
@@ -266,28 +254,9 @@ export const TalkRoom = (props: Props) => {
         },
       });
 
-      const messageData = data.createThoughtTalkRoomMessage;
-
-      const newIMessageData: IMessage = {
-        _id: messageData.id,
-        text: messageData.text,
-        createdAt: new Date(Number(messageData.createdAt)),
-        user: {
-          _id: me.id,
-          name: me.name,
-          avatar: me.imageUrl,
-        },
-        replyMessage: replyMessage
-          ? {
-              id: Number(replyMessage._id),
-              text: replyMessage.text,
-              user: {
-                id: replyMessage.user._id,
-                name: replyMessage.user.name,
-              },
-            }
-          : null,
-      };
+      const newIMessageData = createNewIMessage(
+        data.createThoughtTalkRoomMessage
+      );
 
       setMessages((currentData) => {
         const prev = currentData.filter((c) => c._id !== tempId);
@@ -325,28 +294,8 @@ export const TalkRoom = (props: Props) => {
           messageEdges: T[]
         ) => {
           if (messageEdges) {
-            const im: IMessage[] = messageEdges.map(({ node: message }) => {
-              const { replyMessage } = message;
-              return {
-                _id: message.id,
-                text: message.text,
-                createdAt: new Date(Number(message.createdAt)),
-                user: {
-                  _id: message.sender.id,
-                  name: message.sender.name,
-                  avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
-                },
-                replyMessage: replyMessage
-                  ? {
-                      id: Number(replyMessage.id),
-                      text: replyMessage.text,
-                      user: {
-                        id: replyMessage.sender.id,
-                        name: replyMessage.sender.name,
-                      },
-                    }
-                  : null,
-              };
+            const im: IMessage[] = messageEdges.map((edge) => {
+              return createNewIMessage(edge.node);
             });
 
             setMessages((currentMessages) => {
