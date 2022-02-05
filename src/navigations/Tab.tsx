@@ -6,7 +6,11 @@ import { NewsScreen } from "src/screens/News";
 import { useColorModeValue, useTheme, Box } from "native-base";
 import React, { useMemo } from "react";
 import { HomeStack } from "./Home";
-import { useGetThoughtTalkRoomsQuery } from "src/generated/graphql";
+import {
+  useGetThoughtTalkRoomsQuery,
+  useGetNewsTalkRoomMessagesQuery,
+  useGetNewsTalkRoomsQuery,
+} from "src/generated/graphql";
 import { Badge } from "src/components/Badge";
 import { StyleSheet } from "react-native";
 import { useToughtTalkRoomsWithSubsciption } from "src/hooks/thoughtTalkRoom";
@@ -24,19 +28,32 @@ const Tab = createBottomTabNavigator<TabParamList>();
 export const BottomTab = () => {
   const { colors } = useTheme();
 
-  const { data } = useGetThoughtTalkRoomsQuery({
+  const { data: thoughtTalkRoomData } = useGetThoughtTalkRoomsQuery({
+    fetchPolicy: "cache-only",
+  });
+
+  const { data: newsTalkRoomsData } = useGetNewsTalkRoomsQuery({
     fetchPolicy: "cache-only",
   });
 
   const talkTabBadge = useMemo(() => {
-    if (data) {
-      const hasNotSeenMessageRoom = data.thoughtTalkRooms.filter(
-        (room) => !room.allMessageSeen
-      );
-
-      return !!hasNotSeenMessageRoom.length;
+    if (!thoughtTalkRoomData || !newsTalkRoomsData) {
+      return false;
     }
-  }, [data]);
+
+    const notSeenMessageThoughtTalkRoom = thoughtTalkRoomData.thoughtTalkRooms.filter(
+      (room) => !room.allMessageSeen
+    );
+
+    const notSeenMessageNewsTalkRoom = newsTalkRoomsData.newsTalkRooms.filter(
+      (room) => !room.allMessageSeen
+    );
+
+    return (
+      !!notSeenMessageThoughtTalkRoom.length ||
+      !!notSeenMessageNewsTalkRoom.length
+    );
+  }, [thoughtTalkRoomData, newsTalkRoomsData]);
 
   useToughtTalkRoomsWithSubsciption();
   useActiveData();
