@@ -114,6 +114,10 @@ export enum Genre {
   Society = 'SOCIETY'
 }
 
+export type GetOutNewsTalkRoomInput = {
+  talkRoomId: Scalars['Int'];
+};
+
 export type GetOutThoughtTalkRoomInput = {
   roomId: Scalars['Int'];
 };
@@ -175,6 +179,7 @@ export type Mutation = {
   deleteThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
   deleteThoughtTalkRoomMember: ThoughtTalkRoom;
   follow: User;
+  getOutNewsTalkRoom?: Maybe<Scalars['Boolean']>;
   getOutThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
   joinNewsTalkRoom: NewsTalkRoom;
   joinThoughtTalk: ThoughtTalkRoom;
@@ -259,6 +264,11 @@ export type MutationDeleteThoughtTalkRoomMemberArgs = {
 
 export type MutationFollowArgs = {
   followeeId: Scalars['ID'];
+};
+
+
+export type MutationGetOutNewsTalkRoomArgs = {
+  input: GetOutNewsTalkRoomInput;
 };
 
 
@@ -804,6 +814,13 @@ export type FollowMutationVariables = Exact<{
 
 
 export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+
+export type GetOutNewsTalkRoomMutationVariables = Exact<{
+  input: GetOutNewsTalkRoomInput;
+}>;
+
+
+export type GetOutNewsTalkRoomMutation = { __typename?: 'Mutation', getOutNewsTalkRoom?: boolean | null | undefined };
 
 export type GetOutThoughtTalkRoomMutationVariables = Exact<{
   input: GetOutThoughtTalkRoomInput;
@@ -1721,6 +1738,37 @@ export function useFollowMutation(baseOptions?: Apollo.MutationHookOptions<Follo
 export type FollowMutationHookResult = ReturnType<typeof useFollowMutation>;
 export type FollowMutationResult = Apollo.MutationResult<FollowMutation>;
 export type FollowMutationOptions = Apollo.BaseMutationOptions<FollowMutation, FollowMutationVariables>;
+export const GetOutNewsTalkRoomDocument = gql`
+    mutation GetOutNewsTalkRoom($input: GetOutNewsTalkRoomInput!) {
+  getOutNewsTalkRoom(input: $input)
+}
+    `;
+export type GetOutNewsTalkRoomMutationFn = Apollo.MutationFunction<GetOutNewsTalkRoomMutation, GetOutNewsTalkRoomMutationVariables>;
+
+/**
+ * __useGetOutNewsTalkRoomMutation__
+ *
+ * To run a mutation, you first call `useGetOutNewsTalkRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useGetOutNewsTalkRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [getOutNewsTalkRoomMutation, { data, loading, error }] = useGetOutNewsTalkRoomMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useGetOutNewsTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<GetOutNewsTalkRoomMutation, GetOutNewsTalkRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<GetOutNewsTalkRoomMutation, GetOutNewsTalkRoomMutationVariables>(GetOutNewsTalkRoomDocument, options);
+      }
+export type GetOutNewsTalkRoomMutationHookResult = ReturnType<typeof useGetOutNewsTalkRoomMutation>;
+export type GetOutNewsTalkRoomMutationResult = Apollo.MutationResult<GetOutNewsTalkRoomMutation>;
+export type GetOutNewsTalkRoomMutationOptions = Apollo.BaseMutationOptions<GetOutNewsTalkRoomMutation, GetOutNewsTalkRoomMutationVariables>;
 export const GetOutThoughtTalkRoomDocument = gql`
     mutation GetOutThoughtTalkRoom($input: GetOutThoughtTalkRoomInput!) {
   getOutThoughtTalkRoom(input: $input)

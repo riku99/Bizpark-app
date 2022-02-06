@@ -1,12 +1,17 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import { Box, FlatList } from "native-base";
 import {
   useGetNewsTalkRoomsQuery,
   GetNewsTalkRoomsQueryResult,
+  useGetOutNewsTalkRoomMutation,
 } from "src/generated/graphql";
 import { TalkRoomListItem } from "src/components/TalkRoomListItem";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
+import { InstaLikeModal, ListItem } from "src/components/InstaLikeModal";
+import { Alert } from "react-native";
+import * as Haptics from "expo-haptics";
+import { useToast } from "react-native-toast-notifications";
 
 type Item = GetNewsTalkRoomsQueryResult["data"]["newsTalkRooms"][number];
 
@@ -14,6 +19,61 @@ export const NewsTalkRoomList = React.memo(() => {
   const { data: talkRoomData } = useGetNewsTalkRoomsQuery();
 
   const navigation = useNavigation<RootNavigationProp<"Tab">>();
+
+  const [getOutTalkRoomMutation] = useGetOutNewsTalkRoomMutation();
+
+  const [modalData, setModalData] = useState<{ roomId: number } | null>(null);
+
+  const toast = useToast();
+
+  const closeModal = () => {
+    setModalData(null);
+  };
+
+  const modalList: ListItem[] = [
+    {
+      title: "トークから抜ける",
+      color: "red",
+      onPress: () => {
+        Alert.alert(
+          "トークから抜ける",
+          "このトークルームは表示されなくなります。トークから抜けてよろしいですか?",
+          [
+            {
+              text: "キャンセル",
+              style: "cancel",
+            },
+            {
+              text: "抜ける",
+              style: "destructive",
+              onPress: async () => {
+                if (modalData) {
+                  try {
+                    await getOutTalkRoomMutation({
+                      variables: {
+                        input: {
+                          talkRoomId: modalData.roomId,
+                        },
+                      },
+                      update: () => {
+                        // キャッシュからトークルーム削除
+                      },
+                    });
+
+                    toast.show("削除しました", { type: "success" });
+                  } catch (e) {
+                    console.log(e);
+                  } finally {
+                    setModalData(null);
+                  }
+                }
+              },
+            },
+          ]
+        );
+      },
+    },
+  ];
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
     let userImageUrls: string[] = [];
@@ -40,7 +100,10 @@ export const NewsTalkRoomList = React.memo(() => {
       });
     };
 
-    const onLongPress = () => {};
+    const onLongPress = () => {
+      Haptics.selectionAsync();
+      setModalData({ roomId: item.id });
+    };
 
     return (
       <TalkRoomListItem
@@ -60,6 +123,13 @@ export const NewsTalkRoomList = React.memo(() => {
         data={talkRoomData.newsTalkRooms}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+      />
+
+      <InstaLikeModal
+        isVisible={!!modalData}
+        list={modalList}
+        onBackdropPress={closeModal}
+        onCancel={closeModal}
       />
     </Box>
   );

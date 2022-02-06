@@ -50,7 +50,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
               text: "抜ける",
               style: "destructive",
               onPress: async () => {
-                if (modalList) {
+                if (modalData) {
                   try {
                     await getOutMutation({
                       variables: {
