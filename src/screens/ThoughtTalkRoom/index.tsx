@@ -64,7 +64,7 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
         }}
       />
     );
-  }, [membersData, navigation]);
+  }, [memberImageUrls, navigation]);
 
   useLayoutEffect(() => {
     navigation.setOptions({

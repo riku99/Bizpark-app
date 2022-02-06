@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useCallback } from "react";
+import React, { useLayoutEffect, useCallback, useState } from "react";
 import { Box, Pressable, Text } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import {
@@ -39,6 +39,8 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
     return <MemberListItem item={item} talkRoomId={talkRoomId} />;
   }, []);
 
+  const [fetchEnabled, setfetchEnabled] = useState(true);
+
   const infiniteLoad = async () => {
     if (membersData) {
       const { pageInfo } = membersData.thoughtTalkRoom.members;
@@ -51,6 +53,8 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
             after: endCursor ? btoa(endCursor) : null,
           },
         });
+      } else {
+        setfetchEnabled(false);
       }
     }
   };
@@ -66,11 +70,8 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
         renderItem={renderItem}
         infiniteLoad={infiniteLoad}
         keyExtractor={(item) => item.node.id.toString()}
+        initialNumToRender={15}
       />
     </SafeAreaView>
   );
 };
-
-const LIST_ITEM_LEFT_WIDTH = 40;
-
-const styles = StyleSheet.create({});

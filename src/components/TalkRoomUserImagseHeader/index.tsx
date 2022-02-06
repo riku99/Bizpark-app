@@ -1,11 +1,9 @@
 import React from "react";
 import { Pressable } from "native-base";
 import { UserImages, TRANSLATE_IMAGE_X } from "src/components/UserImages";
-import { ThoughtTalkRoomMemberConnection } from "src/generated/graphql";
 import { Indicator } from "src/components/Indicator";
 
 type Props = {
-  // members?: ThoughtTalkRoomMemberConnection;
   imageUrls?: string[];
   onPress: () => void;
 };
