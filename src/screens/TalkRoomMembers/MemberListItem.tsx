@@ -42,7 +42,9 @@ export const MemberListItem = React.memo(({ item, talkRoomId }: Props) => {
 
   const { data: meData } = useMeQuery();
 
-  const navigation = useNavigation<RootNavigationProp<"TalkRoomMembers">>();
+  const navigation = useNavigation<
+    RootNavigationProp<"ThoughtTalkRoomMembers">
+  >();
 
   const [deleteMemberMutation] = useDeleteThoughtTalkRoomMemberMutation();
 

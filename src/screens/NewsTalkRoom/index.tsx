@@ -12,7 +12,7 @@ import { TalkRoomMessage } from "src/components/TalkRoomMessage";
 import { useDeleteNewsTalkRoomFromCache } from "src/hooks/newsTalkRoom";
 import { TalkRoomUserImagesHeader } from "src/components/TalkRoomUserImagseHeader";
 
-type Props = RootNavigationScreenProp<"ThoughtTalkRoomMain">;
+type Props = RootNavigationScreenProp<"NewsTalkRoomMain">;
 
 export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
@@ -44,7 +44,11 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     return (
       <TalkRoomUserImagesHeader
         imageUrls={memberImageUrls}
-        onPress={() => {}}
+        onPress={() => {
+          navigation.navigate("NewsTalkRoomMembers", {
+            talkRoomId: id,
+          });
+        }}
       />
     );
   }, [memberImageUrls]);

@@ -12,7 +12,7 @@ import { btoa } from "react-native-quick-base64";
 import { SafeAreaView, StyleSheet } from "react-native";
 import { MemberListItem } from "./MemberListItem";
 
-type Props = RootNavigationScreenProp<"TalkRoomMembers">;
+type Props = RootNavigationScreenProp<"ThoughtTalkRoomMembers">;
 
 type Item = ThoughtTalkRoomMemberEdge;
 
