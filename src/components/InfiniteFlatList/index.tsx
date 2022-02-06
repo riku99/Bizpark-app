@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { FlatList, FlatListProps } from "react-native";
 import { Indicator } from "src/components/Indicator";
 
@@ -17,8 +17,6 @@ export const InfiniteFlatList = <T extends {}>({
     setOnEndReachedCalledDuringMomentum,
   ] = useState(false);
   const [isInfiniteLoading, setIsInfiniteLoading] = useState(false);
-
-  const listRef = useRef<FlatList>(null);
 
   const renderBottomIndicator = () => {
     if (isInfiniteLoading) {
@@ -45,7 +43,7 @@ export const InfiniteFlatList = <T extends {}>({
       // ローディングを消すのをフィッチされたデータが反映されるよりも遅くすることで繋がりを自然にする
       setTimeout(() => {
         setIsInfiniteLoading(false);
-      }, 300);
+      }, 200);
     }
   };
 
@@ -55,7 +53,6 @@ export const InfiniteFlatList = <T extends {}>({
 
   return (
     <FlatList
-      ref={listRef}
       onEndReachedThreshold={0.3}
       onEndReached={onEndReached}
       ListFooterComponent={renderBottomIndicator}

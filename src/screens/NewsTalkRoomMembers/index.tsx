@@ -1,9 +1,15 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useCallback } from "react";
 import { Box } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
-import { useGetNewsTalkRoomMembersQuery } from "src/generated/graphql";
+import {
+  useGetNewsTalkRoomMembersQuery,
+  NewsTalkRoomMemberEdge,
+} from "src/generated/graphql";
+import { MemberListItem } from "src/components/TalkRoomMemberListItem";
 
 type Props = RootNavigationScreenProp<"NewsTalkRoomMembers">;
+
+type Item = NewsTalkRoomMemberEdge;
 
 export const NewsTalkRoomMembersScreen = ({ navigation, route }: Props) => {
   const { talkRoomId } = route.params;
@@ -18,7 +24,12 @@ export const NewsTalkRoomMembersScreen = ({ navigation, route }: Props) => {
     variables: {
       talkRoomId,
     },
+    fetchPolicy: "network-only",
   });
+
+  const renderItem = useCallback(({ item }: { item: Item }) => {
+    return <MemberListItem item={item} talkRoomId={talkRoomId} />;
+  }, []);
 
   return <Box></Box>;
 };

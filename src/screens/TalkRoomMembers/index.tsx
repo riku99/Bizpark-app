@@ -1,16 +1,17 @@
-import React, { useLayoutEffect, useCallback, useState } from "react";
-import { Box, Pressable, Text } from "native-base";
+import React, { useLayoutEffect, useCallback } from "react";
 import { RootNavigationScreenProp } from "src/types";
 import {
   useGetThoughtTalkRoomMembersQuery,
   ThoughtTalkRoomMemberEdge,
   useMeQuery,
+  useDeleteThoughtTalkRoomMemberMutation,
+  useGetThoughtTalkRoomParentQuery,
 } from "src/generated/graphql";
 import { Indicator } from "src/components/Indicator";
 import { InfiniteFlatList } from "src/components/InfiniteFlatList";
 import { btoa } from "react-native-quick-base64";
-import { SafeAreaView, StyleSheet } from "react-native";
-import { MemberListItem } from "./MemberListItem";
+import { SafeAreaView } from "react-native";
+import { MemberListItem } from "../../components/TalkRoomMemberListItem";
 
 type Props = RootNavigationScreenProp<"ThoughtTalkRoomMembers">;
 
@@ -18,15 +19,16 @@ type Item = ThoughtTalkRoomMemberEdge;
 
 export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
   const { talkRoomId } = route.params;
-  const {
-    data: { me },
-  } = useMeQuery();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "参加しているメンバー",
+      title: "メンバー",
     });
   }, [navigation]);
+
+  const {
+    data: { me },
+  } = useMeQuery();
 
   const { data: membersData, fetchMore } = useGetThoughtTalkRoomMembersQuery({
     variables: {
@@ -35,11 +37,34 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
     fetchPolicy: "network-only",
   });
 
-  const renderItem = useCallback(({ item }: { item: Item }) => {
-    return <MemberListItem item={item} talkRoomId={talkRoomId} />;
-  }, []);
+  const { data: talkRoomData } = useGetThoughtTalkRoomParentQuery({
+    variables: {
+      id: talkRoomId,
+    },
+  });
 
-  const [fetchEnabled, setfetchEnabled] = useState(true);
+  const renderItem = useCallback(
+    ({ item }: { item: Item }) => {
+      if (!item) {
+        return null;
+      }
+
+      const { user } = item.node;
+
+      const swipeEnabled =
+        me.id === talkRoomData?.thoughtTalkRoom.thought.contributor.id &&
+        user.id !== me.id;
+
+      return (
+        <MemberListItem
+          talkRoomId={talkRoomId}
+          user={{ id: user.id, name: user.name, imageUrl: user.imageUrl }}
+          swipeEnabled={swipeEnabled}
+        />
+      );
+    },
+    [me, talkRoomData?.thoughtTalkRoom.thought.contributor.id]
+  );
 
   const infiniteLoad = async () => {
     if (membersData) {
@@ -53,8 +78,6 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
             after: endCursor ? btoa(endCursor) : null,
           },
         });
-      } else {
-        setfetchEnabled(false);
       }
     }
   };
