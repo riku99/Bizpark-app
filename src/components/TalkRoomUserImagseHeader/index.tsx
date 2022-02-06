@@ -5,26 +5,26 @@ import { ThoughtTalkRoomMemberConnection } from "src/generated/graphql";
 import { Indicator } from "src/components/Indicator";
 
 type Props = {
-  // talkRoomData?: GetThoughtTalkRoomQuery;
-  members?: ThoughtTalkRoomMemberConnection;
+  // members?: ThoughtTalkRoomMemberConnection;
+  imageUrls?: string[];
   onPress: () => void;
 };
 
-export const TalkRoomUserImagesHeader = ({ members, onPress }: Props) => {
-  if (!members) {
+export const TalkRoomUserImagesHeader = ({ imageUrls, onPress }: Props) => {
+  if (!imageUrls) {
     return <Indicator />;
   }
 
-  const urls = members.edges.slice(0, 7).map((edge) => edge.node.user.imageUrl);
+  // const urls = members.edges.slice(0, 7).map((edge) => edge.node.user.imageUrl);
 
   return (
     <Pressable onPress={onPress}>
       <UserImages
-        data={urls}
+        data={imageUrls}
         imageSize="6"
         style={{
           transform: [
-            { translateX: (urls.length - 1) * (TRANSLATE_IMAGE_X / 2) },
+            { translateX: (imageUrls.length - 1) * (TRANSLATE_IMAGE_X / 2) },
           ],
         }}
       />

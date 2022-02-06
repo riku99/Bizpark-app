@@ -12,6 +12,7 @@ import { InstaLikeModal, ListItem } from "src/components/InstaLikeModal";
 import { Alert } from "react-native";
 import * as Haptics from "expo-haptics";
 import { useToast } from "react-native-toast-notifications";
+import { useDeleteNewsTalkRoomFromCache } from "src/hooks/newsTalkRoom";
 
 type Item = GetNewsTalkRoomsQueryResult["data"]["newsTalkRooms"][number];
 
@@ -25,6 +26,8 @@ export const NewsTalkRoomList = React.memo(() => {
   const [modalData, setModalData] = useState<{ roomId: number } | null>(null);
 
   const toast = useToast();
+
+  const { deleteNewsTalkRoom } = useDeleteNewsTalkRoomFromCache();
 
   const closeModal = () => {
     setModalData(null);
@@ -57,6 +60,7 @@ export const NewsTalkRoomList = React.memo(() => {
                       },
                       update: () => {
                         // キャッシュからトークルーム削除
+                        deleteNewsTalkRoom({ talkRoomId: modalData.roomId });
                       },
                     });
 

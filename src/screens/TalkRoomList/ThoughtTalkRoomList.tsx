@@ -4,7 +4,6 @@ import {
   useGetThoughtTalkRoomsQuery,
   useGetOutThoughtTalkRoomMutation,
   GetThoughtTalkRoomsQueryResult,
-  CustomErrorResponseCode,
 } from "src/generated/graphql";
 import { RootNavigationProp } from "src/types";
 import { useNavigation } from "@react-navigation/native";
@@ -12,7 +11,6 @@ import { InstaLikeModal } from "src/components/InstaLikeModal";
 import { Alert } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import * as Haptics from "expo-haptics";
-import { getGraphQLError, logJson } from "src/utils";
 import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoom";
 import { TalkRoomListItem } from "src/components/TalkRoomListItem";
 
@@ -65,12 +63,6 @@ export const ThoughtTalkRoomList = React.memo(() => {
 
                     toast.show("削除しました", { type: "success" });
                   } catch (e) {
-                    const error = getGraphQLError(e, 0);
-                    if (
-                      error?.code === CustomErrorResponseCode.InvalidRequest
-                    ) {
-                      toast.show(error.message, { type: "danger" });
-                    }
                   } finally {
                     setModalData(null);
                   }

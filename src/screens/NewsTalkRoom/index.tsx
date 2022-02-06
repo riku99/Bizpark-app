@@ -1,6 +1,4 @@
-import React, { useLayoutEffect } from "react";
-import {} from "react-native";
-import { Box } from "native-base";
+import React, { useLayoutEffect, useMemo, useCallback } from "react";
 import { HeaderBackButton } from "@react-navigation/elements";
 import { RootNavigationScreenProp } from "src/types";
 import {
@@ -8,8 +6,11 @@ import {
   useMeQuery,
   useCreateNewsTalkRoomMessageMutation,
   useCreateUserNewsTalkRoomMessageSeenMutation,
+  useGetNewsTalkRoomMembersQuery,
 } from "src/generated/graphql";
 import { TalkRoomMessage } from "src/components/TalkRoomMessage";
+import { useDeleteNewsTalkRoomFromCache } from "src/hooks/newsTalkRoom";
+import { TalkRoomUserImagesHeader } from "src/components/TalkRoomUserImagseHeader";
 
 type Props = RootNavigationScreenProp<"ThoughtTalkRoomMain">;
 
@@ -20,8 +21,37 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     data: { me },
   } = useMeQuery();
 
+  const { data: messageData, fetchMore } = useGetNewsTalkRoomMessagesQuery({
+    variables: {
+      talkRoomId: id,
+    },
+    fetchPolicy: "cache-only",
+  });
+
+  const { data: membersData } = useGetNewsTalkRoomMembersQuery({
+    variables: {
+      talkRoomId: id,
+    },
+  });
+
+  const memberImageUrls = useMemo(() => {
+    return membersData?.newsTalkRoom.members.edges
+      .slice(0, 7)
+      .map((edge) => edge.node.user.imageUrl);
+  }, [membersData]);
+
+  const renderHeaderTitle = useCallback(() => {
+    return (
+      <TalkRoomUserImagesHeader
+        imageUrls={memberImageUrls}
+        onPress={() => {}}
+      />
+    );
+  }, [memberImageUrls]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
+      headerTitle: renderHeaderTitle,
       headerLeft: () => (
         <HeaderBackButton
           onPress={() => {
@@ -32,16 +62,11 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation]);
 
-  const { data: messageData, fetchMore } = useGetNewsTalkRoomMessagesQuery({
-    variables: {
-      talkRoomId: id,
-    },
-    fetchPolicy: "cache-only",
-  });
-
   const [createMessageMutation] = useCreateNewsTalkRoomMessageMutation();
 
   const [createSeenMutation] = useCreateUserNewsTalkRoomMessageSeenMutation();
+
+  const { deleteNewsTalkRoom } = useDeleteNewsTalkRoomFromCache();
 
   return (
     <>
@@ -52,6 +77,7 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
         messageFetchMore={fetchMore}
         createMessage={createMessageMutation}
         createSeen={createSeenMutation}
+        deleteTalkRoomFromCache={deleteNewsTalkRoom}
       />
     </>
   );

@@ -39,6 +39,12 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
     },
   });
 
+  const memberImageUrls = useMemo(() => {
+    return membersData?.thoughtTalkRoom.members.edges
+      .slice(0, 7)
+      .map((edge) => edge.node.user.imageUrl);
+  }, [membersData]);
+
   const [createMessageMutation] = useCreateThoughtTalkRoomMessageMutation();
 
   const [
@@ -50,7 +56,7 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
   const renderHeaderTitle = useCallback(() => {
     return (
       <TalkRoomUserImagesHeader
-        members={membersData?.thoughtTalkRoom.members}
+        imageUrls={memberImageUrls}
         onPress={() => {
           navigation.navigate("ThoughtTalkRoomMembers", {
             talkRoomId: id,

@@ -901,6 +901,14 @@ export type GetActiveDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetActiveDataQuery = { __typename?: 'Query', thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
 
+export type GetNewsTalkRoomMembersQueryVariables = Exact<{
+  talkRoomId: Scalars['Int'];
+  after?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetNewsTalkRoomMembersQuery = { __typename?: 'Query', newsTalkRoom: { __typename?: 'NewsTalkRoom', id: number, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+
 export type GetNewsTalkRoomMessagesQueryVariables = Exact<{
   talkRoomId: Scalars['Int'];
   messageCursor?: InputMaybe<Scalars['String']>;
@@ -2183,6 +2191,57 @@ export function useGetActiveDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetActiveDataQueryHookResult = ReturnType<typeof useGetActiveDataQuery>;
 export type GetActiveDataLazyQueryHookResult = ReturnType<typeof useGetActiveDataLazyQuery>;
 export type GetActiveDataQueryResult = Apollo.QueryResult<GetActiveDataQuery, GetActiveDataQueryVariables>;
+export const GetNewsTalkRoomMembersDocument = gql`
+    query GetNewsTalkRoomMembers($talkRoomId: Int!, $after: String) {
+  newsTalkRoom(id: $talkRoomId) {
+    id
+    members(first: 20, after: $after) {
+      edges {
+        node {
+          id
+          user {
+            ...UserParts
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+  }
+}
+    ${UserPartsFragmentDoc}
+${PageInfoPartsFragmentDoc}`;
+
+/**
+ * __useGetNewsTalkRoomMembersQuery__
+ *
+ * To run a query within a React component, call `useGetNewsTalkRoomMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNewsTalkRoomMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNewsTalkRoomMembersQuery({
+ *   variables: {
+ *      talkRoomId: // value for 'talkRoomId'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useGetNewsTalkRoomMembersQuery(baseOptions: Apollo.QueryHookOptions<GetNewsTalkRoomMembersQuery, GetNewsTalkRoomMembersQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNewsTalkRoomMembersQuery, GetNewsTalkRoomMembersQueryVariables>(GetNewsTalkRoomMembersDocument, options);
+      }
+export function useGetNewsTalkRoomMembersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNewsTalkRoomMembersQuery, GetNewsTalkRoomMembersQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNewsTalkRoomMembersQuery, GetNewsTalkRoomMembersQueryVariables>(GetNewsTalkRoomMembersDocument, options);
+        }
+export type GetNewsTalkRoomMembersQueryHookResult = ReturnType<typeof useGetNewsTalkRoomMembersQuery>;
+export type GetNewsTalkRoomMembersLazyQueryHookResult = ReturnType<typeof useGetNewsTalkRoomMembersLazyQuery>;
+export type GetNewsTalkRoomMembersQueryResult = Apollo.QueryResult<GetNewsTalkRoomMembersQuery, GetNewsTalkRoomMembersQueryVariables>;
 export const GetNewsTalkRoomMessagesDocument = gql`
     query GetNewsTalkRoomMessages($talkRoomId: Int!, $messageCursor: String) {
   newsTalkRoom(id: $talkRoomId) {

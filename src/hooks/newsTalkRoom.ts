@@ -3,10 +3,12 @@ import {
   OnNewsTalkRoomMessageCreatedDocument,
   OnNewsTalkRoomMessageCreatedSubscription,
   OnNewsTalkRoomMessageCreatedSubscriptionVariables,
+  GetNewsTalkRoomsQuery,
+  GetNewsTalkRoomsDocument,
 } from "src/generated/graphql";
 import { meVar } from "src/stores/me";
-import { useReactiveVar } from "@apollo/client";
-import { useState, useMemo, useEffect } from "react";
+import { useReactiveVar, useApolloClient } from "@apollo/client";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import { AppState, AppStateStatus } from "react-native";
 
 export const useNewsTalkRoomsWithSusbscription = () => {
@@ -115,4 +117,32 @@ export const useNewsTalkRoomsWithSusbscription = () => {
       };
     }
   }, [isActive, myId, talkRoomIds, subscribeToMore]);
+};
+
+export const useDeleteNewsTalkRoomFromCache = () => {
+  const { cache } = useApolloClient();
+
+  const deleteNewsTalkRoom = useCallback(
+    ({ talkRoomId }: { talkRoomId: number }) => {
+      const queryResult = cache.readQuery<GetNewsTalkRoomsQuery>({
+        query: GetNewsTalkRoomsDocument,
+      });
+
+      if (queryResult) {
+        const filteredData = queryResult.newsTalkRooms.filter(
+          (n) => n.id !== talkRoomId
+        );
+
+        cache.writeQuery({
+          query: GetNewsTalkRoomsDocument,
+          data: { newsTalkRooms: filteredData },
+        });
+      }
+    },
+    [cache]
+  );
+
+  return {
+    deleteNewsTalkRoom,
+  };
 };
