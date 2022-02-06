@@ -10,39 +10,28 @@ import Animated, {
   useAnimatedStyle,
   withTiming,
 } from "react-native-reanimated";
-import {
-  ThoughtTalkRoomMemberEdge,
-  useDeleteThoughtTalkRoomMemberMutation,
-  useMeQuery,
-  GetThoughtTalkRoomsDocument,
-  GetThoughtTalkRoomsQuery,
-  useGetThoughtTalkRoomParentQuery,
-} from "src/generated/graphql";
 import { ListItem } from "src/components/ListItem";
 import { UserImage } from "src/components/UserImage";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
 import { StyleSheet } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { Alert } from "react-native";
 
 type Props = {
-  talkRoomId: number;
   user: {
     id: string;
     name: string;
     imageUrl: string;
   };
   swipeEnabled: boolean;
+  onDeletePress: (closeItem: () => void, openItem: () => void) => void;
 };
 
 export const MemberListItem = React.memo(
-  ({ talkRoomId, user, swipeEnabled }: Props) => {
+  ({ user, swipeEnabled, onDeletePress }: Props) => {
     const navigation = useNavigation<
       RootNavigationProp<"ThoughtTalkRoomMembers">
     >();
-
-    const [deleteMemberMutation] = useDeleteThoughtTalkRoomMemberMutation();
 
     const [iconVisible, setIconVisible] = useState(true);
 
@@ -82,75 +71,14 @@ export const MemberListItem = React.memo(
       }
     );
 
-    const onDeletePress = () => {
-      Alert.alert(
-        "ユーザーをトークから削除",
-        `${user.name}をトークから削除しますか?\n削除されたユーザーは再度トークに参加することが可能です。トークに参加させたくない場合はブロックもしてください`,
-        [
-          {
-            text: "キャンセル",
-            style: "cancel",
-          },
-          {
-            text: "削除",
-            style: "destructive",
-            onPress: async () => {
-              try {
-                itemHeight.value = withTiming(0);
-                setIconVisible(false);
-                await deleteMemberMutation({
-                  variables: {
-                    input: {
-                      userId: user.id,
-                      roomId: talkRoomId,
-                    },
-                  },
-                  update: (cache, { data: responseData }) => {
-                    const queryResult = cache.readQuery<GetThoughtTalkRoomsQuery>(
-                      {
-                        query: GetThoughtTalkRoomsDocument,
-                      }
-                    );
+    const closeItem = () => {
+      itemHeight.value = withTiming(0);
+      setIconVisible(false);
+    };
 
-                    if (queryResult) {
-                      const newTalkRooms = queryResult.thoughtTalkRooms.map(
-                        (room) => {
-                          if (room.id !== talkRoomId) {
-                            return room;
-                          }
-
-                          const newMembers = room.members.edges.filter(
-                            (edge) => edge.node.user.id !== user.id
-                          );
-
-                          return {
-                            ...room,
-                            members: {
-                              ...room.members,
-                              edges: newMembers,
-                            },
-                          };
-                        }
-                      );
-
-                      cache.writeQuery({
-                        query: GetThoughtTalkRoomsDocument,
-                        data: {
-                          thoughtTalkRooms: newTalkRooms,
-                        },
-                      });
-                    }
-                  },
-                });
-              } catch (e) {
-                itemHeight.value = withTiming(DEFAULT_ITEM_HEIGHT);
-                setIconVisible(true);
-                console.log(e);
-              }
-            },
-          },
-        ]
-      );
+    const openItem = () => {
+      itemHeight.value = withTiming(DEFAULT_ITEM_HEIGHT);
+      setIconVisible(true);
     };
 
     return (
@@ -158,7 +86,11 @@ export const MemberListItem = React.memo(
         {/* 削除 */}
         <Animated.View style={[styles.deleteContainer, rItemContainerStyle]}>
           {iconVisible && (
-            <Pressable onPress={onDeletePress}>
+            <Pressable
+              onPress={() => {
+                onDeletePress(closeItem, openItem);
+              }}
+            >
               <Feather name="delete" size={24} color="red" />
             </Pressable>
           )}

@@ -6,12 +6,15 @@ import {
   useMeQuery,
   useDeleteThoughtTalkRoomMemberMutation,
   useGetThoughtTalkRoomParentQuery,
+  GetThoughtTalkRoomsDocument,
+  GetThoughtTalkRoomsQuery,
 } from "src/generated/graphql";
 import { Indicator } from "src/components/Indicator";
 import { InfiniteFlatList } from "src/components/InfiniteFlatList";
 import { btoa } from "react-native-quick-base64";
 import { SafeAreaView } from "react-native";
 import { MemberListItem } from "../../components/TalkRoomMemberListItem";
+import { Alert } from "react-native";
 
 type Props = RootNavigationScreenProp<"ThoughtTalkRoomMembers">;
 
@@ -43,6 +46,8 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
     },
   });
 
+  const [deleteMemberMutation] = useDeleteThoughtTalkRoomMemberMutation();
+
   const renderItem = useCallback(
     ({ item }: { item: Item }) => {
       if (!item) {
@@ -55,11 +60,80 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
         me.id === talkRoomData?.thoughtTalkRoom.thought.contributor.id &&
         user.id !== me.id;
 
+      const onDeletePress = (closeItem: () => void, openItem: () => void) => {
+        Alert.alert(
+          "ユーザーをトークから削除",
+          `${user.name}をトークから削除しますか?\n削除されたユーザーは再度トークに参加することが可能です。トークに参加させたくない場合はブロックもしてください`,
+          [
+            {
+              text: "キャンセル",
+              style: "cancel",
+            },
+            {
+              text: "削除",
+              style: "destructive",
+              onPress: async () => {
+                try {
+                  closeItem();
+                  await deleteMemberMutation({
+                    variables: {
+                      input: {
+                        userId: user.id,
+                        roomId: talkRoomId,
+                      },
+                    },
+                    update: (cache, { data: responseData }) => {
+                      const queryResult = cache.readQuery<GetThoughtTalkRoomsQuery>(
+                        {
+                          query: GetThoughtTalkRoomsDocument,
+                        }
+                      );
+
+                      if (queryResult) {
+                        const newTalkRooms = queryResult.thoughtTalkRooms.map(
+                          (room) => {
+                            if (room.id !== talkRoomId) {
+                              return room;
+                            }
+
+                            const newMembers = room.members.edges.filter(
+                              (edge) => edge.node.user.id !== user.id
+                            );
+
+                            return {
+                              ...room,
+                              members: {
+                                ...room.members,
+                                edges: newMembers,
+                              },
+                            };
+                          }
+                        );
+
+                        cache.writeQuery({
+                          query: GetThoughtTalkRoomsDocument,
+                          data: {
+                            thoughtTalkRooms: newTalkRooms,
+                          },
+                        });
+                      }
+                    },
+                  });
+                } catch (e) {
+                  openItem();
+                  console.log(e);
+                }
+              },
+            },
+          ]
+        );
+      };
+
       return (
         <MemberListItem
-          talkRoomId={talkRoomId}
           user={{ id: user.id, name: user.name, imageUrl: user.imageUrl }}
           swipeEnabled={swipeEnabled}
+          onDeletePress={onDeletePress}
         />
       );
     },
