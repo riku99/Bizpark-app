@@ -15,8 +15,6 @@ export const TalkRoomUserImagesHeader = ({ imageUrls, onPress }: Props) => {
     return <Indicator />;
   }
 
-  // const urls = members.edges.slice(0, 7).map((edge) => edge.node.user.imageUrl);
-
   return (
     <Pressable onPress={onPress}>
       <UserImages

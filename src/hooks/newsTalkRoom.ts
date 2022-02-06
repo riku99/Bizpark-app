@@ -146,3 +146,28 @@ export const useDeleteNewsTalkRoomFromCache = () => {
     deleteNewsTalkRoom,
   };
 };
+
+export const useFindNewsTalkRoomFromNewsId = () => {
+  const { cache } = useApolloClient();
+
+  const findNewsTalkRoom = useCallback(
+    ({ newsId }: { newsId: number }) => {
+      const result = cache.readQuery<GetNewsTalkRoomsQuery>({
+        query: GetNewsTalkRoomsDocument,
+      });
+
+      if (result) {
+        const targetRoom = result.newsTalkRooms.find(
+          (n) => n.news.id === newsId
+        );
+
+        return targetRoom;
+      }
+    },
+    [cache]
+  );
+
+  return {
+    findNewsTalkRoom,
+  };
+};

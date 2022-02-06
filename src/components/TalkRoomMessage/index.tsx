@@ -156,6 +156,7 @@ export const TalkRoomMessage = (props: Props) => {
         }
 
         setMessages((currentData) => {
+          console.log(currentData);
           // fetchMoreとかでキャッシュ更新するとこのEffectも呼ばれる。ただ、新しいメッセージを作成する必要はないので現在のデータをリターン
           if (currentData.length && currentData[0]._id === firstMessage.id) {
             return currentData;
@@ -164,7 +165,10 @@ export const TalkRoomMessage = (props: Props) => {
           const newMessageData: IMessage[] = [];
 
           for (const messageEdge of messageEdges) {
-            if (messageEdge.node.id !== Number(currentData[0]._id)) {
+            if (
+              !currentData.length ||
+              messageEdge.node.id !== Number(currentData[0]._id)
+            ) {
               const IMessageData = createNewIMessage(messageEdge.node);
 
               newMessageData.push(IMessageData);

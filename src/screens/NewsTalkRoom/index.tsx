@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useCallback } from "react";
+import React, { useLayoutEffect, useMemo, useCallback, useEffect } from "react";
 import { HeaderBackButton } from "@react-navigation/elements";
 import { RootNavigationScreenProp } from "src/types";
 import {
@@ -60,7 +60,7 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
         />
       ),
     });
-  }, [navigation]);
+  }, [navigation, renderHeaderTitle]);
 
   const [createMessageMutation] = useCreateNewsTalkRoomMessageMutation();
 
