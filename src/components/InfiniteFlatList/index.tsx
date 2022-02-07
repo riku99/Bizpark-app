@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useState } from "react";
 import { FlatList, FlatListProps } from "react-native";
 import { Indicator } from "src/components/Indicator";
 
@@ -10,31 +10,23 @@ export const InfiniteFlatList = <T extends {}>({
   infiniteLoad,
   ...props
 }: Props<T>) => {
-  const [listHeight, setListHeight] = useState(0);
-  const [contentsHeight, setContentsHeight] = useState(0);
   const [
     onEndReachedCalledDuringMomentum,
     setOnEndReachedCalledDuringMomentum,
   ] = useState(false);
   const [isInfiniteLoading, setIsInfiniteLoading] = useState(false);
 
-  const renderBottomIndicator = () => {
+  const renderBottomIndicator = useCallback(() => {
     if (isInfiniteLoading) {
       return <Indicator style={{ marginTop: 10, height: 55 }} />;
     } else {
       return null;
     }
-  };
+  }, [isInfiniteLoading]);
 
-  const onEndReached = async () => {
-    // コンテンツのサイズがリストよりも大きい場合のみ実行。これないとアイテム数が少なくて画面サイズ超えていない時にも実行されてしまう
-    if (
-      contentsHeight &&
-      listHeight &&
-      contentsHeight > listHeight &&
-      !onEndReachedCalledDuringMomentum &&
-      !isInfiniteLoading
-    ) {
+  const onEndReached = useCallback(async () => {
+    if (!onEndReachedCalledDuringMomentum && !isInfiniteLoading) {
+      console.log("load!");
       setIsInfiniteLoading(true);
       await infiniteLoad();
 
@@ -45,11 +37,11 @@ export const InfiniteFlatList = <T extends {}>({
         setIsInfiniteLoading(false);
       }, 200);
     }
-  };
+  }, [onEndReachedCalledDuringMomentum, isInfiniteLoading]);
 
-  const onMomentumScrollBegin = () => {
+  const onMomentumScrollBegin = useCallback(() => {
     setOnEndReachedCalledDuringMomentum(false);
-  };
+  }, []);
 
   return (
     <FlatList
@@ -57,12 +49,6 @@ export const InfiniteFlatList = <T extends {}>({
       onEndReached={onEndReached}
       ListFooterComponent={renderBottomIndicator}
       onMomentumScrollBegin={onMomentumScrollBegin}
-      onLayout={(e) => {
-        setListHeight(e.nativeEvent.layout.height);
-      }}
-      onContentSizeChange={(w, h) => {
-        setContentsHeight(h);
-      }}
       indicatorStyle="white"
       {...props}
     />
