@@ -119,6 +119,12 @@ const cache = new InMemoryCache({
         members: relayStylePagination(),
       },
     },
+    NewsTalkRoom: {
+      fields: {
+        mesages: relayStylePagination(),
+        members: relayStylePagination(),
+      },
+    },
   },
 });
 

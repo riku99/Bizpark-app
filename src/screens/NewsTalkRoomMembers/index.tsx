@@ -9,6 +9,7 @@ import { MemberListItem } from "./MemberListItem";
 import { InfiniteFlatList } from "src/components/InfiniteFlatList";
 import { SafeAreaView } from "react-native";
 import { Indicator } from "src/components/Indicator";
+import { btoa } from "react-native-quick-base64";
 
 type Props = RootNavigationScreenProp<"NewsTalkRoomMembers">;
 
@@ -32,6 +33,7 @@ export const NewsTalkRoomMembersScreen = ({ navigation, route }: Props) => {
       talkRoomId,
     },
     fetchPolicy: "network-only",
+    nextFetchPolicy: "cache-first",
   });
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
@@ -48,7 +50,21 @@ export const NewsTalkRoomMembersScreen = ({ navigation, route }: Props) => {
     );
   }, []);
 
-  const inifiniteLoad = async () => {};
+  const inifiniteLoad = async () => {
+    if (membersData) {
+      const { pageInfo } = membersData.newsTalkRoom.members;
+
+      if (pageInfo.hasNextPage) {
+        const { endCursor } = pageInfo;
+
+        await fetchMore({
+          variables: {
+            after: endCursor ? btoa(endCursor) : null,
+          },
+        });
+      }
+    }
+  };
 
   if (!membersData) {
     return <Indicator style={{ marginTop: 10 }} />;
