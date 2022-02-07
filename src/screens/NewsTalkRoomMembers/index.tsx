@@ -1,11 +1,14 @@
 import React, { useLayoutEffect, useCallback } from "react";
-import { Box } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import {
   useGetNewsTalkRoomMembersQuery,
   NewsTalkRoomMemberEdge,
+  useMeQuery,
 } from "src/generated/graphql";
-import { MemberListItem } from "src/components/TalkRoomMemberListItem";
+import { MemberListItem } from "./MemberListItem";
+import { InfiniteFlatList } from "src/components/InfiniteFlatList";
+import { SafeAreaView } from "react-native";
+import { Indicator } from "src/components/Indicator";
 
 type Props = RootNavigationScreenProp<"NewsTalkRoomMembers">;
 
@@ -13,6 +16,10 @@ type Item = NewsTalkRoomMemberEdge;
 
 export const NewsTalkRoomMembersScreen = ({ navigation, route }: Props) => {
   const { talkRoomId } = route.params;
+
+  const {
+    data: { me },
+  } = useMeQuery();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -28,8 +35,34 @@ export const NewsTalkRoomMembersScreen = ({ navigation, route }: Props) => {
   });
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
-    return <MemberListItem item={item} talkRoomId={talkRoomId} />;
+    const { user } = item.node;
+
+    const swipeEnabled = user.id !== me.id;
+
+    return (
+      <MemberListItem
+        user={{ id: user.id, name: user.name, imageUrl: user.imageUrl }}
+        talkRoomId={talkRoomId}
+        swipeEnabled={swipeEnabled}
+      />
+    );
   }, []);
 
-  return <Box></Box>;
+  const inifiniteLoad = async () => {};
+
+  if (!membersData) {
+    return <Indicator style={{ marginTop: 10 }} />;
+  }
+
+  return (
+    <SafeAreaView style={{ flex: 1 }}>
+      <InfiniteFlatList
+        data={membersData.newsTalkRoom.members.edges}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.node.id.toString()}
+        initialNumToRender={15}
+        infiniteLoad={inifiniteLoad}
+      />
+    </SafeAreaView>
+  );
 };
