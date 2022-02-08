@@ -8,7 +8,6 @@ import React, { useMemo } from "react";
 import { HomeStack } from "./Home";
 import {
   useGetThoughtTalkRoomsQuery,
-  useGetNewsTalkRoomMessagesQuery,
   useGetNewsTalkRoomsQuery,
 } from "src/generated/graphql";
 import { Badge } from "src/components/Badge";
