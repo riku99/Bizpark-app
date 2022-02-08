@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useCallback, useState } from "react";
+import React, { useLayoutEffect, useCallback } from "react";
 import { RootNavigationScreenProp } from "src/types";
 import {
   useGetThoughtTalkRoomMembersQuery,
@@ -10,7 +10,7 @@ import { Indicator } from "src/components/Indicator";
 import { InfiniteFlatList } from "src/components/InfiniteFlatList";
 import { btoa } from "react-native-quick-base64";
 import { SafeAreaView } from "react-native";
-import { MemberListItem } from "../../components/TalkRoomMemberListItem";
+import { MemberListItem } from "./MemberListItem";
 
 type Props = RootNavigationScreenProp<"ThoughtTalkRoomMembers">;
 

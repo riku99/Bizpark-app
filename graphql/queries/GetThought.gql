@@ -1,0 +1,6 @@
+query GetThought($id: ID!) {
+  thought(id: $id) {
+    ...ThoughtParts
+    picked
+  }
+}

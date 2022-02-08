@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import {
   Box,
   Text,
@@ -12,7 +12,6 @@ import {
 import { RootNavigationScreenProp } from "src/types";
 import { Alert, StyleSheet } from "react-native";
 import { CheckBox } from "src/components/CheckBox";
-import { useCustomToast } from "src/hooks/toast";
 import {
   useThoughtCacheFragment,
   useCreatePick,
@@ -30,33 +29,59 @@ import { useReactiveVar } from "@apollo/client";
 import {
   useDeleteThoughtMutation,
   CustomErrorResponseCode,
+  useGetThoughtQuery,
 } from "src/generated/graphql";
 import { spinnerVisibleVar } from "src/stores/spinner";
 import { useToast } from "react-native-toast-notifications";
 import { JoinButton } from "./JoinButton";
+import { Indicator } from "src/components/Indicator";
+import { getGraphQLError } from "src/utils";
 
 type Props = {} & RootNavigationScreenProp<"Thought">;
 
 export const ThoughtScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
-  const { readThoughtFragment } = useThoughtCacheFragment();
-  const cacheData = readThoughtFragment(id);
+
+  const { data: thoughtData, error } = useGetThoughtQuery({
+    variables: {
+      id,
+    },
+  });
+
+  useEffect(() => {
+    if (error) {
+      const gqlError = getGraphQLError(error, 0);
+      if (gqlError && gqlError.code === CustomErrorResponseCode.NotFound) {
+        Alert.alert("投稿が見つかりませんでした", "", [
+          {
+            text: "OK",
+            onPress: () => {
+              navigation.goBack();
+            },
+          },
+        ]);
+      }
+    }
+  }, [error]);
+
   const [createPickMutation] = useCreatePick();
   const [deletePickMutation] = useDeletePick();
   const [deleteThoughtMutation] = useDeleteThoughtMutation();
-  const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
+
+  const [picked, setPicked] = useState(
+    thoughtData ? thoughtData.thought.picked : false
+  );
   const [imageViewing, setImageViewing] = useState<number | null>(null);
+
   const { colors } = useTheme();
   const myId = useReactiveVar(meVar.id);
   const toast = useToast();
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: cacheData.title ?? "Not title",
+      title: thoughtData?.thought.title ?? "",
     });
-  }, [navigation]);
-
-  const { noDataToast } = useCustomToast();
+  }, [navigation, thoughtData]);
 
   const onCheckPress = async () => {
     try {
@@ -82,15 +107,19 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  if (!cacheData) {
-    noDataToast();
+  if (!thoughtData) {
+    return <Indicator style={{ marginTop: 10 }} />;
   }
 
   const { bottom } = useSafeAreaInsets();
 
-  const imageViewingData = cacheData.images.map((img) => ({ uri: img.url }));
+  const imageViewingData = thoughtData.thought.images.map((img) => ({
+    uri: img.url,
+  }));
 
-  const isMyItem = myId === cacheData.contributor.id;
+  const { contributor, text, images } = thoughtData.thought;
+
+  const isMyItem = myId === contributor.id;
 
   const deleteThought = async () => {
     try {
@@ -98,7 +127,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
       await deleteThoughtMutation({
         variables: {
           input: {
-            id: cacheData.id,
+            id: thoughtData.thought.id,
           },
         },
       });
@@ -125,7 +154,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 
   const onMenuAction = async (id: string) => {
     if (id === "delete") {
-      Alert.alert("削除する?", "削除してよろしいですか?", [
+      Alert.alert("削除する", "削除してよろしいですか?", [
         {
           text: "キャンセル",
           style: "cancel",
@@ -143,125 +172,115 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 
   return (
     <Box style={styles.container} pb={bottom}>
-      {cacheData ? (
-        <>
-          <ScrollView
-            px={4}
-            _contentContainerStyle={{
-              paddingBottom: BOTTOM_CONTENTS_HEIGHT,
+      <ScrollView
+        px={4}
+        _contentContainerStyle={{
+          paddingBottom: BOTTOM_CONTENTS_HEIGHT,
+        }}
+      >
+        <Box
+          flexDirection="row"
+          alignItems="center"
+          justifyContent="space-between"
+          mt={2}
+        >
+          <Pressable
+            onPress={() => {
+              navigation.navigate("UserProfile", {
+                id: contributor.id,
+              });
             }}
           >
-            <Box
-              flexDirection="row"
-              alignItems="center"
-              justifyContent="space-between"
-              mt={2}
-            >
+            <HStack alignItems="center">
+              <UserImage uri={contributor.imageUrl} size={USER_IMAGE_SIZE} />
+              <Text ml={4} fontWeight="bold" fontSize={16}>
+                {contributor.name}
+              </Text>
+            </HStack>
+          </Pressable>
+
+          {/* 現在は項目が「削除」のみなのでhorizontalアイコンも表示しない */}
+          {isMyItem && (
+            <Menu onAction={onMenuAction} isMyItem={isMyItem}>
+              <MaterialCommunityIcons
+                name="dots-horizontal"
+                size={24}
+                color={useColorModeValue(colors.textBlack, colors.textWhite)}
+              />
+            </Menu>
+          )}
+        </Box>
+
+        <Box flexDirection="row" mt={4}>
+          <Text color="pink" fontWeight="bold" fontSize={18}>
+            Pick
+          </Text>
+          <CheckBox
+            style={{ height: 28, width: 28, marginLeft: 6 }}
+            checked={picked}
+            onPress={onCheckPress}
+          />
+        </Box>
+
+        <Text fontSize={16} mt={4}>
+          {text}
+        </Text>
+
+        <HStack flexWrap="wrap" justifyContent="space-between" mt={4}>
+          {images.map((img, idx) => {
+            return (
               <Pressable
+                key={img.id}
+                w={"49%"}
+                h={"32"}
+                mt={2}
                 onPress={() => {
-                  navigation.navigate("UserProfile", {
-                    id: cacheData.contributor.id,
-                  });
+                  setImageViewing(idx);
                 }}
               >
-                <HStack alignItems="center">
-                  <UserImage
-                    uri={cacheData.contributor.imageUrl}
-                    size={USER_IMAGE_SIZE}
-                  />
-                  <Text ml={4} fontWeight="bold" fontSize={16}>
-                    {cacheData.contributor.name}
-                  </Text>
-                </HStack>
-              </Pressable>
-
-              {/* 現在は項目が「削除」のみなのでhorizontalアイコンも表示しない */}
-              {isMyItem && (
-                <Menu onAction={onMenuAction} isMyItem={isMyItem}>
-                  <MaterialCommunityIcons
-                    name="dots-horizontal"
-                    size={24}
-                    color={useColorModeValue(
-                      colors.textBlack,
-                      colors.textWhite
-                    )}
-                  />
-                </Menu>
-              )}
-            </Box>
-
-            <Box flexDirection="row" mt={4}>
-              <Text color="pink" fontWeight="bold" fontSize={18}>
-                Pick
-              </Text>
-              <CheckBox
-                style={{ height: 28, width: 28, marginLeft: 6 }}
-                checked={picked}
-                onPress={onCheckPress}
-              />
-            </Box>
-
-            <Text fontSize={16} mt={4}>
-              {cacheData.text}
-            </Text>
-
-            <HStack flexWrap="wrap" justifyContent="space-between" mt={4}>
-              {cacheData.images.map((img, idx) => {
-                return (
-                  <Pressable
-                    key={img.id}
-                    w={"49%"}
-                    h={"32"}
-                    mt={2}
-                    onPress={() => {
-                      setImageViewing(idx);
-                    }}
-                  >
-                    <Image
-                      w={"100%"}
-                      h={"100%"}
-                      borderRadius="md"
-                      source={{ uri: img.url }}
-                    />
-                  </Pressable>
-                );
-              })}
-            </HStack>
-          </ScrollView>
-
-          <MotiView
-            from={{ translateY: 180 }}
-            animate={{ translateY: 0 }}
-            transition={{ type: "timing", duration: 400 }}
-            style={{ height: BOTTOM_CONTENTS_HEIGHT }}
-          >
-            <Box
-              position="absolute"
-              bg={useColorModeValue("lt.bg", "dt.bg")}
-              w="100%"
-              h={BOTTOM_CONTENTS_HEIGHT}
-              bottom={0}
-              alignItems="center"
-            >
-              <Box w="90%" mt={4}>
-                <JoinButton
-                  thoughtId={id}
-                  contributorId={cacheData.contributor.id}
+                <Image
+                  w={"100%"}
+                  h={"100%"}
+                  borderRadius="md"
+                  source={{ uri: img.url }}
                 />
-              </Box>
-            </Box>
-          </MotiView>
+              </Pressable>
+            );
+          })}
+        </HStack>
+      </ScrollView>
 
-          <ImageView
-            visible={imageViewing !== null}
-            images={imageViewingData}
-            imageIndex={imageViewing}
-            onRequestClose={() => {
-              setImageViewing(null);
-            }}
-          />
-        </>
-      ) : null}
+      <MotiView
+        from={{ translateY: 180 }}
+        animate={{ translateY: 0 }}
+        transition={{ type: "timing", duration: 400 }}
+        style={{ height: BOTTOM_CONTENTS_HEIGHT }}
+      >
+        <Box
+          position="absolute"
+          bg={useColorModeValue("lt.bg", "dt.bg")}
+          w="100%"
+          h={BOTTOM_CONTENTS_HEIGHT}
+          bottom={0}
+          alignItems="center"
+        >
+          <Box w="90%" mt={4}>
+            <JoinButton
+              thoughtId={id}
+              contributorId={thoughtData.thought.contributor.id}
+            />
+          </Box>
+        </Box>
+      </MotiView>
+
+      <ImageView
+        visible={imageViewing !== null}
+        images={imageViewingData}
+        imageIndex={imageViewing}
+        onRequestClose={() => {
+          setImageViewing(null);
+        }}
+      />
     </Box>
   );
 };
