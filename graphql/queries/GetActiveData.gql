@@ -2,4 +2,7 @@ query GetActiveData {
   thoughtTalkRooms: thoughtTalkRooms {
     ...ThoughtTalkRoomParts
   }
+  newsTalkRooms: newsTalkRooms {
+    ...NewsTalkRoomParts
+  }
 }

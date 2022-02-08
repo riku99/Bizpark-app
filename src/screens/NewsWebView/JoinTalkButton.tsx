@@ -3,6 +3,7 @@ import { Box, Button } from "native-base";
 import { CloseButton } from "src/components/CloseButton";
 import { StyleSheet } from "react-native";
 import {
+  CustomErrorResponseCode,
   GetNewsTalkRoomsDocument,
   GetNewsTalkRoomsQuery,
   useJoinNewsTalkRoomMutation,
@@ -11,6 +12,8 @@ import { useFindNewsTalkRoomFromNewsId } from "src/hooks/newsTalkRoom";
 import { spinnerVisibleVar } from "src/stores/spinner";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
+import { getGraphQLError } from "src/utils";
+import { useToast } from "react-native-toast-notifications";
 
 type Props = {
   onCloseButtonPress: () => void;
@@ -24,6 +27,8 @@ export const JoinTalkButton = ({ onCloseButtonPress, newsId }: Props) => {
 
   const { findNewsTalkRoom } = useFindNewsTalkRoomFromNewsId();
 
+  const toast = useToast();
+
   const onJoinPress = async () => {
     let talkRoomId: number | null = null;
 
@@ -34,7 +39,7 @@ export const JoinTalkButton = ({ onCloseButtonPress, newsId }: Props) => {
     } else {
       try {
         spinnerVisibleVar(true);
-        const { data } = await joinNewsTalkRoomMutation({
+        await joinNewsTalkRoomMutation({
           variables: {
             input: {
               newsId,
@@ -62,6 +67,13 @@ export const JoinTalkButton = ({ onCloseButtonPress, newsId }: Props) => {
         });
       } catch (e) {
         console.log(e);
+        const gqlError = getGraphQLError(e, 0);
+        if (
+          gqlError &&
+          gqlError.code === CustomErrorResponseCode.InvalidRequest
+        ) {
+          toast.show(gqlError.message, { type: "danger" });
+        }
       } finally {
         spinnerVisibleVar(false);
       }

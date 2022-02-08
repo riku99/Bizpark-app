@@ -29,7 +29,6 @@ export const InfiniteFlatList = <T extends {}>({
 
   const onEndReached = useCallback(async () => {
     if (!onEndReachedCalledDuringMomentum && !isInfiniteLoading) {
-      console.log("load!");
       setIsInfiniteLoading(true);
       await infiniteLoad();
 
