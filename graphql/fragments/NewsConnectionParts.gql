@@ -1,6 +1,7 @@
 fragment NewsConnectionParts on NewsConnection {
   edges {
     node {
+      picked
       ...NewsParts
     }
     cursor

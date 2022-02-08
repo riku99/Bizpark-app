@@ -1,0 +1,8 @@
+fragment ThoughtTalkRoomParentParts on Thought {
+  id
+  title
+  text
+  contributor {
+    id
+  }
+}

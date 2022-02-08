@@ -1,32 +1,18 @@
 import React, { useCallback, useState } from "react";
-import {
-  Box,
-  FlatList,
-  HStack,
-  Pressable,
-  Text,
-  Divider,
-  useColorModeValue,
-} from "native-base";
+import { Box, FlatList, useColorModeValue } from "native-base";
 import {
   useGetThoughtTalkRoomsQuery,
-  useMeQuery,
   useGetOutThoughtTalkRoomMutation,
-  GetThoughtTalkRoomsDocument,
-  GetThoughtTalkRoomsQuery,
   GetThoughtTalkRoomsQueryResult,
-  CustomErrorResponseCode,
 } from "src/generated/graphql";
-import { UserImages } from "src/components/UserImages";
 import { RootNavigationProp } from "src/types";
 import { useNavigation } from "@react-navigation/native";
-import { Badge } from "src/components/Badge";
 import { InstaLikeModal } from "src/components/InstaLikeModal";
 import { Alert } from "react-native";
 import { useToast } from "react-native-toast-notifications";
 import * as Haptics from "expo-haptics";
-import { getGraphQLError, logJson } from "src/utils";
 import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoom";
+import { TalkRoomListItem } from "src/components/TalkRoomListItem";
 
 type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 
@@ -36,9 +22,6 @@ export const ThoughtTalkRoomList = React.memo(() => {
   const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
   const textGray = useColorModeValue("lt.textGray", "dt.textGray");
   const navigation = useNavigation<RootNavigationProp<"Tab">>();
-  const {
-    data: { me },
-  } = useMeQuery();
   const toast = useToast();
   const [modalData, setModalData] = useState<{ roomId: number } | null>(null);
 
@@ -65,7 +48,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
               text: "抜ける",
               style: "destructive",
               onPress: async () => {
-                if (modalList) {
+                if (modalData) {
                   try {
                     await getOutMutation({
                       variables: {
@@ -80,12 +63,6 @@ export const ThoughtTalkRoomList = React.memo(() => {
 
                     toast.show("削除しました", { type: "success" });
                   } catch (e) {
-                    const error = getGraphQLError(e, 0);
-                    if (
-                      error?.code === CustomErrorResponseCode.InvalidRequest
-                    ) {
-                      toast.show(error.message, { type: "danger" });
-                    }
                   } finally {
                     setModalData(null);
                   }
@@ -100,58 +77,44 @@ export const ThoughtTalkRoomList = React.memo(() => {
 
   const renderItem = useCallback(
     ({ item }: { item: Item }) => {
-      let images: string[] = [];
+      let userImageUrls: string[] = [];
 
       const { edges } = item.messages;
 
       for (let i = 0; i <= 7; i++) {
         const member = item.members.edges[i];
         if (member) {
-          images.push(member.node.user.imageUrl);
+          userImageUrls.push(member.node.user.imageUrl);
         }
       }
 
+      const title = item.thought.title ? item.thought.title : item.thought.text;
+      const text = edges.length ? edges[0].node.text : "";
+      const allMessageSeen = item.allMessageSeen;
+
+      const onPress = () => {
+        navigation.navigate("ThoughtTalkRoom", {
+          screen: "ThoughtTalkRoomMain",
+          params: {
+            id: item.id,
+          },
+        });
+      };
+
+      const onLongPress = () => {
+        Haptics.selectionAsync();
+        setModalData({ roomId: item.id });
+      };
+
       return (
-        <Pressable
-          px="4"
-          _pressed={{
-            bg: pressedColor,
-          }}
-          onPress={() => {
-            navigation.navigate("TalkRoom", {
-              screen: "TalkRoomMain",
-              params: {
-                id: item.id,
-              },
-            });
-          }}
-          onLongPress={() => {
-            Haptics.selectionAsync();
-            setModalData({ roomId: item.id });
-          }}
-        >
-          <HStack alignItems="center" py="4" justifyContent="space-between">
-            <Box w="76%">
-              <Text h="7" fontWeight="bold" fontSize="14">
-                {item.thought.title ? item.thought.title : item.thought.text}
-              </Text>
-
-              <Text
-                color={item.allMessageSeen ? textGray : undefined}
-                h="7"
-                fontWeight={!item.allMessageSeen ? "bold" : undefined}
-              >
-                {edges.length ? edges[0].node.text : ""}
-              </Text>
-              <UserImages data={images} imageSize="8" mt="1" />
-            </Box>
-
-            {/* バッジ */}
-            {!item.allMessageSeen && <Badge size="3" />}
-          </HStack>
-
-          <Divider />
-        </Pressable>
+        <TalkRoomListItem
+          title={title}
+          text={text}
+          allMessageSeen={allMessageSeen}
+          onPress={onPress}
+          onLongPress={onLongPress}
+          userImageUrls={userImageUrls}
+        />
       );
     },
     [pressedColor, textGray]

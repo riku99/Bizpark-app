@@ -1,0 +1,5 @@
+query GetOneNews($id: Int!) {
+  oneNews(id: $id) {
+    ...NewsParts
+  }
+}

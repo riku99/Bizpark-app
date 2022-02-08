@@ -7,7 +7,7 @@ import { Pick } from "src/components/Pick";
 import { useCreateNewsPick, useDeleteNewsPick } from "src/hooks/apollo";
 
 type Props = {
-  id: string;
+  id: number;
 } & ComponentProps<typeof Pressable>;
 
 export const NewsCard = React.memo(({ id, ...props }: Props) => {

@@ -1,0 +1,18 @@
+fragment NewsTalkRoomMessageParts on NewsTalkRoomMessage {
+  id
+  text
+  createdAt
+  sender {
+    ...UserParts
+  }
+  roomId
+  replyMessage {
+    id
+    text
+    createdAt
+    sender {
+      id
+      name
+    }
+  }
+}

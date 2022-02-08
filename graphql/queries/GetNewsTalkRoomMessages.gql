@@ -1,0 +1,16 @@
+query GetNewsTalkRoomMessages($talkRoomId: Int!, $messageCursor: String) {
+  newsTalkRoom(id: $talkRoomId) {
+    id
+    messages(first: 20, after: $messageCursor) {
+      edges {
+        node {
+          ...NewsTalkRoomMessageParts
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+  }
+}

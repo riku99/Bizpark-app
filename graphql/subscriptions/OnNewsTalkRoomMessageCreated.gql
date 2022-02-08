@@ -1,0 +1,15 @@
+subscription OnNewsTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
+  newsTalkRoomMessageCreated(roomIds: $roomIds, userId: $userId) {
+    ...NewsTalkRoomMessageParts
+    talkRoom {
+      id
+      updatedAt
+      createdAt
+      allMessageSeen
+      news {
+        id
+        title
+      }
+    }
+  }
+}

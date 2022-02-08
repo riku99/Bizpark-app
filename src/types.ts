@@ -2,9 +2,10 @@ import {
   NativeStackScreenProps,
   NativeStackNavigationProp,
 } from "@react-navigation/native-stack";
-import { SettingsParamList } from "src/navigations/Settings";
-import { TalkRoomStackParamList } from "src/navigations/TalkRoom";
 import { NavigatorScreenParams } from "@react-navigation/native";
+import { SettingsParamList } from "src/navigations/Settings";
+import { ThoughtTalkRoomStackParamList } from "src/navigations/ThoughtTalkRoom";
+import { NewsTalkRoomStackParamList } from "src/navigations/NewsTalkRoom";
 
 type ThoughtShare = {
   title?: string;
@@ -43,7 +44,7 @@ export type RootStackParamList = {
   ThoughtWriting: undefined;
   ThoughtShare: ThoughtShare;
   NewsWebView: {
-    id: string;
+    id: number;
   };
   UserEdit: undefined;
   UserItemEdit: {
@@ -55,9 +56,11 @@ export type RootStackParamList = {
     id: string;
   };
   Settings: undefined;
-  TalkRoom: NavigatorScreenParams<TalkRoomStackParamList>;
+  ThoughtTalkRoom: NavigatorScreenParams<ThoughtTalkRoomStackParamList>;
+  NewsTalkRoom: NavigatorScreenParams<NewsTalkRoomStackParamList>;
 } & SettingsParamList &
-  TalkRoomStackParamList;
+  ThoughtTalkRoomStackParamList &
+  NewsTalkRoomStackParamList;
 
 export type RootNavigationScreenProp<
   T extends keyof RootStackParamList

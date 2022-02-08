@@ -1,0 +1,5 @@
+mutation CreateNewsTalkRoomMessage($input: CreateNewsTalkRoomMessageInput!) {
+  createNewsTalkRoomMessage(input: $input) {
+    ...NewsTalkRoomMessageParts
+  }
+}

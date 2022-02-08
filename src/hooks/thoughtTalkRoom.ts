@@ -1,14 +1,13 @@
 import {
   OnThoughtTalkRoomMessageCreatedDocument,
   OnThoughtTalkRoomMessageCreatedSubscription,
-  ThoughtTalkRoomPartsFragment,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,
   OnThoughtTalkRoomMessageCreatedSubscriptionVariables,
   useGetThoughtTalkRoomsQuery,
 } from "src/generated/graphql";
 import { useEffect, useCallback, useMemo, useState } from "react";
-import { useReactiveVar, useApolloClient, gql } from "@apollo/client";
+import { useReactiveVar, useApolloClient } from "@apollo/client";
 import { meVar } from "src/stores/me";
 import { logJson } from "src/utils";
 import { AppState, AppStateStatus } from "react-native";
@@ -36,7 +35,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
 
   // Active時、非アクティブ時の処理
   useEffect(() => {
-    const onChange = async (nextState: AppStateStatus) => {
+    const onChange = (nextState: AppStateStatus) => {
       if (nextState === "active") {
         setIsActive(true);
       } else {
@@ -103,7 +102,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
 
           const newRoomData = {
             ...targetRoom,
-            allMessageSeen: isMySentData ? true : false,
+            allMessageSeen: isMySentData,
             messages: newConnection,
           };
 
@@ -125,76 +124,6 @@ export const useToughtTalkRoomsWithSubsciption = () => {
       };
     }
   }, [isActive, myId, subscriptionVariables, subscribeToMore]);
-};
-
-export const useThoughtTalkRoomReadFragment = ({ id }: { id: number }) => {
-  const client = useApolloClient();
-  return client.cache.readFragment<ThoughtTalkRoomPartsFragment>({
-    id: client.cache.identify({
-      __typename: "ThoughtTalkRoom",
-      id,
-    }),
-    fragment: gql`
-      fragment ThoughtTalkRoomF on ThoughtTalkRoom {
-        id
-        members {
-          edges {
-            node {
-              id
-              user {
-                id
-                name
-                imageUrl
-              }
-            }
-            cursor
-          }
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-        }
-        messages(first: 20) {
-          edges {
-            node {
-              id
-              text
-              createdAt
-              sender {
-                id
-                name
-                imageUrl
-              }
-              roomId
-              replyMessage {
-                id
-                text
-                createdAt
-                sender {
-                  id
-                  name
-                }
-              }
-            }
-          }
-          pageInfo {
-            hasNextPage
-            hasPreviousPage
-            startCursor
-            endCursor
-          }
-        }
-        thought {
-          id
-          contributor {
-            id
-          }
-        }
-      }
-    `,
-  });
 };
 
 export const useFindThoughtTalkRoomsByThoughtId = ({

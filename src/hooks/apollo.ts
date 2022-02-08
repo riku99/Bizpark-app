@@ -46,7 +46,7 @@ export const useThoughtCacheFragment = () => {
 
 export const useNewsCacheFragment = () => {
   const { cache } = useApolloClient();
-  const readNewsFragment = useCallback(({ id }: { id: string }) => {
+  const readNewsFragment = useCallback(({ id }: { id: number }) => {
     const data = cache.readFragment<News>({
       id: cache.identify({
         __typename: "News",

@@ -17,7 +17,8 @@ import { UserEditScreen } from "src/screens/UserEdit";
 import { UserItemEditScreen } from "src/screens/UserItemEdit";
 import { UserProfileScreen } from "src/screens/UserProfile";
 import { Settings } from "./Settings";
-import { TalkRoomStack } from "./TalkRoom";
+import { ThoughtTalkRoomStack } from "./ThoughtTalkRoom";
+import { NewsTalkRoomStack } from "./NewsTalkRoom";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -72,8 +73,13 @@ export const RootNavigation = React.memo(() => {
             <Stack.Screen name="UserItemEdit" component={UserItemEditScreen} />
             <Stack.Screen name="UserProfile" component={UserProfileScreen} />
             <Stack.Screen
-              name="TalkRoom"
-              component={TalkRoomStack}
+              name="ThoughtTalkRoom"
+              component={ThoughtTalkRoomStack}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="NewsTalkRoom"
+              component={NewsTalkRoomStack}
               options={{ headerShown: false }}
             />
             <Stack.Group

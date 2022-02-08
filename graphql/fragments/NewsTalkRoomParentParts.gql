@@ -1,4 +1,4 @@
-fragment NewsParts on News {
+fragment NewsTalkRoomParentParts on News {
   id
   title
   link

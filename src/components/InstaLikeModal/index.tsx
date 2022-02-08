@@ -18,6 +18,8 @@ type Props = {
 
 export const InstaLikeModal = React.memo(
   ({ onCancel, list, isVisible, onBackdropPress }: Props) => {
+    const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
+
     return (
       <Modal
         isVisible={isVisible}
@@ -37,7 +39,13 @@ export const InstaLikeModal = React.memo(
                   bg={useColorModeValue("#e6e6e6", "#333333")}
                 />
               )}
-              <Pressable style={styles.item} onPress={l.onPress}>
+              <Pressable
+                style={styles.item}
+                onPress={l.onPress}
+                _pressed={{
+                  bg: pressedColor,
+                }}
+              >
                 <Text
                   style={[styles.itemTitle]}
                   color={
@@ -56,6 +64,7 @@ export const InstaLikeModal = React.memo(
           style={[styles.cancelContainer, styles.item]}
           onPress={onCancel}
           bg={useColorModeValue("white", "dt.darkGray")}
+          _pressed={{ bg: pressedColor }}
         >
           <Text style={styles.itemTitle}>キャンセル</Text>
         </Pressable>

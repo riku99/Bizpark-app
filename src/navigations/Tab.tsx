@@ -1,16 +1,20 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { AntDesign } from "@expo/vector-icons";
 import { MyPageStack } from "./MyPage";
-import { TalkListScreen } from "src/screens/TalkList";
+import { TalkListScreen } from "src/screens/TalkRoomList";
 import { NewsScreen } from "src/screens/News";
 import { useColorModeValue, useTheme, Box } from "native-base";
 import React, { useMemo } from "react";
 import { HomeStack } from "./Home";
-import { useGetThoughtTalkRoomsQuery } from "src/generated/graphql";
+import {
+  useGetThoughtTalkRoomsQuery,
+  useGetNewsTalkRoomsQuery,
+} from "src/generated/graphql";
 import { Badge } from "src/components/Badge";
 import { StyleSheet } from "react-native";
 import { useToughtTalkRoomsWithSubsciption } from "src/hooks/thoughtTalkRoom";
 import { useActiveData } from "src/hooks/active";
+import { useNewsTalkRoomsWithSusbscription } from "src/hooks/newsTalkRoom";
 
 type TabParamList = {
   Home: undefined;
@@ -24,22 +28,36 @@ const Tab = createBottomTabNavigator<TabParamList>();
 export const BottomTab = () => {
   const { colors } = useTheme();
 
-  const { data } = useGetThoughtTalkRoomsQuery({
+  const { data: thoughtTalkRoomData } = useGetThoughtTalkRoomsQuery({
+    fetchPolicy: "cache-only",
+  });
+
+  const { data: newsTalkRoomsData } = useGetNewsTalkRoomsQuery({
     fetchPolicy: "cache-only",
   });
 
   const talkTabBadge = useMemo(() => {
-    if (data) {
-      const hasNotSeenMessageRoom = data.thoughtTalkRooms.filter(
-        (room) => !room.allMessageSeen
-      );
-
-      return !!hasNotSeenMessageRoom.length;
+    if (!thoughtTalkRoomData || !newsTalkRoomsData) {
+      return false;
     }
-  }, [data]);
 
-  useToughtTalkRoomsWithSubsciption();
+    const notSeenMessageThoughtTalkRoom = thoughtTalkRoomData.thoughtTalkRooms.filter(
+      (room) => !room.allMessageSeen
+    );
+
+    const notSeenMessageNewsTalkRoom = newsTalkRoomsData.newsTalkRooms.filter(
+      (room) => !room.allMessageSeen
+    );
+
+    return (
+      !!notSeenMessageThoughtTalkRoom.length ||
+      !!notSeenMessageNewsTalkRoom.length
+    );
+  }, [thoughtTalkRoomData, newsTalkRoomsData]);
+
   useActiveData();
+  useToughtTalkRoomsWithSubsciption();
+  useNewsTalkRoomsWithSusbscription();
 
   return (
     <Tab.Navigator

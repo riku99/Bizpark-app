@@ -1,6 +1,5 @@
-fragment ThoughtTalkRoomParts on ThoughtTalkRoom {
+fragment NewsTalkRoomParts on NewsTalkRoom {
   id
-  createdAt
   allMessageSeen
   members {
     edges {
@@ -16,13 +15,13 @@ fragment ThoughtTalkRoomParts on ThoughtTalkRoom {
       ...PageInfoParts
     }
   }
-  thought {
-    ...ThoughtTalkRoomParentParts
+  news {
+    ...NewsParts
   }
   messages(first: 20) {
     edges {
       node {
-        ...ThoughtTalkRoomMessageParts
+        ...NewsTalkRoomMessageParts
       }
       cursor
     }

@@ -1,0 +1,19 @@
+query GetNewsTalkRoomMembers($talkRoomId: Int!, $after: String) {
+  newsTalkRoom(id: $talkRoomId) {
+    id
+    members(first: 20, after: $after) {
+      edges {
+        node {
+          id
+          user {
+            ...UserParts
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+  }
+}

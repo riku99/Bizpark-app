@@ -90,9 +90,44 @@ const cache = new InMemoryCache({
             return incoming;
           },
         },
+        thoughtTalkRoom: {
+          read: (_, { args, toReference }) => {
+            return toReference({
+              __typename: "ThoughtTalkRoom",
+              id: args.id,
+            });
+          },
+        },
+        newsTalkRooms: {
+          merge: (existing = [], incoming) => {
+            return incoming;
+          },
+        },
+        newsTalkRoom: {
+          read: (_, { args, toReference }) => {
+            return toReference({
+              __typename: "NewsTalkRoom",
+              id: args.id,
+            });
+          },
+        },
+        oneNews: {
+          read: (_, { args, toReference }) => {
+            return toReference({
+              __typename: "News",
+              id: args.id,
+            });
+          },
+        },
       },
     },
     ThoughtTalkRoom: {
+      fields: {
+        messages: relayStylePagination(),
+        members: relayStylePagination(),
+      },
+    },
+    NewsTalkRoom: {
       fields: {
         messages: relayStylePagination(),
         members: relayStylePagination(),

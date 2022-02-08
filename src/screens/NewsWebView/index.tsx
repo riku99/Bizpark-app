@@ -1,11 +1,11 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { RootNavigationScreenProp } from "src/types";
 import { WebView } from "react-native-webview";
-import { useNewsCacheFragment } from "src/hooks/apollo";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet, Alert } from "react-native";
 import { MotiView } from "moti";
-import { Box, Button } from "native-base";
-import { CloseButton } from "src/components/CloseButton";
+import { JoinTalkButton } from "./JoinTalkButton";
+import { useGetOneNewsQuery } from "src/generated/graphql";
+import { Indicator } from "src/components/Indicator";
 
 type Props = RootNavigationScreenProp<"NewsWebView">;
 
@@ -17,18 +17,44 @@ export const NewsWebViewScreen = ({ navigation, route }: Props) => {
     });
   }, []);
 
-  const { readNewsFragment } = useNewsCacheFragment();
-  const data = readNewsFragment({ id });
   const [talkButtonVisible, setTalkButtonVisible] = useState(true);
 
-  if (!data) {
-    return null;
+  const onJoinTalkRoomCloseButtonPress = () => {
+    setTalkButtonVisible(false);
+  };
+
+  const { data: newsData, error } = useGetOneNewsQuery({
+    variables: {
+      id,
+    },
+  });
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("ニュースが見つかりませんでした", "", [
+        {
+          text: "OK",
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+      ]);
+    }
+  }, [error]);
+
+  if (!newsData) {
+    return (
+      <Indicator
+        style={{ alignSelf: "center", marginTop: "55%" }}
+        size="large"
+      />
+    );
   }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
       <WebView
-        source={{ uri: data.link }}
+        source={{ uri: newsData.oneNews.link }}
         style={{ width: "100%", height: "100%" }}
         allowsInlineMediaPlayback={true}
         allowsFullscreenVideo={false}
@@ -43,24 +69,10 @@ export const NewsWebViewScreen = ({ navigation, route }: Props) => {
           animate={{ translateY: 0 }}
           transition={{ type: "timing", duration: 400 }}
         >
-          <Box
-            position="absolute"
-            w="90%"
-            alignItems="center"
-            alignSelf="center"
-            bottom={4}
-          >
-            <CloseButton
-              size={7}
-              style={styles.closeButton}
-              onPress={() => {
-                setTalkButtonVisible(false);
-              }}
-            />
-            <Button w="100%" _text={{ fontSize: 16 }}>
-              このニュースについてトークする
-            </Button>
-          </Box>
+          <JoinTalkButton
+            onCloseButtonPress={onJoinTalkRoomCloseButtonPress}
+            newsId={id}
+          />
         </MotiView>
       )}
     </SafeAreaView>
