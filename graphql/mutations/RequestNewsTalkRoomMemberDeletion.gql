@@ -1,0 +1,5 @@
+mutation RequestNewsTalkRoomMemberDeletion(
+  $input: RequestNewsTalkRoomMemberDeletionInput!
+) {
+  requestNewsTalkRoomMemberDeletion(input: $input)
+}

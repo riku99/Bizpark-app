@@ -183,6 +183,7 @@ export type Mutation = {
   getOutThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
   joinNewsTalkRoom: NewsTalkRoom;
   joinThoughtTalk: ThoughtTalkRoom;
+  requestNewsTalkRoomMemberDeletion?: Maybe<Scalars['Boolean']>;
   signOut: SignOutResponse;
   unblock: User;
   unfollow: User;
@@ -284,6 +285,11 @@ export type MutationJoinNewsTalkRoomArgs = {
 
 export type MutationJoinThoughtTalkArgs = {
   input: JoinTalkInput;
+};
+
+
+export type MutationRequestNewsTalkRoomMemberDeletionArgs = {
+  input: RequestNewsTalkRoomMemberDeletionInput;
 };
 
 
@@ -500,6 +506,11 @@ export type QueryUserThoughtsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first: Scalars['Int'];
   userId: Scalars['ID'];
+};
+
+export type RequestNewsTalkRoomMemberDeletionInput = {
+  memberId: Scalars['Int'];
+  talkRoomId: Scalars['Int'];
 };
 
 export type SignOutResponse = {
@@ -842,6 +853,13 @@ export type JoinThoughtTalkMutationVariables = Exact<{
 
 
 export type JoinThoughtTalkMutation = { __typename?: 'Mutation', joinThoughtTalk: { __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+
+export type RequestNewsTalkRoomMemberDeletionMutationVariables = Exact<{
+  input: RequestNewsTalkRoomMemberDeletionInput;
+}>;
+
+
+export type RequestNewsTalkRoomMemberDeletionMutation = { __typename?: 'Mutation', requestNewsTalkRoomMemberDeletion?: boolean | null | undefined };
 
 export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
 
@@ -1874,6 +1892,37 @@ export function useJoinThoughtTalkMutation(baseOptions?: Apollo.MutationHookOpti
 export type JoinThoughtTalkMutationHookResult = ReturnType<typeof useJoinThoughtTalkMutation>;
 export type JoinThoughtTalkMutationResult = Apollo.MutationResult<JoinThoughtTalkMutation>;
 export type JoinThoughtTalkMutationOptions = Apollo.BaseMutationOptions<JoinThoughtTalkMutation, JoinThoughtTalkMutationVariables>;
+export const RequestNewsTalkRoomMemberDeletionDocument = gql`
+    mutation RequestNewsTalkRoomMemberDeletion($input: RequestNewsTalkRoomMemberDeletionInput!) {
+  requestNewsTalkRoomMemberDeletion(input: $input)
+}
+    `;
+export type RequestNewsTalkRoomMemberDeletionMutationFn = Apollo.MutationFunction<RequestNewsTalkRoomMemberDeletionMutation, RequestNewsTalkRoomMemberDeletionMutationVariables>;
+
+/**
+ * __useRequestNewsTalkRoomMemberDeletionMutation__
+ *
+ * To run a mutation, you first call `useRequestNewsTalkRoomMemberDeletionMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRequestNewsTalkRoomMemberDeletionMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [requestNewsTalkRoomMemberDeletionMutation, { data, loading, error }] = useRequestNewsTalkRoomMemberDeletionMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useRequestNewsTalkRoomMemberDeletionMutation(baseOptions?: Apollo.MutationHookOptions<RequestNewsTalkRoomMemberDeletionMutation, RequestNewsTalkRoomMemberDeletionMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<RequestNewsTalkRoomMemberDeletionMutation, RequestNewsTalkRoomMemberDeletionMutationVariables>(RequestNewsTalkRoomMemberDeletionDocument, options);
+      }
+export type RequestNewsTalkRoomMemberDeletionMutationHookResult = ReturnType<typeof useRequestNewsTalkRoomMemberDeletionMutation>;
+export type RequestNewsTalkRoomMemberDeletionMutationResult = Apollo.MutationResult<RequestNewsTalkRoomMemberDeletionMutation>;
+export type RequestNewsTalkRoomMemberDeletionMutationOptions = Apollo.BaseMutationOptions<RequestNewsTalkRoomMemberDeletionMutation, RequestNewsTalkRoomMemberDeletionMutationVariables>;
 export const SignOutDocument = gql`
     mutation SignOut {
   signOut {

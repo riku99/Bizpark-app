@@ -1,6 +1,7 @@
 import React, { useCallback, useState } from "react";
 import { FlatList, FlatListProps } from "react-native";
 import { Indicator } from "src/components/Indicator";
+import { useColorModeValue } from "native-base";
 
 type Props<T> = {
   infiniteLoad: () => Promise<void>;
@@ -15,6 +16,8 @@ export const InfiniteFlatList = <T extends {}>({
     setOnEndReachedCalledDuringMomentum,
   ] = useState(false);
   const [isInfiniteLoading, setIsInfiniteLoading] = useState(false);
+
+  const indicatorStyle = useColorModeValue("black", "white");
 
   const renderBottomIndicator = useCallback(() => {
     if (isInfiniteLoading) {
@@ -49,7 +52,7 @@ export const InfiniteFlatList = <T extends {}>({
       onEndReached={onEndReached}
       ListFooterComponent={renderBottomIndicator}
       onMomentumScrollBegin={onMomentumScrollBegin}
-      indicatorStyle="white"
+      indicatorStyle={indicatorStyle}
       {...props}
     />
   );

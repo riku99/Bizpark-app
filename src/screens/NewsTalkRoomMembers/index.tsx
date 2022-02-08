@@ -46,6 +46,7 @@ export const NewsTalkRoomMembersScreen = ({ navigation, route }: Props) => {
         user={{ id: user.id, name: user.name, imageUrl: user.imageUrl }}
         talkRoomId={talkRoomId}
         swipeEnabled={swipeEnabled}
+        memberId={item.node.id}
       />
     );
   }, []);
@@ -72,7 +73,7 @@ export const NewsTalkRoomMembersScreen = ({ navigation, route }: Props) => {
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
-      <InfiniteFlatList
+      <InfiniteFlatList<Item>
         data={membersData.newsTalkRoom.members.edges}
         renderItem={renderItem}
         keyExtractor={(item) => item.node.id.toString()}

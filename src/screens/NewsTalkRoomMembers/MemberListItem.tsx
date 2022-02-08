@@ -9,7 +9,6 @@ import Animated, {
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-  runOnJS,
 } from "react-native-reanimated";
 import { ListItem } from "src/components/ListItem";
 import { UserImage } from "src/components/UserImage";
@@ -17,10 +16,16 @@ import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
 import { StyleSheet, Alert } from "react-native";
 import { Feather } from "@expo/vector-icons";
-import { useDeleteThoughtTalkRoomMemberMutation } from "src/generated/graphql";
+import {
+  CustomErrorResponseCode,
+  useRequestNewsTalkRoomMemberDeletionMutation,
+} from "src/generated/graphql";
+import { useToast } from "react-native-toast-notifications";
+import { getGraphQLError } from "src/utils";
 
 type Props = {
   talkRoomId: number;
+  memberId: number;
   user: {
     id: string;
     name: string;
@@ -32,12 +37,10 @@ type Props = {
 const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export const MemberListItem = React.memo(
-  ({ user, swipeEnabled, talkRoomId }: Props) => {
+  ({ user, swipeEnabled, talkRoomId, memberId }: Props) => {
     const navigation = useNavigation<
       RootNavigationProp<"ThoughtTalkRoomMembers">
     >();
-
-    const [isItemVisible, setIsItemVsisible] = useState(true);
 
     const translateX = useSharedValue(0);
     const itemHeight = useSharedValue(DEFAULT_ITEM_HEIGHT);
@@ -75,11 +78,53 @@ export const MemberListItem = React.memo(
       }
     );
 
-    const [deleteMemberMutation] = useDeleteThoughtTalkRoomMemberMutation();
+    const [
+      requestDeletionMutation,
+    ] = useRequestNewsTalkRoomMemberDeletionMutation();
 
-    if (!isItemVisible) {
-      return null;
-    }
+    const toast = useToast();
+
+    const onRequestPress = () => {
+      Alert.alert(
+        "削除を申請",
+        `${user.name}をこのトークルームからの削除を申請しますか?\n2人以上のユーザーがこのユーザーに対して申請を行なった場合、このユーザーはトークルームから削除されます`,
+        [
+          {
+            text: "キャンセル",
+            style: "cancel",
+          },
+          {
+            text: "申請",
+            style: "destructive",
+            onPress: async () => {
+              try {
+                await requestDeletionMutation({
+                  variables: {
+                    input: {
+                      talkRoomId,
+                      memberId,
+                    },
+                  },
+                });
+
+                toast.show("申請しました", { type: "success" });
+              } catch (e) {
+                const gqlError = getGraphQLError(e, 0);
+                if (
+                  gqlError &&
+                  gqlError.code === CustomErrorResponseCode.InvalidRequest
+                ) {
+                  toast.show(gqlError.message, { type: "danger" });
+                }
+                console.log(e);
+              } finally {
+                translateX.value = withTiming(0);
+              }
+            },
+          },
+        ]
+      );
+    };
 
     return (
       <Animated.View style={[rItemContainerStyle]}>
@@ -91,9 +136,7 @@ export const MemberListItem = React.memo(
           bg="red"
           justifyContent="center"
           alignItems="center"
-          onPress={() => {
-            // onDeletePress();
-          }}
+          onPress={onRequestPress}
         >
           <Feather name="delete" size={24} color="white" />
         </AnimatedPressable>
