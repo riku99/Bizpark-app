@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useCallback, useEffect } from "react";
+import React, { useLayoutEffect, useMemo, useCallback, useState } from "react";
 import { HeaderBackButton } from "@react-navigation/elements";
 import { RootNavigationScreenProp } from "src/types";
 import {
@@ -11,6 +11,8 @@ import {
 import { TalkRoomMessage } from "src/components/TalkRoomMessage";
 import { useDeleteNewsTalkRoomFromCache } from "src/hooks/newsTalkRoom";
 import { TalkRoomUserImagesHeader } from "src/components/TalkRoomUserImagseHeader";
+import { DotsHorizontal } from "src/components/DotsHorizontal";
+import { Menu } from "./Menu";
 
 type Props = RootNavigationScreenProp<"NewsTalkRoomMain">;
 
@@ -53,6 +55,12 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     );
   }, [memberImageUrls]);
 
+  const [menuVisible, setMenuVisible] = useState(false);
+
+  const closeMenu = () => {
+    setMenuVisible(false);
+  };
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: renderHeaderTitle,
@@ -62,6 +70,9 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
             navigation.goBack();
           }}
         />
+      ),
+      headerRight: () => (
+        <DotsHorizontal onPress={() => setMenuVisible(true)} />
       ),
     });
   }, [navigation, renderHeaderTitle]);
@@ -83,6 +94,8 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
         createSeen={createSeenMutation}
         deleteTalkRoomFromCache={deleteNewsTalkRoom}
       />
+
+      <Menu isVisible={menuVisible} closeMenu={closeMenu} />
     </>
   );
 };
