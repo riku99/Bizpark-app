@@ -3,7 +3,6 @@ import { HeaderBackButton } from "@react-navigation/elements";
 import { RootNavigationScreenProp } from "src/types";
 import {
   useGetNewsTalkRoomMessagesQuery,
-  useMeQuery,
   useCreateNewsTalkRoomMessageMutation,
   useCreateUserNewsTalkRoomMessageSeenMutation,
   useGetNewsTalkRoomMembersQuery,
@@ -20,10 +19,6 @@ type Props = RootNavigationScreenProp<"NewsTalkRoomMain">;
 
 export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
-
-  const {
-    data: { me },
-  } = useMeQuery();
 
   const { data: messageData, fetchMore } = useGetNewsTalkRoomMessagesQuery({
     variables: {

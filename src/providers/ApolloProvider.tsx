@@ -129,7 +129,7 @@ const cache = new InMemoryCache({
     },
     NewsTalkRoom: {
       fields: {
-        mesages: relayStylePagination(),
+        messages: relayStylePagination(),
         members: relayStylePagination(),
       },
     },

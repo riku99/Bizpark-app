@@ -1,7 +1,7 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState, useEffect } from "react";
 import { RootNavigationScreenProp } from "src/types";
 import { WebView } from "react-native-webview";
-import { SafeAreaView, StyleSheet } from "react-native";
+import { SafeAreaView, StyleSheet, Alert } from "react-native";
 import { MotiView } from "moti";
 import { JoinTalkButton } from "./JoinTalkButton";
 import { useGetOneNewsQuery } from "src/generated/graphql";
@@ -23,11 +23,24 @@ export const NewsWebViewScreen = ({ navigation, route }: Props) => {
     setTalkButtonVisible(false);
   };
 
-  const { data: newsData } = useGetOneNewsQuery({
+  const { data: newsData, error } = useGetOneNewsQuery({
     variables: {
       id,
     },
   });
+
+  useEffect(() => {
+    if (error) {
+      Alert.alert("ニュースが見つかりませんでした", "", [
+        {
+          text: "OK",
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+      ]);
+    }
+  }, [error]);
 
   if (!newsData) {
     return (
