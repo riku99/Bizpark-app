@@ -22,10 +22,6 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
 
   const [modalVisible, setModalVisible] = useState(false);
 
-  const {
-    data: { me },
-  } = useMeQuery();
-
   const { data: messageData, fetchMore } = useGetThoughtTalkRoomMessagesQuery({
     variables: {
       id,
@@ -88,14 +84,6 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
     },
   });
 
-  const isMyThuoghtTalkRoomData = useMemo(() => {
-    if (!thoughtData || !me) {
-      return false;
-    }
-
-    return thoughtData.thoughtTalkRoom.thought.contributor.id === me.id;
-  }, [thoughtData, me]);
-
   return (
     <>
       <TalkRoomMessage
@@ -114,7 +102,7 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
           setModalVisible(false);
         }}
         talkRoomId={id}
-        isMyThuoghtTalkRoomData={isMyThuoghtTalkRoomData}
+        thoughtId={thoughtData.thoughtTalkRoom.thought.id}
       />
     </>
   );

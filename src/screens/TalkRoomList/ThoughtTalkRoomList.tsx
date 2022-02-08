@@ -4,6 +4,8 @@ import {
   useGetThoughtTalkRoomsQuery,
   useGetOutThoughtTalkRoomMutation,
   GetThoughtTalkRoomsQueryResult,
+  useDeleteThoughtTalkRoomMutation,
+  useMeQuery,
 } from "src/generated/graphql";
 import { RootNavigationProp } from "src/types";
 import { useNavigation } from "@react-navigation/native";
@@ -13,17 +15,30 @@ import { useToast } from "react-native-toast-notifications";
 import * as Haptics from "expo-haptics";
 import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoom";
 import { TalkRoomListItem } from "src/components/TalkRoomListItem";
+import { spinnerVisibleVar } from "src/stores/spinner";
 
 type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
 
 export const ThoughtTalkRoomList = React.memo(() => {
   const { data } = useGetThoughtTalkRoomsQuery();
   const [getOutMutation] = useGetOutThoughtTalkRoomMutation();
+  const [deleteTalkRoomMutation] = useDeleteThoughtTalkRoomMutation();
+
+  const {
+    data: { me },
+  } = useMeQuery();
+
   const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
   const textGray = useColorModeValue("lt.textGray", "dt.textGray");
+
   const navigation = useNavigation<RootNavigationProp<"Tab">>();
+
   const toast = useToast();
-  const [modalData, setModalData] = useState<{ roomId: number } | null>(null);
+
+  const [modalData, setModalData] = useState<{
+    roomId: number;
+    isMyThoughtData: boolean;
+  } | null>(null);
 
   const closeModal = () => {
     setModalData(null);
@@ -31,7 +46,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
 
   const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
 
-  const modalList = [
+  const baseMenuList = [
     {
       title: "トークから抜ける",
       color: "red",
@@ -75,6 +90,53 @@ export const ThoughtTalkRoomList = React.memo(() => {
     },
   ];
 
+  const meMenuList = [
+    {
+      title: "トークルームを解散",
+      color: "red",
+      onPress: () => {
+        Alert.alert(
+          "トークルームを解散",
+          "全てのメンバー、メッセージが削除されます。解散してよろしいですか?",
+          [
+            {
+              text: "キャンセル",
+              style: "cancel",
+            },
+            {
+              text: "解散",
+              style: "destructive",
+              onPress: async () => {
+                if (modalData) {
+                  spinnerVisibleVar(true);
+                  try {
+                    await deleteTalkRoomMutation({
+                      variables: {
+                        input: {
+                          talkRoomId: modalData.roomId,
+                        },
+                      },
+                      update: () => {
+                        deleteThoghtTalkRoom({ talkRoomId: modalData.roomId });
+                        toast.show("解散しました", { type: "success" });
+                      },
+                    });
+                  } catch (e) {
+                    console.log(e);
+                  } finally {
+                    setModalData(null);
+                    spinnerVisibleVar(false);
+                  }
+                }
+              },
+            },
+          ]
+        );
+      },
+    },
+    ...baseMenuList,
+  ];
+
   const renderItem = useCallback(
     ({ item }: { item: Item }) => {
       let userImageUrls: string[] = [];
@@ -92,6 +154,8 @@ export const ThoughtTalkRoomList = React.memo(() => {
       const text = edges.length ? edges[0].node.text : "";
       const allMessageSeen = item.allMessageSeen;
 
+      const isMyThoughtData = item.thought.contributor.id === me.id;
+
       const onPress = () => {
         navigation.navigate("ThoughtTalkRoom", {
           screen: "ThoughtTalkRoomMain",
@@ -103,7 +167,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
 
       const onLongPress = () => {
         Haptics.selectionAsync();
-        setModalData({ roomId: item.id });
+        setModalData({ roomId: item.id, isMyThoughtData });
       };
 
       return (
@@ -132,12 +196,14 @@ export const ThoughtTalkRoomList = React.memo(() => {
         keyExtractor={(item) => item.id}
       />
 
-      <InstaLikeModal
-        isVisible={!!modalData}
-        list={modalList}
-        onBackdropPress={closeModal}
-        onCancel={closeModal}
-      />
+      {!!modalData && (
+        <InstaLikeModal
+          isVisible={!!modalData}
+          list={modalData.isMyThoughtData ? meMenuList : baseMenuList}
+          onBackdropPress={closeModal}
+          onCancel={closeModal}
+        />
+      )}
     </Box>
   );
 });
