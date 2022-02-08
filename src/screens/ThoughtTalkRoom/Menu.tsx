@@ -22,10 +22,10 @@ export const Menu = ({
     {
       title: "元の投稿を見る",
       onPress: () => {
+        closeMenu();
         navigation.navigate("Thought", {
           id: thoughtId,
         });
-        closeMenu();
       },
     },
   ];
