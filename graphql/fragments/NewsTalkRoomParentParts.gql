@@ -1,4 +1,9 @@
 fragment NewsTalkRoomParentParts on News {
   id
   title
+  link
+  image
+  articleCreatedAt
+  genre
+  provider
 }

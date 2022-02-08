@@ -7,12 +7,14 @@ import {
   useCreateNewsTalkRoomMessageMutation,
   useCreateUserNewsTalkRoomMessageSeenMutation,
   useGetNewsTalkRoomMembersQuery,
+  NewsTalkRoom,
 } from "src/generated/graphql";
 import { TalkRoomMessage } from "src/components/TalkRoomMessage";
 import { useDeleteNewsTalkRoomFromCache } from "src/hooks/newsTalkRoom";
 import { TalkRoomUserImagesHeader } from "src/components/TalkRoomUserImagseHeader";
 import { DotsHorizontal } from "src/components/DotsHorizontal";
 import { Menu } from "./Menu";
+import { useApolloClient, gql } from "@apollo/client";
 
 type Props = RootNavigationScreenProp<"NewsTalkRoomMain">;
 
@@ -34,6 +36,20 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       talkRoomId: id,
     },
+  });
+
+  const { cache } = useApolloClient();
+
+  const newsData = cache.readFragment<NewsTalkRoom>({
+    id: `NewsTalkRoom:${id}`,
+    fragment: gql`
+      fragment NewsTalkRoomWithNewsId on NewsTalkRoom {
+        id
+        news {
+          id
+        }
+      }
+    `,
   });
 
   const memberImageUrls = useMemo(() => {
@@ -95,7 +111,11 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
         deleteTalkRoomFromCache={deleteNewsTalkRoom}
       />
 
-      <Menu isVisible={menuVisible} closeMenu={closeMenu} />
+      <Menu
+        isVisible={menuVisible}
+        closeMenu={closeMenu}
+        newsId={newsData.news.id}
+      />
     </>
   );
 };

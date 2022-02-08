@@ -6,5 +6,4 @@ fragment NewsParts on News {
   articleCreatedAt
   genre
   provider
-  picked
 }

@@ -111,6 +111,14 @@ const cache = new InMemoryCache({
             });
           },
         },
+        oneNews: {
+          read: (_, { args, toReference }) => {
+            return toReference({
+              __typename: "News",
+              id: args.id,
+            });
+          },
+        },
       },
     },
     ThoughtTalkRoom: {

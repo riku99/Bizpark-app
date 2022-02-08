@@ -16,7 +16,7 @@ fragment NewsTalkRoomParts on NewsTalkRoom {
     }
   }
   news {
-    ...NewsTalkRoomParentParts
+    ...NewsParts
   }
   messages(first: 20) {
     edges {
