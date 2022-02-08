@@ -2,7 +2,7 @@ import React from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { ThoughtTalkRoomScreen } from "src/screens/ThoughtTalkRoom";
 import { useNavigationHeaderStyle } from "src/hooks/theme";
-import { TalkRoomMembersScreen } from "src/screens/TalkRoomMembers";
+import { TalkRoomMembersScreen } from "src/screens/ThoughtTalkRoomMembers";
 
 export type ThoughtTalkRoomStackParamList = {
   ThoughtTalkRoomMain: {

@@ -185,7 +185,9 @@ export const BaseChat = React.memo(
     }, []);
 
     const renderLoadEarlier = useCallback(() => {
-      return <Indicator style={{ marginTop: 10, marginBottom: 10 }} />;
+      return (
+        <Indicator style={{ marginTop: 10, marginBottom: 10, height: 30 }} />
+      );
     }, []);
 
     const renderCustomView = useCallback(
