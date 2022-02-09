@@ -1,5 +1,5 @@
 import React, { ComponentProps, useState, useEffect } from "react";
-import { Box, Pressable, Text } from "native-base";
+import { Box, Pressable, Text, Divider } from "native-base";
 import { useNewsCacheFragment } from "src/hooks/apollo";
 import { format } from "date-fns";
 import { Image } from "src/components/Image";
@@ -8,12 +8,15 @@ import { useCreateNewsPick, useDeleteNewsPick } from "src/hooks/apollo";
 
 type Props = {
   id: number;
+  divider?: boolean;
 } & ComponentProps<typeof Pressable>;
 
-export const NewsCard = React.memo(({ id, ...props }: Props) => {
+export const NewsCard = React.memo(({ id, divider, ...props }: Props) => {
   const { readNewsFragment } = useNewsCacheFragment();
   const cacheData = readNewsFragment({ id });
+
   const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
+
   const [createNewsPickMutation] = useCreateNewsPick();
   const [deleteNewsPickMutation] = useDeleteNewsPick();
 
@@ -60,51 +63,59 @@ export const NewsCard = React.memo(({ id, ...props }: Props) => {
   );
 
   return (
-    <Pressable w="100%" px="4" py="4" {...props}>
-      <Box w="100%" flexDirection="row" justifyContent="space-between">
-        <Box w="70%">
-          <Text fontWeight="bold" fontSize="14">
-            {title}
-          </Text>
+    <>
+      <Pressable w="100%" px="4" py="4" {...props}>
+        <Box w="100%" flexDirection="row" justifyContent="space-between">
+          <Box w="70%">
+            <Text fontWeight="bold" fontSize="14">
+              {title}
+            </Text>
+          </Box>
+
+          {!!image && (
+            <Image
+              source={{
+                uri: image,
+              }}
+              w="16"
+              h="10"
+            />
+          )}
         </Box>
 
-        {!!image && (
-          <Image
-            source={{
-              uri: image,
-            }}
-            w="16"
-            h="10"
-          />
-        )}
-      </Box>
-
-      <Box
-        flexDirection="row"
-        alignItems="center"
-        mt="4"
-        justifyContent="space-between"
-      >
-        <Text maxW="70%">
-          {provider ?? ""}{" "}
-          <Text mt="1" fontSize="10">
-            {formatedDate}
+        <Box
+          flexDirection="row"
+          alignItems="center"
+          mt="4"
+          justifyContent="space-between"
+        >
+          <Text maxW="70%">
+            {provider ?? ""}{" "}
+            <Text mt="1" fontSize="10">
+              {formatedDate}
+            </Text>
           </Text>
-        </Text>
 
-        <Pick
-          mr="2"
-          checkBoxProp={{
-            checked: picked,
-            onPress: onCheckPress,
-            style: {
-              height: 24,
-              width: 24,
-              marginLeft: 6,
-            },
-          }}
-        />
-      </Box>
-    </Pressable>
+          <Pick
+            mr="2"
+            checkBoxProp={{
+              checked: picked,
+              onPress: onCheckPress,
+              style: {
+                height: 24,
+                width: 24,
+                marginLeft: 6,
+              },
+            }}
+          />
+        </Box>
+      </Pressable>
+
+      {divider && (
+        <Box px="4">
+          <Divider />
+        </Box>
+      )}
+    </>
   );
 });

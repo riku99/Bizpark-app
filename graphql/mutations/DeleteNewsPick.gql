@@ -1,6 +1,5 @@
 mutation DeleteNewsPick($input: DeleteNewsPickInput!) {
   deleteNewsPick(input: $input) {
     id
-    newsId
   }
 }

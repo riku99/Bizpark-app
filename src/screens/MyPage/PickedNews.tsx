@@ -1,15 +1,30 @@
-import React from "react";
+import React, { useCallback, useState } from "react";
 import { Box } from "native-base";
-import { usePickedNewsQuery } from "src/generated/graphql";
+import {
+  useGetPickedNewsQuery,
+  GetPickedNewsQuery,
+} from "src/generated/graphql";
 import { btoa } from "react-native-quick-base64";
-import { List } from "src/components/NewsList";
 import { Indicator } from "src/components/Indicator";
+import { InfiniteFlatList } from "src/components/InfiniteFlatList";
+import { NewsCard } from "src/components/NewsCard";
+import { useNavigation } from "@react-navigation/native";
+import { RootNavigationProp } from "src/types";
+import { RefreshControl } from "src/components/RefreshControl";
+
+type Item = GetPickedNewsQuery["pickedNews"]["edges"][number];
 
 export const PickedNews = () => {
-  const { data, refetch, fetchMore } = usePickedNewsQuery();
+  const { data, refetch, fetchMore } = useGetPickedNewsQuery();
 
-  const refresh = async () => {
+  const [refreshing, setRefreshing] = useState(false);
+
+  const navigation = useNavigation<RootNavigationProp<"Tab">>();
+
+  const onRefresh = async () => {
+    setRefreshing(true);
     await refetch();
+    setRefreshing(false);
   };
 
   const infiniteLoad = async () => {
@@ -25,16 +40,29 @@ export const PickedNews = () => {
     }
   };
 
+  const renderItem = useCallback(({ item }: { item: Item }) => {
+    const { id } = item.node.news;
+
+    const onPress = () => {
+      navigation.navigate("NewsWebView", { id });
+    };
+    return <NewsCard id={id} onPress={onPress} divider />;
+  }, []);
+
   if (!data) {
     return <Indicator style={{ marginTop: 10 }} />;
   }
 
   return (
     <Box flex={1}>
-      <List
+      <InfiniteFlatList
         data={data.pickedNews.edges}
-        refresh={refresh}
+        renderItem={renderItem}
         infiniteLoad={infiniteLoad}
+        initialNumToRender={10}
+        refreshControl={
+          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
+        }
       />
     </Box>
   );
