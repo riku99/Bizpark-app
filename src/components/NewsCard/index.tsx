@@ -1,30 +1,39 @@
 import React, { ComponentProps, useState, useEffect } from "react";
 import { Box, Pressable, Text, Divider } from "native-base";
-import { useNewsCacheFragment } from "src/hooks/apollo";
 import { format } from "date-fns";
 import { Image } from "src/components/Image";
 import { Pick } from "src/components/Pick";
-import { useCreateNewsPick, useDeleteNewsPick } from "src/hooks/apollo";
+import {
+  useGetOneNewsQuery,
+  useCreateNewsPickMutation,
+  useDeleteNewsPickMutation,
+} from "src/generated/graphql";
 
 type Props = {
   id: number;
   divider?: boolean;
 } & ComponentProps<typeof Pressable>;
 
-export const NewsCard = React.memo(({ id, divider, ...props }: Props) => {
-  const { readNewsFragment } = useNewsCacheFragment();
-  const cacheData = readNewsFragment({ id });
+export const NewsCard = ({ id, divider, ...props }: Props) => {
+  const { data: newsData } = useGetOneNewsQuery({
+    variables: {
+      id,
+    },
+    fetchPolicy: "cache-only",
+  });
 
-  const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
+  const [picked, setPicked] = useState(
+    newsData ? newsData.oneNews.picked : false
+  );
 
-  const [createNewsPickMutation] = useCreateNewsPick();
-  const [deleteNewsPickMutation] = useDeleteNewsPick();
+  const [createNewsPickMutation] = useCreateNewsPickMutation();
+  const [deleteNewsPickMutation] = useDeleteNewsPickMutation();
 
   useEffect(() => {
-    if (cacheData) {
-      setPicked(cacheData.picked);
+    if (newsData) {
+      setPicked(newsData.oneNews.picked);
     }
-  }, [cacheData]);
+  }, [newsData]);
 
   const onCheckPress = async () => {
     try {
@@ -48,15 +57,16 @@ export const NewsCard = React.memo(({ id, divider, ...props }: Props) => {
         });
       }
     } catch (e) {
+      console.log(e);
       setPicked((c) => !c);
     }
   };
 
-  if (!cacheData) {
+  if (!newsData) {
     return null;
   }
 
-  const { title, provider, articleCreatedAt, image } = cacheData;
+  const { title, provider, articleCreatedAt, image } = newsData.oneNews;
   const formatedDate = format(
     new Date(Number(articleCreatedAt)),
     "yyyy/MM/dd HH:mm"
@@ -118,4 +128,4 @@ export const NewsCard = React.memo(({ id, divider, ...props }: Props) => {
       )}
     </>
   );
-});
+};

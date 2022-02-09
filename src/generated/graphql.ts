@@ -173,7 +173,7 @@ export type Mutation = {
   createUser: Me;
   createUserNewsTalkRoomMessageSeen: NewsTalkRoom;
   createUserThoughtTalkRoomMessageSeen: ThoughtTalkRoom;
-  deleteNewsPick: NewsPick;
+  deleteNewsPick: News;
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
   deleteThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
@@ -767,7 +767,7 @@ export type CreateNewsPickMutationVariables = Exact<{
 }>;
 
 
-export type CreateNewsPickMutation = { __typename?: 'Mutation', createNewsPick: { __typename?: 'NewsPick', id: number } };
+export type CreateNewsPickMutation = { __typename?: 'Mutation', createNewsPick: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', id: number, picked: boolean } | null | undefined } };
 
 export type CreateNewsTalkRoomMessageMutationVariables = Exact<{
   input: CreateNewsTalkRoomMessageInput;
@@ -823,7 +823,7 @@ export type DeleteNewsPickMutationVariables = Exact<{
 }>;
 
 
-export type DeleteNewsPickMutation = { __typename?: 'Mutation', deleteNewsPick: { __typename?: 'NewsPick', id: number } };
+export type DeleteNewsPickMutation = { __typename?: 'Mutation', deleteNewsPick: { __typename?: 'News', id: number, picked: boolean } };
 
 export type DeletePickMutationVariables = Exact<{
   thoughtId: Scalars['ID'];
@@ -979,7 +979,7 @@ export type GetOneNewsQueryVariables = Exact<{
 }>;
 
 
-export type GetOneNewsQuery = { __typename?: 'Query', oneNews: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } };
+export type GetOneNewsQuery = { __typename?: 'Query', oneNews: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } };
 
 export type GetPickedNewsQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']>;
@@ -1353,6 +1353,10 @@ export const CreateNewsPickDocument = gql`
     mutation CreateNewsPick($input: CreateNewsPickInput!) {
   createNewsPick(input: $input) {
     id
+    news {
+      id
+      picked
+    }
   }
 }
     `;
@@ -1621,6 +1625,7 @@ export const DeleteNewsPickDocument = gql`
     mutation DeleteNewsPick($input: DeleteNewsPickInput!) {
   deleteNewsPick(input: $input) {
     id
+    picked
   }
 }
     `;
@@ -2432,6 +2437,7 @@ export const GetOneNewsDocument = gql`
     query GetOneNews($id: Int!) {
   oneNews(id: $id) {
     ...NewsParts
+    picked
   }
 }
     ${NewsPartsFragmentDoc}`;

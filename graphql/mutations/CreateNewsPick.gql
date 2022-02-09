@@ -1,5 +1,9 @@
 mutation CreateNewsPick($input: CreateNewsPickInput!) {
   createNewsPick(input: $input) {
     id
+    news {
+      id
+      picked
+    }
   }
 }
