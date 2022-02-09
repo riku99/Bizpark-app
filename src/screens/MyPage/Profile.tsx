@@ -43,7 +43,7 @@ export const MyProfile = () => {
         flex={1}
         contentContainerStyle={{
           alignItems: "center",
-          paddingTop: 60,
+          paddingTop: 50,
           paddingBottom: 50,
         }}
         refreshControl={

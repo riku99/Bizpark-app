@@ -9,6 +9,7 @@ import { RootNavigationProp } from "src/types";
 import { Linking, Alert } from "react-native";
 import { INSTAGRAM_BASE_URL, TWITTER_BASE_URL } from "src/constants";
 import { FollowButton } from "../FollowButton";
+import { SendMessageButton } from "./SendMessageButton";
 
 type Props = {
   id: string;
@@ -70,12 +71,12 @@ export const Profile = ({
   return (
     <>
       <ContentsCard
-        w="85%"
+        w="80%"
         px="4"
         pb="8"
         borderRadius="lg"
         shadow="1"
-        minH="2/3"
+        minH="96"
       >
         <>
           <Box>
@@ -83,7 +84,14 @@ export const Profile = ({
               {name}
             </Text>
 
-            <HStack alignSelf="center" mt="4" space="2">
+            {!isMe && (
+              <HStack alignSelf="center" mt="6" space="6">
+                <SendMessageButton />
+                <FollowButton userId={id} follow={follow} loading={loading} />
+              </HStack>
+            )}
+
+            <HStack alignSelf="center" mt="6" space="2">
               {socials.map((l, idx) => (
                 <React.Fragment key={idx}>
                   {!!l.value && (
@@ -107,7 +115,7 @@ export const Profile = ({
             </Box>
           </Box>
 
-          {isMe ? (
+          {isMe && (
             <Pressable
               position="absolute"
               top="4"
@@ -122,8 +130,6 @@ export const Profile = ({
             >
               <Text fontWeight="bold">編集</Text>
             </Pressable>
-          ) : (
-            <FollowButton userId={id} follow={follow} loading={loading} />
           )}
 
           <ContentsCard
