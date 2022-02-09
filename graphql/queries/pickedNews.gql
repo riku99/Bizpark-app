@@ -1,5 +1,0 @@
-query PickedNews($cursor: String) {
-  pickedNews(first: 20, after: $cursor) {
-    ...NewsConnectionParts
-  }
-}

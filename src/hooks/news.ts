@@ -14,12 +14,13 @@ export const useNews = ({ genre }: { genre: NewsGenre }) => {
 
   const infiniteLoad = async () => {
     const { pageInfo } = data.news;
+
     if (pageInfo.hasNextPage) {
       const { endCursor } = pageInfo;
 
       await fetchMore({
         variables: {
-          genre: NewsGenre.Business,
+          genre,
           cursor: endCursor ? btoa(endCursor) : undefined,
         },
       });

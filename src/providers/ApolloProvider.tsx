@@ -127,6 +127,8 @@ const cache = new InMemoryCache({
             });
           },
         },
+        pickedNews: relayStylePagination(),
+        pickedThoughts: relayStylePagination(),
       },
     },
     ThoughtTalkRoom: {

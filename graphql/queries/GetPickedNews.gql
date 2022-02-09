@@ -1,0 +1,17 @@
+query GetPickedNews($cursor: String) {
+  pickedNews(first: 20, after: $cursor) {
+    edges {
+      node {
+        id
+        news {
+          ...NewsParts
+          picked
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
+}
