@@ -86,7 +86,7 @@ export const Profile = ({
 
             {!isMe && (
               <HStack alignSelf="center" mt="6" space="6">
-                <SendMessageButton />
+                <SendMessageButton userId={!isMe ? id : undefined} />
                 <FollowButton userId={id} follow={follow} loading={loading} />
               </HStack>
             )}

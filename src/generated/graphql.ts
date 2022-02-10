@@ -33,6 +33,10 @@ export type CreateNewsTalkRoomMessageInput = {
   text: Scalars['String'];
 };
 
+export type CreateOneOnOneTalkRoomInput = {
+  recipientId: Scalars['ID'];
+};
+
 export type CreatePickInput = {
   thoughtId: Scalars['String'];
 };
@@ -167,6 +171,7 @@ export type Mutation = {
   block: User;
   createNewsPick: NewsPick;
   createNewsTalkRoomMessage: NewsTalkRoomMessage;
+  createOneOnOneTalkRoom: OneOnOneTalkRoom;
   createPick: Pick;
   createThought: CreateThoughtResponse;
   createThoughtTalkRoomMessage?: Maybe<ThoughtTalkRoomMessage>;
@@ -205,6 +210,11 @@ export type MutationCreateNewsPickArgs = {
 
 export type MutationCreateNewsTalkRoomMessageArgs = {
   input: CreateNewsTalkRoomMessageInput;
+};
+
+
+export type MutationCreateOneOnOneTalkRoomArgs = {
+  input: CreateOneOnOneTalkRoomInput;
 };
 
 
@@ -434,6 +444,45 @@ export type NewsTalkRoomMessageEdge = {
   node: NewsTalkRoomMessage;
 };
 
+export type OneOnOneTalkRoom = TalkRoom & {
+  __typename?: 'OneOnOneTalkRoom';
+  allMessageSeen?: Maybe<Scalars['Boolean']>;
+  createdAt: Scalars['String'];
+  id: Scalars['Int'];
+  messages?: Maybe<OneOnOneTalkRoomMessageConnection>;
+  recipient?: Maybe<User>;
+  sender?: Maybe<User>;
+  updatedAt: Scalars['String'];
+};
+
+
+export type OneOnOneTalkRoomMessagesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+export type OneOnOneTalkRoomMessage = TalkRoomMessage & {
+  __typename?: 'OneOnOneTalkRoomMessage';
+  createdAt: Scalars['String'];
+  id: Scalars['Int'];
+  roomId?: Maybe<Scalars['Int']>;
+  sender?: Maybe<User>;
+  talkRoom?: Maybe<OneOnOneTalkRoom>;
+  text: Scalars['String'];
+};
+
+export type OneOnOneTalkRoomMessageConnection = {
+  __typename?: 'OneOnOneTalkRoomMessageConnection';
+  edges: Array<OneOnOneTalkRoomMessageEdge>;
+  pageInfo: PageInfo;
+};
+
+export type OneOnOneTalkRoomMessageEdge = {
+  __typename?: 'OneOnOneTalkRoomMessageEdge';
+  cursor: Scalars['String'];
+  node: OneOnOneTalkRoomMessage;
+};
+
 export type PageInfo = {
   __typename?: 'PageInfo';
   endCursor?: Maybe<Scalars['String']>;
@@ -458,6 +507,7 @@ export type Query = {
   newsTalkRoom: NewsTalkRoom;
   newsTalkRooms: Array<NewsTalkRoom>;
   oneNews: News;
+  oneOnOneTalkRooms: Array<Maybe<OneOnOneTalkRoom>>;
   pickedNews: NewsPickConnection;
   pickedThoughts: ThoughtsConnection;
   thought: Thought;
@@ -776,6 +826,13 @@ export type CreateNewsTalkRoomMessageMutationVariables = Exact<{
 
 export type CreateNewsTalkRoomMessageMutation = { __typename?: 'Mutation', createNewsTalkRoomMessage: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
 
+export type CreateOneOnOneTalkRoomMutationVariables = Exact<{
+  input: CreateOneOnOneTalkRoomInput;
+}>;
+
+
+export type CreateOneOnOneTalkRoomMutation = { __typename?: 'Mutation', createOneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, createdAt: string, updatedAt: string, allMessageSeen?: boolean | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } };
+
 export type CreatePickMutationVariables = Exact<{
   input: CreatePickInput;
 }>;
@@ -980,6 +1037,11 @@ export type GetOneNewsQueryVariables = Exact<{
 
 
 export type GetOneNewsQuery = { __typename?: 'Query', oneNews: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } };
+
+export type GetOneOnOneTalkRoomsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOneOnOneTalkRoomsQuery = { __typename?: 'Query', oneOnOneTalkRooms: Array<{ __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
 
 export type GetPickedNewsQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']>;
@@ -1419,6 +1481,52 @@ export function useCreateNewsTalkRoomMessageMutation(baseOptions?: Apollo.Mutati
 export type CreateNewsTalkRoomMessageMutationHookResult = ReturnType<typeof useCreateNewsTalkRoomMessageMutation>;
 export type CreateNewsTalkRoomMessageMutationResult = Apollo.MutationResult<CreateNewsTalkRoomMessageMutation>;
 export type CreateNewsTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<CreateNewsTalkRoomMessageMutation, CreateNewsTalkRoomMessageMutationVariables>;
+export const CreateOneOnOneTalkRoomDocument = gql`
+    mutation CreateOneOnOneTalkRoom($input: CreateOneOnOneTalkRoomInput!) {
+  createOneOnOneTalkRoom(input: $input) {
+    id
+    createdAt
+    updatedAt
+    sender {
+      id
+      name
+      imageUrl
+    }
+    recipient {
+      id
+      name
+      imageUrl
+    }
+    allMessageSeen
+  }
+}
+    `;
+export type CreateOneOnOneTalkRoomMutationFn = Apollo.MutationFunction<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>;
+
+/**
+ * __useCreateOneOnOneTalkRoomMutation__
+ *
+ * To run a mutation, you first call `useCreateOneOnOneTalkRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOneOnOneTalkRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOneOnOneTalkRoomMutation, { data, loading, error }] = useCreateOneOnOneTalkRoomMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateOneOnOneTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>(CreateOneOnOneTalkRoomDocument, options);
+      }
+export type CreateOneOnOneTalkRoomMutationHookResult = ReturnType<typeof useCreateOneOnOneTalkRoomMutation>;
+export type CreateOneOnOneTalkRoomMutationResult = Apollo.MutationResult<CreateOneOnOneTalkRoomMutation>;
+export type CreateOneOnOneTalkRoomMutationOptions = Apollo.BaseMutationOptions<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>;
 export const CreatePickDocument = gql`
     mutation CreatePick($input: CreatePickInput!) {
   createPick(input: $input) {
@@ -2469,6 +2577,67 @@ export function useGetOneNewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetOneNewsQueryHookResult = ReturnType<typeof useGetOneNewsQuery>;
 export type GetOneNewsLazyQueryHookResult = ReturnType<typeof useGetOneNewsLazyQuery>;
 export type GetOneNewsQueryResult = Apollo.QueryResult<GetOneNewsQuery, GetOneNewsQueryVariables>;
+export const GetOneOnOneTalkRoomsDocument = gql`
+    query GetOneOnOneTalkRooms {
+  oneOnOneTalkRooms {
+    id
+    allMessageSeen
+    updatedAt
+    sender {
+      ...UserParts
+    }
+    recipient {
+      ...UserParts
+    }
+    messages {
+      edges {
+        node {
+          id
+          text
+          createdAt
+          sender {
+            id
+            name
+            imageUrl
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+  }
+}
+    ${UserPartsFragmentDoc}
+${PageInfoPartsFragmentDoc}`;
+
+/**
+ * __useGetOneOnOneTalkRoomsQuery__
+ *
+ * To run a query within a React component, call `useGetOneOnOneTalkRoomsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneOnOneTalkRoomsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneOnOneTalkRoomsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOneOnOneTalkRoomsQuery(baseOptions?: Apollo.QueryHookOptions<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>(GetOneOnOneTalkRoomsDocument, options);
+      }
+export function useGetOneOnOneTalkRoomsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>(GetOneOnOneTalkRoomsDocument, options);
+        }
+export type GetOneOnOneTalkRoomsQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomsQuery>;
+export type GetOneOnOneTalkRoomsLazyQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomsLazyQuery>;
+export type GetOneOnOneTalkRoomsQueryResult = Apollo.QueryResult<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>;
 export const GetPickedNewsDocument = gql`
     query GetPickedNews($cursor: String) {
   pickedNews(first: 20, after: $cursor) {

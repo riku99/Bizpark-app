@@ -1,0 +1,18 @@
+mutation CreateOneOnOneTalkRoom($input: CreateOneOnOneTalkRoomInput!) {
+  createOneOnOneTalkRoom(input: $input) {
+    id
+    createdAt
+    updatedAt
+    sender {
+      id
+      name
+      imageUrl
+    }
+    recipient {
+      id
+      name
+      imageUrl
+    }
+    allMessageSeen
+  }
+}
