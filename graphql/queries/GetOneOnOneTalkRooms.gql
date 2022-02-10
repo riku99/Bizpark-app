@@ -20,6 +20,16 @@ query GetOneOnOneTalkRooms {
             name
             imageUrl
           }
+          replyMessage {
+            id
+            text
+            createdAt
+            sender {
+              id
+              name
+              imageUrl
+            }
+          }
         }
         cursor
       }

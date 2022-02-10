@@ -16,7 +16,10 @@ import {
   CreateNewsTalkRoomMessageMutationFn,
   CreateUserNewsTalkRoomMessageSeenMutationFn,
   GetOneOnOneTalkRoomMessagesQueryResult,
-  CreateOneOnOneTalkRoomMutationFn,
+  SeenOneOnOneTalkRoomMessageMutationFn,
+  OneOnOneTalkRoomMessageEdge,
+  OneOnOneTalkRoomMessage,
+  CreateOneOnOneTalkRoomMessageMutationFn,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -52,7 +55,8 @@ type Props =
       roomId: number;
       messageData: GetOneOnOneTalkRoomMessagesQueryResult["data"];
       messageFetchMore: GetOneOnOneTalkRoomMessagesQueryResult["fetchMore"];
-      createMessage: CreateOneOnOneTalkRoomMutationFn;
+      createMessage: CreateOneOnOneTalkRoomMessageMutationFn;
+      createSeen: SeenOneOnOneTalkRoomMessageMutationFn;
     };
 
 const isTmp = (str: string) => str.slice(0, 3) === "tmp";
@@ -66,23 +70,36 @@ export const TalkRoomMessage = (props: Props) => {
     data: { me },
   } = useMeQuery();
 
-  const [pageInfo, setPageInfo] = useState<PageInfo>(
-    props.type === "Thought"
-      ? props.messageData?.thoughtTalkRoom.messages.pageInfo
-      : props.messageData?.newsTalkRoom.messages.pageInfo
-  );
+  const [pageInfo, setPageInfo] = useState<PageInfo>(() => {
+    switch (props.type) {
+      case "Thought":
+        return props.messageData?.thoughtTalkRoom.messages.pageInfo;
+      case "News":
+        return props.messageData?.newsTalkRoom.messages.pageInfo;
+      case "OneOnOne":
+        return props.messageData.oneOnOneTalkRoom.messages.pageInfo;
+    }
+  });
 
   useEffect(() => {
     if (props.messageData) {
-      const newMessageInfo =
-        props.type === "Thought"
-          ? props.messageData.thoughtTalkRoom.messages.pageInfo
-          : props.messageData.newsTalkRoom.messages.pageInfo;
+      let newPageInfo: PageInfo;
+
+      switch (props.type) {
+        case "Thought":
+          newPageInfo = props.messageData.thoughtTalkRoom.messages.pageInfo;
+          break;
+        case "News":
+          newPageInfo = props.messageData.newsTalkRoom.messages.pageInfo;
+          break;
+        case "OneOnOne":
+          newPageInfo = props.messageData.oneOnOneTalkRoom.messages.pageInfo;
+      }
 
       setPageInfo((currentInfo) => {
         // トークルームを開いたままActiveになるとキャッシュのPageInfoも更新される。その更新されたものを使用すると無限ローディングでダブるのでチェック
-        if (Number(newMessageInfo.endCursor) < Number(currentInfo.endCursor)) {
-          return newMessageInfo;
+        if (Number(newPageInfo.endCursor) < Number(currentInfo.endCursor)) {
+          return newPageInfo;
         } else {
           return currentInfo;
         }
@@ -104,7 +121,10 @@ export const TalkRoomMessage = (props: Props) => {
 
   // チャットに表示するためのメッセージデータの作成
   const createNewIMessage = <
-    T extends ThoughtTalkRoomMessage | NewsTalkRoomMessage
+    T extends
+      | ThoughtTalkRoomMessage
+      | NewsTalkRoomMessage
+      | OneOnOneTalkRoomMessage
   >(
     message: T
   ): IMessage => {
@@ -135,10 +155,22 @@ export const TalkRoomMessage = (props: Props) => {
   // 初回キャッシュのデータからのみここでセット
   useEffect(() => {
     if (props.messageData) {
-      const edges =
-        props.type === "Thought"
-          ? props.messageData.thoughtTalkRoom.messages.edges
-          : props.messageData.newsTalkRoom.messages.edges;
+      let edges: (
+        | ThoughtTalkRoomMessageEdge
+        | NewsTalkRoomMessageEdge
+        | OneOnOneTalkRoomMessageEdge
+      )[];
+
+      switch (props.type) {
+        case "Thought":
+          edges = props.messageData.thoughtTalkRoom.messages.edges;
+          break;
+        case "News":
+          edges = props.messageData.newsTalkRoom.messages.edges;
+          break;
+        case "OneOnOne":
+          edges = props.messageData.oneOnOneTalkRoom.messages.edges;
+      }
 
       const im: IMessage[] = edges.map((edge: typeof edges[number]) =>
         createNewIMessage(edge.node)
@@ -151,10 +183,23 @@ export const TalkRoomMessage = (props: Props) => {
   // SubscriptionやActive時のデータの取得で新たに取得したメッセージ追加
   useEffect(() => {
     if (props.messageData) {
-      const messageEdges =
-        props.type === "Thought"
-          ? props.messageData.thoughtTalkRoom.messages.edges
-          : props.messageData.newsTalkRoom.messages.edges;
+      let messageEdges: (
+        | ThoughtTalkRoomMessageEdge
+        | NewsTalkRoomMessageEdge
+        | OneOnOneTalkRoomMessageEdge
+      )[];
+
+      switch (props.type) {
+        case "Thought":
+          messageEdges = props.messageData.thoughtTalkRoom.messages.edges;
+          break;
+        case "News":
+          messageEdges = props.messageData.newsTalkRoom.messages.edges;
+          break;
+        case "OneOnOne":
+          messageEdges = props.messageData.oneOnOneTalkRoom.messages.edges;
+      }
+
       if (messageEdges.length) {
         const firstMessage = messageEdges[0].node;
 
@@ -216,27 +261,24 @@ export const TalkRoomMessage = (props: Props) => {
                   },
                 },
               });
+              break;
+
+            case "OneOnOne":
+              await props.createSeen({
+                variables: {
+                  input: {
+                    messageId: Number(latestMessage._id),
+                    talkRoomId: roomId,
+                  },
+                },
+              });
 
             default:
               break;
           }
         } catch (e) {
+          // 既読作成時のエラー無視でいい
           console.log(e);
-          const gqlError = getGraphQLError(e, 0);
-          if (
-            gqlError &&
-            gqlError.code === CustomErrorResponseCode.InvalidRequest
-          ) {
-            Alert.alert(gqlError.message, "", [
-              {
-                text: "OK",
-                onPress: async () => {
-                  props.deleteTalkRoomFromCache({ talkRoomId: roomId });
-                  navigation.goBack();
-                },
-              },
-            ]);
-          }
         }
       }
     })();
@@ -316,6 +358,26 @@ export const TalkRoomMessage = (props: Props) => {
           if (createdNewsTalkRoomMessageData) {
             newIMessageData = createNewIMessage(
               createdNewsTalkRoomMessageData.createNewsTalkRoomMessage
+            );
+          }
+          break;
+
+        case "OneOnOne":
+          const {
+            data: createdOneOnOneTalkRoomData,
+          } = await props.createMessage({
+            variables: {
+              input: {
+                text: inputMessages[0].text,
+                talkRoomId: roomId,
+                replyTo: replyMessage ? Number(replyMessage._id) : null,
+              },
+            },
+          });
+
+          if (createdOneOnOneTalkRoomData) {
+            newIMessageData = createNewIMessage(
+              createdOneOnOneTalkRoomData.createOneOnOneTalkRoomMessage
             );
           }
           break;

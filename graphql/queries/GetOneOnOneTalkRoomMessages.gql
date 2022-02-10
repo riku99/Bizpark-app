@@ -13,6 +13,16 @@ query GetOneOnOneTalkRoomMessages($id: Int!, $after: String) {
             imageUrl
           }
           roomId
+          replyMessage {
+            id
+            text
+            createdAt
+            sender {
+              id
+              name
+              imageUrl
+            }
+          }
         }
         cursor
       }

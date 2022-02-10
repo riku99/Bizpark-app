@@ -38,6 +38,7 @@ export type CreateOneOnOneTalkRoomInput = {
 };
 
 export type CreateOneOnOneTalkRoomMessageInput = {
+  replyTo?: InputMaybe<Scalars['Int']>;
   talkRoomId: Scalars['Int'];
   text: Scalars['String'];
 };
@@ -482,6 +483,7 @@ export type OneOnOneTalkRoomMessage = TalkRoomMessage & {
   __typename?: 'OneOnOneTalkRoomMessage';
   createdAt: Scalars['String'];
   id: Scalars['Int'];
+  replyMessage?: Maybe<OneOnOneTalkRoomMessage>;
   roomId?: Maybe<Scalars['Int']>;
   sender?: Maybe<User>;
   talkRoom?: Maybe<OneOnOneTalkRoom>;
@@ -861,6 +863,13 @@ export type CreateOneOnOneTalkRoomMutationVariables = Exact<{
 
 export type CreateOneOnOneTalkRoomMutation = { __typename?: 'Mutation', createOneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, createdAt: string, updatedAt: string, allMessageSeen?: boolean | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } };
 
+export type CreateOneOnOneTalkRoomMessageMutationVariables = Exact<{
+  input: CreateOneOnOneTalkRoomMessageInput;
+}>;
+
+
+export type CreateOneOnOneTalkRoomMessageMutation = { __typename?: 'Mutation', createOneOnOneTalkRoomMessage: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
+
 export type CreatePickMutationVariables = Exact<{
   input: CreatePickInput;
 }>;
@@ -1079,12 +1088,12 @@ export type GetOneOnOneTalkRoomMessagesQueryVariables = Exact<{
 }>;
 
 
-export type GetOneOnOneTalkRoomMessagesQuery = { __typename?: 'Query', oneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetOneOnOneTalkRoomMessagesQuery = { __typename?: 'Query', oneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
 
 export type GetOneOnOneTalkRoomsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetOneOnOneTalkRoomsQuery = { __typename?: 'Query', oneOnOneTalkRooms: Array<{ __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
+export type GetOneOnOneTalkRoomsQuery = { __typename?: 'Query', oneOnOneTalkRooms: Array<{ __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
 
 export type GetPickedNewsQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']>;
@@ -1570,6 +1579,54 @@ export function useCreateOneOnOneTalkRoomMutation(baseOptions?: Apollo.MutationH
 export type CreateOneOnOneTalkRoomMutationHookResult = ReturnType<typeof useCreateOneOnOneTalkRoomMutation>;
 export type CreateOneOnOneTalkRoomMutationResult = Apollo.MutationResult<CreateOneOnOneTalkRoomMutation>;
 export type CreateOneOnOneTalkRoomMutationOptions = Apollo.BaseMutationOptions<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>;
+export const CreateOneOnOneTalkRoomMessageDocument = gql`
+    mutation CreateOneOnOneTalkRoomMessage($input: CreateOneOnOneTalkRoomMessageInput!) {
+  createOneOnOneTalkRoomMessage(input: $input) {
+    id
+    text
+    createdAt
+    sender {
+      ...UserParts
+    }
+    roomId
+    replyMessage {
+      id
+      text
+      createdAt
+      sender {
+        id
+        name
+      }
+    }
+  }
+}
+    ${UserPartsFragmentDoc}`;
+export type CreateOneOnOneTalkRoomMessageMutationFn = Apollo.MutationFunction<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>;
+
+/**
+ * __useCreateOneOnOneTalkRoomMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateOneOnOneTalkRoomMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOneOnOneTalkRoomMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOneOnOneTalkRoomMessageMutation, { data, loading, error }] = useCreateOneOnOneTalkRoomMessageMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateOneOnOneTalkRoomMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>(CreateOneOnOneTalkRoomMessageDocument, options);
+      }
+export type CreateOneOnOneTalkRoomMessageMutationHookResult = ReturnType<typeof useCreateOneOnOneTalkRoomMessageMutation>;
+export type CreateOneOnOneTalkRoomMessageMutationResult = Apollo.MutationResult<CreateOneOnOneTalkRoomMessageMutation>;
+export type CreateOneOnOneTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>;
 export const CreatePickDocument = gql`
     mutation CreatePick($input: CreatePickInput!) {
   createPick(input: $input) {
@@ -2670,6 +2727,16 @@ export const GetOneOnOneTalkRoomMessagesDocument = gql`
             imageUrl
           }
           roomId
+          replyMessage {
+            id
+            text
+            createdAt
+            sender {
+              id
+              name
+              imageUrl
+            }
+          }
         }
         cursor
       }
@@ -2731,6 +2798,16 @@ export const GetOneOnOneTalkRoomsDocument = gql`
             id
             name
             imageUrl
+          }
+          replyMessage {
+            id
+            text
+            createdAt
+            sender {
+              id
+              name
+              imageUrl
+            }
           }
         }
         cursor

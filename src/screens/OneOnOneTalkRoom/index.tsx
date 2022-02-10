@@ -1,12 +1,33 @@
 import React, { useLayoutEffect } from "react";
 import { RootNavigationScreenProp } from "src/types";
 import { HeaderBackButton } from "@react-navigation/elements";
+import {
+  useGetOneOnOneTalkRoomMessagesQuery,
+  useCreateOneOnOneTalkRoomMessageMutation,
+  useSeenOneOnOneTalkRoomMessageMutation,
+} from "src/generated/graphql";
+import { TalkRoomMessage } from "src/components/TalkRoomMessage";
 
 type Props = RootNavigationScreenProp<"OneOnOneTalkRoomMain">;
 
 export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
   const talkRoomId = route.params.id;
   const { user } = route.params;
+
+  const { data: messageData, fetchMore } = useGetOneOnOneTalkRoomMessagesQuery({
+    variables: {
+      id: talkRoomId,
+    },
+    // fetchPolicy: "cache-only",
+  });
+
+  const [createMessageMutation] = useCreateOneOnOneTalkRoomMessageMutation();
+
+  const [seenMutation] = useSeenOneOnOneTalkRoomMessageMutation();
+
+  if (messageData) {
+    console.log(messageData.oneOnOneTalkRoom.messages.edges);
+  }
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -21,5 +42,18 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation]);
 
-  return null;
+  if (!messageData) {
+    return null;
+  }
+
+  return (
+    <TalkRoomMessage
+      type="OneOnOne"
+      roomId={talkRoomId}
+      messageData={messageData}
+      messageFetchMore={fetchMore}
+      createMessage={createMessageMutation}
+      createSeen={seenMutation}
+    />
+  );
 };
