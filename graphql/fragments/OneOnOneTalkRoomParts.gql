@@ -1,0 +1,22 @@
+fragment OneOnOneTalkRoomParts on OneOnOneTalkRoom {
+  id
+  allMessageSeen
+  updatedAt
+  sender {
+    ...UserParts
+  }
+  recipient {
+    ...UserParts
+  }
+  messages {
+    edges {
+      node {
+        ...OneOnOneTalkRoomMessageParts
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
+}

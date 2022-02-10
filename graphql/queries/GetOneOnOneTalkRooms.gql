@@ -1,41 +1,5 @@
 query GetOneOnOneTalkRooms {
   oneOnOneTalkRooms {
-    id
-    allMessageSeen
-    updatedAt
-    sender {
-      ...UserParts
-    }
-    recipient {
-      ...UserParts
-    }
-    messages {
-      edges {
-        node {
-          id
-          text
-          createdAt
-          sender {
-            id
-            name
-            imageUrl
-          }
-          replyMessage {
-            id
-            text
-            createdAt
-            sender {
-              id
-              name
-              imageUrl
-            }
-          }
-        }
-        cursor
-      }
-      pageInfo {
-        ...PageInfoParts
-      }
-    }
+    ...OneOnOneTalkRoomParts
   }
 }

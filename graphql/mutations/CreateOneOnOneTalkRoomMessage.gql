@@ -2,21 +2,6 @@ mutation CreateOneOnOneTalkRoomMessage(
   $input: CreateOneOnOneTalkRoomMessageInput!
 ) {
   createOneOnOneTalkRoomMessage(input: $input) {
-    id
-    text
-    createdAt
-    sender {
-      ...UserParts
-    }
-    roomId
-    replyMessage {
-      id
-      text
-      createdAt
-      sender {
-        id
-        name
-      }
-    }
+    ...OneOnOneTalkRoomMessageParts
   }
 }

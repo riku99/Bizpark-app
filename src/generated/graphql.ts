@@ -821,6 +821,10 @@ export type NewsTalkRoomParentPartsFragment = { __typename?: 'News', id: number,
 
 export type NewsTalkRoomPartsFragment = { __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
 
+export type OneOnOneTalkRoomMessagePartsFragment = { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined };
+
+export type OneOnOneTalkRoomPartsFragment = { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
+
 export type PageInfoPartsFragment = { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined };
 
 export type ThoughtPartsFragment = { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> };
@@ -861,14 +865,14 @@ export type CreateOneOnOneTalkRoomMutationVariables = Exact<{
 }>;
 
 
-export type CreateOneOnOneTalkRoomMutation = { __typename?: 'Mutation', createOneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, createdAt: string, updatedAt: string, allMessageSeen?: boolean | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } };
+export type CreateOneOnOneTalkRoomMutation = { __typename?: 'Mutation', createOneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
 
 export type CreateOneOnOneTalkRoomMessageMutationVariables = Exact<{
   input: CreateOneOnOneTalkRoomMessageInput;
 }>;
 
 
-export type CreateOneOnOneTalkRoomMessageMutation = { __typename?: 'Mutation', createOneOnOneTalkRoomMessage: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
+export type CreateOneOnOneTalkRoomMessageMutation = { __typename?: 'Mutation', createOneOnOneTalkRoomMessage: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } };
 
 export type CreatePickMutationVariables = Exact<{
   input: CreatePickInput;
@@ -1328,6 +1332,54 @@ export const NewsTalkRoomPartsFragmentDoc = gql`
 ${PageInfoPartsFragmentDoc}
 ${NewsPartsFragmentDoc}
 ${NewsTalkRoomMessagePartsFragmentDoc}`;
+export const OneOnOneTalkRoomMessagePartsFragmentDoc = gql`
+    fragment OneOnOneTalkRoomMessageParts on OneOnOneTalkRoomMessage {
+  id
+  text
+  createdAt
+  sender {
+    id
+    name
+    imageUrl
+  }
+  replyMessage {
+    id
+    text
+    createdAt
+    sender {
+      id
+      name
+      imageUrl
+    }
+  }
+}
+    `;
+export const OneOnOneTalkRoomPartsFragmentDoc = gql`
+    fragment OneOnOneTalkRoomParts on OneOnOneTalkRoom {
+  id
+  allMessageSeen
+  updatedAt
+  sender {
+    ...UserParts
+  }
+  recipient {
+    ...UserParts
+  }
+  messages {
+    edges {
+      node {
+        ...OneOnOneTalkRoomMessageParts
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
+}
+    ${UserPartsFragmentDoc}
+${OneOnOneTalkRoomMessagePartsFragmentDoc}
+${PageInfoPartsFragmentDoc}`;
 export const ThoughtTalkRoomParentPartsFragmentDoc = gql`
     fragment ThoughtTalkRoomParentParts on Thought {
   id
@@ -1536,23 +1588,10 @@ export type CreateNewsTalkRoomMessageMutationOptions = Apollo.BaseMutationOption
 export const CreateOneOnOneTalkRoomDocument = gql`
     mutation CreateOneOnOneTalkRoom($input: CreateOneOnOneTalkRoomInput!) {
   createOneOnOneTalkRoom(input: $input) {
-    id
-    createdAt
-    updatedAt
-    sender {
-      id
-      name
-      imageUrl
-    }
-    recipient {
-      id
-      name
-      imageUrl
-    }
-    allMessageSeen
+    ...OneOnOneTalkRoomParts
   }
 }
-    `;
+    ${OneOnOneTalkRoomPartsFragmentDoc}`;
 export type CreateOneOnOneTalkRoomMutationFn = Apollo.MutationFunction<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>;
 
 /**
@@ -1582,25 +1621,10 @@ export type CreateOneOnOneTalkRoomMutationOptions = Apollo.BaseMutationOptions<C
 export const CreateOneOnOneTalkRoomMessageDocument = gql`
     mutation CreateOneOnOneTalkRoomMessage($input: CreateOneOnOneTalkRoomMessageInput!) {
   createOneOnOneTalkRoomMessage(input: $input) {
-    id
-    text
-    createdAt
-    sender {
-      ...UserParts
-    }
-    roomId
-    replyMessage {
-      id
-      text
-      createdAt
-      sender {
-        id
-        name
-      }
-    }
+    ...OneOnOneTalkRoomMessageParts
   }
 }
-    ${UserPartsFragmentDoc}`;
+    ${OneOnOneTalkRoomMessagePartsFragmentDoc}`;
 export type CreateOneOnOneTalkRoomMessageMutationFn = Apollo.MutationFunction<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>;
 
 /**
@@ -2779,47 +2803,10 @@ export type GetOneOnOneTalkRoomMessagesQueryResult = Apollo.QueryResult<GetOneOn
 export const GetOneOnOneTalkRoomsDocument = gql`
     query GetOneOnOneTalkRooms {
   oneOnOneTalkRooms {
-    id
-    allMessageSeen
-    updatedAt
-    sender {
-      ...UserParts
-    }
-    recipient {
-      ...UserParts
-    }
-    messages {
-      edges {
-        node {
-          id
-          text
-          createdAt
-          sender {
-            id
-            name
-            imageUrl
-          }
-          replyMessage {
-            id
-            text
-            createdAt
-            sender {
-              id
-              name
-              imageUrl
-            }
-          }
-        }
-        cursor
-      }
-      pageInfo {
-        ...PageInfoParts
-      }
-    }
+    ...OneOnOneTalkRoomParts
   }
 }
-    ${UserPartsFragmentDoc}
-${PageInfoPartsFragmentDoc}`;
+    ${OneOnOneTalkRoomPartsFragmentDoc}`;
 
 /**
  * __useGetOneOnOneTalkRoomsQuery__

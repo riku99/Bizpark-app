@@ -25,10 +25,6 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
 
   const [seenMutation] = useSeenOneOnOneTalkRoomMessageMutation();
 
-  if (messageData) {
-    console.log(messageData.oneOnOneTalkRoom.messages.edges);
-  }
-
   useLayoutEffect(() => {
     navigation.setOptions({
       headerLeft: () => (
