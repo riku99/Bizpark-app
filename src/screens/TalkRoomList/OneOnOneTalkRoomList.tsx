@@ -14,6 +14,8 @@ import {
 import { ListItem } from "react-native-elements";
 import { UserImage } from "src/components/UserImage";
 import { Badge } from "src/components/Badge";
+import { useNavigation } from "@react-navigation/native";
+import { RootNavigationProp } from "src/types";
 
 type Item = GetOneOnOneTalkRoomsQuery["oneOnOneTalkRooms"][number];
 
@@ -36,6 +38,8 @@ export const OneOnOneTalkRoomList = React.memo(() => {
     fetchPolicy: "cache-only",
   });
 
+  const navigation = useNavigation<RootNavigationProp<"Tab">>();
+
   const renderItem = useCallback(
     ({ item }: { item: Item }) => {
       if (!me) {
@@ -48,8 +52,21 @@ export const OneOnOneTalkRoomList = React.memo(() => {
 
       const user = me.id === sender.id ? recipient : sender;
 
+      const onPress = () => {
+        navigation.navigate("OneOnOneTalkRoom", {
+          screen: "OneOnOneTalkRoomMain",
+          params: {
+            id,
+          },
+        });
+      };
+
       return (
-        <Pressable bg={bg} _pressed={{ bg: itemPressedColor }}>
+        <Pressable
+          onPress={onPress}
+          bg={bg}
+          _pressed={{ bg: itemPressedColor }}
+        >
           <ListItem containerStyle={{ backgroundColor: "transparent" }}>
             <UserImage uri={user.imageUrl} size="10" />
             <ListItem.Content>
@@ -59,7 +76,7 @@ export const OneOnOneTalkRoomList = React.memo(() => {
                 {user.name}
               </ListItem.Title>
               <ListItem.Subtitle style={{ color: messageColor, fontSize: 14 }}>
-                {"lastMessage"}
+                {lastMessage}
               </ListItem.Subtitle>
             </ListItem.Content>
 

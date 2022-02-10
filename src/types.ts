@@ -6,6 +6,7 @@ import { NavigatorScreenParams } from "@react-navigation/native";
 import { SettingsParamList } from "src/navigations/Settings";
 import { ThoughtTalkRoomStackParamList } from "src/navigations/ThoughtTalkRoom";
 import { NewsTalkRoomStackParamList } from "src/navigations/NewsTalkRoom";
+import { OneOnOneTalkRoomStackParamList } from "src/navigations/OneOnOneTalkRoom";
 
 type ThoughtShare = {
   title?: string;
@@ -58,9 +59,11 @@ export type RootStackParamList = {
   Settings: undefined;
   ThoughtTalkRoom: NavigatorScreenParams<ThoughtTalkRoomStackParamList>;
   NewsTalkRoom: NavigatorScreenParams<NewsTalkRoomStackParamList>;
+  OneOnOneTalkRoom: NavigatorScreenParams<OneOnOneTalkRoomStackParamList>;
 } & SettingsParamList &
   ThoughtTalkRoomStackParamList &
-  NewsTalkRoomStackParamList;
+  NewsTalkRoomStackParamList &
+  OneOnOneTalkRoomStackParamList;
 
 export type RootNavigationScreenProp<
   T extends keyof RootStackParamList
