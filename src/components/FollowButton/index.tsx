@@ -56,9 +56,6 @@ export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
 
   return (
     <Pressable
-      // position="absolute"
-      // top="4"
-      // right="3"
       borderWidth={isFollowing || loading ? "1" : "0"}
       borderColor={isFollowing || loading ? borderColor : undefined}
       bg={isFollowing || loading ? undefined : "pink"}
