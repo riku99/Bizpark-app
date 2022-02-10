@@ -15,6 +15,8 @@ import {
   CreateUserThoughtTalkRoomMessageSeenMutationFn,
   CreateNewsTalkRoomMessageMutationFn,
   CreateUserNewsTalkRoomMessageSeenMutationFn,
+  GetOneOnOneTalkRoomMessagesQueryResult,
+  CreateOneOnOneTalkRoomMutationFn,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -26,7 +28,7 @@ import { Alert } from "react-native";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
 
-type Props = (
+type Props =
   | {
       type: "Thought";
       roomId: number;
@@ -34,6 +36,7 @@ type Props = (
       messageFetchMore: GetThoughtTalkRoomMessagesQueryResult["fetchMore"];
       createMessage: CreateThoughtTalkRoomMessageMutationFn;
       createSeen: CreateUserThoughtTalkRoomMessageSeenMutationFn;
+      deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
     }
   | {
       type: "News";
@@ -42,10 +45,15 @@ type Props = (
       messageFetchMore: GetNewsTalkRoomMessagesQueryResult["fetchMore"];
       createMessage: CreateNewsTalkRoomMessageMutationFn;
       createSeen: CreateUserNewsTalkRoomMessageSeenMutationFn;
+      deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
     }
-) & {
-  deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
-};
+  | {
+      type: "OneOnOne";
+      roomId: number;
+      messageData: GetOneOnOneTalkRoomMessagesQueryResult["data"];
+      messageFetchMore: GetOneOnOneTalkRoomMessagesQueryResult["fetchMore"];
+      createMessage: CreateOneOnOneTalkRoomMutationFn;
+    };
 
 const isTmp = (str: string) => str.slice(0, 3) === "tmp";
 

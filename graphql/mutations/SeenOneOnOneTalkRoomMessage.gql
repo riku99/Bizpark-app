@@ -1,0 +1,8 @@
+mutation SeenOneOnOneTalkRoomMessage(
+  $input: SeenOneOnOneTalkRoomMessageInput!
+) {
+  seenOneOnOneTalkRoomMessage(input: $input) {
+    id
+    allMessageSeen
+  }
+}

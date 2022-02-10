@@ -57,6 +57,9 @@ export const OneOnOneTalkRoomList = React.memo(() => {
           screen: "OneOnOneTalkRoomMain",
           params: {
             id,
+            user: {
+              name: user.name,
+            },
           },
         });
       };
