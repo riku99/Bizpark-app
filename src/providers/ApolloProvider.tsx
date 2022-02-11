@@ -18,7 +18,7 @@ import { createUploadLink } from "apollo-upload-client";
 import { useCustomToast } from "src/hooks/toast";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
-import { read } from "react-native-fs";
+
 type Props = {
   children: JSX.Element;
 };
@@ -130,6 +130,11 @@ const cache = new InMemoryCache({
         },
         pickedNews: relayStylePagination(),
         pickedThoughts: relayStylePagination(),
+        oneOnOneTalRooms: {
+          merge: (existing = [], incoming) => {
+            return incoming;
+          },
+        },
         oneOnOneTalkRoom: {
           read: (_, { args, toReference }) => {
             return toReference({

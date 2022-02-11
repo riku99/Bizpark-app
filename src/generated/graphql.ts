@@ -634,12 +634,18 @@ export type SubImage = {
 export type Subscription = {
   __typename?: 'Subscription';
   newsTalkRoomMessageCreated: NewsTalkRoomMessage;
+  oneOnOneTalkRoomMessageCreated: OneOnOneTalkRoomMessage;
   thoughtTalkRoomMessageCreated?: Maybe<ThoughtTalkRoomMessage>;
 };
 
 
 export type SubscriptionNewsTalkRoomMessageCreatedArgs = {
   roomIds: Array<InputMaybe<Scalars['Int']>>;
+  userId: Scalars['ID'];
+};
+
+
+export type SubscriptionOneOnOneTalkRoomMessageCreatedArgs = {
   userId: Scalars['ID'];
 };
 
@@ -1197,6 +1203,13 @@ export type OnNewsTalkRoomMessageCreatedSubscriptionVariables = Exact<{
 
 
 export type OnNewsTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', newsTalkRoomMessageCreated: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, talkRoom?: { __typename?: 'NewsTalkRoom', id: number, updatedAt?: string | null | undefined, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, news?: { __typename?: 'News', id: number, title: string } | null | undefined } | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
+
+export type OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables = Exact<{
+  userId: Scalars['ID'];
+}>;
+
+
+export type OnOneOnOneTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', oneOnOneTalkRoomMessageCreated: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } };
 
 export type OnThoughtTalkRoomMessageCreatedSubscriptionVariables = Exact<{
   roomIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
@@ -3388,6 +3401,36 @@ export function useOnNewsTalkRoomMessageCreatedSubscription(baseOptions: Apollo.
       }
 export type OnNewsTalkRoomMessageCreatedSubscriptionHookResult = ReturnType<typeof useOnNewsTalkRoomMessageCreatedSubscription>;
 export type OnNewsTalkRoomMessageCreatedSubscriptionResult = Apollo.SubscriptionResult<OnNewsTalkRoomMessageCreatedSubscription>;
+export const OnOneOnOneTalkRoomMessageCreatedDocument = gql`
+    subscription OnOneOnOneTalkRoomMessageCreated($userId: ID!) {
+  oneOnOneTalkRoomMessageCreated(userId: $userId) {
+    ...OneOnOneTalkRoomMessageParts
+  }
+}
+    ${OneOnOneTalkRoomMessagePartsFragmentDoc}`;
+
+/**
+ * __useOnOneOnOneTalkRoomMessageCreatedSubscription__
+ *
+ * To run a query within a React component, call `useOnOneOnOneTalkRoomMessageCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnOneOnOneTalkRoomMessageCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnOneOnOneTalkRoomMessageCreatedSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useOnOneOnOneTalkRoomMessageCreatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OnOneOnOneTalkRoomMessageCreatedSubscription, OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnOneOnOneTalkRoomMessageCreatedSubscription, OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables>(OnOneOnOneTalkRoomMessageCreatedDocument, options);
+      }
+export type OnOneOnOneTalkRoomMessageCreatedSubscriptionHookResult = ReturnType<typeof useOnOneOnOneTalkRoomMessageCreatedSubscription>;
+export type OnOneOnOneTalkRoomMessageCreatedSubscriptionResult = Apollo.SubscriptionResult<OnOneOnOneTalkRoomMessageCreatedSubscription>;
 export const OnThoughtTalkRoomMessageCreatedDocument = gql`
     subscription OnThoughtTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
   thoughtTalkRoomMessageCreated(roomIds: $roomIds, userId: $userId) {

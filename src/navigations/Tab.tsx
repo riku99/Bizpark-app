@@ -15,6 +15,7 @@ import { StyleSheet } from "react-native";
 import { useToughtTalkRoomsWithSubsciption } from "src/hooks/thoughtTalkRoom";
 import { useActiveData } from "src/hooks/active";
 import { useNewsTalkRoomsWithSusbscription } from "src/hooks/newsTalkRoom";
+import { useOneOnOneTalkRoomsWithSubscription } from "src/hooks/oneOnOneTalkRoom";
 
 type TabParamList = {
   Home: undefined;
@@ -58,6 +59,7 @@ export const BottomTab = () => {
   useActiveData();
   useToughtTalkRoomsWithSubsciption();
   useNewsTalkRoomsWithSusbscription();
+  useOneOnOneTalkRoomsWithSubscription();
 
   return (
     <Tab.Navigator
