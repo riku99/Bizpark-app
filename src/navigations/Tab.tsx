@@ -9,6 +9,7 @@ import { HomeStack } from "./Home";
 import {
   useGetThoughtTalkRoomsQuery,
   useGetNewsTalkRoomsQuery,
+  useGetOneOnOneTalkRoomsQuery,
 } from "src/generated/graphql";
 import { Badge } from "src/components/Badge";
 import { StyleSheet } from "react-native";
@@ -33,28 +34,52 @@ export const BottomTab = () => {
     fetchPolicy: "cache-only",
   });
 
-  const { data: newsTalkRoomsData } = useGetNewsTalkRoomsQuery({
+  const { data: newsTalkRoomData } = useGetNewsTalkRoomsQuery({
     fetchPolicy: "cache-only",
   });
 
-  const talkTabBadge = useMemo(() => {
-    if (!thoughtTalkRoomData || !newsTalkRoomsData) {
+  const { data: oneOnOneTalkRoomData } = useGetOneOnOneTalkRoomsQuery({
+    fetchPolicy: "cache-only",
+  });
+
+  const notThoughtTalkRoomAllSeen = useMemo(() => {
+    if (!thoughtTalkRoomData) {
       return false;
     }
 
-    const notSeenMessageThoughtTalkRoom = thoughtTalkRoomData.thoughtTalkRooms.filter(
+    return thoughtTalkRoomData.thoughtTalkRooms.some(
       (room) => !room.allMessageSeen
     );
+  }, [thoughtTalkRoomData]);
 
-    const notSeenMessageNewsTalkRoom = newsTalkRoomsData.newsTalkRooms.filter(
+  const notNewsTalkRoomAllSeen = useMemo(() => {
+    if (!newsTalkRoomData) {
+      return false;
+    }
+
+    return newsTalkRoomData.newsTalkRooms.find((room) => !room.allMessageSeen);
+  }, [newsTalkRoomData]);
+
+  const notOneOnOneTalkRoomAllSeen = useMemo(() => {
+    if (!oneOnOneTalkRoomData) {
+      return false;
+    }
+    return oneOnOneTalkRoomData.oneOnOneTalkRooms.find(
       (room) => !room.allMessageSeen
     );
+  }, [oneOnOneTalkRoomData]);
 
+  const talkBadgeVisible = useMemo(() => {
     return (
-      !!notSeenMessageThoughtTalkRoom.length ||
-      !!notSeenMessageNewsTalkRoom.length
+      notThoughtTalkRoomAllSeen ||
+      notNewsTalkRoomAllSeen ||
+      notOneOnOneTalkRoomAllSeen
     );
-  }, [thoughtTalkRoomData, newsTalkRoomsData]);
+  }, [
+    notThoughtTalkRoomAllSeen,
+    notNewsTalkRoomAllSeen,
+    notOneOnOneTalkRoomAllSeen,
+  ]);
 
   useActiveData();
   useToughtTalkRoomsWithSubsciption();
@@ -105,7 +130,7 @@ export const BottomTab = () => {
           tabBarIcon: ({ color }) => (
             <Box>
               <AntDesign name="message1" size={ICON_SIZE} color={color} />
-              {talkTabBadge && <Badge containerStyle={styles.badge} />}
+              {talkBadgeVisible && <Badge containerStyle={styles.badge} />}
             </Box>
           ),
           tabBarLabel: "トーク",
