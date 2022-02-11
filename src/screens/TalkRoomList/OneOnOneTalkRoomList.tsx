@@ -5,6 +5,7 @@ import {
   useColorModeValue,
   useTheme,
   Pressable,
+  Text,
 } from "native-base";
 import {
   useGetOneOnOneTalkRoomsQuery,
@@ -16,6 +17,7 @@ import { UserImage } from "src/components/UserImage";
 import { Badge } from "src/components/Badge";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
+import { StyleSheet } from "react-native";
 
 type Item = GetOneOnOneTalkRoomsQuery["oneOnOneTalkRooms"][number];
 
@@ -72,17 +74,16 @@ export const OneOnOneTalkRoomList = React.memo(() => {
           bg={bg}
           _pressed={{ bg: itemPressedColor }}
         >
-          <ListItem containerStyle={{ backgroundColor: "transparent" }}>
+          <ListItem containerStyle={styles.itemContainer}>
             <UserImage uri={user.imageUrl} size="10" />
             <ListItem.Content>
-              <ListItem.Title
-                style={{ color: nameColor, fontWeight: "bold", fontSize: 16 }}
-              >
+              <ListItem.Title style={[{ color: nameColor }, styles.title]}>
                 {user.name}
               </ListItem.Title>
-              <ListItem.Subtitle style={{ color: messageColor, fontSize: 14 }}>
+
+              <Text color={messageColor} ellipsizeMode="tail" numberOfLines={1}>
                 {lastMessage}
-              </ListItem.Subtitle>
+              </Text>
             </ListItem.Content>
 
             {!allMessageSeen && <Badge />}
@@ -106,4 +107,14 @@ export const OneOnOneTalkRoomList = React.memo(() => {
       />
     </Box>
   );
+});
+
+const styles = StyleSheet.create({
+  itemContainer: {
+    backgroundColor: "transparent",
+  },
+  title: {
+    fontWeight: "bold",
+    fontSize: 16,
+  },
 });
