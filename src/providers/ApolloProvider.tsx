@@ -130,7 +130,7 @@ const cache = new InMemoryCache({
         },
         pickedNews: relayStylePagination(),
         pickedThoughts: relayStylePagination(),
-        oneOnOneTalRooms: {
+        oneOnOneTalkRooms: {
           merge: (existing = [], incoming) => {
             return incoming;
           },

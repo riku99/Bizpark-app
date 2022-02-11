@@ -7,6 +7,7 @@ import {
   useSeenOneOnOneTalkRoomMessageMutation,
 } from "src/generated/graphql";
 import { TalkRoomMessage } from "src/components/TalkRoomMessage";
+import { useDeleteOneOnOneTalkRoomFromCache } from "src/hooks/oneOnOneTalkRoom";
 
 type Props = RootNavigationScreenProp<"OneOnOneTalkRoomMain">;
 
@@ -24,6 +25,10 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
   const [createMessageMutation] = useCreateOneOnOneTalkRoomMessageMutation();
 
   const [seenMutation] = useSeenOneOnOneTalkRoomMessageMutation();
+
+  const {
+    deleteOneOnOneTalkRoomFromCache,
+  } = useDeleteOneOnOneTalkRoomFromCache();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -50,6 +55,7 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
       messageFetchMore={fetchMore}
       createMessage={createMessageMutation}
       createSeen={seenMutation}
+      deleteTalkRoomFromCache={deleteOneOnOneTalkRoomFromCache}
     />
   );
 };

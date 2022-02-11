@@ -58,6 +58,7 @@ type Props =
       messageFetchMore: GetOneOnOneTalkRoomMessagesQueryResult["fetchMore"];
       createMessage: CreateOneOnOneTalkRoomMessageMutationFn;
       createSeen: SeenOneOnOneTalkRoomMessageMutationFn;
+      deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
     };
 
 const isTmp = (str: string) => str.slice(0, 3) === "tmp";

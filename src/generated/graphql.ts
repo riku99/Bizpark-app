@@ -92,6 +92,10 @@ export type DeleteNewsPickInput = {
   newsId: Scalars['Int'];
 };
 
+export type DeleteOneOnOneTalkRoonInput = {
+  talkRoomId: Scalars['Int'];
+};
+
 export type DeleteThoughtInput = {
   id: Scalars['String'];
 };
@@ -186,6 +190,7 @@ export type Mutation = {
   createUserNewsTalkRoomMessageSeen: NewsTalkRoom;
   createUserThoughtTalkRoomMessageSeen: ThoughtTalkRoom;
   deleteNewsPick: News;
+  deleteOneOnOneTalkRoom?: Maybe<Scalars['Boolean']>;
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
   deleteThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
@@ -263,6 +268,11 @@ export type MutationCreateUserThoughtTalkRoomMessageSeenArgs = {
 
 export type MutationDeleteNewsPickArgs = {
   input: DeleteNewsPickInput;
+};
+
+
+export type MutationDeleteOneOnOneTalkRoomArgs = {
+  input: DeleteOneOnOneTalkRoonInput;
 };
 
 
@@ -928,6 +938,13 @@ export type DeleteNewsPickMutationVariables = Exact<{
 
 
 export type DeleteNewsPickMutation = { __typename?: 'Mutation', deleteNewsPick: { __typename?: 'News', id: number, picked: boolean } };
+
+export type DeleteOneOnOneTalkRoomMutationVariables = Exact<{
+  input: DeleteOneOnOneTalkRoonInput;
+}>;
+
+
+export type DeleteOneOnOneTalkRoomMutation = { __typename?: 'Mutation', deleteOneOnOneTalkRoom?: boolean | null | undefined };
 
 export type DeletePickMutationVariables = Exact<{
   thoughtId: Scalars['ID'];
@@ -1908,6 +1925,37 @@ export function useDeleteNewsPickMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteNewsPickMutationHookResult = ReturnType<typeof useDeleteNewsPickMutation>;
 export type DeleteNewsPickMutationResult = Apollo.MutationResult<DeleteNewsPickMutation>;
 export type DeleteNewsPickMutationOptions = Apollo.BaseMutationOptions<DeleteNewsPickMutation, DeleteNewsPickMutationVariables>;
+export const DeleteOneOnOneTalkRoomDocument = gql`
+    mutation DeleteOneOnOneTalkRoom($input: DeleteOneOnOneTalkRoonInput!) {
+  deleteOneOnOneTalkRoom(input: $input)
+}
+    `;
+export type DeleteOneOnOneTalkRoomMutationFn = Apollo.MutationFunction<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>;
+
+/**
+ * __useDeleteOneOnOneTalkRoomMutation__
+ *
+ * To run a mutation, you first call `useDeleteOneOnOneTalkRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOneOnOneTalkRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOneOnOneTalkRoomMutation, { data, loading, error }] = useDeleteOneOnOneTalkRoomMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteOneOnOneTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>(DeleteOneOnOneTalkRoomDocument, options);
+      }
+export type DeleteOneOnOneTalkRoomMutationHookResult = ReturnType<typeof useDeleteOneOnOneTalkRoomMutation>;
+export type DeleteOneOnOneTalkRoomMutationResult = Apollo.MutationResult<DeleteOneOnOneTalkRoomMutation>;
+export type DeleteOneOnOneTalkRoomMutationOptions = Apollo.BaseMutationOptions<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>;
 export const DeletePickDocument = gql`
     mutation DeletePick($thoughtId: ID!) {
   deletePick(thoughtId: $thoughtId) {

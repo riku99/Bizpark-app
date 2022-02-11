@@ -1,4 +1,4 @@
-import React, { useCallback } from "react";
+import React, { useCallback, useState } from "react";
 import {
   Box,
   FlatList,
@@ -11,13 +11,21 @@ import {
   useGetOneOnOneTalkRoomsQuery,
   GetOneOnOneTalkRoomsQuery,
   useMeQuery,
+  useDeleteOneOnOneTalkRoomMutation,
 } from "src/generated/graphql";
 import { ListItem } from "react-native-elements";
 import { UserImage } from "src/components/UserImage";
 import { Badge } from "src/components/Badge";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
-import { StyleSheet } from "react-native";
+import { StyleSheet, Alert } from "react-native";
+import { useDeleteOneOnOneTalkRoomFromCache } from "src/hooks/oneOnOneTalkRoom";
+import * as Haptics from "expo-haptics";
+import {
+  InstaLikeModal,
+  ListItem as MenuListItem,
+} from "src/components/InstaLikeModal";
+import { useToast } from "react-native-toast-notifications";
 
 type Item = GetOneOnOneTalkRoomsQuery["oneOnOneTalkRooms"][number];
 
@@ -44,6 +52,66 @@ export const OneOnOneTalkRoomList = React.memo(() => {
 
   const navigation = useNavigation<RootNavigationProp<"Tab">>();
 
+  const [menuData, setMenuData] = useState<{ roomId: number | null }>(null);
+
+  const closeMenu = () => {
+    setMenuData(null);
+  };
+
+  const [deleteTalkRoomMutation] = useDeleteOneOnOneTalkRoomMutation();
+
+  const {
+    deleteOneOnOneTalkRoomFromCache,
+  } = useDeleteOneOnOneTalkRoomFromCache();
+
+  const toast = useToast();
+
+  const menuList: MenuListItem[] = [
+    {
+      title: "トークルームを削除",
+      color: "red",
+      onPress: () => {
+        Alert.alert(
+          "トークルームを削除",
+          "メッセージが全て削除され元に戻すことはできません。削除しますか?",
+          [
+            {
+              text: "キャンセル",
+              style: "cancel",
+            },
+            {
+              text: "削除",
+              style: "destructive",
+              onPress: async () => {
+                if (menuData) {
+                  try {
+                    await deleteTalkRoomMutation({
+                      variables: {
+                        input: {
+                          talkRoomId: menuData.roomId,
+                        },
+                      },
+                    });
+
+                    deleteOneOnOneTalkRoomFromCache({
+                      talkRoomId: menuData.roomId,
+                    });
+
+                    toast.show("削除しました", { type: "success" });
+                  } catch (e) {
+                    console.log(e);
+                  } finally {
+                    setMenuData(null);
+                  }
+                }
+              },
+            },
+          ]
+        );
+      },
+    },
+  ];
+
   const renderItem = useCallback(
     ({ item }: { item: Item }) => {
       if (!me) {
@@ -68,9 +136,15 @@ export const OneOnOneTalkRoomList = React.memo(() => {
         });
       };
 
+      const onLongPress = () => {
+        Haptics.selectionAsync();
+        setMenuData({ roomId: item.id });
+      };
+
       return (
         <Pressable
           onPress={onPress}
+          onLongPress={onLongPress}
           bg={bg}
           _pressed={{ bg: itemPressedColor }}
         >
@@ -104,6 +178,13 @@ export const OneOnOneTalkRoomList = React.memo(() => {
         data={talkRoomData.oneOnOneTalkRooms}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
+      />
+
+      <InstaLikeModal
+        isVisible={!!menuData}
+        list={menuList}
+        onBackdropPress={closeMenu}
+        onCancel={closeMenu}
       />
     </Box>
   );

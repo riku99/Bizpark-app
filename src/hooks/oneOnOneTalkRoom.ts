@@ -177,3 +177,31 @@ export const useFindOneOnOneTalkRoomFromUserId = () => {
     findOneOnOneTalkRoom,
   };
 };
+
+export const useDeleteOneOnOneTalkRoomFromCache = () => {
+  const { cache } = useApolloClient();
+
+  const deleteOneOnOneTalkRoomFromCache = useCallback(
+    ({ talkRoomId }: { talkRoomId: number }) => {
+      const queryResult = cache.readQuery<GetOneOnOneTalkRoomsQuery>({
+        query: GetOneOnOneTalkRoomsDocument,
+      });
+
+      if (queryResult) {
+        const filteredData = queryResult.oneOnOneTalkRooms.filter(
+          (room) => room.id !== talkRoomId
+        );
+
+        cache.writeQuery({
+          query: GetOneOnOneTalkRoomsDocument,
+          data: { oneOnOneTalkRooms: filteredData },
+        });
+      }
+    },
+    [cache]
+  );
+
+  return {
+    deleteOneOnOneTalkRoomFromCache,
+  };
+};

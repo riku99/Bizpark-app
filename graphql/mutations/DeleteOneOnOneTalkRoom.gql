@@ -1,0 +1,3 @@
+mutation DeleteOneOnOneTalkRoom($input: DeleteOneOnOneTalkRoonInput!) {
+  deleteOneOnOneTalkRoom(input: $input)
+}
