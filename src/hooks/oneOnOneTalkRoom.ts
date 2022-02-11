@@ -3,6 +3,9 @@ import {
   OnOneOnOneTalkRoomMessageCreatedSubscription,
   OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables,
   OnOneOnOneTalkRoomMessageCreatedDocument,
+  useGetOneOnOneTalkRoomLazyQuery,
+  GetOneOnOneTalkRoomsQuery,
+  GetOneOnOneTalkRoomsDocument,
 } from "src/generated/graphql";
 import { meVar } from "src/stores/me";
 import { useReactiveVar, useApolloClient } from "@apollo/client";
@@ -12,11 +15,19 @@ import { AppState, AppStateStatus } from "react-native";
 export const useOneOnOneTalkRoomsWithSubscription = () => {
   const myId = useReactiveVar(meVar.id);
 
+  const { cache } = useApolloClient();
+
   const { subscribeToMore } = useGetOneOnOneTalkRoomsQuery({
     fetchPolicy: "cache-only",
   });
 
+  const [getOneOnOneTalkRoomQuery] = useGetOneOnOneTalkRoomLazyQuery({
+    fetchPolicy: "network-only",
+  });
+
   const [isActive, setIsActive] = useState(true);
+
+  const [newTalkRoomId, setNewTalkRoomId] = useState<null | number>(null);
 
   useEffect(() => {
     const onChange = (nextState: AppStateStatus) => {
@@ -60,7 +71,10 @@ export const useOneOnOneTalkRoomsWithSubscription = () => {
           );
 
           if (!targetRoom) {
-            // そのルームをフェッチ
+            setNewTalkRoomId(
+              subscriptionData.data.oneOnOneTalkRoomMessageCreated.roomId
+            );
+            return prev;
           }
 
           const newMessageEdge = {
@@ -106,5 +120,38 @@ export const useOneOnOneTalkRoomsWithSubscription = () => {
         }
       };
     }
-  }, [isActive, myId, subscribeToMore]);
+  }, [isActive, myId, subscribeToMore, setNewTalkRoomId]);
+
+  //最初のメッセージ(まだトークルームを持っていない)メッセージが送られて来た場合はそのトークルームをフェッチ。cacheに手動で追加
+  useEffect(() => {
+    if (newTalkRoomId) {
+      (async function () {
+        setNewTalkRoomId(null);
+
+        const { data } = await getOneOnOneTalkRoomQuery({
+          variables: {
+            id: newTalkRoomId,
+          },
+        });
+
+        if (data) {
+          const currentQueryData = cache.readQuery<GetOneOnOneTalkRoomsQuery>({
+            query: GetOneOnOneTalkRoomsDocument,
+          });
+
+          if (currentQueryData) {
+            const newTalkRooms = [
+              data.oneOnOneTalkRoom,
+              ...currentQueryData.oneOnOneTalkRooms,
+            ];
+
+            cache.writeQuery({
+              query: GetOneOnOneTalkRoomsDocument,
+              data: { oneOnOneTalkRooms: newTalkRooms },
+            });
+          }
+        }
+      })();
+    }
+  }, [newTalkRoomId, cache]);
 };

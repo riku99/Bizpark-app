@@ -1092,6 +1092,13 @@ export type GetOneNewsQueryVariables = Exact<{
 
 export type GetOneNewsQuery = { __typename?: 'Query', oneNews: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } };
 
+export type GetOneOnOneTalkRoomQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetOneOnOneTalkRoomQuery = { __typename?: 'Query', oneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+
 export type GetOneOnOneTalkRoomMessagesQueryVariables = Exact<{
   id: Scalars['Int'];
   after?: InputMaybe<Scalars['String']>;
@@ -2749,6 +2756,41 @@ export function useGetOneNewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetOneNewsQueryHookResult = ReturnType<typeof useGetOneNewsQuery>;
 export type GetOneNewsLazyQueryHookResult = ReturnType<typeof useGetOneNewsLazyQuery>;
 export type GetOneNewsQueryResult = Apollo.QueryResult<GetOneNewsQuery, GetOneNewsQueryVariables>;
+export const GetOneOnOneTalkRoomDocument = gql`
+    query GetOneOnOneTalkRoom($id: Int!) {
+  oneOnOneTalkRoom(id: $id) {
+    ...OneOnOneTalkRoomParts
+  }
+}
+    ${OneOnOneTalkRoomPartsFragmentDoc}`;
+
+/**
+ * __useGetOneOnOneTalkRoomQuery__
+ *
+ * To run a query within a React component, call `useGetOneOnOneTalkRoomQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneOnOneTalkRoomQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneOnOneTalkRoomQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetOneOnOneTalkRoomQuery(baseOptions: Apollo.QueryHookOptions<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>(GetOneOnOneTalkRoomDocument, options);
+      }
+export function useGetOneOnOneTalkRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>(GetOneOnOneTalkRoomDocument, options);
+        }
+export type GetOneOnOneTalkRoomQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomQuery>;
+export type GetOneOnOneTalkRoomLazyQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomLazyQuery>;
+export type GetOneOnOneTalkRoomQueryResult = Apollo.QueryResult<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>;
 export const GetOneOnOneTalkRoomMessagesDocument = gql`
     query GetOneOnOneTalkRoomMessages($id: Int!, $after: String) {
   oneOnOneTalkRoom(id: $id) {
