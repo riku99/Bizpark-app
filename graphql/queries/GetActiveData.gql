@@ -5,4 +5,7 @@ query GetActiveData {
   newsTalkRooms: newsTalkRooms {
     ...NewsTalkRoomParts
   }
+  oneOnOneTalkRooms: oneOnOneTalkRooms {
+    ...OneOnOneTalkRoomParts
+  }
 }
