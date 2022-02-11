@@ -20,6 +20,7 @@ import {
   OneOnOneTalkRoomMessageEdge,
   OneOnOneTalkRoomMessage,
   CreateOneOnOneTalkRoomMessageMutationFn,
+  GetOneOnOneTalkRoomMessagesQuery,
 } from "src/generated/graphql";
 import { IMessage } from "react-native-gifted-chat";
 import { BaseChat } from "src/components/BaseChat";
@@ -321,6 +322,9 @@ export const TalkRoomMessage = (props: Props) => {
     try {
       let newIMessageData: IMessage;
 
+      const text = inputMessages[0].text;
+      const replyTo = replyMessage ? Number(replyMessage._id) : null;
+
       switch (props.type) {
         case "Thought":
           const {
@@ -328,9 +332,9 @@ export const TalkRoomMessage = (props: Props) => {
           } = await props.createMessage({
             variables: {
               input: {
-                text: inputMessages[0].text,
+                text,
                 roomId,
-                replyTo: replyMessage ? Number(replyMessage._id) : null,
+                replyTo,
               },
             },
           });
@@ -348,9 +352,9 @@ export const TalkRoomMessage = (props: Props) => {
           } = await props.createMessage({
             variables: {
               input: {
-                text: inputMessages[0].text,
+                text,
                 talkRoomId: roomId,
-                replyTo: replyMessage ? Number(replyMessage._id) : null,
+                replyTo,
               },
             },
           });
@@ -368,9 +372,9 @@ export const TalkRoomMessage = (props: Props) => {
           } = await props.createMessage({
             variables: {
               input: {
-                text: inputMessages[0].text,
+                text,
                 talkRoomId: roomId,
-                replyTo: replyMessage ? Number(replyMessage._id) : null,
+                replyTo,
               },
             },
           });
@@ -420,7 +424,10 @@ export const TalkRoomMessage = (props: Props) => {
         const { endCursor } = pageInfo;
 
         const setNewMessages = <
-          T extends ThoughtTalkRoomMessageEdge | NewsTalkRoomMessageEdge
+          T extends
+            | ThoughtTalkRoomMessageEdge
+            | NewsTalkRoomMessageEdge
+            | OneOnOneTalkRoomMessageEdge
         >(
           messageEdges: T[]
         ) => {
@@ -435,13 +442,15 @@ export const TalkRoomMessage = (props: Props) => {
           }
         };
 
+        const messageCursor = endCursor ? btoa(endCursor) : null;
+
         if (props.type === "Thought") {
           const { data } = await props.messageFetchMore<
             GetThoughtTalkRoomMessagesQuery,
             { messageCursor: string }
           >({
             variables: {
-              messageCursor: endCursor ? btoa(endCursor) : null,
+              messageCursor,
             },
           });
 
@@ -458,11 +467,28 @@ export const TalkRoomMessage = (props: Props) => {
             { messageCursor: string }
           >({
             variables: {
-              messageCursor: endCursor ? btoa(endCursor) : null,
+              messageCursor,
             },
           });
 
           const messageEdges = data.newsTalkRoom.messages.edges;
+
+          if (messageEdges) {
+            setNewMessages(messageEdges);
+          }
+        }
+
+        if (props.type === "OneOnOne") {
+          const { data } = await props.messageFetchMore<
+            GetOneOnOneTalkRoomMessagesQuery,
+            { after: string }
+          >({
+            variables: {
+              after: messageCursor,
+            },
+          });
+
+          const messageEdges = data.oneOnOneTalkRoom.messages.edges;
 
           if (messageEdges) {
             setNewMessages(messageEdges);

@@ -8,7 +8,7 @@ fragment OneOnOneTalkRoomParts on OneOnOneTalkRoom {
   recipient {
     ...UserParts
   }
-  messages {
+  messages(first: 20) {
     edges {
       node {
         ...OneOnOneTalkRoomMessageParts

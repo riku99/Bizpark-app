@@ -18,7 +18,7 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       id: talkRoomId,
     },
-    // fetchPolicy: "cache-only",
+    fetchPolicy: "cache-only",
   });
 
   const [createMessageMutation] = useCreateOneOnOneTalkRoomMessageMutation();

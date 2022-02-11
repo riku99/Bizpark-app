@@ -4,25 +4,7 @@ query GetOneOnOneTalkRoomMessages($id: Int!, $after: String) {
     messages(first: 20, after: $after) {
       edges {
         node {
-          id
-          text
-          createdAt
-          sender {
-            id
-            name
-            imageUrl
-          }
-          roomId
-          replyMessage {
-            id
-            text
-            createdAt
-            sender {
-              id
-              name
-              imageUrl
-            }
-          }
+          ...OneOnOneTalkRoomMessageParts
         }
         cursor
       }

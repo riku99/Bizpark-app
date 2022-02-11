@@ -20,7 +20,9 @@ import { RootNavigationProp } from "src/types";
 type Item = GetOneOnOneTalkRoomsQuery["oneOnOneTalkRooms"][number];
 
 export const OneOnOneTalkRoomList = React.memo(() => {
-  const { data: talkRoomData } = useGetOneOnOneTalkRoomsQuery();
+  const { data: talkRoomData } = useGetOneOnOneTalkRoomsQuery({
+    fetchPolicy: "cache-only",
+  });
 
   const { colors } = useTheme();
 
@@ -83,7 +85,7 @@ export const OneOnOneTalkRoomList = React.memo(() => {
               </ListItem.Subtitle>
             </ListItem.Content>
 
-            <Badge />
+            {!allMessageSeen && <Badge />}
           </ListItem>
         </Pressable>
       );
