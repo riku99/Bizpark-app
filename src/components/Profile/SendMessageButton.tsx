@@ -28,7 +28,7 @@ export const SendMessageButton = ({ user, ...props }: Props) => {
 
   const onPress = async () => {
     let talkRoomId: number | null = null;
-    // まずローカルでチェック
+
     const existingTalkRoom = findOneOnOneTalkRoom({ userId: user.id });
 
     if (existingTalkRoom) {
