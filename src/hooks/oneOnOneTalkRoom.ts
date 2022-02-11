@@ -155,3 +155,25 @@ export const useOneOnOneTalkRoomsWithSubscription = () => {
     }
   }, [newTalkRoomId, cache]);
 };
+
+export const useFindOneOnOneTalkRoomFromUserId = () => {
+  const { cache } = useApolloClient();
+
+  const findOneOnOneTalkRoom = useCallback(({ userId }: { userId: string }) => {
+    const queryResult = cache.readQuery<GetOneOnOneTalkRoomsQuery>({
+      query: GetOneOnOneTalkRoomsDocument,
+    });
+
+    if (queryResult) {
+      const targetRoom = queryResult.oneOnOneTalkRooms.find(
+        (room) => room.sender.id === userId || room.recipient.id === userId
+      );
+
+      return targetRoom;
+    }
+  }, []);
+
+  return {
+    findOneOnOneTalkRoom,
+  };
+};
