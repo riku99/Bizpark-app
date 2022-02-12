@@ -21,8 +21,6 @@ export const FollowUserCard = ({
   imageUrl,
   follow,
 }: Props) => {
-  const { readUserFragment } = useUserCacheFragment();
-  // const cacheData = readUserFragment({ id });
   const navigation = useNavigation<RootNavigationProp<any>>();
 
   return (
@@ -33,7 +31,7 @@ export const FollowUserCard = ({
         });
       }}
     >
-      <HStack px="4" py="4" alignItems="center">
+      <HStack px="4" py="4" alignItems="center" justifyContent="space-between">
         <HStack alignItems="center">
           <UserImage uri={imageUrl} size="10" />
           <Text fontWeight="bold" ml="4">
@@ -41,7 +39,7 @@ export const FollowUserCard = ({
           </Text>
         </HStack>
 
-        <FollowButton userId={id} follow={follow} mt="1" />
+        <FollowButton userId={id} follow={follow} />
       </HStack>
     </Pressable>
   );

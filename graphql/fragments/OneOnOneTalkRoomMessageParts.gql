@@ -1,0 +1,21 @@
+fragment OneOnOneTalkRoomMessageParts on OneOnOneTalkRoomMessage {
+  id
+  text
+  createdAt
+  sender {
+    id
+    name
+    imageUrl
+  }
+  roomId
+  replyMessage {
+    id
+    text
+    createdAt
+    sender {
+      id
+      name
+      imageUrl
+    }
+  }
+}

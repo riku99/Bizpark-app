@@ -18,6 +18,7 @@ import { createUploadLink } from "apollo-upload-client";
 import { useCustomToast } from "src/hooks/toast";
 import { WebSocketLink } from "@apollo/client/link/ws";
 import { getMainDefinition } from "@apollo/client/utilities";
+
 type Props = {
   children: JSX.Element;
 };
@@ -129,6 +130,19 @@ const cache = new InMemoryCache({
         },
         pickedNews: relayStylePagination(),
         pickedThoughts: relayStylePagination(),
+        oneOnOneTalkRooms: {
+          merge: (existing = [], incoming) => {
+            return incoming;
+          },
+        },
+        oneOnOneTalkRoom: {
+          read: (_, { args, toReference }) => {
+            return toReference({
+              __typename: "OneOnOneTalkRoom",
+              id: args.id,
+            });
+          },
+        },
       },
     },
     ThoughtTalkRoom: {
@@ -141,6 +155,11 @@ const cache = new InMemoryCache({
       fields: {
         messages: relayStylePagination(),
         members: relayStylePagination(),
+      },
+    },
+    OneOnOneTalkRoom: {
+      fields: {
+        messages: relayStylePagination(),
       },
     },
   },

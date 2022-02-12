@@ -1,0 +1,5 @@
+subscription OnOneOnOneTalkRoomMessageCreated($userId: ID!) {
+  oneOnOneTalkRoomMessageCreated(userId: $userId) {
+    ...OneOnOneTalkRoomMessageParts
+  }
+}

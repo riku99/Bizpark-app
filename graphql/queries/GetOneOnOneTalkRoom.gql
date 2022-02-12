@@ -1,0 +1,5 @@
+query GetOneOnOneTalkRoom($id: Int!) {
+  oneOnOneTalkRoom(id: $id) {
+    ...OneOnOneTalkRoomParts
+  }
+}

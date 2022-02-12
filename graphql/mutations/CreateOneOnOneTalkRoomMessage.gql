@@ -1,0 +1,7 @@
+mutation CreateOneOnOneTalkRoomMessage(
+  $input: CreateOneOnOneTalkRoomMessageInput!
+) {
+  createOneOnOneTalkRoomMessage(input: $input) {
+    ...OneOnOneTalkRoomMessageParts
+  }
+}

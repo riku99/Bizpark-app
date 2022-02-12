@@ -10,6 +10,7 @@ import { Badge } from "src/components/Badge";
 import {
   useGetNewsTalkRoomsQuery,
   useGetThoughtTalkRoomsQuery,
+  useGetOneOnOneTalkRoomsQuery,
 } from "src/generated/graphql";
 import { Box } from "native-base";
 
@@ -42,9 +43,17 @@ export const TalkListScreen = ({ navigation }: Props) => {
     );
   }, []);
 
-  const { data: thoughtTalkRoomData } = useGetThoughtTalkRoomsQuery();
+  const { data: thoughtTalkRoomData } = useGetThoughtTalkRoomsQuery({
+    fetchPolicy: "cache-only",
+  });
 
-  const { data: newsTalkRoomData } = useGetNewsTalkRoomsQuery();
+  const { data: newsTalkRoomData } = useGetNewsTalkRoomsQuery({
+    fetchPolicy: "cache-only",
+  });
+
+  const { data: oneOnOneTalkRoomData } = useGetOneOnOneTalkRoomsQuery({
+    fetchPolicy: "cache-only",
+  });
 
   const shareBadgeVisible = useMemo(() => {
     if (!thoughtTalkRoomData) {
@@ -63,6 +72,15 @@ export const TalkListScreen = ({ navigation }: Props) => {
 
     return newsTalkRoomData.newsTalkRooms.find((room) => !room.allMessageSeen);
   }, [newsTalkRoomData]);
+
+  const userBadgeVisible = useMemo(() => {
+    if (!oneOnOneTalkRoomData) {
+      return false;
+    }
+    return oneOnOneTalkRoomData.oneOnOneTalkRooms.find(
+      (room) => !room.allMessageSeen
+    );
+  }, [oneOnOneTalkRoomData]);
 
   return (
     <>
@@ -98,6 +116,7 @@ export const TalkListScreen = ({ navigation }: Props) => {
           component={OneOnOneTalkRoomList}
           options={{
             tabBarLabel: "ユーザー",
+            tabBarBadge: userBadgeVisible ? renderBadge : undefined,
           }}
         />
       </TopTab.Navigator>

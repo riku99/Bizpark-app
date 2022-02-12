@@ -1,0 +1,16 @@
+query GetOneOnOneTalkRoomMessages($id: Int!, $after: String) {
+  oneOnOneTalkRoom(id: $id) {
+    id
+    messages(first: 20, after: $after) {
+      edges {
+        node {
+          ...OneOnOneTalkRoomMessageParts
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+  }
+}

@@ -1,11 +1,12 @@
 import { NativeBaseProvider, extendTheme } from "native-base";
 import React from "react";
+import { LinearGradient } from "expo-linear-gradient";
 
 type Props = {
   children: JSX.Element;
 };
 
-const config = {
+const themeConfig = {
   useSystemColorMode: false,
   initialColorMode: "dark",
 };
@@ -65,9 +66,15 @@ const components = {
 
 const theme = extendTheme({
   colors,
-  config,
+  config: themeConfig,
   components,
 });
+
+const config = {
+  dependencies: {
+    "linear-gradient": LinearGradient,
+  },
+};
 
 type CustomThemeType = typeof theme;
 
@@ -76,5 +83,9 @@ declare module "native-base" {
 }
 
 export const NativeBaseThemeProvider = ({ children }: Props) => {
-  return <NativeBaseProvider theme={theme}>{children}</NativeBaseProvider>;
+  return (
+    <NativeBaseProvider config={config} theme={theme}>
+      {children}
+    </NativeBaseProvider>
+  );
 };

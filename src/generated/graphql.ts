@@ -33,6 +33,16 @@ export type CreateNewsTalkRoomMessageInput = {
   text: Scalars['String'];
 };
 
+export type CreateOneOnOneTalkRoomInput = {
+  recipientId: Scalars['ID'];
+};
+
+export type CreateOneOnOneTalkRoomMessageInput = {
+  replyTo?: InputMaybe<Scalars['Int']>;
+  talkRoomId: Scalars['Int'];
+  text: Scalars['String'];
+};
+
 export type CreatePickInput = {
   thoughtId: Scalars['String'];
 };
@@ -80,6 +90,10 @@ export enum CustomErrorResponseCode {
 
 export type DeleteNewsPickInput = {
   newsId: Scalars['Int'];
+};
+
+export type DeleteOneOnOneTalkRoonInput = {
+  talkRoomId: Scalars['Int'];
 };
 
 export type DeleteThoughtInput = {
@@ -167,6 +181,8 @@ export type Mutation = {
   block: User;
   createNewsPick: NewsPick;
   createNewsTalkRoomMessage: NewsTalkRoomMessage;
+  createOneOnOneTalkRoom: OneOnOneTalkRoom;
+  createOneOnOneTalkRoomMessage: OneOnOneTalkRoomMessage;
   createPick: Pick;
   createThought: CreateThoughtResponse;
   createThoughtTalkRoomMessage?: Maybe<ThoughtTalkRoomMessage>;
@@ -174,6 +190,7 @@ export type Mutation = {
   createUserNewsTalkRoomMessageSeen: NewsTalkRoom;
   createUserThoughtTalkRoomMessageSeen: ThoughtTalkRoom;
   deleteNewsPick: News;
+  deleteOneOnOneTalkRoom?: Maybe<Scalars['Boolean']>;
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
   deleteThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
@@ -184,6 +201,7 @@ export type Mutation = {
   joinNewsTalkRoom: NewsTalkRoom;
   joinThoughtTalk: ThoughtTalkRoom;
   requestNewsTalkRoomMemberDeletion?: Maybe<Scalars['Boolean']>;
+  seenOneOnOneTalkRoomMessage: OneOnOneTalkRoom;
   signOut: SignOutResponse;
   unblock: User;
   unfollow: User;
@@ -205,6 +223,16 @@ export type MutationCreateNewsPickArgs = {
 
 export type MutationCreateNewsTalkRoomMessageArgs = {
   input: CreateNewsTalkRoomMessageInput;
+};
+
+
+export type MutationCreateOneOnOneTalkRoomArgs = {
+  input: CreateOneOnOneTalkRoomInput;
+};
+
+
+export type MutationCreateOneOnOneTalkRoomMessageArgs = {
+  input: CreateOneOnOneTalkRoomMessageInput;
 };
 
 
@@ -240,6 +268,11 @@ export type MutationCreateUserThoughtTalkRoomMessageSeenArgs = {
 
 export type MutationDeleteNewsPickArgs = {
   input: DeleteNewsPickInput;
+};
+
+
+export type MutationDeleteOneOnOneTalkRoomArgs = {
+  input: DeleteOneOnOneTalkRoonInput;
 };
 
 
@@ -290,6 +323,11 @@ export type MutationJoinThoughtTalkArgs = {
 
 export type MutationRequestNewsTalkRoomMemberDeletionArgs = {
   input: RequestNewsTalkRoomMemberDeletionInput;
+};
+
+
+export type MutationSeenOneOnOneTalkRoomMessageArgs = {
+  input: SeenOneOnOneTalkRoomMessageInput;
 };
 
 
@@ -434,6 +472,46 @@ export type NewsTalkRoomMessageEdge = {
   node: NewsTalkRoomMessage;
 };
 
+export type OneOnOneTalkRoom = TalkRoom & {
+  __typename?: 'OneOnOneTalkRoom';
+  allMessageSeen?: Maybe<Scalars['Boolean']>;
+  createdAt: Scalars['String'];
+  id: Scalars['Int'];
+  messages?: Maybe<OneOnOneTalkRoomMessageConnection>;
+  recipient?: Maybe<User>;
+  sender?: Maybe<User>;
+  updatedAt: Scalars['String'];
+};
+
+
+export type OneOnOneTalkRoomMessagesArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+export type OneOnOneTalkRoomMessage = TalkRoomMessage & {
+  __typename?: 'OneOnOneTalkRoomMessage';
+  createdAt: Scalars['String'];
+  id: Scalars['Int'];
+  replyMessage?: Maybe<OneOnOneTalkRoomMessage>;
+  roomId?: Maybe<Scalars['Int']>;
+  sender?: Maybe<User>;
+  talkRoom?: Maybe<OneOnOneTalkRoom>;
+  text: Scalars['String'];
+};
+
+export type OneOnOneTalkRoomMessageConnection = {
+  __typename?: 'OneOnOneTalkRoomMessageConnection';
+  edges: Array<OneOnOneTalkRoomMessageEdge>;
+  pageInfo: PageInfo;
+};
+
+export type OneOnOneTalkRoomMessageEdge = {
+  __typename?: 'OneOnOneTalkRoomMessageEdge';
+  cursor: Scalars['String'];
+  node: OneOnOneTalkRoomMessage;
+};
+
 export type PageInfo = {
   __typename?: 'PageInfo';
   endCursor?: Maybe<Scalars['String']>;
@@ -458,6 +536,8 @@ export type Query = {
   newsTalkRoom: NewsTalkRoom;
   newsTalkRooms: Array<NewsTalkRoom>;
   oneNews: News;
+  oneOnOneTalkRoom: OneOnOneTalkRoom;
+  oneOnOneTalkRooms: Array<Maybe<OneOnOneTalkRoom>>;
   pickedNews: NewsPickConnection;
   pickedThoughts: ThoughtsConnection;
   thought: Thought;
@@ -489,6 +569,11 @@ export type QueryNewsTalkRoomArgs = {
 
 
 export type QueryOneNewsArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryOneOnOneTalkRoomArgs = {
   id: Scalars['Int'];
 };
 
@@ -539,6 +624,11 @@ export type RequestNewsTalkRoomMemberDeletionInput = {
   talkRoomId: Scalars['Int'];
 };
 
+export type SeenOneOnOneTalkRoomMessageInput = {
+  messageId: Scalars['Int'];
+  talkRoomId: Scalars['Int'];
+};
+
 export type SignOutResponse = {
   __typename?: 'SignOutResponse';
   id: Scalars['ID'];
@@ -554,12 +644,18 @@ export type SubImage = {
 export type Subscription = {
   __typename?: 'Subscription';
   newsTalkRoomMessageCreated: NewsTalkRoomMessage;
+  oneOnOneTalkRoomMessageCreated: OneOnOneTalkRoomMessage;
   thoughtTalkRoomMessageCreated?: Maybe<ThoughtTalkRoomMessage>;
 };
 
 
 export type SubscriptionNewsTalkRoomMessageCreatedArgs = {
   roomIds: Array<InputMaybe<Scalars['Int']>>;
+  userId: Scalars['ID'];
+};
+
+
+export type SubscriptionOneOnOneTalkRoomMessageCreatedArgs = {
   userId: Scalars['ID'];
 };
 
@@ -741,6 +837,10 @@ export type NewsTalkRoomParentPartsFragment = { __typename?: 'News', id: number,
 
 export type NewsTalkRoomPartsFragment = { __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
 
+export type OneOnOneTalkRoomMessagePartsFragment = { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined };
+
+export type OneOnOneTalkRoomPartsFragment = { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
+
 export type PageInfoPartsFragment = { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined };
 
 export type ThoughtPartsFragment = { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> };
@@ -775,6 +875,20 @@ export type CreateNewsTalkRoomMessageMutationVariables = Exact<{
 
 
 export type CreateNewsTalkRoomMessageMutation = { __typename?: 'Mutation', createNewsTalkRoomMessage: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
+
+export type CreateOneOnOneTalkRoomMutationVariables = Exact<{
+  input: CreateOneOnOneTalkRoomInput;
+}>;
+
+
+export type CreateOneOnOneTalkRoomMutation = { __typename?: 'Mutation', createOneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+
+export type CreateOneOnOneTalkRoomMessageMutationVariables = Exact<{
+  input: CreateOneOnOneTalkRoomMessageInput;
+}>;
+
+
+export type CreateOneOnOneTalkRoomMessageMutation = { __typename?: 'Mutation', createOneOnOneTalkRoomMessage: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } };
 
 export type CreatePickMutationVariables = Exact<{
   input: CreatePickInput;
@@ -824,6 +938,13 @@ export type DeleteNewsPickMutationVariables = Exact<{
 
 
 export type DeleteNewsPickMutation = { __typename?: 'Mutation', deleteNewsPick: { __typename?: 'News', id: number, picked: boolean } };
+
+export type DeleteOneOnOneTalkRoomMutationVariables = Exact<{
+  input: DeleteOneOnOneTalkRoonInput;
+}>;
+
+
+export type DeleteOneOnOneTalkRoomMutation = { __typename?: 'Mutation', deleteOneOnOneTalkRoom?: boolean | null | undefined };
 
 export type DeletePickMutationVariables = Exact<{
   thoughtId: Scalars['ID'];
@@ -895,6 +1016,13 @@ export type RequestNewsTalkRoomMemberDeletionMutationVariables = Exact<{
 
 export type RequestNewsTalkRoomMemberDeletionMutation = { __typename?: 'Mutation', requestNewsTalkRoomMemberDeletion?: boolean | null | undefined };
 
+export type SeenOneOnOneTalkRoomMessageMutationVariables = Exact<{
+  input: SeenOneOnOneTalkRoomMessageInput;
+}>;
+
+
+export type SeenOneOnOneTalkRoomMessageMutation = { __typename?: 'Mutation', seenOneOnOneTalkRoomMessage: { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined } };
+
 export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -951,7 +1079,7 @@ export type FollowsQuery = { __typename?: 'Query', follows: { __typename?: 'User
 export type GetActiveDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type GetActiveDataQuery = { __typename?: 'Query', thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined>, newsTalkRooms: Array<{ __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined }> };
+export type GetActiveDataQuery = { __typename?: 'Query', thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined>, newsTalkRooms: Array<{ __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined }>, oneOnOneTalkRooms: Array<{ __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
 
 export type GetNewsTalkRoomMembersQueryVariables = Exact<{
   talkRoomId: Scalars['Int'];
@@ -980,6 +1108,26 @@ export type GetOneNewsQueryVariables = Exact<{
 
 
 export type GetOneNewsQuery = { __typename?: 'Query', oneNews: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } };
+
+export type GetOneOnOneTalkRoomQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetOneOnOneTalkRoomQuery = { __typename?: 'Query', oneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+
+export type GetOneOnOneTalkRoomMessagesQueryVariables = Exact<{
+  id: Scalars['Int'];
+  after?: InputMaybe<Scalars['String']>;
+}>;
+
+
+export type GetOneOnOneTalkRoomMessagesQuery = { __typename?: 'Query', oneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+
+export type GetOneOnOneTalkRoomsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetOneOnOneTalkRoomsQuery = { __typename?: 'Query', oneOnOneTalkRooms: Array<{ __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
 
 export type GetPickedNewsQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']>;
@@ -1026,7 +1174,7 @@ export type GetThoughtTalkRoomParentQuery = { __typename?: 'Query', thoughtTalkR
 export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type InitialDataQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined }, thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined>, newsTalkRooms: Array<{ __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined }> };
+export type InitialDataQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined }, thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined>, newsTalkRooms: Array<{ __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined }>, oneOnONeTalkRooms: Array<{ __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1079,6 +1227,13 @@ export type OnNewsTalkRoomMessageCreatedSubscriptionVariables = Exact<{
 
 
 export type OnNewsTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', newsTalkRoomMessageCreated: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, talkRoom?: { __typename?: 'NewsTalkRoom', id: number, updatedAt?: string | null | undefined, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, news?: { __typename?: 'News', id: number, title: string } | null | undefined } | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
+
+export type OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables = Exact<{
+  userId: Scalars['ID'];
+}>;
+
+
+export type OnOneOnOneTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', oneOnOneTalkRoomMessageCreated: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } };
 
 export type OnThoughtTalkRoomMessageCreatedSubscriptionVariables = Exact<{
   roomIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
@@ -1214,6 +1369,55 @@ export const NewsTalkRoomPartsFragmentDoc = gql`
 ${PageInfoPartsFragmentDoc}
 ${NewsPartsFragmentDoc}
 ${NewsTalkRoomMessagePartsFragmentDoc}`;
+export const OneOnOneTalkRoomMessagePartsFragmentDoc = gql`
+    fragment OneOnOneTalkRoomMessageParts on OneOnOneTalkRoomMessage {
+  id
+  text
+  createdAt
+  sender {
+    id
+    name
+    imageUrl
+  }
+  roomId
+  replyMessage {
+    id
+    text
+    createdAt
+    sender {
+      id
+      name
+      imageUrl
+    }
+  }
+}
+    `;
+export const OneOnOneTalkRoomPartsFragmentDoc = gql`
+    fragment OneOnOneTalkRoomParts on OneOnOneTalkRoom {
+  id
+  allMessageSeen
+  updatedAt
+  sender {
+    ...UserParts
+  }
+  recipient {
+    ...UserParts
+  }
+  messages(first: 20) {
+    edges {
+      node {
+        ...OneOnOneTalkRoomMessageParts
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
+}
+    ${UserPartsFragmentDoc}
+${OneOnOneTalkRoomMessagePartsFragmentDoc}
+${PageInfoPartsFragmentDoc}`;
 export const ThoughtTalkRoomParentPartsFragmentDoc = gql`
     fragment ThoughtTalkRoomParentParts on Thought {
   id
@@ -1419,6 +1623,72 @@ export function useCreateNewsTalkRoomMessageMutation(baseOptions?: Apollo.Mutati
 export type CreateNewsTalkRoomMessageMutationHookResult = ReturnType<typeof useCreateNewsTalkRoomMessageMutation>;
 export type CreateNewsTalkRoomMessageMutationResult = Apollo.MutationResult<CreateNewsTalkRoomMessageMutation>;
 export type CreateNewsTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<CreateNewsTalkRoomMessageMutation, CreateNewsTalkRoomMessageMutationVariables>;
+export const CreateOneOnOneTalkRoomDocument = gql`
+    mutation CreateOneOnOneTalkRoom($input: CreateOneOnOneTalkRoomInput!) {
+  createOneOnOneTalkRoom(input: $input) {
+    ...OneOnOneTalkRoomParts
+  }
+}
+    ${OneOnOneTalkRoomPartsFragmentDoc}`;
+export type CreateOneOnOneTalkRoomMutationFn = Apollo.MutationFunction<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>;
+
+/**
+ * __useCreateOneOnOneTalkRoomMutation__
+ *
+ * To run a mutation, you first call `useCreateOneOnOneTalkRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOneOnOneTalkRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOneOnOneTalkRoomMutation, { data, loading, error }] = useCreateOneOnOneTalkRoomMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateOneOnOneTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>(CreateOneOnOneTalkRoomDocument, options);
+      }
+export type CreateOneOnOneTalkRoomMutationHookResult = ReturnType<typeof useCreateOneOnOneTalkRoomMutation>;
+export type CreateOneOnOneTalkRoomMutationResult = Apollo.MutationResult<CreateOneOnOneTalkRoomMutation>;
+export type CreateOneOnOneTalkRoomMutationOptions = Apollo.BaseMutationOptions<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>;
+export const CreateOneOnOneTalkRoomMessageDocument = gql`
+    mutation CreateOneOnOneTalkRoomMessage($input: CreateOneOnOneTalkRoomMessageInput!) {
+  createOneOnOneTalkRoomMessage(input: $input) {
+    ...OneOnOneTalkRoomMessageParts
+  }
+}
+    ${OneOnOneTalkRoomMessagePartsFragmentDoc}`;
+export type CreateOneOnOneTalkRoomMessageMutationFn = Apollo.MutationFunction<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>;
+
+/**
+ * __useCreateOneOnOneTalkRoomMessageMutation__
+ *
+ * To run a mutation, you first call `useCreateOneOnOneTalkRoomMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateOneOnOneTalkRoomMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createOneOnOneTalkRoomMessageMutation, { data, loading, error }] = useCreateOneOnOneTalkRoomMessageMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useCreateOneOnOneTalkRoomMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>(CreateOneOnOneTalkRoomMessageDocument, options);
+      }
+export type CreateOneOnOneTalkRoomMessageMutationHookResult = ReturnType<typeof useCreateOneOnOneTalkRoomMessageMutation>;
+export type CreateOneOnOneTalkRoomMessageMutationResult = Apollo.MutationResult<CreateOneOnOneTalkRoomMessageMutation>;
+export type CreateOneOnOneTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>;
 export const CreatePickDocument = gql`
     mutation CreatePick($input: CreatePickInput!) {
   createPick(input: $input) {
@@ -1655,6 +1925,37 @@ export function useDeleteNewsPickMutation(baseOptions?: Apollo.MutationHookOptio
 export type DeleteNewsPickMutationHookResult = ReturnType<typeof useDeleteNewsPickMutation>;
 export type DeleteNewsPickMutationResult = Apollo.MutationResult<DeleteNewsPickMutation>;
 export type DeleteNewsPickMutationOptions = Apollo.BaseMutationOptions<DeleteNewsPickMutation, DeleteNewsPickMutationVariables>;
+export const DeleteOneOnOneTalkRoomDocument = gql`
+    mutation DeleteOneOnOneTalkRoom($input: DeleteOneOnOneTalkRoonInput!) {
+  deleteOneOnOneTalkRoom(input: $input)
+}
+    `;
+export type DeleteOneOnOneTalkRoomMutationFn = Apollo.MutationFunction<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>;
+
+/**
+ * __useDeleteOneOnOneTalkRoomMutation__
+ *
+ * To run a mutation, you first call `useDeleteOneOnOneTalkRoomMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteOneOnOneTalkRoomMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteOneOnOneTalkRoomMutation, { data, loading, error }] = useDeleteOneOnOneTalkRoomMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useDeleteOneOnOneTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>(DeleteOneOnOneTalkRoomDocument, options);
+      }
+export type DeleteOneOnOneTalkRoomMutationHookResult = ReturnType<typeof useDeleteOneOnOneTalkRoomMutation>;
+export type DeleteOneOnOneTalkRoomMutationResult = Apollo.MutationResult<DeleteOneOnOneTalkRoomMutation>;
+export type DeleteOneOnOneTalkRoomMutationOptions = Apollo.BaseMutationOptions<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>;
 export const DeletePickDocument = gql`
     mutation DeletePick($thoughtId: ID!) {
   deletePick(thoughtId: $thoughtId) {
@@ -1979,6 +2280,40 @@ export function useRequestNewsTalkRoomMemberDeletionMutation(baseOptions?: Apoll
 export type RequestNewsTalkRoomMemberDeletionMutationHookResult = ReturnType<typeof useRequestNewsTalkRoomMemberDeletionMutation>;
 export type RequestNewsTalkRoomMemberDeletionMutationResult = Apollo.MutationResult<RequestNewsTalkRoomMemberDeletionMutation>;
 export type RequestNewsTalkRoomMemberDeletionMutationOptions = Apollo.BaseMutationOptions<RequestNewsTalkRoomMemberDeletionMutation, RequestNewsTalkRoomMemberDeletionMutationVariables>;
+export const SeenOneOnOneTalkRoomMessageDocument = gql`
+    mutation SeenOneOnOneTalkRoomMessage($input: SeenOneOnOneTalkRoomMessageInput!) {
+  seenOneOnOneTalkRoomMessage(input: $input) {
+    id
+    allMessageSeen
+  }
+}
+    `;
+export type SeenOneOnOneTalkRoomMessageMutationFn = Apollo.MutationFunction<SeenOneOnOneTalkRoomMessageMutation, SeenOneOnOneTalkRoomMessageMutationVariables>;
+
+/**
+ * __useSeenOneOnOneTalkRoomMessageMutation__
+ *
+ * To run a mutation, you first call `useSeenOneOnOneTalkRoomMessageMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSeenOneOnOneTalkRoomMessageMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [seenOneOnOneTalkRoomMessageMutation, { data, loading, error }] = useSeenOneOnOneTalkRoomMessageMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSeenOneOnOneTalkRoomMessageMutation(baseOptions?: Apollo.MutationHookOptions<SeenOneOnOneTalkRoomMessageMutation, SeenOneOnOneTalkRoomMessageMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SeenOneOnOneTalkRoomMessageMutation, SeenOneOnOneTalkRoomMessageMutationVariables>(SeenOneOnOneTalkRoomMessageDocument, options);
+      }
+export type SeenOneOnOneTalkRoomMessageMutationHookResult = ReturnType<typeof useSeenOneOnOneTalkRoomMessageMutation>;
+export type SeenOneOnOneTalkRoomMessageMutationResult = Apollo.MutationResult<SeenOneOnOneTalkRoomMessageMutation>;
+export type SeenOneOnOneTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<SeenOneOnOneTalkRoomMessageMutation, SeenOneOnOneTalkRoomMessageMutationVariables>;
 export const SignOutDocument = gql`
     mutation SignOut {
   signOut {
@@ -2270,9 +2605,13 @@ export const GetActiveDataDocument = gql`
   newsTalkRooms: newsTalkRooms {
     ...NewsTalkRoomParts
   }
+  oneOnOneTalkRooms: oneOnOneTalkRooms {
+    ...OneOnOneTalkRoomParts
+  }
 }
     ${ThoughtTalkRoomPartsFragmentDoc}
-${NewsTalkRoomPartsFragmentDoc}`;
+${NewsTalkRoomPartsFragmentDoc}
+${OneOnOneTalkRoomPartsFragmentDoc}`;
 
 /**
  * __useGetActiveDataQuery__
@@ -2469,6 +2808,123 @@ export function useGetOneNewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions
 export type GetOneNewsQueryHookResult = ReturnType<typeof useGetOneNewsQuery>;
 export type GetOneNewsLazyQueryHookResult = ReturnType<typeof useGetOneNewsLazyQuery>;
 export type GetOneNewsQueryResult = Apollo.QueryResult<GetOneNewsQuery, GetOneNewsQueryVariables>;
+export const GetOneOnOneTalkRoomDocument = gql`
+    query GetOneOnOneTalkRoom($id: Int!) {
+  oneOnOneTalkRoom(id: $id) {
+    ...OneOnOneTalkRoomParts
+  }
+}
+    ${OneOnOneTalkRoomPartsFragmentDoc}`;
+
+/**
+ * __useGetOneOnOneTalkRoomQuery__
+ *
+ * To run a query within a React component, call `useGetOneOnOneTalkRoomQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneOnOneTalkRoomQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneOnOneTalkRoomQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetOneOnOneTalkRoomQuery(baseOptions: Apollo.QueryHookOptions<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>(GetOneOnOneTalkRoomDocument, options);
+      }
+export function useGetOneOnOneTalkRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>(GetOneOnOneTalkRoomDocument, options);
+        }
+export type GetOneOnOneTalkRoomQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomQuery>;
+export type GetOneOnOneTalkRoomLazyQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomLazyQuery>;
+export type GetOneOnOneTalkRoomQueryResult = Apollo.QueryResult<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>;
+export const GetOneOnOneTalkRoomMessagesDocument = gql`
+    query GetOneOnOneTalkRoomMessages($id: Int!, $after: String) {
+  oneOnOneTalkRoom(id: $id) {
+    id
+    messages(first: 20, after: $after) {
+      edges {
+        node {
+          ...OneOnOneTalkRoomMessageParts
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+  }
+}
+    ${OneOnOneTalkRoomMessagePartsFragmentDoc}
+${PageInfoPartsFragmentDoc}`;
+
+/**
+ * __useGetOneOnOneTalkRoomMessagesQuery__
+ *
+ * To run a query within a React component, call `useGetOneOnOneTalkRoomMessagesQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneOnOneTalkRoomMessagesQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneOnOneTalkRoomMessagesQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *      after: // value for 'after'
+ *   },
+ * });
+ */
+export function useGetOneOnOneTalkRoomMessagesQuery(baseOptions: Apollo.QueryHookOptions<GetOneOnOneTalkRoomMessagesQuery, GetOneOnOneTalkRoomMessagesQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneOnOneTalkRoomMessagesQuery, GetOneOnOneTalkRoomMessagesQueryVariables>(GetOneOnOneTalkRoomMessagesDocument, options);
+      }
+export function useGetOneOnOneTalkRoomMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneOnOneTalkRoomMessagesQuery, GetOneOnOneTalkRoomMessagesQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneOnOneTalkRoomMessagesQuery, GetOneOnOneTalkRoomMessagesQueryVariables>(GetOneOnOneTalkRoomMessagesDocument, options);
+        }
+export type GetOneOnOneTalkRoomMessagesQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomMessagesQuery>;
+export type GetOneOnOneTalkRoomMessagesLazyQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomMessagesLazyQuery>;
+export type GetOneOnOneTalkRoomMessagesQueryResult = Apollo.QueryResult<GetOneOnOneTalkRoomMessagesQuery, GetOneOnOneTalkRoomMessagesQueryVariables>;
+export const GetOneOnOneTalkRoomsDocument = gql`
+    query GetOneOnOneTalkRooms {
+  oneOnOneTalkRooms {
+    ...OneOnOneTalkRoomParts
+  }
+}
+    ${OneOnOneTalkRoomPartsFragmentDoc}`;
+
+/**
+ * __useGetOneOnOneTalkRoomsQuery__
+ *
+ * To run a query within a React component, call `useGetOneOnOneTalkRoomsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOneOnOneTalkRoomsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOneOnOneTalkRoomsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOneOnOneTalkRoomsQuery(baseOptions?: Apollo.QueryHookOptions<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>(GetOneOnOneTalkRoomsDocument, options);
+      }
+export function useGetOneOnOneTalkRoomsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>(GetOneOnOneTalkRoomsDocument, options);
+        }
+export type GetOneOnOneTalkRoomsQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomsQuery>;
+export type GetOneOnOneTalkRoomsLazyQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomsLazyQuery>;
+export type GetOneOnOneTalkRoomsQueryResult = Apollo.QueryResult<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>;
 export const GetPickedNewsDocument = gql`
     query GetPickedNews($cursor: String) {
   pickedNews(first: 20, after: $cursor) {
@@ -2742,9 +3198,13 @@ export const InitialDataDocument = gql`
   newsTalkRooms: newsTalkRooms {
     ...NewsTalkRoomParts
   }
+  oneOnONeTalkRooms: oneOnOneTalkRooms {
+    ...OneOnOneTalkRoomParts
+  }
 }
     ${ThoughtTalkRoomPartsFragmentDoc}
-${NewsTalkRoomPartsFragmentDoc}`;
+${NewsTalkRoomPartsFragmentDoc}
+${OneOnOneTalkRoomPartsFragmentDoc}`;
 
 /**
  * __useInitialDataQuery__
@@ -3035,6 +3495,36 @@ export function useOnNewsTalkRoomMessageCreatedSubscription(baseOptions: Apollo.
       }
 export type OnNewsTalkRoomMessageCreatedSubscriptionHookResult = ReturnType<typeof useOnNewsTalkRoomMessageCreatedSubscription>;
 export type OnNewsTalkRoomMessageCreatedSubscriptionResult = Apollo.SubscriptionResult<OnNewsTalkRoomMessageCreatedSubscription>;
+export const OnOneOnOneTalkRoomMessageCreatedDocument = gql`
+    subscription OnOneOnOneTalkRoomMessageCreated($userId: ID!) {
+  oneOnOneTalkRoomMessageCreated(userId: $userId) {
+    ...OneOnOneTalkRoomMessageParts
+  }
+}
+    ${OneOnOneTalkRoomMessagePartsFragmentDoc}`;
+
+/**
+ * __useOnOneOnOneTalkRoomMessageCreatedSubscription__
+ *
+ * To run a query within a React component, call `useOnOneOnOneTalkRoomMessageCreatedSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useOnOneOnOneTalkRoomMessageCreatedSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useOnOneOnOneTalkRoomMessageCreatedSubscription({
+ *   variables: {
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useOnOneOnOneTalkRoomMessageCreatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OnOneOnOneTalkRoomMessageCreatedSubscription, OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useSubscription<OnOneOnOneTalkRoomMessageCreatedSubscription, OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables>(OnOneOnOneTalkRoomMessageCreatedDocument, options);
+      }
+export type OnOneOnOneTalkRoomMessageCreatedSubscriptionHookResult = ReturnType<typeof useOnOneOnOneTalkRoomMessageCreatedSubscription>;
+export type OnOneOnOneTalkRoomMessageCreatedSubscriptionResult = Apollo.SubscriptionResult<OnOneOnOneTalkRoomMessageCreatedSubscription>;
 export const OnThoughtTalkRoomMessageCreatedDocument = gql`
     subscription OnThoughtTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
   thoughtTalkRoomMessageCreated(roomIds: $roomIds, userId: $userId) {

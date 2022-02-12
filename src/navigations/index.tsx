@@ -19,6 +19,7 @@ import { UserProfileScreen } from "src/screens/UserProfile";
 import { Settings } from "./Settings";
 import { ThoughtTalkRoomStack } from "./ThoughtTalkRoom";
 import { NewsTalkRoomStack } from "./NewsTalkRoom";
+import { OneOnOneTalkRoomStack } from "./OneOnOneTalkRoom";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -80,6 +81,11 @@ export const RootNavigation = React.memo(() => {
             <Stack.Screen
               name="NewsTalkRoom"
               component={NewsTalkRoomStack}
+              options={{ headerShown: false }}
+            />
+            <Stack.Screen
+              name="OneOnOneTalkRoom"
+              component={OneOnOneTalkRoomStack}
               options={{ headerShown: false }}
             />
             <Stack.Group

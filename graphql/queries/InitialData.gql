@@ -15,4 +15,7 @@ query InitialData {
   newsTalkRooms: newsTalkRooms {
     ...NewsTalkRoomParts
   }
+  oneOnONeTalkRooms: oneOnOneTalkRooms {
+    ...OneOnOneTalkRoomParts
+  }
 }
