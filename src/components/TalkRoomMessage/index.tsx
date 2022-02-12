@@ -509,6 +509,11 @@ export const TalkRoomMessage = (props: Props) => {
       }}
       onSend={onSendPress}
       infiniteLoad={infiniteLoad}
+      onPressAvatar={(user) => {
+        navigation.navigate("UserProfile", {
+          id: user._id.toString(),
+        });
+      }}
     />
   );
 };

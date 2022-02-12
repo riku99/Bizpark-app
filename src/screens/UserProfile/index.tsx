@@ -2,7 +2,12 @@ import React, { useEffect, useLayoutEffect, useState } from "react";
 import { ScrollView, useColorModeValue, useTheme } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import { useUserCacheFragment } from "src/hooks/users";
-import { useUserQuery, useMeQuery } from "src/generated/graphql";
+import {
+  useUserQuery,
+  useMeQuery,
+  UserProfileFragment,
+  UserProfileFragmentDoc,
+} from "src/generated/graphql";
 import { SocialIconProps } from "react-native-elements";
 import { Profile } from "src/components/Profile";
 import { RefreshControl } from "src/components/RefreshControl";
@@ -11,36 +16,57 @@ import { InstaLikeModal } from "src/components/InstaLikeModal";
 import { useToast } from "react-native-toast-notifications";
 import { Alert } from "react-native";
 import { useUnblock, useBlock } from "src/hooks/users";
+import { useApolloClient, gql } from "@apollo/client";
+import { Indicator } from "src/components/Indicator";
 
 type Props = RootNavigationScreenProp<"UserProfile">;
 
 // MyPageで表示するプロフィール以外のプロフィール画面
 export const UserProfileScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
-  const { readUserFragment } = useUserCacheFragment();
-  const cacheData = readUserFragment({ id });
+
+  const { cache } = useApolloClient();
+
+  const cacheData = cache.readFragment<UserProfileFragment>({
+    id: cache.identify({
+      __typename: "User",
+      id,
+    }),
+    fragment: UserProfileFragmentDoc,
+  });
+
   const { refetch, data, loading } = useUserQuery({
     variables: {
       id,
     },
+    fetchPolicy: "network-only",
+    nextFetchPolicy: "cache-first",
   });
+
   const [refreshing, setRefreshing] = useState(false);
   const [modalVisible, setModalVisible] = useState(false);
   const { colors } = useTheme();
+
   const [blockMutation] = useBlock();
   const [unblockMutation] = useUnblock();
+
   const toast = useToast();
   const iconColor = useColorModeValue(colors.textBlack, colors.textWhite);
+
   const {
     data: { me },
   } = useMeQuery();
+
   const isMe = me.id === id;
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: cacheData ? cacheData.name : "ユーザーが存在しません",
+      title:
+        !data && !loading
+          ? "ユーザーが存在しません"
+          : data?.user.name ?? cacheData.name,
       headerRight:
-        cacheData && !isMe
+        (cacheData || data) && !isMe
           ? () => (
               <MaterialCommunityIcons
                 name="dots-horizontal"
@@ -53,7 +79,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
             )
           : undefined,
     });
-  }, [iconColor, isMe]);
+  }, [iconColor, isMe, loading, cacheData, data]);
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -65,9 +91,15 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     setModalVisible(false);
   };
 
-  if (!cacheData) {
-    return null;
+  if (!data && !cacheData) {
+    if (loading) {
+      return <Indicator style={{ marginTop: 10 }} />;
+    } else {
+      return null;
+    }
   }
+
+  const userProfile = data ? data.user : cacheData;
 
   const {
     name,
@@ -77,7 +109,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     facebook,
     twitter,
     linkedin,
-  } = cacheData;
+  } = userProfile;
   const socials: { type: SocialIconProps["type"]; value: string | null }[] = [
     { type: "facebook", value: facebook },
     { type: "twitter", value: twitter },
@@ -152,10 +184,6 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
         }
       },
     },
-    {
-      title: "メッセージを送る",
-      onPress: async () => {},
-    },
   ];
 
   return (
@@ -177,9 +205,9 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
           bio={bio}
           imageUrl={imageUrl}
           socials={socials}
-          follow={data?.user.follow}
           isMe={isMe}
           loading={loading}
+          follow={data?.user.follow}
         />
       </ScrollView>
 

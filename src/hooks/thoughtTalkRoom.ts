@@ -78,7 +78,6 @@ export const useToughtTalkRoomsWithSubsciption = () => {
 
           if (!targetRoom) {
             if (contributor.id === myId) {
-              // TalkRoomsのrefetchではなくて、TalkRoom(id: talkRoomId)のフェッチでいいかもしれない。その後手動で追加
               setNewTalkRoomId(
                 subscriptionData.data.thoughtTalkRoomMessageCreated.roomId
               );

@@ -17,12 +17,15 @@ type Props = {
 
 export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
   const toast = useToast();
+
   const [followMutation] = useFollowMutation();
   const [unfollowMutation] = useUnfollowMutation();
+
   const [isFollowing, setIsFollowing] = useState<boolean>(follow);
   useEffect(() => {
     setIsFollowing(follow);
   }, [follow]);
+
   const borderColor = useColorModeValue("textBlack", "textWhite");
 
   const onPress = async () => {

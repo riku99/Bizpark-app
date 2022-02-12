@@ -855,6 +855,8 @@ export type ThoughtsConnectionPartsFragment = { __typename?: 'ThoughtsConnection
 
 export type UserPartsFragment = { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined };
 
+export type UserProfileFragment = { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined };
+
 export type BlockMutationVariables = Exact<{
   blockTo: Scalars['ID'];
 }>;
@@ -1525,6 +1527,18 @@ export const ThoughtsConnectionPartsFragmentDoc = gql`
 }
     ${ThoughtPartsFragmentDoc}
 ${PageInfoPartsFragmentDoc}`;
+export const UserProfileFragmentDoc = gql`
+    fragment UserProfile on User {
+  id
+  name
+  bio
+  imageUrl
+  facebook
+  twitter
+  linkedin
+  instagram
+}
+    `;
 export const BlockDocument = gql`
     mutation Block($blockTo: ID!) {
   block(blockTo: $blockTo) {
