@@ -91,6 +91,10 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     return <UserProfile id={id} />;
   }, [id]);
 
+  const renderThoughts = useCallback(() => {
+    return <Thoughts id={id} />;
+  }, [id]);
+
   const [blockMutation] = useBlock();
   const [unblockMutation] = useUnblock();
 
@@ -131,7 +135,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
         sceneContainerStyle={sceneContainerStyle}
       >
         <TopTab.Screen name="プロフィール" component={renderProfile} />
-        <TopTab.Screen name="投稿" component={Thoughts} />
+        <TopTab.Screen name="投稿" component={renderThoughts} />
       </TopTab.Navigator>
 
       <Menu

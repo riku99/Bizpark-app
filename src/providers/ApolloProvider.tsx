@@ -143,6 +143,7 @@ const cache = new InMemoryCache({
             });
           },
         },
+        userThoughts: relayStylePagination(["userId"]),
       },
     },
     ThoughtTalkRoom: {

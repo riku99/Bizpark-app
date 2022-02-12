@@ -8,6 +8,7 @@ import { btoa } from "react-native-quick-base64";
 
 export const Thouhgts = React.memo(() => {
   const myId = meVar.id();
+
   const { data, refetch, fetchMore } = useUserThoughtsQuery({
     variables: {
       userId: myId,
@@ -36,7 +37,7 @@ export const Thouhgts = React.memo(() => {
   }
 
   return (
-    <Box flex={1} px="4">
+    <Box flex={1} px="4" pt="4">
       <List
         data={data.userThoughts.edges}
         refresh={refresh}
