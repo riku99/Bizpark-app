@@ -1,7 +1,6 @@
-import React, { useEffect, useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from "react";
 import { ScrollView, useColorModeValue, useTheme } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
-import { useUserCacheFragment } from "src/hooks/users";
 import {
   useUserQuery,
   useMeQuery,
@@ -12,12 +11,11 @@ import { SocialIconProps } from "react-native-elements";
 import { Profile } from "src/components/Profile";
 import { RefreshControl } from "src/components/RefreshControl";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { InstaLikeModal } from "src/components/InstaLikeModal";
 import { useToast } from "react-native-toast-notifications";
-import { Alert } from "react-native";
 import { useUnblock, useBlock } from "src/hooks/users";
-import { useApolloClient, gql } from "@apollo/client";
+import { useApolloClient } from "@apollo/client";
 import { Indicator } from "src/components/Indicator";
+import { Menu } from "./Menu";
 
 type Props = RootNavigationScreenProp<"UserProfile">;
 
@@ -117,74 +115,31 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     { type: "instagram", value: instagram },
   ];
 
-  const modalList = [
-    {
-      title: data?.user.blocking ? "ブロック解除" : "ブロックする",
-      color: "#f51000",
-      onPress: async () => {
-        if (id && data) {
-          try {
-            if (!data?.user.blocking) {
-              Alert.alert(
-                "ブロックしますか?",
-                "シェアが表示されなくなり、フォローも解除されます",
-                [
-                  {
-                    text: "キャンセル",
-                    style: "cancel",
-                  },
-                  {
-                    text: "ブロックする",
-                    style: "destructive",
-                    onPress: async () => {
-                      try {
-                        await blockMutation({
-                          variables: {
-                            blockTo: id,
-                          },
-                        });
+  const onBlockPress = async () => {
+    try {
+      await blockMutation({
+        variables: {
+          blockTo: id,
+        },
+      });
 
-                        toast.show("ブロックしました", { type: "success" });
-                      } catch (e) {}
-                    },
-                  },
-                ]
-              );
-            } else {
-              Alert.alert(
-                "ブロック解除しますか?",
-                "シェアが表示されるようになり、フォローも可能になります",
-                [
-                  {
-                    text: "キャンセル",
-                    style: "cancel",
-                  },
-                  {
-                    text: "解除する",
-                    style: "destructive",
-                    onPress: async () => {
-                      try {
-                        await unblockMutation({
-                          variables: {
-                            blockedUserId: id,
-                          },
-                        });
+      toast.show("ブロックしました", { type: "success" });
+    } catch (e) {}
+  };
 
-                        toast.show("解除しました", { type: "success" });
-                      } catch (e) {}
-                    },
-                  },
-                ]
-              );
-            }
-          } catch (e) {
-          } finally {
-            setModalVisible(false);
-          }
-        }
-      },
-    },
-  ];
+  const onUnBlockPress = async () => {
+    try {
+      await unblockMutation({
+        variables: {
+          blockedUserId: id,
+        },
+      });
+
+      toast.show("解除しました", { type: "success" });
+    } catch (e) {
+      console.log(e);
+    }
+  };
 
   return (
     <>
@@ -211,11 +166,13 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
         />
       </ScrollView>
 
-      <InstaLikeModal
+      <Menu
         isVisible={modalVisible}
-        onBackdropPress={closeModal}
-        onCancel={closeModal}
-        list={modalList}
+        closeMenu={closeModal}
+        userId={id}
+        blocking={data?.user.blocking}
+        onBlockPress={onBlockPress}
+        onUnBlockPress={onUnBlockPress}
       />
     </>
   );
