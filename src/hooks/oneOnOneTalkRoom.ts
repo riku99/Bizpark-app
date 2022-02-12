@@ -9,7 +9,7 @@ import {
 } from "src/generated/graphql";
 import { meVar } from "src/stores/me";
 import { useReactiveVar, useApolloClient } from "@apollo/client";
-import { useState, useMemo, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { AppState, AppStateStatus } from "react-native";
 
 export const useOneOnOneTalkRoomsWithSubscription = () => {

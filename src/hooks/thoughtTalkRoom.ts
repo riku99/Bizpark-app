@@ -5,6 +5,7 @@ import {
   GetThoughtTalkRoomsQuery,
   OnThoughtTalkRoomMessageCreatedSubscriptionVariables,
   useGetThoughtTalkRoomsQuery,
+  useGetThoughtTalkRoomLazyQuery,
 } from "src/generated/graphql";
 import { useEffect, useCallback, useMemo, useState } from "react";
 import { useReactiveVar, useApolloClient } from "@apollo/client";
@@ -15,11 +16,9 @@ import { AppState, AppStateStatus } from "react-native";
 export const useToughtTalkRoomsWithSubsciption = () => {
   const myId = useReactiveVar(meVar.id);
 
-  const {
-    data: talkRoomsData,
-    subscribeToMore,
-    refetch,
-  } = useGetThoughtTalkRoomsQuery({
+  const { cache } = useApolloClient();
+
+  const { data: talkRoomsData, subscribeToMore } = useGetThoughtTalkRoomsQuery({
     fetchPolicy: "cache-only",
   });
 
@@ -50,6 +49,10 @@ export const useToughtTalkRoomsWithSubsciption = () => {
     };
   }, [setIsActive]);
 
+  const [getThougtTalkRoomQuery] = useGetThoughtTalkRoomLazyQuery();
+
+  const [newTalkRoomId, setNewTalkRoomId] = useState<number | null>(null);
+
   useEffect(() => {
     if (isActive && myId) {
       console.log("⚡️ subscribe for ThoughtTalkRooms");
@@ -76,7 +79,9 @@ export const useToughtTalkRoomsWithSubsciption = () => {
           if (!targetRoom) {
             if (contributor.id === myId) {
               // TalkRoomsのrefetchではなくて、TalkRoom(id: talkRoomId)のフェッチでいいかもしれない。その後手動で追加
-              refetch();
+              setNewTalkRoomId(
+                subscriptionData.data.thoughtTalkRoomMessageCreated.roomId
+              );
               return;
             } else {
               return prev;
@@ -125,6 +130,38 @@ export const useToughtTalkRoomsWithSubsciption = () => {
       };
     }
   }, [isActive, myId, subscriptionVariables, subscribeToMore]);
+
+  useEffect(() => {
+    if (newTalkRoomId) {
+      (async function () {
+        setNewTalkRoomId(null);
+
+        const { data } = await getThougtTalkRoomQuery({
+          variables: {
+            id: newTalkRoomId,
+          },
+        });
+
+        if (data) {
+          const currentQueryData = cache.readQuery<GetThoughtTalkRoomsQuery>({
+            query: GetThoughtTalkRoomsDocument,
+          });
+
+          if (currentQueryData) {
+            const newTalkRooms = [
+              data.thoughtTalkRoom,
+              ...currentQueryData.thoughtTalkRooms,
+            ];
+
+            cache.writeQuery({
+              query: GetThoughtTalkRoomsDocument,
+              data: { thoughtTalkRooms: newTalkRooms },
+            });
+          }
+        }
+      })();
+    }
+  }, [newTalkRoomId, cache]);
 };
 
 export const useFindThoughtTalkRoomsByThoughtId = ({
