@@ -1,5 +1,5 @@
-import React, { useLayoutEffect, useState } from "react";
-import { ScrollView, useColorModeValue, useTheme } from "native-base";
+import React, { useLayoutEffect, useState, useCallback } from "react";
+import { useColorModeValue, useTheme } from "native-base";
 import { RootNavigationScreenProp } from "src/types";
 import {
   useUserQuery,
@@ -7,23 +7,27 @@ import {
   UserProfileFragment,
   UserProfileFragmentDoc,
 } from "src/generated/graphql";
-import { SocialIconProps } from "react-native-elements";
-import { Profile } from "src/components/Profile";
-import { RefreshControl } from "src/components/RefreshControl";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
 import { useToast } from "react-native-toast-notifications";
 import { useUnblock, useBlock } from "src/hooks/users";
 import { useApolloClient } from "@apollo/client";
-import { Indicator } from "src/components/Indicator";
 import { Menu } from "./Menu";
+import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
+import { useTopTabBarStyle } from "src/hooks/theme";
+import { UserProfile } from "./Profile";
+import { Thoughts } from "./Thoughts";
 
 type Props = RootNavigationScreenProp<"UserProfile">;
+
+const TopTab = createMaterialTopTabNavigator();
 
 // MyPageで表示するプロフィール以外のプロフィール画面
 export const UserProfileScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
 
   const { cache } = useApolloClient();
+
+  const toast = useToast();
 
   const cacheData = cache.readFragment<UserProfileFragment>({
     id: cache.identify({
@@ -33,7 +37,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     fragment: UserProfileFragmentDoc,
   });
 
-  const { refetch, data, loading } = useUserQuery({
+  const { data, loading } = useUserQuery({
     variables: {
       id,
     },
@@ -41,21 +45,19 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     nextFetchPolicy: "cache-first",
   });
 
-  const [refreshing, setRefreshing] = useState(false);
-  const [modalVisible, setModalVisible] = useState(false);
-  const { colors } = useTheme();
-
-  const [blockMutation] = useBlock();
-  const [unblockMutation] = useUnblock();
-
-  const toast = useToast();
-  const iconColor = useColorModeValue(colors.textBlack, colors.textWhite);
-
   const {
     data: { me },
   } = useMeQuery();
 
   const isMe = me.id === id;
+
+  const { colors } = useTheme();
+  const iconColor = useColorModeValue(colors.textBlack, colors.textWhite);
+  const [modalVisible, setModalVisible] = useState(false);
+
+  const closeModal = () => {
+    setModalVisible(false);
+  };
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -79,41 +81,18 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     });
   }, [iconColor, isMe, loading, cacheData, data]);
 
-  const onRefresh = async () => {
-    setRefreshing(true);
-    await refetch();
-    setRefreshing(false);
-  };
-
-  const closeModal = () => {
-    setModalVisible(false);
-  };
-
-  if (!data && !cacheData) {
-    if (loading) {
-      return <Indicator style={{ marginTop: 10 }} />;
-    } else {
-      return null;
-    }
-  }
-
-  const userProfile = data ? data.user : cacheData;
-
   const {
-    name,
-    imageUrl,
-    bio,
-    instagram,
-    facebook,
-    twitter,
-    linkedin,
-  } = userProfile;
-  const socials: { type: SocialIconProps["type"]; value: string | null }[] = [
-    { type: "facebook", value: facebook },
-    { type: "twitter", value: twitter },
-    { type: "linkedin", value: linkedin },
-    { type: "instagram", value: instagram },
-  ];
+    defaultScreenStyle,
+    style,
+    sceneContainerStyle,
+  } = useTopTabBarStyle();
+
+  const renderProfile = useCallback(() => {
+    return <UserProfile id={id} />;
+  }, [id]);
+
+  const [blockMutation] = useBlock();
+  const [unblockMutation] = useUnblock();
 
   const onBlockPress = async () => {
     try {
@@ -143,28 +122,17 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
 
   return (
     <>
-      <ScrollView
-        flex={1}
-        contentContainerStyle={{
-          alignItems: "center",
-          paddingTop: 60,
-          paddingBottom: 50,
+      <TopTab.Navigator
+        screenOptions={{
+          ...defaultScreenStyle,
+          lazy: true,
         }}
-        refreshControl={
-          <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
-        }
+        style={style}
+        sceneContainerStyle={sceneContainerStyle}
       >
-        <Profile
-          id={id}
-          name={name}
-          bio={bio}
-          imageUrl={imageUrl}
-          socials={socials}
-          isMe={isMe}
-          loading={loading}
-          follow={data?.user.follow}
-        />
-      </ScrollView>
+        <TopTab.Screen name="プロフィール" component={renderProfile} />
+        <TopTab.Screen name="投稿" component={Thoughts} />
+      </TopTab.Navigator>
 
       <Menu
         isVisible={modalVisible}
