@@ -4,11 +4,14 @@ import {
   GetOneOnOneTalkRoomsDocument,
   GetOneOnOneTalkRoomsQuery,
   useCreateOneOnOneTalkRoomMutation,
+  CustomErrorResponseCode,
 } from "src/generated/graphql";
 import { spinnerVisibleVar } from "src/stores/spinner";
 import { useFindOneOnOneTalkRoomFromUserId } from "src/hooks/oneOnOneTalkRoom";
 import { useNavigation } from "@react-navigation/native";
 import { RootNavigationProp } from "src/types";
+import { getGraphQLError } from "src/utils";
+import { Alert } from "react-native";
 
 type Props = {
   user: {
@@ -67,6 +70,13 @@ export const SendMessageButton = ({ user, ...props }: Props) => {
         });
       } catch (e) {
         console.log(e);
+        const gqlError = getGraphQLError(e, 0);
+        if (
+          gqlError &&
+          gqlError.code === CustomErrorResponseCode.InvalidRequest
+        ) {
+          Alert.alert(gqlError.message);
+        }
       } finally {
         spinnerVisibleVar(false);
       }
