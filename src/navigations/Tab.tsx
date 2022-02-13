@@ -4,7 +4,7 @@ import { MyPageStack } from './MyPage';
 import { TalkListScreen } from 'src/screens/TalkRoomList';
 import { NewsScreen } from 'src/screens/News';
 import { useColorModeValue, useTheme, Box } from 'native-base';
-import React, { useMemo } from 'react';
+import React, { useMemo, useEffect } from 'react';
 import { HomeStack } from './Home';
 import {
   useGetThoughtTalkRoomsQuery,
@@ -17,6 +17,8 @@ import { useToughtTalkRoomsWithSubsciption } from 'src/hooks/thoughtTalkRoom';
 import { useActiveData } from 'src/hooks/active';
 import { useNewsTalkRoomsWithSusbscription } from 'src/hooks/newsTalkRoom';
 import { useOneOnOneTalkRoomsWithSubscription } from 'src/hooks/oneOnOneTalkRoom';
+import { useDeviceToken } from 'src/hooks/pushNotificatoins';
+import { requestUserPermission } from 'src/helpers/pushNotifications';
 
 type TabParamList = {
   Home: undefined;
@@ -85,6 +87,14 @@ export const BottomTab = () => {
   useToughtTalkRoomsWithSubsciption();
   useNewsTalkRoomsWithSusbscription();
   useOneOnOneTalkRoomsWithSubscription();
+  useDeviceToken();
+
+  // 通知許可はワークスルーで表示するようにする
+  useEffect(() => {
+    (async function () {
+      await requestUserPermission();
+    })();
+  }, []);
 
   return (
     <Tab.Navigator
