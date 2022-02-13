@@ -1,4 +1,5 @@
 #import "AppDelegate.h"
+#import "RNFBMessagingModule.h"
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -35,13 +36,15 @@ static void InitializeFlipper(UIApplication *application) {
 #if defined(FB_SONARKIT_ENABLED) && __has_include(<FlipperKit/FlipperClient.h>)
   InitializeFlipper(application);
 #endif
+
+NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions];
   
   // RCTBridge *bridge = [self.reactDelegate createBridgeWithDelegate:self launchOptions:launchOptions];
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   // RCTRootView *rootView = [self.reactDelegate createRootViewWithBridge:bridge moduleName:@"main" initialProperties:nil];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"main"
-                                            initialProperties:nil];
+                                            initialProperties:appProperties];
   rootView.backgroundColor = [UIColor whiteColor];
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   // UIViewController *rootViewController = [self.reactDelegate createRootViewController];

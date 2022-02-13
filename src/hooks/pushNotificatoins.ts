@@ -16,7 +16,7 @@ export const useDeviceToken = () => {
         DEVICE_TOKEN_STORAGE_KEY
       );
 
-      if (!storageDeviceToken || token !== storageDeviceToken) {
+      if (true) {
         try {
           await addDeviceTokenMutation({
             variables: {
@@ -33,5 +33,24 @@ export const useDeviceToken = () => {
         }
       }
     })();
+
+    return messaging().onTokenRefresh((token) => {
+      (async function () {
+        const storageDeviceToken = await AsyncStorage.getItem(
+          DEVICE_TOKEN_STORAGE_KEY
+        );
+
+        await addDeviceTokenMutation({
+          variables: {
+            input: {
+              newToken: token,
+              oldToken: storageDeviceToken,
+            },
+          },
+        });
+
+        await AsyncStorage.setItem(DEVICE_TOKEN_STORAGE_KEY, token);
+      })();
+    });
   }, [addDeviceTokenMutation]);
 };

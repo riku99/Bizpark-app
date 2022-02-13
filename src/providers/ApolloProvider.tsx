@@ -23,6 +23,8 @@ type Props = {
   children: JSX.Element;
 };
 
+// 172.20.10.3
+
 const uploadLink = createUploadLink({
   uri: 'http://localhost:4000/graphql',
 });
