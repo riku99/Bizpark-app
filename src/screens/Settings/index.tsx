@@ -1,19 +1,19 @@
-import React, { useLayoutEffect } from "react";
-import { ScrollView, useColorModeValue, useTheme } from "native-base";
-import { RootNavigationScreenProp } from "src/types";
-import { CloseButton } from "src/components/BackButon";
-import { StyleSheet } from "react-native";
-import { ListItem } from "src/components/ListItem";
-import { MaterialIcons } from "@expo/vector-icons";
-import { Feather } from "@expo/vector-icons";
-import { RightIcon } from "src/components/RightIcon";
+import React, { useLayoutEffect } from 'react';
+import { ScrollView, useColorModeValue, useTheme } from 'native-base';
+import { RootNavigationScreenProp } from 'src/types';
+import { CloseButton } from 'src/components/BackButon';
+import { StyleSheet } from 'react-native';
+import { ListItem } from 'src/components/ListItem';
+import { MaterialIcons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
+import { RightIcon } from 'src/components/RightIcon';
 
-type Props = RootNavigationScreenProp<"Settings">;
+type Props = RootNavigationScreenProp<'Settings'>;
 
 export const SettingsScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "設定",
+      title: '設定',
       headerRight: () => <CloseButton />,
     });
   }, [navigation]);
@@ -24,16 +24,16 @@ export const SettingsScreen = ({ navigation }: Props) => {
   const settingList = [
     {
       Icon: <MaterialIcons name="account-box" size={24} color={iconColor} />,
-      title: "アカウント",
+      title: 'アカウント',
       onPress: () => {
-        navigation.navigate("AccountSettings");
+        navigation.navigate('AccountSettings');
       },
     },
     {
       Icon: <Feather name="users" size={24} color={iconColor} />,
-      title: "ユーザー",
+      title: 'ユーザー',
       onPress: () => {
-        navigation.navigate("UserSettings");
+        navigation.navigate('UserSettings');
       },
     },
   ];
@@ -44,7 +44,7 @@ export const SettingsScreen = ({ navigation }: Props) => {
         <ListItem
           title={item.title}
           titleStyle={{
-            fontSize: "16",
+            fontSize: '16',
           }}
           onPress={item.onPress}
           key={idx}

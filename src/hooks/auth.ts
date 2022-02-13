@@ -1,23 +1,23 @@
-import auth from "@react-native-firebase/auth";
-import { useCallback } from "react";
-import { useToast } from "react-native-toast-notifications";
+import auth from '@react-native-firebase/auth';
+import { useCallback } from 'react';
+import { useToast } from 'react-native-toast-notifications';
 import {
   useCreateUserMutation,
   useInitialDataLazyQuery,
   useSignOutMutation,
-} from "src/generated/graphql";
-import { appleAuth } from "@invertase/react-native-apple-authentication";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import Config from "react-native-config";
-import { googleSignIn } from "src/helpers/auth";
-import { Alert } from "react-native";
-import { useCustomToast } from "./toast";
-import { spinnerVisibleVar } from "src/stores/spinner";
-import { useApolloClient } from "@apollo/client";
-import { meVar, storageKeys } from "src/stores/me";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { useColorMode } from "native-base";
-import { gotInitialDataVar } from "src/stores/initialData";
+} from 'src/generated/graphql';
+import { appleAuth } from '@invertase/react-native-apple-authentication';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import Config from 'react-native-config';
+import { googleSignIn } from 'src/helpers/auth';
+import { Alert } from 'react-native';
+import { useCustomToast } from './toast';
+import { spinnerVisibleVar } from 'src/stores/spinner';
+import { useApolloClient } from '@apollo/client';
+import { meVar, storageKeys } from 'src/stores/me';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useColorMode } from 'native-base';
+import { gotInitialDataVar } from 'src/stores/initialData';
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
@@ -40,9 +40,8 @@ export const useSignUpWithEmail = () => {
     }) => {
       spinnerVisibleVar(true);
       try {
-        const {
-          user: firebaseUser,
-        } = await auth().createUserWithEmailAndPassword(email, password);
+        const { user: firebaseUser } =
+          await auth().createUserWithEmailAndPassword(email, password);
         const idToken = await firebaseUser.getIdToken();
         try {
           const { data } = await createUserMutation({
@@ -61,20 +60,20 @@ export const useSignUpWithEmail = () => {
         }
       } catch (error) {
         console.log(error);
-        if (error.code === "auth/email-already-in-use") {
-          toast.show("メールアドレスは既に使用されています", {
-            type: "danger",
+        if (error.code === 'auth/email-already-in-use') {
+          toast.show('メールアドレスは既に使用されています', {
+            type: 'danger',
           });
           return;
         }
 
-        if (error.code === "auth/invalid-email") {
-          toast.show("無効なアドレスです", { type: "danger" });
+        if (error.code === 'auth/invalid-email') {
+          toast.show('無効なアドレスです', { type: 'danger' });
           return;
         }
 
-        if (error.code === "auth/weak-password") {
-          toast.show("パスワードは8文字以上にしてください");
+        if (error.code === 'auth/weak-password') {
+          toast.show('パスワードは8文字以上にしてください');
           return;
         }
 
@@ -184,7 +183,7 @@ export const useSignInWithEmail = () => {
           }
         } catch (e) {}
       } catch (e) {
-        Alert.alert("エラー", "メールアドレスまたはパスワードが間違っています");
+        Alert.alert('エラー', 'メールアドレスまたはパスワードが間違っています');
       } finally {
         spinnerVisibleVar(false);
       }
@@ -243,7 +242,7 @@ export const useSignOut = () => {
 
       await client.clearStore();
 
-      console.log("👋 Sign out success!");
+      console.log('👋 Sign out success!');
 
       spinnerVisibleVar(false);
     }

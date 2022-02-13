@@ -1,12 +1,12 @@
 import {
   NativeStackScreenProps,
   NativeStackNavigationProp,
-} from "@react-navigation/native-stack";
-import { NavigatorScreenParams } from "@react-navigation/native";
-import { SettingsParamList } from "src/navigations/Settings";
-import { ThoughtTalkRoomStackParamList } from "src/navigations/ThoughtTalkRoom";
-import { NewsTalkRoomStackParamList } from "src/navigations/NewsTalkRoom";
-import { OneOnOneTalkRoomStackParamList } from "src/navigations/OneOnOneTalkRoom";
+} from '@react-navigation/native-stack';
+import { NavigatorScreenParams } from '@react-navigation/native';
+import { SettingsParamList } from 'src/navigations/Settings';
+import { ThoughtTalkRoomStackParamList } from 'src/navigations/ThoughtTalkRoom';
+import { NewsTalkRoomStackParamList } from 'src/navigations/NewsTalkRoom';
+import { OneOnOneTalkRoomStackParamList } from 'src/navigations/OneOnOneTalkRoom';
 
 type ThoughtShare = {
   title?: string;
@@ -14,7 +14,7 @@ type ThoughtShare = {
   images: { url: string; mime: string }[];
 };
 
-export type Socials = "facebook" | "twitter" | "linkedin" | "instagram";
+export type Socials = 'facebook' | 'twitter' | 'linkedin' | 'instagram';
 
 export type TohughtStackParamList = {
   Thought: {
@@ -37,7 +37,7 @@ export type RootStackParamList = {
   Signup: undefined;
   Signin: undefined;
   MailForm: {
-    type: "signUp" | "signIn";
+    type: 'signUp' | 'signIn';
   };
   Thought: {
     id: string;
@@ -49,7 +49,7 @@ export type RootStackParamList = {
   };
   UserEdit: undefined;
   UserItemEdit: {
-    type: "name" | "bio" | Socials;
+    type: 'name' | 'bio' | Socials;
     value: string | null;
     setValue: (v: string | null) => void;
   };
@@ -65,10 +65,8 @@ export type RootStackParamList = {
   NewsTalkRoomStackParamList &
   OneOnOneTalkRoomStackParamList;
 
-export type RootNavigationScreenProp<
-  T extends keyof RootStackParamList
-> = NativeStackScreenProps<RootStackParamList, T>;
+export type RootNavigationScreenProp<T extends keyof RootStackParamList> =
+  NativeStackScreenProps<RootStackParamList, T>;
 
-export type RootNavigationProp<
-  T extends keyof RootStackParamList
-> = NativeStackNavigationProp<RootStackParamList, T>;
+export type RootNavigationProp<T extends keyof RootStackParamList> =
+  NativeStackNavigationProp<RootStackParamList, T>;

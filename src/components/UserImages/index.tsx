@@ -1,13 +1,13 @@
-import React, { ComponentProps } from "react";
-import { Box, HStack } from "native-base";
-import { UserImage } from "../UserImage";
+import React, { ComponentProps } from 'react';
+import { Box, HStack } from 'native-base';
+import { UserImage } from '../UserImage';
 
 export const TRANSLATE_IMAGE_X = 10;
 
 type Props = {
   data: (string | null)[];
-  imageSize: ComponentProps<typeof UserImage>["size"];
-  imageStyle?: ComponentProps<typeof UserImage>["style"];
+  imageSize: ComponentProps<typeof UserImage>['size'];
+  imageStyle?: ComponentProps<typeof UserImage>['style'];
 } & ComponentProps<typeof HStack>;
 
 export const UserImages = ({

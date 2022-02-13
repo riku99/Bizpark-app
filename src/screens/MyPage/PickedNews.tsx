@@ -1,25 +1,25 @@
-import React, { useCallback, useState } from "react";
-import { Box } from "native-base";
+import React, { useCallback, useState } from 'react';
+import { Box } from 'native-base';
 import {
   useGetPickedNewsQuery,
   GetPickedNewsQuery,
-} from "src/generated/graphql";
-import { btoa } from "react-native-quick-base64";
-import { Indicator } from "src/components/Indicator";
-import { InfiniteFlatList } from "src/components/InfiniteFlatList";
-import { NewsCard } from "src/components/NewsCard";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
-import { RefreshControl } from "src/components/RefreshControl";
+} from 'src/generated/graphql';
+import { btoa } from 'react-native-quick-base64';
+import { Indicator } from 'src/components/Indicator';
+import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
+import { NewsCard } from 'src/components/NewsCard';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
+import { RefreshControl } from 'src/components/RefreshControl';
 
-type Item = GetPickedNewsQuery["pickedNews"]["edges"][number];
+type Item = GetPickedNewsQuery['pickedNews']['edges'][number];
 
 export const PickedNews = () => {
   const { data, refetch, fetchMore } = useGetPickedNewsQuery();
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const navigation = useNavigation<RootNavigationProp<"Tab">>();
+  const navigation = useNavigation<RootNavigationProp<'Tab'>>();
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -44,7 +44,7 @@ export const PickedNews = () => {
     const { id } = item.node.news;
 
     const onPress = () => {
-      navigation.navigate("NewsWebView", { id });
+      navigation.navigate('NewsWebView', { id });
     };
     return <NewsCard id={id} onPress={onPress} divider />;
   }, []);

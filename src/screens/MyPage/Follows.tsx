@@ -1,13 +1,13 @@
-import React, { useCallback, useState } from "react";
-import { Box } from "native-base";
-import { useFollowsQuery, UserEdge } from "src/generated/graphql";
-import { FollowUserCard } from "src/components/FollowUserCard";
-import { RefreshControl } from "src/components/RefreshControl";
-import { InfiniteFlatList } from "src/components/InfiniteFlatList";
-import { btoa } from "react-native-quick-base64";
-import { StyleSheet } from "react-native";
-import { Indicator } from "src/components/Indicator";
-import { SerachBar } from "src/components/SearchBar";
+import React, { useCallback, useState } from 'react';
+import { Box } from 'native-base';
+import { useFollowsQuery, UserEdge } from 'src/generated/graphql';
+import { FollowUserCard } from 'src/components/FollowUserCard';
+import { RefreshControl } from 'src/components/RefreshControl';
+import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
+import { btoa } from 'react-native-quick-base64';
+import { StyleSheet } from 'react-native';
+import { Indicator } from 'src/components/Indicator';
+import { SerachBar } from 'src/components/SearchBar';
 
 export const Follows = React.memo(() => {
   const { data, refetch, fetchMore, loading } = useFollowsQuery();

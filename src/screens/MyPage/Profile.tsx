@@ -1,10 +1,10 @@
-import React, { useState } from "react";
-import { ScrollView } from "native-base";
-import { useMeQuery } from "src/generated/graphql";
-import { Profile } from "src/components/Profile";
-import { SocialIconProps } from "react-native-elements";
-import { RefreshControl } from "src/components/RefreshControl";
-import { AddButton } from "src/components/AddButton";
+import React, { useState } from 'react';
+import { ScrollView } from 'native-base';
+import { useMeQuery } from 'src/generated/graphql';
+import { Profile } from 'src/components/Profile';
+import { SocialIconProps } from 'react-native-elements';
+import { RefreshControl } from 'src/components/RefreshControl';
+import { AddButton } from 'src/components/AddButton';
 
 export const MyProfile = () => {
   const { data, refetch } = useMeQuery();
@@ -20,21 +20,13 @@ export const MyProfile = () => {
     return null;
   }
 
-  const {
-    id,
-    name,
-    bio,
-    imageUrl,
-    instagram,
-    facebook,
-    twitter,
-    linkedin,
-  } = data.me;
-  const socials: { type: SocialIconProps["type"]; value: string | null }[] = [
-    { type: "facebook", value: facebook },
-    { type: "twitter", value: twitter },
-    { type: "linkedin", value: linkedin },
-    { type: "instagram", value: instagram },
+  const { id, name, bio, imageUrl, instagram, facebook, twitter, linkedin } =
+    data.me;
+  const socials: { type: SocialIconProps['type']; value: string | null }[] = [
+    { type: 'facebook', value: facebook },
+    { type: 'twitter', value: twitter },
+    { type: 'linkedin', value: linkedin },
+    { type: 'instagram', value: instagram },
   ];
 
   return (
@@ -42,7 +34,7 @@ export const MyProfile = () => {
       <ScrollView
         flex={1}
         contentContainerStyle={{
-          alignItems: "center",
+          alignItems: 'center',
           paddingTop: 50,
           paddingBottom: 50,
         }}

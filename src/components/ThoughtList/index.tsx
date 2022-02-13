@@ -1,11 +1,11 @@
-import React, { useCallback, useState } from "react";
-import { RefreshControl } from "react-native";
-import { ThoughtEdge } from "src/generated/graphql";
-import { ThoughtCard } from "src/components/ThoughtCard";
-import { useColorModeValue, useTheme } from "native-base";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
-import { InfiniteFlatList } from "src/components/InfiniteFlatList";
+import React, { useCallback, useState } from 'react';
+import { RefreshControl } from 'react-native';
+import { ThoughtEdge } from 'src/generated/graphql';
+import { ThoughtCard } from 'src/components/ThoughtCard';
+import { useColorModeValue, useTheme } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
+import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
 
 type Props = {
   data: ThoughtEdge[];
@@ -15,7 +15,7 @@ type Props = {
 
 export const List = ({ data, refresh, infiniteLoad }: Props) => {
   const { colors } = useTheme();
-  const navigation = useNavigation<RootNavigationProp<"Tab">>();
+  const navigation = useNavigation<RootNavigationProp<'Tab'>>();
   const [refreshing, setRefreshing] = useState(false);
 
   const renderItem = useCallback(
@@ -27,7 +27,7 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
           id={id}
           mt={index !== 0 ? 4 : 0}
           onPress={() => {
-            navigation.navigate("Thought", {
+            navigation.navigate('Thought', {
               id,
             });
           }}
@@ -48,7 +48,7 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
       data={data}
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
-      contentContainerStyle={{ paddingBottom: 8, minHeight: "100%" }}
+      contentContainerStyle={{ paddingBottom: 8, minHeight: '100%' }}
       keyExtractor={(i: ThoughtEdge) => i.node.id}
       refreshControl={
         <RefreshControl

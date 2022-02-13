@@ -1,6 +1,6 @@
-import React from "react";
-import { InstaLikeModal } from "src/components/InstaLikeModal";
-import { Alert } from "react-native";
+import React from 'react';
+import { InstaLikeModal } from 'src/components/InstaLikeModal';
+import { Alert } from 'react-native';
 
 type Props = {
   isVisible;
@@ -21,23 +21,23 @@ export const Menu = ({
 }: Props) => {
   const menuList = [
     {
-      title: blocking ? "ブロック解除" : "ブロックする",
-      color: "#f51000",
+      title: blocking ? 'ブロック解除' : 'ブロックする',
+      color: '#f51000',
       onPress: async () => {
         if (userId) {
           try {
             if (!blocking) {
               Alert.alert(
-                "ブロックしますか?",
-                "シェアが表示されなくなり、フォローも解除されます",
+                'ブロックしますか?',
+                'シェアが表示されなくなり、フォローも解除されます',
                 [
                   {
-                    text: "キャンセル",
-                    style: "cancel",
+                    text: 'キャンセル',
+                    style: 'cancel',
                   },
                   {
-                    text: "ブロックする",
-                    style: "destructive",
+                    text: 'ブロックする',
+                    style: 'destructive',
                     onPress: async () => {
                       await onBlockPress();
                     },
@@ -46,16 +46,16 @@ export const Menu = ({
               );
             } else {
               Alert.alert(
-                "ブロック解除しますか?",
-                "シェアが表示されるようになり、フォローも可能になります",
+                'ブロック解除しますか?',
+                'シェアが表示されるようになり、フォローも可能になります',
                 [
                   {
-                    text: "キャンセル",
-                    style: "cancel",
+                    text: 'キャンセル',
+                    style: 'cancel',
                   },
                   {
-                    text: "解除する",
-                    style: "destructive",
+                    text: '解除する',
+                    style: 'destructive',
                     onPress: async () => {
                       await onUnBlockPress();
                     },

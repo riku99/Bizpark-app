@@ -1,17 +1,17 @@
-import React, { useCallback, useState } from "react";
-import { RefreshControl } from "react-native";
+import React, { useCallback, useState } from 'react';
+import { RefreshControl } from 'react-native';
 import {
   Box,
   FlatList,
   Divider,
   useTheme,
   useColorModeValue,
-} from "native-base";
-import { NewsQuery, NewsEdge } from "src/generated/graphql";
-import { NewsCard } from "src/components/NewsCard";
-import { Indicator } from "src/components/Indicator";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
+} from 'native-base';
+import { NewsQuery, NewsEdge } from 'src/generated/graphql';
+import { NewsCard } from 'src/components/NewsCard';
+import { Indicator } from 'src/components/Indicator';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
 
 type Props = {
   data: NewsEdge[];
@@ -19,7 +19,7 @@ type Props = {
   infiniteLoad: () => Promise<void>;
 };
 
-type Item = NewsQuery["news"]["edges"][number];
+type Item = NewsQuery['news']['edges'][number];
 
 export const List = React.memo(({ data, refresh, infiniteLoad }: Props) => {
   const { colors } = useTheme();
@@ -66,13 +66,13 @@ export const List = React.memo(({ data, refresh, infiniteLoad }: Props) => {
     }
   };
 
-  const navigation = useNavigation<RootNavigationProp<"Tab">>();
+  const navigation = useNavigation<RootNavigationProp<'Tab'>>();
 
   const renderItem = useCallback(
     ({ item, index }: { item: Item; index: number }) => {
       const { id } = item.node;
       const onPress = () => {
-        navigation.navigate("NewsWebView", { id });
+        navigation.navigate('NewsWebView', { id });
       };
 
       return (

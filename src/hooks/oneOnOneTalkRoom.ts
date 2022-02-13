@@ -6,11 +6,11 @@ import {
   useGetOneOnOneTalkRoomLazyQuery,
   GetOneOnOneTalkRoomsQuery,
   GetOneOnOneTalkRoomsDocument,
-} from "src/generated/graphql";
-import { meVar } from "src/stores/me";
-import { useReactiveVar, useApolloClient } from "@apollo/client";
-import { useState, useEffect, useCallback } from "react";
-import { AppState, AppStateStatus } from "react-native";
+} from 'src/generated/graphql';
+import { meVar } from 'src/stores/me';
+import { useReactiveVar, useApolloClient } from '@apollo/client';
+import { useState, useEffect, useCallback } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 
 export const useOneOnOneTalkRoomsWithSubscription = () => {
   const myId = useReactiveVar(meVar.id);
@@ -18,11 +18,11 @@ export const useOneOnOneTalkRoomsWithSubscription = () => {
   const { cache } = useApolloClient();
 
   const { subscribeToMore } = useGetOneOnOneTalkRoomsQuery({
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const [getOneOnOneTalkRoomQuery] = useGetOneOnOneTalkRoomLazyQuery({
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   const [isActive, setIsActive] = useState(true);
@@ -31,24 +31,24 @@ export const useOneOnOneTalkRoomsWithSubscription = () => {
 
   useEffect(() => {
     const onChange = (nextState: AppStateStatus) => {
-      if (nextState === "active") {
+      if (nextState === 'active') {
         setIsActive(true);
       } else {
         setIsActive(false);
       }
     };
 
-    AppState.addEventListener("change", onChange);
+    AppState.addEventListener('change', onChange);
 
     return () => {
-      AppState.removeEventListener("change", onChange);
+      AppState.removeEventListener('change', onChange);
     };
   }, [setIsActive]);
 
   // サブスクライブ
   useEffect(() => {
     if (isActive && myId) {
-      console.log("😆　subsucribe for OneOnOneTalkRooms");
+      console.log('😆　subsucribe for OneOnOneTalkRooms');
 
       const unsubscribe = subscribeToMore<
         OnOneOnOneTalkRoomMessageCreatedSubscription,
@@ -79,7 +79,8 @@ export const useOneOnOneTalkRoomsWithSubscription = () => {
 
           const newMessageEdge = {
             node: subscriptionData.data.oneOnOneTalkRoomMessageCreated,
-            cursor: subscriptionData.data.oneOnOneTalkRoomMessageCreated.id.toString(),
+            cursor:
+              subscriptionData.data.oneOnOneTalkRoomMessageCreated.id.toString(),
           };
 
           const newMessagesConnection = {
@@ -115,7 +116,7 @@ export const useOneOnOneTalkRoomsWithSubscription = () => {
 
       return () => {
         if (unsubscribe) {
-          console.log("案サブスク OneOnOneTalkRooms");
+          console.log('案サブスク OneOnOneTalkRooms');
           unsubscribe();
         }
       };

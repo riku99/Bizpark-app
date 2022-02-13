@@ -1,22 +1,22 @@
-import React from "react";
-import { Button } from "native-base";
+import React from 'react';
+import { Button } from 'native-base';
 import {
   useJoinThoughtTalkMutation,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,
-} from "src/generated/graphql";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
-import { useFindThoughtTalkRoomsByThoughtId } from "src/hooks/thoughtTalkRoom";
-import { spinnerVisibleVar } from "src/stores/spinner";
-import { getGraphQLError } from "src/utils";
-import { useToast } from "react-native-toast-notifications";
+} from 'src/generated/graphql';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
+import { useFindThoughtTalkRoomsByThoughtId } from 'src/hooks/thoughtTalkRoom';
+import { spinnerVisibleVar } from 'src/stores/spinner';
+import { getGraphQLError } from 'src/utils';
+import { useToast } from 'react-native-toast-notifications';
 
 type Props = { thoughtId: string; contributorId: string };
 
 export const JoinButton = ({ thoughtId, contributorId }: Props) => {
   const [joinMutation] = useJoinThoughtTalkMutation();
-  const navigation = useNavigation<RootNavigationProp<"Thought">>();
+  const navigation = useNavigation<RootNavigationProp<'Thought'>>();
   const existingData = useFindThoughtTalkRoomsByThoughtId({ thoughtId });
 
   const toast = useToast();
@@ -63,7 +63,7 @@ export const JoinButton = ({ thoughtId, contributorId }: Props) => {
       } catch (e) {
         const result = getGraphQLError(e, 0);
         if (result) {
-          toast.show(result.message, { type: "danger" });
+          toast.show(result.message, { type: 'danger' });
         }
       } finally {
         spinnerVisibleVar(false);
@@ -71,8 +71,8 @@ export const JoinButton = ({ thoughtId, contributorId }: Props) => {
     }
 
     if (roomId) {
-      navigation.navigate("ThoughtTalkRoom", {
-        screen: "ThoughtTalkRoomMain",
+      navigation.navigate('ThoughtTalkRoom', {
+        screen: 'ThoughtTalkRoomMain',
         params: {
           id: roomId,
         },

@@ -1,4 +1,4 @@
-import React, { ComponentProps } from "react";
+import React, { ComponentProps } from 'react';
 import {
   Box,
   HStack,
@@ -6,13 +6,13 @@ import {
   useColorModeValue,
   Pressable,
   useTheme,
-} from "native-base";
-import { MotiView } from "moti";
-import { Overlay } from "src/components/Overlay";
-import { StyleSheet } from "react-native";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import * as Clipboard from "expo-clipboard";
-import { IMessage } from "react-native-gifted-chat";
+} from 'native-base';
+import { MotiView } from 'moti';
+import { Overlay } from 'src/components/Overlay';
+import { StyleSheet } from 'react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import * as Clipboard from 'expo-clipboard';
+import { IMessage } from 'react-native-gifted-chat';
 
 type Props = {
   message: IMessage;
@@ -54,7 +54,7 @@ export const BubbleActions = ({
         ]}
         from={{ translateY: 60 + bottom }}
         animate={{ translateY: 0 }}
-        transition={{ type: "timing", duration: 200 }}
+        transition={{ type: 'timing', duration: 200 }}
       >
         <Pressable
           flex={1}
@@ -98,9 +98,9 @@ export const BubbleActions = ({
 
 const styles = StyleSheet.create({
   bottomContents: {
-    width: "100%",
-    flexDirection: "row",
-    position: "absolute",
+    width: '100%',
+    flexDirection: 'row',
+    position: 'absolute',
     zIndex: 10,
   },
 });

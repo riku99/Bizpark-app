@@ -1,19 +1,19 @@
-import React from "react";
-import { Box, Button } from "native-base";
-import { CloseButton } from "src/components/CloseButton";
-import { StyleSheet } from "react-native";
+import React from 'react';
+import { Box, Button } from 'native-base';
+import { CloseButton } from 'src/components/CloseButton';
+import { StyleSheet } from 'react-native';
 import {
   CustomErrorResponseCode,
   GetNewsTalkRoomsDocument,
   GetNewsTalkRoomsQuery,
   useJoinNewsTalkRoomMutation,
-} from "src/generated/graphql";
-import { useFindNewsTalkRoomFromNewsId } from "src/hooks/newsTalkRoom";
-import { spinnerVisibleVar } from "src/stores/spinner";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
-import { getGraphQLError } from "src/utils";
-import { useToast } from "react-native-toast-notifications";
+} from 'src/generated/graphql';
+import { useFindNewsTalkRoomFromNewsId } from 'src/hooks/newsTalkRoom';
+import { spinnerVisibleVar } from 'src/stores/spinner';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
+import { getGraphQLError } from 'src/utils';
+import { useToast } from 'react-native-toast-notifications';
 
 type Props = {
   onCloseButtonPress: () => void;
@@ -21,7 +21,7 @@ type Props = {
 };
 
 export const JoinTalkButton = ({ onCloseButtonPress, newsId }: Props) => {
-  const navigation = useNavigation<RootNavigationProp<"NewsWebView">>();
+  const navigation = useNavigation<RootNavigationProp<'NewsWebView'>>();
 
   const [joinNewsTalkRoomMutation] = useJoinNewsTalkRoomMutation();
 
@@ -72,7 +72,7 @@ export const JoinTalkButton = ({ onCloseButtonPress, newsId }: Props) => {
           gqlError &&
           gqlError.code === CustomErrorResponseCode.InvalidRequest
         ) {
-          toast.show(gqlError.message, { type: "danger" });
+          toast.show(gqlError.message, { type: 'danger' });
         }
       } finally {
         spinnerVisibleVar(false);
@@ -80,8 +80,8 @@ export const JoinTalkButton = ({ onCloseButtonPress, newsId }: Props) => {
     }
 
     if (talkRoomId) {
-      navigation.navigate("NewsTalkRoom", {
-        screen: "NewsTalkRoomMain",
+      navigation.navigate('NewsTalkRoom', {
+        screen: 'NewsTalkRoomMain',
         params: {
           id: talkRoomId,
         },
@@ -111,7 +111,7 @@ export const JoinTalkButton = ({ onCloseButtonPress, newsId }: Props) => {
 
 const styles = StyleSheet.create({
   closeButton: {
-    alignSelf: "flex-end",
+    alignSelf: 'flex-end',
     transform: [{ translateY: -15 }],
   },
 });

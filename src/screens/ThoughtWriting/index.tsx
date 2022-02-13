@@ -4,22 +4,22 @@ import React, {
   useRef,
   useCallback,
   useEffect,
-} from "react";
-import { Box, Pressable, Text, Input, useColorModeValue } from "native-base";
-import { RootNavigationScreenProp } from "src/types";
-import { CloseButton } from "src/components/BackButon";
-import { InputAccessoryView, TextInput } from "react-native";
-import { TextKeyboardAccessory } from "./TextKeyboardAccessory";
-import ImagePicker from "react-native-image-crop-picker";
-import { TitleKeyboardAccessory } from "./TitleKeyboardAccessory";
+} from 'react';
+import { Box, Pressable, Text, Input, useColorModeValue } from 'native-base';
+import { RootNavigationScreenProp } from 'src/types';
+import { CloseButton } from 'src/components/BackButon';
+import { InputAccessoryView, TextInput } from 'react-native';
+import { TextKeyboardAccessory } from './TextKeyboardAccessory';
+import ImagePicker from 'react-native-image-crop-picker';
+import { TitleKeyboardAccessory } from './TitleKeyboardAccessory';
 
-type Props = RootNavigationScreenProp<"ThoughtWriting">;
+type Props = RootNavigationScreenProp<'ThoughtWriting'>;
 
 export const ThoughtWritingScreen = ({ navigation }: Props) => {
-  const textInputId = "textInput";
-  const titleInputId = "titleInput";
-  const [title, setTitle] = useState("");
-  const [text, setText] = useState("");
+  const textInputId = 'textInput';
+  const titleInputId = 'titleInput';
+  const [title, setTitle] = useState('');
+  const [text, setText] = useState('');
   const [images, setImages] = useState<{ url: string; mime: string }[]>([]);
   const [nextDisabled, setNextDisabled] = useState(true);
 
@@ -36,7 +36,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       return;
     }
 
-    navigation.navigate("ThoughtShare", {
+    navigation.navigate('ThoughtShare', {
       title,
       text,
       images,
@@ -50,14 +50,14 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         <Pressable onPress={onNextPress}>
           <Text
             fontWeight="bold"
-            color={!nextDisabled ? "pink" : "lightGray"}
+            color={!nextDisabled ? 'pink' : 'lightGray'}
             fontSize={16}
           >
             次へ
           </Text>
         </Pressable>
       ),
-      title: "作成",
+      title: '作成',
     });
   }, [text, onNextPress]);
 
@@ -66,7 +66,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
   const onAccessoryImagePress = useCallback(async () => {
     ImagePicker.openPicker({
       multiple: true,
-      mediaType: "photo",
+      mediaType: 'photo',
       maxFiles: 4,
     })
       .then((images) => {
@@ -100,7 +100,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         fontWeight="bold"
         placeholder="タイトル (任意)"
         mt={2}
-        keyboardAppearance={useColorModeValue("light", "dark")}
+        keyboardAppearance={useColorModeValue('light', 'dark')}
         onChangeText={setTitle}
         inputAccessoryViewID={titleInputId}
       />
@@ -112,7 +112,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
         fontSize={16}
         multiline
         h="27%"
-        keyboardAppearance={useColorModeValue("light", "dark")}
+        keyboardAppearance={useColorModeValue('light', 'dark')}
         autoFocus
         inputAccessoryViewID={textInputId}
         onChangeText={setText}

@@ -1,37 +1,34 @@
-import React, { useLayoutEffect, useMemo, useCallback } from "react";
-import { RootNavigationScreenProp } from "src/types";
-import { ThoughtTalkRoomList } from "./ThoughtTalkRoomList";
-import { NewsTalkRoomList } from "./NewsTalkRoomList";
-import { OneOnOneTalkRoomList } from "./OneOnOneTalkRoomList";
-import { useTopTabBarStyle } from "src/hooks/theme";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { Badge } from "src/components/Badge";
+import React, { useLayoutEffect, useMemo, useCallback } from 'react';
+import { RootNavigationScreenProp } from 'src/types';
+import { ThoughtTalkRoomList } from './ThoughtTalkRoomList';
+import { NewsTalkRoomList } from './NewsTalkRoomList';
+import { OneOnOneTalkRoomList } from './OneOnOneTalkRoomList';
+import { useTopTabBarStyle } from 'src/hooks/theme';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Badge } from 'src/components/Badge';
 import {
   useGetNewsTalkRoomsQuery,
   useGetThoughtTalkRoomsQuery,
   useGetOneOnOneTalkRoomsQuery,
-} from "src/generated/graphql";
-import { Box } from "native-base";
+} from 'src/generated/graphql';
+import { Box } from 'native-base';
 
-type Props = RootNavigationScreenProp<"Tab">;
+type Props = RootNavigationScreenProp<'Tab'>;
 
 const TopTab = createMaterialTopTabNavigator();
 
 export const TalkListScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "",
+      title: '',
       headerShown: false,
       headerShadowVisible: false,
     });
   }, []);
 
-  const {
-    defaultScreenStyle,
-    style,
-    sceneContainerStyle,
-  } = useTopTabBarStyle();
+  const { defaultScreenStyle, style, sceneContainerStyle } =
+    useTopTabBarStyle();
 
   const { top } = useSafeAreaInsets();
 
@@ -44,15 +41,15 @@ export const TalkListScreen = ({ navigation }: Props) => {
   }, []);
 
   const { data: thoughtTalkRoomData } = useGetThoughtTalkRoomsQuery({
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const { data: newsTalkRoomData } = useGetNewsTalkRoomsQuery({
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const { data: oneOnOneTalkRoomData } = useGetOneOnOneTalkRoomsQuery({
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const shareBadgeVisible = useMemo(() => {
@@ -99,7 +96,7 @@ export const TalkListScreen = ({ navigation }: Props) => {
           name="ThoughtTalkRoomList"
           component={ThoughtTalkRoomList}
           options={{
-            tabBarLabel: "シェア",
+            tabBarLabel: 'シェア',
             tabBarBadge: shareBadgeVisible ? renderBadge : undefined,
           }}
         />
@@ -107,7 +104,7 @@ export const TalkListScreen = ({ navigation }: Props) => {
           name="NewsTalkRoomList"
           component={NewsTalkRoomList}
           options={{
-            tabBarLabel: "ニュース",
+            tabBarLabel: 'ニュース',
             tabBarBadge: newsBadgeVisible ? renderBadge : undefined,
           }}
         />
@@ -115,7 +112,7 @@ export const TalkListScreen = ({ navigation }: Props) => {
           name="OneOnOneTalkRoomList"
           component={OneOnOneTalkRoomList}
           options={{
-            tabBarLabel: "ユーザー",
+            tabBarLabel: 'ユーザー',
             tabBarBadge: userBadgeVisible ? renderBadge : undefined,
           }}
         />

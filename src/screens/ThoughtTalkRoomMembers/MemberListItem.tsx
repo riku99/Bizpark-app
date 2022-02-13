@@ -1,27 +1,27 @@
-import React, { useState } from "react";
-import { Pressable } from "native-base";
+import React, { useState } from 'react';
+import { Pressable } from 'native-base';
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
-} from "react-native-gesture-handler";
+} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
   useAnimatedStyle,
   withTiming,
   runOnJS,
-} from "react-native-reanimated";
-import { ListItem } from "src/components/ListItem";
-import { UserImage } from "src/components/UserImage";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
-import { StyleSheet, Alert } from "react-native";
-import { Feather } from "@expo/vector-icons";
+} from 'react-native-reanimated';
+import { ListItem } from 'src/components/ListItem';
+import { UserImage } from 'src/components/UserImage';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
+import { StyleSheet, Alert } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import {
   useDeleteThoughtTalkRoomMemberMutation,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,
-} from "src/generated/graphql";
+} from 'src/generated/graphql';
 
 type Props = {
   talkRoomId: number;
@@ -37,9 +37,8 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export const MemberListItem = React.memo(
   ({ user, swipeEnabled, talkRoomId }: Props) => {
-    const navigation = useNavigation<
-      RootNavigationProp<"ThoughtTalkRoomMembers">
-    >();
+    const navigation =
+      useNavigation<RootNavigationProp<'ThoughtTalkRoomMembers'>>();
 
     const [isItemVisible, setIsItemVsisible] = useState(true);
 
@@ -62,8 +61,8 @@ export const MemberListItem = React.memo(
       };
     });
 
-    const panGestureHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>(
-      {
+    const panGestureHandler =
+      useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
         onStart: (_, ctx) => {},
         onActive: (event, ctx) => {
           translateX.value = event.translationX;
@@ -76,8 +75,7 @@ export const MemberListItem = React.memo(
             translateX.value = withTiming(0);
           }
         },
-      }
-    );
+      });
 
     const [deleteMemberMutation] = useDeleteThoughtTalkRoomMemberMutation();
 
@@ -136,16 +134,16 @@ export const MemberListItem = React.memo(
 
     const onDeletePress = () => {
       Alert.alert(
-        "ユーザーをトークから削除",
+        'ユーザーをトークから削除',
         `${user.name}をトークから削除しますか?\n削除されたユーザーは再度トークに参加することが可能です。トークに参加させたくない場合はブロックもしてください`,
         [
           {
-            text: "キャンセル",
-            style: "cancel",
+            text: 'キャンセル',
+            style: 'cancel',
           },
           {
-            text: "削除",
-            style: "destructive",
+            text: '削除',
+            style: 'destructive',
             onPress: async () => {
               itemHeight.value = withTiming(0, undefined, () => {
                 runOnJS(close)();
@@ -189,7 +187,7 @@ export const MemberListItem = React.memo(
               ItemLeft={<UserImage uri={user.imageUrl} size="8" />}
               py="3"
               onPress={() => {
-                navigation.navigate("UserProfile", {
+                navigation.navigate('UserProfile', {
                   id: user.id,
                 });
               }}
@@ -207,10 +205,10 @@ const DEFAULT_ITEM_HEIGHT = 56;
 const styles = StyleSheet.create({
   itemContainer: {},
   deleteContainer: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     width: DELETE_CONTAINER_WIDTH,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

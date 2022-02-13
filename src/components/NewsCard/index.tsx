@@ -1,13 +1,13 @@
-import React, { ComponentProps, useState, useEffect } from "react";
-import { Box, Pressable, Text, Divider } from "native-base";
-import { format } from "date-fns";
-import { Image } from "src/components/Image";
-import { Pick } from "src/components/Pick";
+import React, { ComponentProps, useState, useEffect } from 'react';
+import { Box, Pressable, Text, Divider } from 'native-base';
+import { format } from 'date-fns';
+import { Image } from 'src/components/Image';
+import { Pick } from 'src/components/Pick';
 import {
   useGetOneNewsQuery,
   useCreateNewsPickMutation,
   useDeleteNewsPickMutation,
-} from "src/generated/graphql";
+} from 'src/generated/graphql';
 
 type Props = {
   id: number;
@@ -19,7 +19,7 @@ export const NewsCard = ({ id, divider, ...props }: Props) => {
     variables: {
       id,
     },
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const [picked, setPicked] = useState(
@@ -69,7 +69,7 @@ export const NewsCard = ({ id, divider, ...props }: Props) => {
   const { title, provider, articleCreatedAt, image } = newsData.oneNews;
   const formatedDate = format(
     new Date(Number(articleCreatedAt)),
-    "yyyy/MM/dd HH:mm"
+    'yyyy/MM/dd HH:mm'
   );
 
   return (
@@ -100,7 +100,7 @@ export const NewsCard = ({ id, divider, ...props }: Props) => {
           justifyContent="space-between"
         >
           <Text maxW="70%">
-            {provider ?? ""}{" "}
+            {provider ?? ''}{' '}
             <Text mt="1" fontSize="10">
               {formatedDate}
             </Text>

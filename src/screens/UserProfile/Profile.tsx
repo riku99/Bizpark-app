@@ -1,16 +1,16 @@
-import React, { useState } from "react";
-import { ScrollView } from "native-base";
+import React, { useState } from 'react';
+import { ScrollView } from 'native-base';
 import {
   useUserQuery,
   useMeQuery,
   UserProfileFragment,
   UserProfileFragmentDoc,
-} from "src/generated/graphql";
-import { SocialIconProps } from "react-native-elements";
-import { Profile } from "src/components/Profile";
-import { RefreshControl } from "src/components/RefreshControl";
-import { useApolloClient } from "@apollo/client";
-import { Indicator } from "src/components/Indicator";
+} from 'src/generated/graphql';
+import { SocialIconProps } from 'react-native-elements';
+import { Profile } from 'src/components/Profile';
+import { RefreshControl } from 'src/components/RefreshControl';
+import { useApolloClient } from '@apollo/client';
+import { Indicator } from 'src/components/Indicator';
 
 type Props = { id: string };
 
@@ -19,7 +19,7 @@ export const UserProfile = ({ id }: Props) => {
 
   const cacheData = cache.readFragment<UserProfileFragment>({
     id: cache.identify({
-      __typename: "User",
+      __typename: 'User',
       id,
     }),
     fragment: UserProfileFragmentDoc,
@@ -29,7 +29,7 @@ export const UserProfile = ({ id }: Props) => {
     variables: {
       id,
     },
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const [refreshing, setRefreshing] = useState(false);
@@ -56,20 +56,13 @@ export const UserProfile = ({ id }: Props) => {
 
   const userProfile = data ? data.user : cacheData;
 
-  const {
-    name,
-    imageUrl,
-    bio,
-    instagram,
-    facebook,
-    twitter,
-    linkedin,
-  } = userProfile;
-  const socials: { type: SocialIconProps["type"]; value: string | null }[] = [
-    { type: "facebook", value: facebook },
-    { type: "twitter", value: twitter },
-    { type: "linkedin", value: linkedin },
-    { type: "instagram", value: instagram },
+  const { name, imageUrl, bio, instagram, facebook, twitter, linkedin } =
+    userProfile;
+  const socials: { type: SocialIconProps['type']; value: string | null }[] = [
+    { type: 'facebook', value: facebook },
+    { type: 'twitter', value: twitter },
+    { type: 'linkedin', value: linkedin },
+    { type: 'instagram', value: instagram },
   ];
 
   return (
@@ -77,7 +70,7 @@ export const UserProfile = ({ id }: Props) => {
       <ScrollView
         flex={1}
         contentContainerStyle={{
-          alignItems: "center",
+          alignItems: 'center',
           paddingTop: 60,
           paddingBottom: 50,
         }}

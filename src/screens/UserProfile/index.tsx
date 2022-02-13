@@ -1,23 +1,23 @@
-import React, { useLayoutEffect, useState, useCallback } from "react";
-import { useColorModeValue, useTheme } from "native-base";
-import { RootNavigationScreenProp } from "src/types";
+import React, { useLayoutEffect, useState, useCallback } from 'react';
+import { useColorModeValue, useTheme } from 'native-base';
+import { RootNavigationScreenProp } from 'src/types';
 import {
   useUserQuery,
   useMeQuery,
   UserProfileFragment,
   UserProfileFragmentDoc,
-} from "src/generated/graphql";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useToast } from "react-native-toast-notifications";
-import { useUnblock, useBlock } from "src/hooks/users";
-import { useApolloClient } from "@apollo/client";
-import { Menu } from "./Menu";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { useTopTabBarStyle } from "src/hooks/theme";
-import { UserProfile } from "./Profile";
-import { Thoughts } from "./Thoughts";
+} from 'src/generated/graphql';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useToast } from 'react-native-toast-notifications';
+import { useUnblock, useBlock } from 'src/hooks/users';
+import { useApolloClient } from '@apollo/client';
+import { Menu } from './Menu';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useTopTabBarStyle } from 'src/hooks/theme';
+import { UserProfile } from './Profile';
+import { Thoughts } from './Thoughts';
 
-type Props = RootNavigationScreenProp<"UserProfile">;
+type Props = RootNavigationScreenProp<'UserProfile'>;
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -31,7 +31,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
 
   const cacheData = cache.readFragment<UserProfileFragment>({
     id: cache.identify({
-      __typename: "User",
+      __typename: 'User',
       id,
     }),
     fragment: UserProfileFragmentDoc,
@@ -41,8 +41,8 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     variables: {
       id,
     },
-    fetchPolicy: "network-only",
-    nextFetchPolicy: "cache-first",
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
   });
 
   const {
@@ -63,7 +63,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     navigation.setOptions({
       title:
         !data && !loading
-          ? "ユーザーが存在しません"
+          ? 'ユーザーが存在しません'
           : data?.user.name ?? cacheData.name,
       headerRight:
         (cacheData || data) && !isMe
@@ -81,11 +81,8 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     });
   }, [iconColor, isMe, loading, cacheData, data]);
 
-  const {
-    defaultScreenStyle,
-    style,
-    sceneContainerStyle,
-  } = useTopTabBarStyle();
+  const { defaultScreenStyle, style, sceneContainerStyle } =
+    useTopTabBarStyle();
 
   const renderProfile = useCallback(() => {
     return <UserProfile id={id} />;
@@ -106,7 +103,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
         },
       });
 
-      toast.show("ブロックしました", { type: "success" });
+      toast.show('ブロックしました', { type: 'success' });
     } catch (e) {}
   };
 
@@ -118,7 +115,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
         },
       });
 
-      toast.show("解除しました", { type: "success" });
+      toast.show('解除しました', { type: 'success' });
     } catch (e) {
       console.log(e);
     }

@@ -1,23 +1,23 @@
-import React, { useLayoutEffect } from "react";
-import { RootNavigationScreenProp } from "src/types";
-import { Mail, Apple, Google } from "src/components/AuthButton";
-import { VStack, Box } from "native-base";
-import { useSignInWithGoogle } from "src/hooks/auth";
+import React, { useLayoutEffect } from 'react';
+import { RootNavigationScreenProp } from 'src/types';
+import { Mail, Apple, Google } from 'src/components/AuthButton';
+import { VStack, Box } from 'native-base';
+import { useSignInWithGoogle } from 'src/hooks/auth';
 
-type Props = RootNavigationScreenProp<"Signin">;
+type Props = RootNavigationScreenProp<'Signin'>;
 
 export const SigninScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerTitle: "ログイン",
+      headerTitle: 'ログイン',
     });
   }, [navigation]);
 
   const { signInWithGoogle } = useSignInWithGoogle();
 
   const onEmailPress = () => {
-    navigation.navigate("MailForm", {
-      type: "signIn",
+    navigation.navigate('MailForm', {
+      type: 'signIn',
     });
   };
 

@@ -1,16 +1,16 @@
-import React, { ComponentProps, useState, useEffect } from "react";
-import { Box, Text, Pressable, HStack } from "native-base";
+import React, { ComponentProps, useState, useEffect } from 'react';
+import { Box, Text, Pressable, HStack } from 'native-base';
 import {
   useThoughtCacheFragment,
   useCreatePick,
   useDeletePick,
-} from "src/hooks/apollo";
-import { Image } from "src/components/Image";
-import { UserImage } from "src/components/UserImage";
-import { Pick } from "src/components/Pick";
-import { ContentsCard } from "src/components/ContentsCard";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
+} from 'src/hooks/apollo';
+import { Image } from 'src/components/Image';
+import { UserImage } from 'src/components/UserImage';
+import { Pick } from 'src/components/Pick';
+import { ContentsCard } from 'src/components/ContentsCard';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
 
 type Props = {
   id: string;
@@ -57,7 +57,7 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
   };
 
   const onUserPress = () => {
-    navigation.navigate("UserProfile", {
+    navigation.navigate('UserProfile', {
       id: cacheData.contributor.id,
     });
   };

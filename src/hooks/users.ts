@@ -1,5 +1,5 @@
-import { gql, useApolloClient } from "@apollo/client";
-import { useCallback } from "react";
+import { gql, useApolloClient } from '@apollo/client';
+import { useCallback } from 'react';
 import {
   UserPartsFragmentDoc,
   UserPartsFragment,
@@ -9,7 +9,7 @@ import {
   BlockingUsersDocument,
   BlockingUsersQueryResult,
   useBlockMutation,
-} from "src/generated/graphql";
+} from 'src/generated/graphql';
 
 export const useUserCacheFragment = () => {
   const { cache } = useApolloClient();
@@ -17,7 +17,7 @@ export const useUserCacheFragment = () => {
     ({ id }: { id: string }) => {
       const data = cache.readFragment<UserPartsFragment>({
         id: cache.identify({
-          __typename: "User",
+          __typename: 'User',
           id,
         }),
         fragment: UserPartsFragmentDoc,
@@ -36,7 +36,7 @@ export const useUserCacheFragment = () => {
 export const useBlock = () => {
   const mutation = useBlockMutation({
     update: (cache, result) => {
-      const queryData = cache.readQuery<BlockingUsersQueryResult["data"]>({
+      const queryData = cache.readQuery<BlockingUsersQueryResult['data']>({
         query: BlockingUsersDocument,
       });
 
@@ -57,7 +57,7 @@ export const useBlock = () => {
 export const useUnblock = () => {
   const mutation = useUnBlockMutation({
     update: (cache, result) => {
-      const queryData = cache.readQuery<BlockingUsersQueryResult["data"]>({
+      const queryData = cache.readQuery<BlockingUsersQueryResult['data']>({
         query: BlockingUsersDocument,
       });
 

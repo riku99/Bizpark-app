@@ -1,25 +1,25 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import React from "react";
-import { BottomTab } from "./Tab";
-import { StatusBar } from "expo-status-bar";
-import { RootStackParamList } from "src/types";
-import { useColorModeValue, useTheme } from "native-base";
-import { SignupScreen } from "src/screens/Signup";
-import { SigninScreen } from "src/screens/Siginin";
-import { MailFormScreen } from "src/screens/MailForm";
-import { meVar } from "src/stores/me";
-import { useReactiveVar } from "@apollo/client";
-import { ThoughtScreen } from "src/screens/Thought";
-import { ThoughtWritingScreen } from "src/screens/ThoughtWriting";
-import { ThoughtShareScreen } from "src/screens/ThoughtShare";
-import { NewsWebViewScreen } from "src/screens/NewsWebView";
-import { UserEditScreen } from "src/screens/UserEdit";
-import { UserItemEditScreen } from "src/screens/UserItemEdit";
-import { UserProfileScreen } from "src/screens/UserProfile";
-import { Settings } from "./Settings";
-import { ThoughtTalkRoomStack } from "./ThoughtTalkRoom";
-import { NewsTalkRoomStack } from "./NewsTalkRoom";
-import { OneOnOneTalkRoomStack } from "./OneOnOneTalkRoom";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import React from 'react';
+import { BottomTab } from './Tab';
+import { StatusBar } from 'expo-status-bar';
+import { RootStackParamList } from 'src/types';
+import { useColorModeValue, useTheme } from 'native-base';
+import { SignupScreen } from 'src/screens/Signup';
+import { SigninScreen } from 'src/screens/Siginin';
+import { MailFormScreen } from 'src/screens/MailForm';
+import { meVar } from 'src/stores/me';
+import { useReactiveVar } from '@apollo/client';
+import { ThoughtScreen } from 'src/screens/Thought';
+import { ThoughtWritingScreen } from 'src/screens/ThoughtWriting';
+import { ThoughtShareScreen } from 'src/screens/ThoughtShare';
+import { NewsWebViewScreen } from 'src/screens/NewsWebView';
+import { UserEditScreen } from 'src/screens/UserEdit';
+import { UserItemEditScreen } from 'src/screens/UserItemEdit';
+import { UserProfileScreen } from 'src/screens/UserProfile';
+import { Settings } from './Settings';
+import { ThoughtTalkRoomStack } from './ThoughtTalkRoom';
+import { NewsTalkRoomStack } from './NewsTalkRoom';
+import { OneOnOneTalkRoomStack } from './OneOnOneTalkRoom';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 
@@ -30,14 +30,14 @@ export const RootNavigation = React.memo(() => {
   return (
     <>
       {/* AppだとうまくcolorModeが動かなかったのでここで定義 */}
-      <StatusBar style={useColorModeValue("dark", "light")} />
+      <StatusBar style={useColorModeValue('dark', 'light')} />
       <Stack.Navigator
         screenOptions={{
           headerStyle: {
             backgroundColor: useColorModeValue(colors.lt.bg, colors.dt.bg),
           },
           headerTitleStyle: {
-            color: useColorModeValue(colors.textBlack, "white"),
+            color: useColorModeValue(colors.textBlack, 'white'),
           },
           headerBackTitleVisible: false,
           headerShadowVisible: false,
@@ -47,7 +47,7 @@ export const RootNavigation = React.memo(() => {
           <Stack.Group
             screenOptions={{
               headerStyle: {
-                backgroundColor: "white",
+                backgroundColor: 'white',
               },
               headerTitleStyle: {
                 color: colors.textBlack,
@@ -90,7 +90,7 @@ export const RootNavigation = React.memo(() => {
             />
             <Stack.Group
               screenOptions={{
-                presentation: "modal",
+                presentation: 'modal',
               }}
             >
               <Stack.Screen

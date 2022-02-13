@@ -1,7 +1,7 @@
-import React from "react";
-import { MenuView, MenuAction } from "@react-native-menu/menu";
+import React from 'react';
+import { MenuView, MenuAction } from '@react-native-menu/menu';
 
-type ID = "delete";
+type ID = 'delete';
 
 type Props = {
   children: JSX.Element;
@@ -14,13 +14,13 @@ export const Menu = ({ children, onAction, isMyItem }: Props) => {
 
   const myItemAction = [
     {
-      id: "delete",
-      title: "削除",
+      id: 'delete',
+      title: '削除',
       attributes: {
         destructive: true,
       },
-      image: "trash",
-      imageColor: "red",
+      image: 'trash',
+      imageColor: 'red',
     },
   ];
 

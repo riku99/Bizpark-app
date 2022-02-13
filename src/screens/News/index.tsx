@@ -1,14 +1,14 @@
-import React, { useLayoutEffect } from "react";
-import { RootNavigationScreenProp } from "src/types";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { useTopTabBarStyle } from "src/hooks/theme";
-import { Business } from "./Business";
-import { Politics } from "./Politics";
-import { Economy } from "./Economy";
-import { Technology } from "./Technology";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
+import React, { useLayoutEffect } from 'react';
+import { RootNavigationScreenProp } from 'src/types';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useTopTabBarStyle } from 'src/hooks/theme';
+import { Business } from './Business';
+import { Politics } from './Politics';
+import { Economy } from './Economy';
+import { Technology } from './Technology';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
-type Props = {} & RootNavigationScreenProp<"Tab">;
+type Props = {} & RootNavigationScreenProp<'Tab'>;
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -19,11 +19,8 @@ export const NewsScreen = ({ navigation }: Props) => {
     });
   }, []);
 
-  const {
-    defaultScreenStyle,
-    style,
-    sceneContainerStyle,
-  } = useTopTabBarStyle();
+  const { defaultScreenStyle, style, sceneContainerStyle } =
+    useTopTabBarStyle();
 
   const { top } = useSafeAreaInsets();
 
@@ -34,7 +31,7 @@ export const NewsScreen = ({ navigation }: Props) => {
           ...defaultScreenStyle,
           tabBarLabelStyle: {
             fontSize: 11,
-            fontWeight: "bold",
+            fontWeight: 'bold',
           },
           lazy: true,
         }}

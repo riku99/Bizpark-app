@@ -1,7 +1,7 @@
-import React from "react";
-import { View, StyleSheet } from "react-native";
-import Modal from "react-native-modal";
-import { Box, useColorModeValue, Pressable, Text, Divider } from "native-base";
+import React from 'react';
+import { View, StyleSheet } from 'react-native';
+import Modal from 'react-native-modal';
+import { Box, useColorModeValue, Pressable, Text, Divider } from 'native-base';
 
 export type ListItem = {
   title: string;
@@ -18,25 +18,25 @@ type Props = {
 
 export const InstaLikeModal = React.memo(
   ({ onCancel, list, isVisible, onBackdropPress }: Props) => {
-    const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
+    const pressedColor = useColorModeValue('lt.pressed', 'dt.pressed');
 
     return (
       <Modal
         isVisible={isVisible}
         backdropOpacity={0.25}
-        style={{ justifyContent: "flex-end", marginBottom: 20 }}
+        style={{ justifyContent: 'flex-end', marginBottom: 20 }}
         onBackdropPress={onBackdropPress}
       >
         <Box
           style={styles.itemsContainer}
-          bg={useColorModeValue("white", "dt.darkGray")}
+          bg={useColorModeValue('white', 'dt.darkGray')}
         >
           {list.map((l, idx) => (
             <View key={idx}>
               {idx !== 0 && (
                 <Divider
-                  style={{ width: "100%" }}
-                  bg={useColorModeValue("#e6e6e6", "#333333")}
+                  style={{ width: '100%' }}
+                  bg={useColorModeValue('#e6e6e6', '#333333')}
                 />
               )}
               <Pressable
@@ -51,7 +51,7 @@ export const InstaLikeModal = React.memo(
                   color={
                     l.color
                       ? l.color
-                      : useColorModeValue("textBlack", "textWhite")
+                      : useColorModeValue('textBlack', 'textWhite')
                   }
                 >
                   {l.title}
@@ -63,7 +63,7 @@ export const InstaLikeModal = React.memo(
         <Pressable
           style={[styles.cancelContainer, styles.item]}
           onPress={onCancel}
-          bg={useColorModeValue("white", "dt.darkGray")}
+          bg={useColorModeValue('white', 'dt.darkGray')}
           _pressed={{ bg: pressedColor }}
         >
           <Text style={styles.itemTitle}>キャンセル</Text>
@@ -76,12 +76,12 @@ export const InstaLikeModal = React.memo(
 const styles = StyleSheet.create({
   itemsContainer: {
     borderRadius: 15,
-    overflow: "hidden",
+    overflow: 'hidden',
   },
   item: {
     height: 50,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   itemTitle: {
     fontSize: 16,

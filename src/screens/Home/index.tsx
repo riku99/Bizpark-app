@@ -1,19 +1,19 @@
-import React, { useLayoutEffect } from "react";
-import { useColorMode, Button, Box } from "native-base";
-import { RootNavigationScreenProp } from "src/types";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { Society } from "./Society";
-import { Business } from "./Business";
-import { Economy } from "./Economy";
-import { Politics } from "./Politics";
-import { useTopTabBarStyle } from "src/hooks/theme";
-import { AddButton } from "src/components/AddButton";
-import { CreatingToast } from "src/components/CreatingToast";
-import { useReactiveVar } from "@apollo/client";
-import { creatingThoughtVar } from "src/stores/thought";
-import { Follow } from "./Follow";
+import React, { useLayoutEffect } from 'react';
+import { useColorMode, Button, Box } from 'native-base';
+import { RootNavigationScreenProp } from 'src/types';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { Society } from './Society';
+import { Business } from './Business';
+import { Economy } from './Economy';
+import { Politics } from './Politics';
+import { useTopTabBarStyle } from 'src/hooks/theme';
+import { AddButton } from 'src/components/AddButton';
+import { CreatingToast } from 'src/components/CreatingToast';
+import { useReactiveVar } from '@apollo/client';
+import { creatingThoughtVar } from 'src/stores/thought';
+import { Follow } from './Follow';
 
-type Props = RootNavigationScreenProp<"Tab">;
+type Props = RootNavigationScreenProp<'Tab'>;
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -21,17 +21,14 @@ export const HomeScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShadowVisible: false,
-      headerTitle: "",
+      headerTitle: '',
       // headerLeft: () => <Text>Logo</Text>,
     });
   }, [navigation]);
   const { toggleColorMode } = useColorMode();
 
-  const {
-    defaultScreenStyle,
-    style,
-    sceneContainerStyle,
-  } = useTopTabBarStyle();
+  const { defaultScreenStyle, style, sceneContainerStyle } =
+    useTopTabBarStyle();
 
   const onSubButtonPress = async () => {
     toggleColorMode();
@@ -48,7 +45,7 @@ export const HomeScreen = ({ navigation }: Props) => {
           ...defaultScreenStyle,
           tabBarLabelStyle: {
             fontSize: 12,
-            fontWeight: "bold",
+            fontWeight: 'bold',
           },
           tabBarItemStyle: {
             width: 90,
@@ -61,33 +58,33 @@ export const HomeScreen = ({ navigation }: Props) => {
           name="Business"
           component={Business}
           options={{
-            tabBarLabel: "ビジネス",
+            tabBarLabel: 'ビジネス',
           }}
         />
         <TopTab.Screen
           name="Politics"
           component={Politics}
-          options={{ tabBarLabel: "政治" }}
+          options={{ tabBarLabel: '政治' }}
         />
         <TopTab.Screen
           name="Economy"
           component={Economy}
           options={{
-            tabBarLabel: "金融・経済",
+            tabBarLabel: '金融・経済',
           }}
         />
         <TopTab.Screen
           name="Society"
           component={Society}
           options={{
-            tabBarLabel: "社会",
+            tabBarLabel: '社会',
           }}
         />
         <TopTab.Screen
           name="Follow"
           component={Follow}
           options={{
-            tabBarLabel: "フォロー",
+            tabBarLabel: 'フォロー',
           }}
         />
       </TopTab.Navigator>

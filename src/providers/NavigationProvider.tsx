@@ -1,6 +1,6 @@
-import React from "react";
-import { NavigationContainer, DefaultTheme } from "@react-navigation/native";
-import { useTheme, useColorModeValue } from "native-base";
+import React from 'react';
+import { NavigationContainer, DefaultTheme } from '@react-navigation/native';
+import { useTheme, useColorModeValue } from 'native-base';
 
 type Props = {
   children: JSX.Element;

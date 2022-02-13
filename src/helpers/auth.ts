@@ -1,8 +1,8 @@
-import auth from "@react-native-firebase/auth";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { storageKeys, meVar } from "src/stores/me";
-import { GoogleSignin } from "@react-native-google-signin/google-signin";
-import { spinnerVisibleVar } from "src/stores/spinner";
+import auth from '@react-native-firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { storageKeys, meVar } from 'src/stores/me';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
+import { spinnerVisibleVar } from 'src/stores/spinner';
 
 export const googleSignIn = async () => {
   const { idToken } = await GoogleSignin.signIn();
@@ -27,5 +27,5 @@ export const signOut = async () => {
   await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(false));
 
   spinnerVisibleVar(false);
-  console.log("👋 Sign out success!");
+  console.log('👋 Sign out success!');
 };

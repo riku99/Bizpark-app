@@ -1,1 +1,1 @@
-import {} from "native-base";
+import {} from 'native-base';

@@ -1,8 +1,8 @@
-import { AntDesign } from "@expo/vector-icons";
-import { useColorModeValue, useTheme } from "native-base";
-import React, { ComponentProps } from "react";
+import { AntDesign } from '@expo/vector-icons';
+import { useColorModeValue, useTheme } from 'native-base';
+import React, { ComponentProps } from 'react';
 
-type Props = Omit<ComponentProps<typeof AntDesign>, "name">;
+type Props = Omit<ComponentProps<typeof AntDesign>, 'name'>;
 
 export const RightIcon = ({ ...props }: Props) => {
   const { colors } = useTheme();
@@ -11,7 +11,7 @@ export const RightIcon = ({ ...props }: Props) => {
     <AntDesign
       name="right"
       size={16}
-      color={useColorModeValue(colors.muted["500"], colors.muted["400"])}
+      color={useColorModeValue(colors.muted['500'], colors.muted['400'])}
       {...props}
     />
   );

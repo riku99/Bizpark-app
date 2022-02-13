@@ -1,18 +1,18 @@
-import { useEffect, useRef } from "react";
-import { useGetActiveDataLazyQuery } from "src/generated/graphql";
-import { AppState, AppStateStatus } from "react-native";
+import { useEffect, useRef } from 'react';
+import { useGetActiveDataLazyQuery } from 'src/generated/graphql';
+import { AppState, AppStateStatus } from 'react-native';
 
 // Active時に取得したいデータ
 export const useActiveData = () => {
   const [activeDataQuery] = useGetActiveDataLazyQuery({
-    fetchPolicy: "network-only",
+    fetchPolicy: 'network-only',
   });
 
   const isInitialMount = useRef(true);
 
   useEffect(() => {
     const onChange = async (nextAppState: AppStateStatus) => {
-      if (nextAppState === "active") {
+      if (nextAppState === 'active') {
         if (!isInitialMount.current) {
           await activeDataQuery();
         } else {
@@ -21,10 +21,10 @@ export const useActiveData = () => {
       }
     };
 
-    AppState.addEventListener("change", onChange);
+    AppState.addEventListener('change', onChange);
 
     return () => {
-      AppState.removeEventListener("change", onChange);
+      AppState.removeEventListener('change', onChange);
     };
   }, [activeDataQuery]);
 };

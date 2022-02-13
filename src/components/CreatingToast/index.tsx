@@ -1,7 +1,7 @@
-import React, { ComponentProps } from "react";
-import { Box, Text, HStack } from "native-base";
-import { ActivityIndicator, Pressable } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import React, { ComponentProps } from 'react';
+import { Box, Text, HStack } from 'native-base';
+import { ActivityIndicator, Pressable } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 type Props = {
   onClosePress: () => void;

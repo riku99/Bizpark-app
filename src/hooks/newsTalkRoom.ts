@@ -5,17 +5,17 @@ import {
   OnNewsTalkRoomMessageCreatedSubscriptionVariables,
   GetNewsTalkRoomsQuery,
   GetNewsTalkRoomsDocument,
-} from "src/generated/graphql";
-import { meVar } from "src/stores/me";
-import { useReactiveVar, useApolloClient } from "@apollo/client";
-import { useState, useMemo, useEffect, useCallback } from "react";
-import { AppState, AppStateStatus } from "react-native";
+} from 'src/generated/graphql';
+import { meVar } from 'src/stores/me';
+import { useReactiveVar, useApolloClient } from '@apollo/client';
+import { useState, useMemo, useEffect, useCallback } from 'react';
+import { AppState, AppStateStatus } from 'react-native';
 
 export const useNewsTalkRoomsWithSusbscription = () => {
   const myId = useReactiveVar(meVar.id);
 
   const { data: talkRoomsData, subscribeToMore } = useGetNewsTalkRoomsQuery({
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const [isActive, setIsActive] = useState(true);
@@ -31,24 +31,24 @@ export const useNewsTalkRoomsWithSusbscription = () => {
   // アクティブ、非アクティブの処理
   useEffect(() => {
     const onChange = (nextState: AppStateStatus) => {
-      if (nextState === "active") {
+      if (nextState === 'active') {
         setIsActive(true);
       } else {
         setIsActive(false);
       }
     };
 
-    AppState.addEventListener("change", onChange);
+    AppState.addEventListener('change', onChange);
 
     return () => {
-      AppState.removeEventListener("change", onChange);
+      AppState.removeEventListener('change', onChange);
     };
   }, [setIsActive]);
 
   // サブスクライブ
   useEffect(() => {
     if (isActive && myId) {
-      console.log("🌙 subsucribe for NewsTalkRooms");
+      console.log('🌙 subsucribe for NewsTalkRooms');
 
       const unsubscribe = subscribeToMore<
         OnNewsTalkRoomMessageCreatedSubscription,
@@ -76,7 +76,8 @@ export const useNewsTalkRoomsWithSusbscription = () => {
 
           const newMessageEdge = {
             node: subscriptionData.data.newsTalkRoomMessageCreated,
-            cursor: subscriptionData.data.newsTalkRoomMessageCreated.id.toString(),
+            cursor:
+              subscriptionData.data.newsTalkRoomMessageCreated.id.toString(),
           };
 
           const newMessageConnection = {
@@ -111,7 +112,7 @@ export const useNewsTalkRoomsWithSusbscription = () => {
 
       return () => {
         if (unsubscribe) {
-          console.log("案サブスク NewsTalkRoom");
+          console.log('案サブスク NewsTalkRoom');
           unsubscribe();
         }
       };

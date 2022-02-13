@@ -1,15 +1,15 @@
-import React, { useEffect, useState } from "react";
-import { RootNavigation } from "src/navigations";
-import AsyncStorage from "@react-native-async-storage/async-storage";
-import { meVar, storageKeys, getMeStorageData } from "src/stores/me";
-import { useReactiveVar, useApolloClient } from "@apollo/client";
-import SplashScreen from "react-native-splash-screen";
-import { useInitialDataLazyQuery } from "src/generated/graphql";
-import Spinner from "react-native-loading-spinner-overlay";
-import { spinnerVisibleVar } from "src/stores/spinner";
-import FastImage from "react-native-fast-image";
-import { gotInitialDataVar } from "src/stores/initialData";
-import { useToughtTalkRoomsWithSubsciption } from "src/hooks/thoughtTalkRoom";
+import React, { useEffect, useState } from 'react';
+import { RootNavigation } from 'src/navigations';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { meVar, storageKeys, getMeStorageData } from 'src/stores/me';
+import { useReactiveVar, useApolloClient } from '@apollo/client';
+import SplashScreen from 'react-native-splash-screen';
+import { useInitialDataLazyQuery } from 'src/generated/graphql';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { spinnerVisibleVar } from 'src/stores/spinner';
+import FastImage from 'react-native-fast-image';
+import { gotInitialDataVar } from 'src/stores/initialData';
+import { useToughtTalkRoomsWithSubsciption } from 'src/hooks/thoughtTalkRoom';
 
 export const Root = () => {
   const loggedIn = useReactiveVar(meVar.loggedIn);
@@ -17,7 +17,7 @@ export const Root = () => {
   const spinnerVisible = useReactiveVar(spinnerVisibleVar);
 
   useEffect(() => {
-    console.log("💓 My id is " + myId);
+    console.log('💓 My id is ' + myId);
   }, [myId]);
 
   const [checkedLogin, setCheckedLogin] = useState(false);
@@ -83,7 +83,7 @@ export const Root = () => {
     (async function () {
       if (checkedLogin && !loggedIn && called) {
         await client.clearStore();
-        console.log("🧹 clear cache");
+        console.log('🧹 clear cache');
       }
     })();
   }, [checkedLogin, loggedIn]);

@@ -1,5 +1,5 @@
-import { useNewsQuery, NewsGenre } from "src/generated/graphql";
-import { btoa } from "react-native-quick-base64";
+import { useNewsQuery, NewsGenre } from 'src/generated/graphql';
+import { btoa } from 'react-native-quick-base64';
 
 export const useNews = ({ genre }: { genre: NewsGenre }) => {
   const { data, refetch, fetchMore } = useNewsQuery({

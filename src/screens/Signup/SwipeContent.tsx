@@ -1,10 +1,10 @@
-import React from "react";
-import Swiper from "react-native-swiper";
-import { Box, Text, useTheme } from "native-base";
-import Browsing from "src/assets/svg/browsing.svg";
-import Post from "src/assets/svg/post.svg";
-import Chatting from "src/assets/svg/chatting.svg";
-import { HIGHER_8_DEVICE } from "src/constants";
+import React from 'react';
+import Swiper from 'react-native-swiper';
+import { Box, Text, useTheme } from 'native-base';
+import Browsing from 'src/assets/svg/browsing.svg';
+import Post from 'src/assets/svg/post.svg';
+import Chatting from 'src/assets/svg/chatting.svg';
+import { HIGHER_8_DEVICE } from 'src/constants';
 
 type ContentProps = {
   children: JSX.Element;
@@ -32,7 +32,7 @@ const First = () => {
 
 const Second = () => {
   return (
-    <Content text={`考えや思ったことをシェアしよう`}>
+    <Content text={'考えや思ったことをシェアしよう'}>
       <Post width={SVG_SIZE} height={SVG_SIZE} />
     </Content>
   );
@@ -55,7 +55,7 @@ export const SwipeContent = () => {
         backgroundColor: colors.purple,
       }}
       dotStyle={{
-        backgroundColor: "#b5b5b5",
+        backgroundColor: '#b5b5b5',
       }}
       autoplay
     >

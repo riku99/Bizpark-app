@@ -1,7 +1,7 @@
-import React from "react";
-import { MenuView, MenuAction } from "@react-native-menu/menu";
+import React from 'react';
+import { MenuView, MenuAction } from '@react-native-menu/menu';
 
-type ActionID = "select" | "delete";
+type ActionID = 'select' | 'delete';
 type Props = {
   children: JSX.Element;
   onAction: (id: string) => void;
@@ -10,18 +10,18 @@ type Props = {
 export const AvatarMenu = ({ children, onAction }: Props) => {
   const menuAction: MenuAction[] = [
     {
-      id: "select",
-      title: "写真から選択",
-      image: "photo",
+      id: 'select',
+      title: '写真から選択',
+      image: 'photo',
     },
     {
-      id: "delete",
-      title: "プロフィール画像を削除",
+      id: 'delete',
+      title: 'プロフィール画像を削除',
       attributes: {
         destructive: true,
       },
-      image: "trash",
-      imageColor: "red",
+      image: 'trash',
+      imageColor: 'red',
     },
   ];
 

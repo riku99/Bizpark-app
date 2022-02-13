@@ -1,9 +1,9 @@
-import React from "react";
-import { Box } from "native-base";
-import { useNews } from "src/hooks/news";
-import { NewsGenre } from "src/generated/graphql";
-import { List } from "../../components/NewsList";
-import { Indicator } from "src/components/Indicator";
+import React from 'react';
+import { Box } from 'native-base';
+import { useNews } from 'src/hooks/news';
+import { NewsGenre } from 'src/generated/graphql';
+import { List } from '../../components/NewsList';
+import { Indicator } from 'src/components/Indicator';
 
 export const Economy = React.memo(() => {
   const { data, infiniteLoad, refresh } = useNews({

@@ -1,9 +1,9 @@
-import React from "react";
-import { Box } from "native-base";
-import { usePickedThoughtsQuery } from "src/generated/graphql";
-import { Indicator } from "src/components/Indicator";
-import { List } from "src/components/ThoughtList";
-import { btoa } from "react-native-quick-base64";
+import React from 'react';
+import { Box } from 'native-base';
+import { usePickedThoughtsQuery } from 'src/generated/graphql';
+import { Indicator } from 'src/components/Indicator';
+import { List } from 'src/components/ThoughtList';
+import { btoa } from 'react-native-quick-base64';
 
 export const PickedThoughts = React.memo(() => {
   const { data, refetch, fetchMore } = usePickedThoughtsQuery();

@@ -1,17 +1,17 @@
-import React, { useLayoutEffect, useCallback } from "react";
-import { RootNavigationScreenProp } from "src/types";
+import React, { useLayoutEffect, useCallback } from 'react';
+import { RootNavigationScreenProp } from 'src/types';
 import {
   useGetNewsTalkRoomMembersQuery,
   NewsTalkRoomMemberEdge,
   useMeQuery,
-} from "src/generated/graphql";
-import { MemberListItem } from "./MemberListItem";
-import { InfiniteFlatList } from "src/components/InfiniteFlatList";
-import { SafeAreaView } from "react-native";
-import { Indicator } from "src/components/Indicator";
-import { btoa } from "react-native-quick-base64";
+} from 'src/generated/graphql';
+import { MemberListItem } from './MemberListItem';
+import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
+import { SafeAreaView } from 'react-native';
+import { Indicator } from 'src/components/Indicator';
+import { btoa } from 'react-native-quick-base64';
 
-type Props = RootNavigationScreenProp<"NewsTalkRoomMembers">;
+type Props = RootNavigationScreenProp<'NewsTalkRoomMembers'>;
 
 type Item = NewsTalkRoomMemberEdge;
 
@@ -24,7 +24,7 @@ export const NewsTalkRoomMembersScreen = ({ navigation, route }: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "メンバー",
+      title: 'メンバー',
     });
   }, [navigation]);
 
@@ -32,8 +32,8 @@ export const NewsTalkRoomMembersScreen = ({ navigation, route }: Props) => {
     variables: {
       talkRoomId,
     },
-    fetchPolicy: "network-only",
-    nextFetchPolicy: "cache-first",
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
   });
 
   const renderItem = useCallback(({ item }: { item: Item }) => {

@@ -1,9 +1,9 @@
-import React, { ComponentProps } from "react";
-import { Input, useColorModeValue, Icon } from "native-base";
-import { LogBox } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
+import React, { ComponentProps } from 'react';
+import { Input, useColorModeValue, Icon } from 'native-base';
+import { LogBox } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
 
-LogBox.ignoreLogs(["NativeBase"]);
+LogBox.ignoreLogs(['NativeBase']);
 
 type Props = ComponentProps<typeof Input>;
 
@@ -11,7 +11,7 @@ export const SerachBar = ({ ...props }: Props) => {
   return (
     <Input
       h="9"
-      bg={useColorModeValue("trueGray.200", "trueGray.700")}
+      bg={useColorModeValue('trueGray.200', 'trueGray.700')}
       fontSize="16"
       placeholder="検索"
       InputLeftElement={

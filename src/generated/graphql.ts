@@ -2,10 +2,16 @@ import { gql } from '@apollo/client';
 import * as Apollo from '@apollo/client';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
-export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
-export type MakeOptional<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]?: Maybe<T[SubKey]> };
-export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & { [SubKey in K]: Maybe<T[SubKey]> };
-const defaultOptions =  {}
+export type Exact<T extends { [key: string]: unknown }> = {
+  [K in keyof T]: T[K];
+};
+export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]?: Maybe<T[SubKey]>;
+};
+export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
+  [SubKey in K]: Maybe<T[SubKey]>;
+};
+const defaultOptions = {};
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -85,7 +91,7 @@ export enum CustomErrorResponseCode {
   AlreadyUnBloking = 'ALREADY_UN_BLOKING',
   AlreadyUserExisting = 'ALREADY_USER_EXISTING',
   InvalidRequest = 'INVALID_REQUEST',
-  NotFound = 'NOT_FOUND'
+  NotFound = 'NOT_FOUND',
 }
 
 export type DeleteNewsPickInput = {
@@ -125,7 +131,7 @@ export enum Genre {
   Business = 'BUSINESS',
   Economy = 'ECONOMY',
   Politics = 'POLITICS',
-  Society = 'SOCIETY'
+  Society = 'SOCIETY',
 }
 
 export type GetOutNewsTalkRoomInput = {
@@ -210,146 +216,117 @@ export type Mutation = {
   uploadThoughtImages: UploadThoughtImagesResponse;
 };
 
-
 export type MutationBlockArgs = {
   blockTo: Scalars['ID'];
 };
-
 
 export type MutationCreateNewsPickArgs = {
   input: CreateNewsPickInput;
 };
 
-
 export type MutationCreateNewsTalkRoomMessageArgs = {
   input: CreateNewsTalkRoomMessageInput;
 };
-
 
 export type MutationCreateOneOnOneTalkRoomArgs = {
   input: CreateOneOnOneTalkRoomInput;
 };
 
-
 export type MutationCreateOneOnOneTalkRoomMessageArgs = {
   input: CreateOneOnOneTalkRoomMessageInput;
 };
-
 
 export type MutationCreatePickArgs = {
   input: CreatePickInput;
 };
 
-
 export type MutationCreateThoughtArgs = {
   input: CreateThoughtInput;
 };
-
 
 export type MutationCreateThoughtTalkRoomMessageArgs = {
   input: CreateThoughtTalkRoomMessageInput;
 };
 
-
 export type MutationCreateUserArgs = {
   input: CreateUserInput;
 };
-
 
 export type MutationCreateUserNewsTalkRoomMessageSeenArgs = {
   input: CreateUserNewsTalkRoomMessageSeenInput;
 };
 
-
 export type MutationCreateUserThoughtTalkRoomMessageSeenArgs = {
   input: CreateUserThoughtTalkRoomMessageSeenInput;
 };
-
 
 export type MutationDeleteNewsPickArgs = {
   input: DeleteNewsPickInput;
 };
 
-
 export type MutationDeleteOneOnOneTalkRoomArgs = {
   input: DeleteOneOnOneTalkRoonInput;
 };
-
 
 export type MutationDeletePickArgs = {
   thoughtId: Scalars['ID'];
 };
 
-
 export type MutationDeleteThoughtArgs = {
   input: DeleteThoughtInput;
 };
-
 
 export type MutationDeleteThoughtTalkRoomArgs = {
   input: DeleteThoughtTalkRoomInput;
 };
 
-
 export type MutationDeleteThoughtTalkRoomMemberArgs = {
   input: DeleteThoughtTalkRoomMemberInput;
 };
-
 
 export type MutationFollowArgs = {
   followeeId: Scalars['ID'];
 };
 
-
 export type MutationGetOutNewsTalkRoomArgs = {
   input: GetOutNewsTalkRoomInput;
 };
-
 
 export type MutationGetOutThoughtTalkRoomArgs = {
   input: GetOutThoughtTalkRoomInput;
 };
 
-
 export type MutationJoinNewsTalkRoomArgs = {
   input: JoinNewsTalkRoomInput;
 };
-
 
 export type MutationJoinThoughtTalkArgs = {
   input: JoinTalkInput;
 };
 
-
 export type MutationRequestNewsTalkRoomMemberDeletionArgs = {
   input: RequestNewsTalkRoomMemberDeletionInput;
 };
-
 
 export type MutationSeenOneOnOneTalkRoomMessageArgs = {
   input: SeenOneOnOneTalkRoomMessageInput;
 };
 
-
 export type MutationUnblockArgs = {
   blockedUserId: Scalars['ID'];
 };
-
 
 export type MutationUnfollowArgs = {
   followeeId: Scalars['ID'];
 };
 
-
 export type MutationUpdateMeArgs = {
   input: UpdateMeInput;
 };
 
-
 export type MutationUploadImageArgs = {
   file: Scalars['Upload'];
 };
-
 
 export type MutationUploadThoughtImagesArgs = {
   files: Array<Scalars['Upload']>;
@@ -383,7 +360,7 @@ export enum NewsGenre {
   Business = 'BUSINESS',
   Economy = 'ECONOMY',
   Politics = 'POLITICS',
-  Technology = 'TECHNOLOGY'
+  Technology = 'TECHNOLOGY',
 }
 
 export type NewsPick = {
@@ -417,12 +394,10 @@ export type NewsTalkRoom = TalkRoom & {
   updatedAt?: Maybe<Scalars['String']>;
 };
 
-
 export type NewsTalkRoomMembersArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
 };
-
 
 export type NewsTalkRoomMessagesArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -482,7 +457,6 @@ export type OneOnOneTalkRoom = TalkRoom & {
   sender?: Maybe<User>;
   updatedAt: Scalars['String'];
 };
-
 
 export type OneOnOneTalkRoomMessagesArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -548,13 +522,11 @@ export type Query = {
   userThoughts: ThoughtsConnection;
 };
 
-
 export type QueryFollowsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first: Scalars['Int'];
   q?: InputMaybe<Scalars['String']>;
 };
-
 
 export type QueryNewsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -562,43 +534,35 @@ export type QueryNewsArgs = {
   genre: NewsGenre;
 };
 
-
 export type QueryNewsTalkRoomArgs = {
   id: Scalars['Int'];
 };
-
 
 export type QueryOneNewsArgs = {
   id: Scalars['Int'];
 };
 
-
 export type QueryOneOnOneTalkRoomArgs = {
   id: Scalars['Int'];
 };
-
 
 export type QueryPickedNewsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first: Scalars['Int'];
 };
 
-
 export type QueryPickedThoughtsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first: Scalars['Int'];
 };
 
-
 export type QueryThoughtArgs = {
   id: Scalars['ID'];
 };
 
-
 export type QueryThoughtTalkRoomArgs = {
   id: Scalars['Int'];
 };
-
 
 export type QueryThoughtsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -607,11 +571,9 @@ export type QueryThoughtsArgs = {
   genre?: InputMaybe<Genre>;
 };
 
-
 export type QueryUserArgs = {
   id: Scalars['ID'];
 };
-
 
 export type QueryUserThoughtsArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -648,17 +610,14 @@ export type Subscription = {
   thoughtTalkRoomMessageCreated?: Maybe<ThoughtTalkRoomMessage>;
 };
 
-
 export type SubscriptionNewsTalkRoomMessageCreatedArgs = {
   roomIds: Array<InputMaybe<Scalars['Int']>>;
   userId: Scalars['ID'];
 };
 
-
 export type SubscriptionOneOnOneTalkRoomMessageCreatedArgs = {
   userId: Scalars['ID'];
 };
-
 
 export type SubscriptionThoughtTalkRoomMessageCreatedArgs = {
   roomIds: Array<InputMaybe<Scalars['Int']>>;
@@ -723,12 +682,10 @@ export type ThoughtTalkRoom = TalkRoom & {
   updatedAt?: Maybe<Scalars['String']>;
 };
 
-
 export type ThoughtTalkRoomMembersArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
 };
-
 
 export type ThoughtTalkRoomMessagesArgs = {
   after?: InputMaybe<Scalars['String']>;
@@ -825,385 +782,2997 @@ export type UserEdge = {
   node: User;
 };
 
-export type NewsFieldsFragment = { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
+export type NewsFieldsFragment = {
+  __typename?: 'News';
+  id: number;
+  title: string;
+  link: string;
+  image?: string | null | undefined;
+  articleCreatedAt?: string | null | undefined;
+  genre: NewsGenre;
+  provider?: string | null | undefined;
+  picked: boolean;
+};
 
-export type NewsConnectionPartsFragment = { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } };
+export type NewsConnectionPartsFragment = {
+  __typename?: 'NewsConnection';
+  edges: Array<{
+    __typename?: 'NewsEdge';
+    cursor: string;
+    node: {
+      __typename?: 'News';
+      picked: boolean;
+      id: number;
+      title: string;
+      link: string;
+      image?: string | null | undefined;
+      articleCreatedAt?: string | null | undefined;
+      genre: NewsGenre;
+      provider?: string | null | undefined;
+    };
+  }>;
+  pageInfo: {
+    __typename?: 'PageInfo';
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    startCursor?: string | null | undefined;
+    endCursor?: string | null | undefined;
+  };
+};
 
-export type NewsPartsFragment = { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined };
+export type NewsPartsFragment = {
+  __typename?: 'News';
+  id: number;
+  title: string;
+  link: string;
+  image?: string | null | undefined;
+  articleCreatedAt?: string | null | undefined;
+  genre: NewsGenre;
+  provider?: string | null | undefined;
+};
 
-export type NewsTalkRoomMessagePartsFragment = { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined };
+export type NewsTalkRoomMessagePartsFragment = {
+  __typename?: 'NewsTalkRoomMessage';
+  id: number;
+  text: string;
+  createdAt: string;
+  roomId?: number | null | undefined;
+  sender?:
+    | {
+        __typename?: 'User';
+        id: string;
+        name: string;
+        bio?: string | null | undefined;
+        imageUrl?: string | null | undefined;
+        facebook?: string | null | undefined;
+        twitter?: string | null | undefined;
+        linkedin?: string | null | undefined;
+        instagram?: string | null | undefined;
+      }
+    | null
+    | undefined;
+  replyMessage?:
+    | {
+        __typename?: 'NewsTalkRoomMessage';
+        id: number;
+        text: string;
+        createdAt: string;
+        sender?:
+          | { __typename?: 'User'; id: string; name: string }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined;
+};
 
-export type NewsTalkRoomParentPartsFragment = { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined };
+export type NewsTalkRoomParentPartsFragment = {
+  __typename?: 'News';
+  id: number;
+  title: string;
+  link: string;
+  image?: string | null | undefined;
+  articleCreatedAt?: string | null | undefined;
+  genre: NewsGenre;
+  provider?: string | null | undefined;
+};
 
-export type NewsTalkRoomPartsFragment = { __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
+export type NewsTalkRoomPartsFragment = {
+  __typename?: 'NewsTalkRoom';
+  id: number;
+  allMessageSeen?: boolean | null | undefined;
+  members?:
+    | {
+        __typename?: 'NewsTalkRoomMemberConnection';
+        edges: Array<{
+          __typename?: 'NewsTalkRoomMemberEdge';
+          cursor: string;
+          node: {
+            __typename?: 'NewsTalkRoomMember';
+            id: number;
+            user: {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            };
+          };
+        }>;
+        pageInfo: {
+          __typename?: 'PageInfo';
+          hasNextPage: boolean;
+          hasPreviousPage: boolean;
+          startCursor?: string | null | undefined;
+          endCursor?: string | null | undefined;
+        };
+      }
+    | null
+    | undefined;
+  news?:
+    | {
+        __typename?: 'News';
+        id: number;
+        title: string;
+        link: string;
+        image?: string | null | undefined;
+        articleCreatedAt?: string | null | undefined;
+        genre: NewsGenre;
+        provider?: string | null | undefined;
+      }
+    | null
+    | undefined;
+  messages?:
+    | {
+        __typename?: 'NewsTalkRoomMessageConnection';
+        edges: Array<{
+          __typename?: 'NewsTalkRoomMessageEdge';
+          cursor: string;
+          node: {
+            __typename?: 'NewsTalkRoomMessage';
+            id: number;
+            text: string;
+            createdAt: string;
+            roomId?: number | null | undefined;
+            sender?:
+              | {
+                  __typename?: 'User';
+                  id: string;
+                  name: string;
+                  bio?: string | null | undefined;
+                  imageUrl?: string | null | undefined;
+                  facebook?: string | null | undefined;
+                  twitter?: string | null | undefined;
+                  linkedin?: string | null | undefined;
+                  instagram?: string | null | undefined;
+                }
+              | null
+              | undefined;
+            replyMessage?:
+              | {
+                  __typename?: 'NewsTalkRoomMessage';
+                  id: number;
+                  text: string;
+                  createdAt: string;
+                  sender?:
+                    | { __typename?: 'User'; id: string; name: string }
+                    | null
+                    | undefined;
+                }
+              | null
+              | undefined;
+          };
+        }>;
+        pageInfo: {
+          __typename?: 'PageInfo';
+          hasNextPage: boolean;
+          hasPreviousPage: boolean;
+          startCursor?: string | null | undefined;
+          endCursor?: string | null | undefined;
+        };
+      }
+    | null
+    | undefined;
+};
 
-export type OneOnOneTalkRoomMessagePartsFragment = { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined };
+export type OneOnOneTalkRoomMessagePartsFragment = {
+  __typename?: 'OneOnOneTalkRoomMessage';
+  id: number;
+  text: string;
+  createdAt: string;
+  roomId?: number | null | undefined;
+  sender?:
+    | {
+        __typename?: 'User';
+        id: string;
+        name: string;
+        imageUrl?: string | null | undefined;
+      }
+    | null
+    | undefined;
+  replyMessage?:
+    | {
+        __typename?: 'OneOnOneTalkRoomMessage';
+        id: number;
+        text: string;
+        createdAt: string;
+        sender?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              imageUrl?: string | null | undefined;
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined;
+};
 
-export type OneOnOneTalkRoomPartsFragment = { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
+export type OneOnOneTalkRoomPartsFragment = {
+  __typename?: 'OneOnOneTalkRoom';
+  id: number;
+  allMessageSeen?: boolean | null | undefined;
+  updatedAt: string;
+  sender?:
+    | {
+        __typename?: 'User';
+        id: string;
+        name: string;
+        bio?: string | null | undefined;
+        imageUrl?: string | null | undefined;
+        facebook?: string | null | undefined;
+        twitter?: string | null | undefined;
+        linkedin?: string | null | undefined;
+        instagram?: string | null | undefined;
+      }
+    | null
+    | undefined;
+  recipient?:
+    | {
+        __typename?: 'User';
+        id: string;
+        name: string;
+        bio?: string | null | undefined;
+        imageUrl?: string | null | undefined;
+        facebook?: string | null | undefined;
+        twitter?: string | null | undefined;
+        linkedin?: string | null | undefined;
+        instagram?: string | null | undefined;
+      }
+    | null
+    | undefined;
+  messages?:
+    | {
+        __typename?: 'OneOnOneTalkRoomMessageConnection';
+        edges: Array<{
+          __typename?: 'OneOnOneTalkRoomMessageEdge';
+          cursor: string;
+          node: {
+            __typename?: 'OneOnOneTalkRoomMessage';
+            id: number;
+            text: string;
+            createdAt: string;
+            roomId?: number | null | undefined;
+            sender?:
+              | {
+                  __typename?: 'User';
+                  id: string;
+                  name: string;
+                  imageUrl?: string | null | undefined;
+                }
+              | null
+              | undefined;
+            replyMessage?:
+              | {
+                  __typename?: 'OneOnOneTalkRoomMessage';
+                  id: number;
+                  text: string;
+                  createdAt: string;
+                  sender?:
+                    | {
+                        __typename?: 'User';
+                        id: string;
+                        name: string;
+                        imageUrl?: string | null | undefined;
+                      }
+                    | null
+                    | undefined;
+                }
+              | null
+              | undefined;
+          };
+        }>;
+        pageInfo: {
+          __typename?: 'PageInfo';
+          hasNextPage: boolean;
+          hasPreviousPage: boolean;
+          startCursor?: string | null | undefined;
+          endCursor?: string | null | undefined;
+        };
+      }
+    | null
+    | undefined;
+};
 
-export type PageInfoPartsFragment = { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined };
+export type PageInfoPartsFragment = {
+  __typename?: 'PageInfo';
+  hasNextPage: boolean;
+  hasPreviousPage: boolean;
+  startCursor?: string | null | undefined;
+  endCursor?: string | null | undefined;
+};
 
-export type ThoughtPartsFragment = { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> };
+export type ThoughtPartsFragment = {
+  __typename?: 'Thought';
+  id: string;
+  title?: string | null | undefined;
+  text: string;
+  createdAt?: string | null | undefined;
+  picked?: boolean | null | undefined;
+  contributor?:
+    | {
+        __typename?: 'User';
+        id: string;
+        name: string;
+        bio?: string | null | undefined;
+        imageUrl?: string | null | undefined;
+        facebook?: string | null | undefined;
+        twitter?: string | null | undefined;
+        linkedin?: string | null | undefined;
+        instagram?: string | null | undefined;
+      }
+    | null
+    | undefined;
+  images: Array<
+    | {
+        __typename?: 'ThoughtImage';
+        id: string;
+        url: string;
+        width?: number | null | undefined;
+        height?: number | null | undefined;
+      }
+    | null
+    | undefined
+  >;
+};
 
-export type ThoughtTalkRoomMessagePartsFragment = { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined };
+export type ThoughtTalkRoomMessagePartsFragment = {
+  __typename?: 'ThoughtTalkRoomMessage';
+  id: number;
+  text: string;
+  createdAt: string;
+  roomId?: number | null | undefined;
+  sender?:
+    | {
+        __typename?: 'User';
+        id: string;
+        name: string;
+        bio?: string | null | undefined;
+        imageUrl?: string | null | undefined;
+        facebook?: string | null | undefined;
+        twitter?: string | null | undefined;
+        linkedin?: string | null | undefined;
+        instagram?: string | null | undefined;
+      }
+    | null
+    | undefined;
+  replyMessage?:
+    | {
+        __typename?: 'ThoughtTalkRoomMessage';
+        id: number;
+        text: string;
+        createdAt: string;
+        sender?:
+          | { __typename?: 'User'; id: string; name: string }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined;
+};
 
-export type ThoughtTalkRoomParentPartsFragment = { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined };
+export type ThoughtTalkRoomParentPartsFragment = {
+  __typename?: 'Thought';
+  id: string;
+  title?: string | null | undefined;
+  text: string;
+  contributor?: { __typename?: 'User'; id: string } | null | undefined;
+};
 
-export type ThoughtTalkRoomPartsFragment = { __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
+export type ThoughtTalkRoomPartsFragment = {
+  __typename?: 'ThoughtTalkRoom';
+  id: number;
+  createdAt?: string | null | undefined;
+  allMessageSeen?: boolean | null | undefined;
+  members?:
+    | {
+        __typename?: 'ThoughtTalkRoomMemberConnection';
+        edges: Array<{
+          __typename?: 'ThoughtTalkRoomMemberEdge';
+          cursor: string;
+          node: {
+            __typename?: 'ThoughtTalkRoomMember';
+            id: number;
+            user: {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            };
+          };
+        }>;
+        pageInfo: {
+          __typename?: 'PageInfo';
+          hasNextPage: boolean;
+          hasPreviousPage: boolean;
+          startCursor?: string | null | undefined;
+          endCursor?: string | null | undefined;
+        };
+      }
+    | null
+    | undefined;
+  thought?:
+    | {
+        __typename?: 'Thought';
+        id: string;
+        title?: string | null | undefined;
+        text: string;
+        contributor?: { __typename?: 'User'; id: string } | null | undefined;
+      }
+    | null
+    | undefined;
+  messages?:
+    | {
+        __typename?: 'ThoughtTalkRoomMessageConnection';
+        edges: Array<{
+          __typename?: 'ThoughtTalkRoomMessageEdge';
+          cursor: string;
+          node: {
+            __typename?: 'ThoughtTalkRoomMessage';
+            id: number;
+            text: string;
+            createdAt: string;
+            roomId?: number | null | undefined;
+            sender?:
+              | {
+                  __typename?: 'User';
+                  id: string;
+                  name: string;
+                  bio?: string | null | undefined;
+                  imageUrl?: string | null | undefined;
+                  facebook?: string | null | undefined;
+                  twitter?: string | null | undefined;
+                  linkedin?: string | null | undefined;
+                  instagram?: string | null | undefined;
+                }
+              | null
+              | undefined;
+            replyMessage?:
+              | {
+                  __typename?: 'ThoughtTalkRoomMessage';
+                  id: number;
+                  text: string;
+                  createdAt: string;
+                  sender?:
+                    | { __typename?: 'User'; id: string; name: string }
+                    | null
+                    | undefined;
+                }
+              | null
+              | undefined;
+          };
+        }>;
+        pageInfo: {
+          __typename?: 'PageInfo';
+          hasNextPage: boolean;
+          hasPreviousPage: boolean;
+          startCursor?: string | null | undefined;
+          endCursor?: string | null | undefined;
+        };
+      }
+    | null
+    | undefined;
+};
 
-export type ThoughtsConnectionPartsFragment = { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } };
+export type ThoughtsConnectionPartsFragment = {
+  __typename?: 'ThoughtsConnection';
+  edges: Array<{
+    __typename?: 'ThoughtEdge';
+    cursor: string;
+    node: {
+      __typename?: 'Thought';
+      id: string;
+      title?: string | null | undefined;
+      text: string;
+      createdAt?: string | null | undefined;
+      picked?: boolean | null | undefined;
+      contributor?:
+        | {
+            __typename?: 'User';
+            id: string;
+            name: string;
+            bio?: string | null | undefined;
+            imageUrl?: string | null | undefined;
+            facebook?: string | null | undefined;
+            twitter?: string | null | undefined;
+            linkedin?: string | null | undefined;
+            instagram?: string | null | undefined;
+          }
+        | null
+        | undefined;
+      images: Array<
+        | {
+            __typename?: 'ThoughtImage';
+            id: string;
+            url: string;
+            width?: number | null | undefined;
+            height?: number | null | undefined;
+          }
+        | null
+        | undefined
+      >;
+    };
+  }>;
+  pageInfo: {
+    __typename?: 'PageInfo';
+    hasNextPage: boolean;
+    hasPreviousPage: boolean;
+    startCursor?: string | null | undefined;
+    endCursor?: string | null | undefined;
+  };
+};
 
-export type UserPartsFragment = { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined };
+export type UserPartsFragment = {
+  __typename?: 'User';
+  id: string;
+  name: string;
+  bio?: string | null | undefined;
+  imageUrl?: string | null | undefined;
+  facebook?: string | null | undefined;
+  twitter?: string | null | undefined;
+  linkedin?: string | null | undefined;
+  instagram?: string | null | undefined;
+};
 
-export type UserProfileFragment = { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined };
+export type UserProfileFragment = {
+  __typename?: 'User';
+  id: string;
+  name: string;
+  bio?: string | null | undefined;
+  imageUrl?: string | null | undefined;
+  facebook?: string | null | undefined;
+  twitter?: string | null | undefined;
+  linkedin?: string | null | undefined;
+  instagram?: string | null | undefined;
+};
 
 export type BlockMutationVariables = Exact<{
   blockTo: Scalars['ID'];
 }>;
 
-
-export type BlockMutation = { __typename?: 'Mutation', block: { __typename?: 'User', blocking?: boolean | null | undefined, follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type BlockMutation = {
+  __typename?: 'Mutation';
+  block: {
+    __typename?: 'User';
+    blocking?: boolean | null | undefined;
+    follow?: boolean | null | undefined;
+    id: string;
+    name: string;
+    bio?: string | null | undefined;
+    imageUrl?: string | null | undefined;
+    facebook?: string | null | undefined;
+    twitter?: string | null | undefined;
+    linkedin?: string | null | undefined;
+    instagram?: string | null | undefined;
+  };
+};
 
 export type CreateNewsPickMutationVariables = Exact<{
   input: CreateNewsPickInput;
 }>;
 
-
-export type CreateNewsPickMutation = { __typename?: 'Mutation', createNewsPick: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', id: number, picked: boolean } | null | undefined } };
+export type CreateNewsPickMutation = {
+  __typename?: 'Mutation';
+  createNewsPick: {
+    __typename?: 'NewsPick';
+    id: number;
+    news?:
+      | { __typename?: 'News'; id: number; picked: boolean }
+      | null
+      | undefined;
+  };
+};
 
 export type CreateNewsTalkRoomMessageMutationVariables = Exact<{
   input: CreateNewsTalkRoomMessageInput;
 }>;
 
-
-export type CreateNewsTalkRoomMessageMutation = { __typename?: 'Mutation', createNewsTalkRoomMessage: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
+export type CreateNewsTalkRoomMessageMutation = {
+  __typename?: 'Mutation';
+  createNewsTalkRoomMessage: {
+    __typename?: 'NewsTalkRoomMessage';
+    id: number;
+    text: string;
+    createdAt: string;
+    roomId?: number | null | undefined;
+    sender?:
+      | {
+          __typename?: 'User';
+          id: string;
+          name: string;
+          bio?: string | null | undefined;
+          imageUrl?: string | null | undefined;
+          facebook?: string | null | undefined;
+          twitter?: string | null | undefined;
+          linkedin?: string | null | undefined;
+          instagram?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    replyMessage?:
+      | {
+          __typename?: 'NewsTalkRoomMessage';
+          id: number;
+          text: string;
+          createdAt: string;
+          sender?:
+            | { __typename?: 'User'; id: string; name: string }
+            | null
+            | undefined;
+        }
+      | null
+      | undefined;
+  };
+};
 
 export type CreateOneOnOneTalkRoomMutationVariables = Exact<{
   input: CreateOneOnOneTalkRoomInput;
 }>;
 
-
-export type CreateOneOnOneTalkRoomMutation = { __typename?: 'Mutation', createOneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type CreateOneOnOneTalkRoomMutation = {
+  __typename?: 'Mutation';
+  createOneOnOneTalkRoom: {
+    __typename?: 'OneOnOneTalkRoom';
+    id: number;
+    allMessageSeen?: boolean | null | undefined;
+    updatedAt: string;
+    sender?:
+      | {
+          __typename?: 'User';
+          id: string;
+          name: string;
+          bio?: string | null | undefined;
+          imageUrl?: string | null | undefined;
+          facebook?: string | null | undefined;
+          twitter?: string | null | undefined;
+          linkedin?: string | null | undefined;
+          instagram?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    recipient?:
+      | {
+          __typename?: 'User';
+          id: string;
+          name: string;
+          bio?: string | null | undefined;
+          imageUrl?: string | null | undefined;
+          facebook?: string | null | undefined;
+          twitter?: string | null | undefined;
+          linkedin?: string | null | undefined;
+          instagram?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    messages?:
+      | {
+          __typename?: 'OneOnOneTalkRoomMessageConnection';
+          edges: Array<{
+            __typename?: 'OneOnOneTalkRoomMessageEdge';
+            cursor: string;
+            node: {
+              __typename?: 'OneOnOneTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              roomId?: number | null | undefined;
+              sender?:
+                | {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    imageUrl?: string | null | undefined;
+                  }
+                | null
+                | undefined;
+              replyMessage?:
+                | {
+                    __typename?: 'OneOnOneTalkRoomMessage';
+                    id: number;
+                    text: string;
+                    createdAt: string;
+                    sender?:
+                      | {
+                          __typename?: 'User';
+                          id: string;
+                          name: string;
+                          imageUrl?: string | null | undefined;
+                        }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  };
+};
 
 export type CreateOneOnOneTalkRoomMessageMutationVariables = Exact<{
   input: CreateOneOnOneTalkRoomMessageInput;
 }>;
 
-
-export type CreateOneOnOneTalkRoomMessageMutation = { __typename?: 'Mutation', createOneOnOneTalkRoomMessage: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } };
+export type CreateOneOnOneTalkRoomMessageMutation = {
+  __typename?: 'Mutation';
+  createOneOnOneTalkRoomMessage: {
+    __typename?: 'OneOnOneTalkRoomMessage';
+    id: number;
+    text: string;
+    createdAt: string;
+    roomId?: number | null | undefined;
+    sender?:
+      | {
+          __typename?: 'User';
+          id: string;
+          name: string;
+          imageUrl?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    replyMessage?:
+      | {
+          __typename?: 'OneOnOneTalkRoomMessage';
+          id: number;
+          text: string;
+          createdAt: string;
+          sender?:
+            | {
+                __typename?: 'User';
+                id: string;
+                name: string;
+                imageUrl?: string | null | undefined;
+              }
+            | null
+            | undefined;
+        }
+      | null
+      | undefined;
+  };
+};
 
 export type CreatePickMutationVariables = Exact<{
   input: CreatePickInput;
 }>;
 
-
-export type CreatePickMutation = { __typename?: 'Mutation', createPick: { __typename?: 'Pick', id: string, thoughtId: string } };
+export type CreatePickMutation = {
+  __typename?: 'Mutation';
+  createPick: { __typename?: 'Pick'; id: string; thoughtId: string };
+};
 
 export type CreateThoughtMutationVariables = Exact<{
   input: CreateThoughtInput;
 }>;
 
-
-export type CreateThoughtMutation = { __typename?: 'Mutation', createThought: { __typename?: 'CreateThoughtResponse', id: string } };
+export type CreateThoughtMutation = {
+  __typename?: 'Mutation';
+  createThought: { __typename?: 'CreateThoughtResponse'; id: string };
+};
 
 export type CreateThoughtTalkRoomMessageMutationVariables = Exact<{
   input: CreateThoughtTalkRoomMessageInput;
 }>;
 
-
-export type CreateThoughtTalkRoomMessageMutation = { __typename?: 'Mutation', createThoughtTalkRoomMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } | null | undefined };
+export type CreateThoughtTalkRoomMessageMutation = {
+  __typename?: 'Mutation';
+  createThoughtTalkRoomMessage?:
+    | {
+        __typename?: 'ThoughtTalkRoomMessage';
+        id: number;
+        text: string;
+        createdAt: string;
+        roomId?: number | null | undefined;
+        sender?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        replyMessage?:
+          | {
+              __typename?: 'ThoughtTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              sender?:
+                | { __typename?: 'User'; id: string; name: string }
+                | null
+                | undefined;
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined;
+};
 
 export type CreateUserMutationVariables = Exact<{
   input: CreateUserInput;
 }>;
 
-
-export type CreateUserMutation = { __typename?: 'Mutation', createUser: { __typename?: 'Me', id: string, name: string } };
+export type CreateUserMutation = {
+  __typename?: 'Mutation';
+  createUser: { __typename?: 'Me'; id: string; name: string };
+};
 
 export type CreateUserNewsTalkRoomMessageSeenMutationVariables = Exact<{
   input: CreateUserNewsTalkRoomMessageSeenInput;
 }>;
 
-
-export type CreateUserNewsTalkRoomMessageSeenMutation = { __typename?: 'Mutation', createUserNewsTalkRoomMessageSeen: { __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined } };
+export type CreateUserNewsTalkRoomMessageSeenMutation = {
+  __typename?: 'Mutation';
+  createUserNewsTalkRoomMessageSeen: {
+    __typename?: 'NewsTalkRoom';
+    id: number;
+    allMessageSeen?: boolean | null | undefined;
+  };
+};
 
 export type CreateUserThoughtTalkRoomMessageSeenMutationVariables = Exact<{
   input: CreateUserThoughtTalkRoomMessageSeenInput;
 }>;
 
-
-export type CreateUserThoughtTalkRoomMessageSeenMutation = { __typename?: 'Mutation', createUserThoughtTalkRoomMessageSeen: { __typename?: 'ThoughtTalkRoom', id: number, allMessageSeen?: boolean | null | undefined } };
+export type CreateUserThoughtTalkRoomMessageSeenMutation = {
+  __typename?: 'Mutation';
+  createUserThoughtTalkRoomMessageSeen: {
+    __typename?: 'ThoughtTalkRoom';
+    id: number;
+    allMessageSeen?: boolean | null | undefined;
+  };
+};
 
 export type DeleteNewsPickMutationVariables = Exact<{
   input: DeleteNewsPickInput;
 }>;
 
-
-export type DeleteNewsPickMutation = { __typename?: 'Mutation', deleteNewsPick: { __typename?: 'News', id: number, picked: boolean } };
+export type DeleteNewsPickMutation = {
+  __typename?: 'Mutation';
+  deleteNewsPick: { __typename?: 'News'; id: number; picked: boolean };
+};
 
 export type DeleteOneOnOneTalkRoomMutationVariables = Exact<{
   input: DeleteOneOnOneTalkRoonInput;
 }>;
 
-
-export type DeleteOneOnOneTalkRoomMutation = { __typename?: 'Mutation', deleteOneOnOneTalkRoom?: boolean | null | undefined };
+export type DeleteOneOnOneTalkRoomMutation = {
+  __typename?: 'Mutation';
+  deleteOneOnOneTalkRoom?: boolean | null | undefined;
+};
 
 export type DeletePickMutationVariables = Exact<{
   thoughtId: Scalars['ID'];
 }>;
 
-
-export type DeletePickMutation = { __typename?: 'Mutation', deletePick: { __typename?: 'Pick', id: string, thoughtId: string } };
+export type DeletePickMutation = {
+  __typename?: 'Mutation';
+  deletePick: { __typename?: 'Pick'; id: string; thoughtId: string };
+};
 
 export type DeleteThoughtMutationVariables = Exact<{
   input: DeleteThoughtInput;
 }>;
 
-
-export type DeleteThoughtMutation = { __typename?: 'Mutation', deleteThought: { __typename?: 'DeleteThoughtResponse', id: string } };
+export type DeleteThoughtMutation = {
+  __typename?: 'Mutation';
+  deleteThought: { __typename?: 'DeleteThoughtResponse'; id: string };
+};
 
 export type DeleteThoughtTalkRoomMutationVariables = Exact<{
   input: DeleteThoughtTalkRoomInput;
 }>;
 
-
-export type DeleteThoughtTalkRoomMutation = { __typename?: 'Mutation', deleteThoughtTalkRoom?: boolean | null | undefined };
+export type DeleteThoughtTalkRoomMutation = {
+  __typename?: 'Mutation';
+  deleteThoughtTalkRoom?: boolean | null | undefined;
+};
 
 export type DeleteThoughtTalkRoomMemberMutationVariables = Exact<{
   input: DeleteThoughtTalkRoomMemberInput;
 }>;
 
-
-export type DeleteThoughtTalkRoomMemberMutation = { __typename?: 'Mutation', deleteThoughtTalkRoomMember: { __typename?: 'ThoughtTalkRoom', id: number } };
+export type DeleteThoughtTalkRoomMemberMutation = {
+  __typename?: 'Mutation';
+  deleteThoughtTalkRoomMember: { __typename?: 'ThoughtTalkRoom'; id: number };
+};
 
 export type FollowMutationVariables = Exact<{
   followeeId: Scalars['ID'];
 }>;
 
-
-export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type FollowMutation = {
+  __typename?: 'Mutation';
+  follow: {
+    __typename?: 'User';
+    follow?: boolean | null | undefined;
+    id: string;
+    name: string;
+    bio?: string | null | undefined;
+    imageUrl?: string | null | undefined;
+    facebook?: string | null | undefined;
+    twitter?: string | null | undefined;
+    linkedin?: string | null | undefined;
+    instagram?: string | null | undefined;
+  };
+};
 
 export type GetOutNewsTalkRoomMutationVariables = Exact<{
   input: GetOutNewsTalkRoomInput;
 }>;
 
-
-export type GetOutNewsTalkRoomMutation = { __typename?: 'Mutation', getOutNewsTalkRoom?: boolean | null | undefined };
+export type GetOutNewsTalkRoomMutation = {
+  __typename?: 'Mutation';
+  getOutNewsTalkRoom?: boolean | null | undefined;
+};
 
 export type GetOutThoughtTalkRoomMutationVariables = Exact<{
   input: GetOutThoughtTalkRoomInput;
 }>;
 
-
-export type GetOutThoughtTalkRoomMutation = { __typename?: 'Mutation', getOutThoughtTalkRoom?: boolean | null | undefined };
+export type GetOutThoughtTalkRoomMutation = {
+  __typename?: 'Mutation';
+  getOutThoughtTalkRoom?: boolean | null | undefined;
+};
 
 export type JoinNewsTalkRoomMutationVariables = Exact<{
   input: JoinNewsTalkRoomInput;
 }>;
 
-
-export type JoinNewsTalkRoomMutation = { __typename?: 'Mutation', joinNewsTalkRoom: { __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type JoinNewsTalkRoomMutation = {
+  __typename?: 'Mutation';
+  joinNewsTalkRoom: {
+    __typename?: 'NewsTalkRoom';
+    id: number;
+    allMessageSeen?: boolean | null | undefined;
+    members?:
+      | {
+          __typename?: 'NewsTalkRoomMemberConnection';
+          edges: Array<{
+            __typename?: 'NewsTalkRoomMemberEdge';
+            cursor: string;
+            node: {
+              __typename?: 'NewsTalkRoomMember';
+              id: number;
+              user: {
+                __typename?: 'User';
+                id: string;
+                name: string;
+                bio?: string | null | undefined;
+                imageUrl?: string | null | undefined;
+                facebook?: string | null | undefined;
+                twitter?: string | null | undefined;
+                linkedin?: string | null | undefined;
+                instagram?: string | null | undefined;
+              };
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+    news?:
+      | {
+          __typename?: 'News';
+          id: number;
+          title: string;
+          link: string;
+          image?: string | null | undefined;
+          articleCreatedAt?: string | null | undefined;
+          genre: NewsGenre;
+          provider?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    messages?:
+      | {
+          __typename?: 'NewsTalkRoomMessageConnection';
+          edges: Array<{
+            __typename?: 'NewsTalkRoomMessageEdge';
+            cursor: string;
+            node: {
+              __typename?: 'NewsTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              roomId?: number | null | undefined;
+              sender?:
+                | {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    bio?: string | null | undefined;
+                    imageUrl?: string | null | undefined;
+                    facebook?: string | null | undefined;
+                    twitter?: string | null | undefined;
+                    linkedin?: string | null | undefined;
+                    instagram?: string | null | undefined;
+                  }
+                | null
+                | undefined;
+              replyMessage?:
+                | {
+                    __typename?: 'NewsTalkRoomMessage';
+                    id: number;
+                    text: string;
+                    createdAt: string;
+                    sender?:
+                      | { __typename?: 'User'; id: string; name: string }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  };
+};
 
 export type JoinThoughtTalkMutationVariables = Exact<{
   input: JoinTalkInput;
 }>;
 
-
-export type JoinThoughtTalkMutation = { __typename?: 'Mutation', joinThoughtTalk: { __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type JoinThoughtTalkMutation = {
+  __typename?: 'Mutation';
+  joinThoughtTalk: {
+    __typename?: 'ThoughtTalkRoom';
+    id: number;
+    createdAt?: string | null | undefined;
+    allMessageSeen?: boolean | null | undefined;
+    members?:
+      | {
+          __typename?: 'ThoughtTalkRoomMemberConnection';
+          edges: Array<{
+            __typename?: 'ThoughtTalkRoomMemberEdge';
+            cursor: string;
+            node: {
+              __typename?: 'ThoughtTalkRoomMember';
+              id: number;
+              user: {
+                __typename?: 'User';
+                id: string;
+                name: string;
+                bio?: string | null | undefined;
+                imageUrl?: string | null | undefined;
+                facebook?: string | null | undefined;
+                twitter?: string | null | undefined;
+                linkedin?: string | null | undefined;
+                instagram?: string | null | undefined;
+              };
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+    thought?:
+      | {
+          __typename?: 'Thought';
+          id: string;
+          title?: string | null | undefined;
+          text: string;
+          contributor?: { __typename?: 'User'; id: string } | null | undefined;
+        }
+      | null
+      | undefined;
+    messages?:
+      | {
+          __typename?: 'ThoughtTalkRoomMessageConnection';
+          edges: Array<{
+            __typename?: 'ThoughtTalkRoomMessageEdge';
+            cursor: string;
+            node: {
+              __typename?: 'ThoughtTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              roomId?: number | null | undefined;
+              sender?:
+                | {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    bio?: string | null | undefined;
+                    imageUrl?: string | null | undefined;
+                    facebook?: string | null | undefined;
+                    twitter?: string | null | undefined;
+                    linkedin?: string | null | undefined;
+                    instagram?: string | null | undefined;
+                  }
+                | null
+                | undefined;
+              replyMessage?:
+                | {
+                    __typename?: 'ThoughtTalkRoomMessage';
+                    id: number;
+                    text: string;
+                    createdAt: string;
+                    sender?:
+                      | { __typename?: 'User'; id: string; name: string }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  };
+};
 
 export type RequestNewsTalkRoomMemberDeletionMutationVariables = Exact<{
   input: RequestNewsTalkRoomMemberDeletionInput;
 }>;
 
-
-export type RequestNewsTalkRoomMemberDeletionMutation = { __typename?: 'Mutation', requestNewsTalkRoomMemberDeletion?: boolean | null | undefined };
+export type RequestNewsTalkRoomMemberDeletionMutation = {
+  __typename?: 'Mutation';
+  requestNewsTalkRoomMemberDeletion?: boolean | null | undefined;
+};
 
 export type SeenOneOnOneTalkRoomMessageMutationVariables = Exact<{
   input: SeenOneOnOneTalkRoomMessageInput;
 }>;
 
+export type SeenOneOnOneTalkRoomMessageMutation = {
+  __typename?: 'Mutation';
+  seenOneOnOneTalkRoomMessage: {
+    __typename?: 'OneOnOneTalkRoom';
+    id: number;
+    allMessageSeen?: boolean | null | undefined;
+  };
+};
 
-export type SeenOneOnOneTalkRoomMessageMutation = { __typename?: 'Mutation', seenOneOnOneTalkRoomMessage: { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined } };
+export type SignOutMutationVariables = Exact<{ [key: string]: never }>;
 
-export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
-
-
-export type SignOutMutation = { __typename?: 'Mutation', signOut: { __typename?: 'SignOutResponse', id: string } };
+export type SignOutMutation = {
+  __typename?: 'Mutation';
+  signOut: { __typename?: 'SignOutResponse'; id: string };
+};
 
 export type UnBlockMutationVariables = Exact<{
   blockedUserId: Scalars['ID'];
 }>;
 
-
-export type UnBlockMutation = { __typename?: 'Mutation', unblock: { __typename?: 'User', id: string, blocking?: boolean | null | undefined } };
+export type UnBlockMutation = {
+  __typename?: 'Mutation';
+  unblock: {
+    __typename?: 'User';
+    id: string;
+    blocking?: boolean | null | undefined;
+  };
+};
 
 export type UnfollowMutationVariables = Exact<{
   followeeId: Scalars['ID'];
 }>;
 
-
-export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type UnfollowMutation = {
+  __typename?: 'Mutation';
+  unfollow: {
+    __typename?: 'User';
+    follow?: boolean | null | undefined;
+    id: string;
+    name: string;
+    bio?: string | null | undefined;
+    imageUrl?: string | null | undefined;
+    facebook?: string | null | undefined;
+    twitter?: string | null | undefined;
+    linkedin?: string | null | undefined;
+    instagram?: string | null | undefined;
+  };
+};
 
 export type UpdateMeMutationVariables = Exact<{
   input: UpdateMeInput;
 }>;
 
-
-export type UpdateMeMutation = { __typename?: 'Mutation', updateMe: { __typename?: 'Me', id: string } };
+export type UpdateMeMutation = {
+  __typename?: 'Mutation';
+  updateMe: { __typename?: 'Me'; id: string };
+};
 
 export type UploadImageMutationVariables = Exact<{
   file: Scalars['Upload'];
 }>;
 
-
-export type UploadImageMutation = { __typename?: 'Mutation', uploadImage: { __typename?: 'SubImage', url: string } };
+export type UploadImageMutation = {
+  __typename?: 'Mutation';
+  uploadImage: { __typename?: 'SubImage'; url: string };
+};
 
 export type UploadThoughtImagesMutationVariables = Exact<{
   files: Array<Scalars['Upload']> | Scalars['Upload'];
 }>;
 
+export type UploadThoughtImagesMutation = {
+  __typename?: 'Mutation';
+  uploadThoughtImages: {
+    __typename?: 'UploadThoughtImagesResponse';
+    images: Array<{
+      __typename?: 'SubImage';
+      url: string;
+      width?: number | null | undefined;
+      height?: number | null | undefined;
+    }>;
+  };
+};
 
-export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoughtImages: { __typename?: 'UploadThoughtImagesResponse', images: Array<{ __typename?: 'SubImage', url: string, width?: number | null | undefined, height?: number | null | undefined }> } };
+export type BlockingUsersQueryVariables = Exact<{ [key: string]: never }>;
 
-export type BlockingUsersQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type BlockingUsersQuery = { __typename?: 'Query', blockingUsers: Array<{ __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined> };
+export type BlockingUsersQuery = {
+  __typename?: 'Query';
+  blockingUsers: Array<
+    | {
+        __typename?: 'User';
+        id: string;
+        name: string;
+        bio?: string | null | undefined;
+        imageUrl?: string | null | undefined;
+        facebook?: string | null | undefined;
+        twitter?: string | null | undefined;
+        linkedin?: string | null | undefined;
+        instagram?: string | null | undefined;
+      }
+    | null
+    | undefined
+  >;
+};
 
 export type FollowsQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']>;
   q?: InputMaybe<Scalars['String']>;
 }>;
 
+export type FollowsQuery = {
+  __typename?: 'Query';
+  follows: {
+    __typename?: 'UserConnection';
+    edges: Array<{
+      __typename?: 'UserEdge';
+      cursor: string;
+      node: {
+        __typename?: 'User';
+        follow?: boolean | null | undefined;
+        id: string;
+        name: string;
+        bio?: string | null | undefined;
+        imageUrl?: string | null | undefined;
+        facebook?: string | null | undefined;
+        twitter?: string | null | undefined;
+        linkedin?: string | null | undefined;
+        instagram?: string | null | undefined;
+      };
+    }>;
+    pageInfo: {
+      __typename?: 'PageInfo';
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null | undefined;
+      endCursor?: string | null | undefined;
+    };
+  };
+};
 
-export type FollowsQuery = { __typename?: 'Query', follows: { __typename?: 'UserConnection', edges: Array<{ __typename?: 'UserEdge', cursor: string, node: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type GetActiveDataQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetActiveDataQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetActiveDataQuery = { __typename?: 'Query', thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined>, newsTalkRooms: Array<{ __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined }>, oneOnOneTalkRooms: Array<{ __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
+export type GetActiveDataQuery = {
+  __typename?: 'Query';
+  thoughtTalkRooms: Array<
+    | {
+        __typename?: 'ThoughtTalkRoom';
+        id: number;
+        createdAt?: string | null | undefined;
+        allMessageSeen?: boolean | null | undefined;
+        members?:
+          | {
+              __typename?: 'ThoughtTalkRoomMemberConnection';
+              edges: Array<{
+                __typename?: 'ThoughtTalkRoomMemberEdge';
+                cursor: string;
+                node: {
+                  __typename?: 'ThoughtTalkRoomMember';
+                  id: number;
+                  user: {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    bio?: string | null | undefined;
+                    imageUrl?: string | null | undefined;
+                    facebook?: string | null | undefined;
+                    twitter?: string | null | undefined;
+                    linkedin?: string | null | undefined;
+                    instagram?: string | null | undefined;
+                  };
+                };
+              }>;
+              pageInfo: {
+                __typename?: 'PageInfo';
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+                startCursor?: string | null | undefined;
+                endCursor?: string | null | undefined;
+              };
+            }
+          | null
+          | undefined;
+        thought?:
+          | {
+              __typename?: 'Thought';
+              id: string;
+              title?: string | null | undefined;
+              text: string;
+              contributor?:
+                | { __typename?: 'User'; id: string }
+                | null
+                | undefined;
+            }
+          | null
+          | undefined;
+        messages?:
+          | {
+              __typename?: 'ThoughtTalkRoomMessageConnection';
+              edges: Array<{
+                __typename?: 'ThoughtTalkRoomMessageEdge';
+                cursor: string;
+                node: {
+                  __typename?: 'ThoughtTalkRoomMessage';
+                  id: number;
+                  text: string;
+                  createdAt: string;
+                  roomId?: number | null | undefined;
+                  sender?:
+                    | {
+                        __typename?: 'User';
+                        id: string;
+                        name: string;
+                        bio?: string | null | undefined;
+                        imageUrl?: string | null | undefined;
+                        facebook?: string | null | undefined;
+                        twitter?: string | null | undefined;
+                        linkedin?: string | null | undefined;
+                        instagram?: string | null | undefined;
+                      }
+                    | null
+                    | undefined;
+                  replyMessage?:
+                    | {
+                        __typename?: 'ThoughtTalkRoomMessage';
+                        id: number;
+                        text: string;
+                        createdAt: string;
+                        sender?:
+                          | { __typename?: 'User'; id: string; name: string }
+                          | null
+                          | undefined;
+                      }
+                    | null
+                    | undefined;
+                };
+              }>;
+              pageInfo: {
+                __typename?: 'PageInfo';
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+                startCursor?: string | null | undefined;
+                endCursor?: string | null | undefined;
+              };
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined
+  >;
+  newsTalkRooms: Array<{
+    __typename?: 'NewsTalkRoom';
+    id: number;
+    allMessageSeen?: boolean | null | undefined;
+    members?:
+      | {
+          __typename?: 'NewsTalkRoomMemberConnection';
+          edges: Array<{
+            __typename?: 'NewsTalkRoomMemberEdge';
+            cursor: string;
+            node: {
+              __typename?: 'NewsTalkRoomMember';
+              id: number;
+              user: {
+                __typename?: 'User';
+                id: string;
+                name: string;
+                bio?: string | null | undefined;
+                imageUrl?: string | null | undefined;
+                facebook?: string | null | undefined;
+                twitter?: string | null | undefined;
+                linkedin?: string | null | undefined;
+                instagram?: string | null | undefined;
+              };
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+    news?:
+      | {
+          __typename?: 'News';
+          id: number;
+          title: string;
+          link: string;
+          image?: string | null | undefined;
+          articleCreatedAt?: string | null | undefined;
+          genre: NewsGenre;
+          provider?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    messages?:
+      | {
+          __typename?: 'NewsTalkRoomMessageConnection';
+          edges: Array<{
+            __typename?: 'NewsTalkRoomMessageEdge';
+            cursor: string;
+            node: {
+              __typename?: 'NewsTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              roomId?: number | null | undefined;
+              sender?:
+                | {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    bio?: string | null | undefined;
+                    imageUrl?: string | null | undefined;
+                    facebook?: string | null | undefined;
+                    twitter?: string | null | undefined;
+                    linkedin?: string | null | undefined;
+                    instagram?: string | null | undefined;
+                  }
+                | null
+                | undefined;
+              replyMessage?:
+                | {
+                    __typename?: 'NewsTalkRoomMessage';
+                    id: number;
+                    text: string;
+                    createdAt: string;
+                    sender?:
+                      | { __typename?: 'User'; id: string; name: string }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  }>;
+  oneOnOneTalkRooms: Array<
+    | {
+        __typename?: 'OneOnOneTalkRoom';
+        id: number;
+        allMessageSeen?: boolean | null | undefined;
+        updatedAt: string;
+        sender?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        recipient?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        messages?:
+          | {
+              __typename?: 'OneOnOneTalkRoomMessageConnection';
+              edges: Array<{
+                __typename?: 'OneOnOneTalkRoomMessageEdge';
+                cursor: string;
+                node: {
+                  __typename?: 'OneOnOneTalkRoomMessage';
+                  id: number;
+                  text: string;
+                  createdAt: string;
+                  roomId?: number | null | undefined;
+                  sender?:
+                    | {
+                        __typename?: 'User';
+                        id: string;
+                        name: string;
+                        imageUrl?: string | null | undefined;
+                      }
+                    | null
+                    | undefined;
+                  replyMessage?:
+                    | {
+                        __typename?: 'OneOnOneTalkRoomMessage';
+                        id: number;
+                        text: string;
+                        createdAt: string;
+                        sender?:
+                          | {
+                              __typename?: 'User';
+                              id: string;
+                              name: string;
+                              imageUrl?: string | null | undefined;
+                            }
+                          | null
+                          | undefined;
+                      }
+                    | null
+                    | undefined;
+                };
+              }>;
+              pageInfo: {
+                __typename?: 'PageInfo';
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+                startCursor?: string | null | undefined;
+                endCursor?: string | null | undefined;
+              };
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined
+  >;
+};
 
 export type GetNewsTalkRoomMembersQueryVariables = Exact<{
   talkRoomId: Scalars['Int'];
   after?: InputMaybe<Scalars['String']>;
 }>;
 
-
-export type GetNewsTalkRoomMembersQuery = { __typename?: 'Query', newsTalkRoom: { __typename?: 'NewsTalkRoom', id: number, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetNewsTalkRoomMembersQuery = {
+  __typename?: 'Query';
+  newsTalkRoom: {
+    __typename?: 'NewsTalkRoom';
+    id: number;
+    members?:
+      | {
+          __typename?: 'NewsTalkRoomMemberConnection';
+          edges: Array<{
+            __typename?: 'NewsTalkRoomMemberEdge';
+            cursor: string;
+            node: {
+              __typename?: 'NewsTalkRoomMember';
+              id: number;
+              user: {
+                __typename?: 'User';
+                id: string;
+                name: string;
+                bio?: string | null | undefined;
+                imageUrl?: string | null | undefined;
+                facebook?: string | null | undefined;
+                twitter?: string | null | undefined;
+                linkedin?: string | null | undefined;
+                instagram?: string | null | undefined;
+              };
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  };
+};
 
 export type GetNewsTalkRoomMessagesQueryVariables = Exact<{
   talkRoomId: Scalars['Int'];
   messageCursor?: InputMaybe<Scalars['String']>;
 }>;
 
+export type GetNewsTalkRoomMessagesQuery = {
+  __typename?: 'Query';
+  newsTalkRoom: {
+    __typename?: 'NewsTalkRoom';
+    id: number;
+    messages?:
+      | {
+          __typename?: 'NewsTalkRoomMessageConnection';
+          edges: Array<{
+            __typename?: 'NewsTalkRoomMessageEdge';
+            cursor: string;
+            node: {
+              __typename?: 'NewsTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              roomId?: number | null | undefined;
+              sender?:
+                | {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    bio?: string | null | undefined;
+                    imageUrl?: string | null | undefined;
+                    facebook?: string | null | undefined;
+                    twitter?: string | null | undefined;
+                    linkedin?: string | null | undefined;
+                    instagram?: string | null | undefined;
+                  }
+                | null
+                | undefined;
+              replyMessage?:
+                | {
+                    __typename?: 'NewsTalkRoomMessage';
+                    id: number;
+                    text: string;
+                    createdAt: string;
+                    sender?:
+                      | { __typename?: 'User'; id: string; name: string }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  };
+};
 
-export type GetNewsTalkRoomMessagesQuery = { __typename?: 'Query', newsTalkRoom: { __typename?: 'NewsTalkRoom', id: number, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetNewsTalkRoomsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetNewsTalkRoomsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetNewsTalkRoomsQuery = { __typename?: 'Query', newsTalkRooms: Array<{ __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined }> };
+export type GetNewsTalkRoomsQuery = {
+  __typename?: 'Query';
+  newsTalkRooms: Array<{
+    __typename?: 'NewsTalkRoom';
+    id: number;
+    allMessageSeen?: boolean | null | undefined;
+    members?:
+      | {
+          __typename?: 'NewsTalkRoomMemberConnection';
+          edges: Array<{
+            __typename?: 'NewsTalkRoomMemberEdge';
+            cursor: string;
+            node: {
+              __typename?: 'NewsTalkRoomMember';
+              id: number;
+              user: {
+                __typename?: 'User';
+                id: string;
+                name: string;
+                bio?: string | null | undefined;
+                imageUrl?: string | null | undefined;
+                facebook?: string | null | undefined;
+                twitter?: string | null | undefined;
+                linkedin?: string | null | undefined;
+                instagram?: string | null | undefined;
+              };
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+    news?:
+      | {
+          __typename?: 'News';
+          id: number;
+          title: string;
+          link: string;
+          image?: string | null | undefined;
+          articleCreatedAt?: string | null | undefined;
+          genre: NewsGenre;
+          provider?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    messages?:
+      | {
+          __typename?: 'NewsTalkRoomMessageConnection';
+          edges: Array<{
+            __typename?: 'NewsTalkRoomMessageEdge';
+            cursor: string;
+            node: {
+              __typename?: 'NewsTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              roomId?: number | null | undefined;
+              sender?:
+                | {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    bio?: string | null | undefined;
+                    imageUrl?: string | null | undefined;
+                    facebook?: string | null | undefined;
+                    twitter?: string | null | undefined;
+                    linkedin?: string | null | undefined;
+                    instagram?: string | null | undefined;
+                  }
+                | null
+                | undefined;
+              replyMessage?:
+                | {
+                    __typename?: 'NewsTalkRoomMessage';
+                    id: number;
+                    text: string;
+                    createdAt: string;
+                    sender?:
+                      | { __typename?: 'User'; id: string; name: string }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  }>;
+};
 
 export type GetOneNewsQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
-
-export type GetOneNewsQuery = { __typename?: 'Query', oneNews: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } };
+export type GetOneNewsQuery = {
+  __typename?: 'Query';
+  oneNews: {
+    __typename?: 'News';
+    picked: boolean;
+    id: number;
+    title: string;
+    link: string;
+    image?: string | null | undefined;
+    articleCreatedAt?: string | null | undefined;
+    genre: NewsGenre;
+    provider?: string | null | undefined;
+  };
+};
 
 export type GetOneOnOneTalkRoomQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
-
-export type GetOneOnOneTalkRoomQuery = { __typename?: 'Query', oneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetOneOnOneTalkRoomQuery = {
+  __typename?: 'Query';
+  oneOnOneTalkRoom: {
+    __typename?: 'OneOnOneTalkRoom';
+    id: number;
+    allMessageSeen?: boolean | null | undefined;
+    updatedAt: string;
+    sender?:
+      | {
+          __typename?: 'User';
+          id: string;
+          name: string;
+          bio?: string | null | undefined;
+          imageUrl?: string | null | undefined;
+          facebook?: string | null | undefined;
+          twitter?: string | null | undefined;
+          linkedin?: string | null | undefined;
+          instagram?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    recipient?:
+      | {
+          __typename?: 'User';
+          id: string;
+          name: string;
+          bio?: string | null | undefined;
+          imageUrl?: string | null | undefined;
+          facebook?: string | null | undefined;
+          twitter?: string | null | undefined;
+          linkedin?: string | null | undefined;
+          instagram?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    messages?:
+      | {
+          __typename?: 'OneOnOneTalkRoomMessageConnection';
+          edges: Array<{
+            __typename?: 'OneOnOneTalkRoomMessageEdge';
+            cursor: string;
+            node: {
+              __typename?: 'OneOnOneTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              roomId?: number | null | undefined;
+              sender?:
+                | {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    imageUrl?: string | null | undefined;
+                  }
+                | null
+                | undefined;
+              replyMessage?:
+                | {
+                    __typename?: 'OneOnOneTalkRoomMessage';
+                    id: number;
+                    text: string;
+                    createdAt: string;
+                    sender?:
+                      | {
+                          __typename?: 'User';
+                          id: string;
+                          name: string;
+                          imageUrl?: string | null | undefined;
+                        }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  };
+};
 
 export type GetOneOnOneTalkRoomMessagesQueryVariables = Exact<{
   id: Scalars['Int'];
   after?: InputMaybe<Scalars['String']>;
 }>;
 
+export type GetOneOnOneTalkRoomMessagesQuery = {
+  __typename?: 'Query';
+  oneOnOneTalkRoom: {
+    __typename?: 'OneOnOneTalkRoom';
+    id: number;
+    messages?:
+      | {
+          __typename?: 'OneOnOneTalkRoomMessageConnection';
+          edges: Array<{
+            __typename?: 'OneOnOneTalkRoomMessageEdge';
+            cursor: string;
+            node: {
+              __typename?: 'OneOnOneTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              roomId?: number | null | undefined;
+              sender?:
+                | {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    imageUrl?: string | null | undefined;
+                  }
+                | null
+                | undefined;
+              replyMessage?:
+                | {
+                    __typename?: 'OneOnOneTalkRoomMessage';
+                    id: number;
+                    text: string;
+                    createdAt: string;
+                    sender?:
+                      | {
+                          __typename?: 'User';
+                          id: string;
+                          name: string;
+                          imageUrl?: string | null | undefined;
+                        }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  };
+};
 
-export type GetOneOnOneTalkRoomMessagesQuery = { __typename?: 'Query', oneOnOneTalkRoom: { __typename?: 'OneOnOneTalkRoom', id: number, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetOneOnOneTalkRoomsQueryVariables = Exact<{
+  [key: string]: never;
+}>;
 
-export type GetOneOnOneTalkRoomsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetOneOnOneTalkRoomsQuery = { __typename?: 'Query', oneOnOneTalkRooms: Array<{ __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
+export type GetOneOnOneTalkRoomsQuery = {
+  __typename?: 'Query';
+  oneOnOneTalkRooms: Array<
+    | {
+        __typename?: 'OneOnOneTalkRoom';
+        id: number;
+        allMessageSeen?: boolean | null | undefined;
+        updatedAt: string;
+        sender?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        recipient?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        messages?:
+          | {
+              __typename?: 'OneOnOneTalkRoomMessageConnection';
+              edges: Array<{
+                __typename?: 'OneOnOneTalkRoomMessageEdge';
+                cursor: string;
+                node: {
+                  __typename?: 'OneOnOneTalkRoomMessage';
+                  id: number;
+                  text: string;
+                  createdAt: string;
+                  roomId?: number | null | undefined;
+                  sender?:
+                    | {
+                        __typename?: 'User';
+                        id: string;
+                        name: string;
+                        imageUrl?: string | null | undefined;
+                      }
+                    | null
+                    | undefined;
+                  replyMessage?:
+                    | {
+                        __typename?: 'OneOnOneTalkRoomMessage';
+                        id: number;
+                        text: string;
+                        createdAt: string;
+                        sender?:
+                          | {
+                              __typename?: 'User';
+                              id: string;
+                              name: string;
+                              imageUrl?: string | null | undefined;
+                            }
+                          | null
+                          | undefined;
+                      }
+                    | null
+                    | undefined;
+                };
+              }>;
+              pageInfo: {
+                __typename?: 'PageInfo';
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+                startCursor?: string | null | undefined;
+                endCursor?: string | null | undefined;
+              };
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined
+  >;
+};
 
 export type GetPickedNewsQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']>;
 }>;
 
-
-export type GetPickedNewsQuery = { __typename?: 'Query', pickedNews: { __typename?: 'NewsPickConnection', edges: Array<{ __typename?: 'NewsPickEdge', cursor: string, node: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type GetPickedNewsQuery = {
+  __typename?: 'Query';
+  pickedNews: {
+    __typename?: 'NewsPickConnection';
+    edges: Array<{
+      __typename?: 'NewsPickEdge';
+      cursor: string;
+      node: {
+        __typename?: 'NewsPick';
+        id: number;
+        news?:
+          | {
+              __typename?: 'News';
+              picked: boolean;
+              id: number;
+              title: string;
+              link: string;
+              image?: string | null | undefined;
+              articleCreatedAt?: string | null | undefined;
+              genre: NewsGenre;
+              provider?: string | null | undefined;
+            }
+          | null
+          | undefined;
+      };
+    }>;
+    pageInfo: {
+      __typename?: 'PageInfo';
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null | undefined;
+      endCursor?: string | null | undefined;
+    };
+  };
+};
 
 export type GetThoughtQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
-
-export type GetThoughtQuery = { __typename?: 'Query', thought: { __typename?: 'Thought', picked?: boolean | null | undefined, id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } };
+export type GetThoughtQuery = {
+  __typename?: 'Query';
+  thought: {
+    __typename?: 'Thought';
+    picked?: boolean | null | undefined;
+    id: string;
+    title?: string | null | undefined;
+    text: string;
+    createdAt?: string | null | undefined;
+    contributor?:
+      | {
+          __typename?: 'User';
+          id: string;
+          name: string;
+          bio?: string | null | undefined;
+          imageUrl?: string | null | undefined;
+          facebook?: string | null | undefined;
+          twitter?: string | null | undefined;
+          linkedin?: string | null | undefined;
+          instagram?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    images: Array<
+      | {
+          __typename?: 'ThoughtImage';
+          id: string;
+          url: string;
+          width?: number | null | undefined;
+          height?: number | null | undefined;
+        }
+      | null
+      | undefined
+    >;
+  };
+};
 
 export type GetThoughtTalkRoomQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
-
-export type GetThoughtTalkRoomQuery = { __typename?: 'Query', thoughtTalkRoom: { __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetThoughtTalkRoomQuery = {
+  __typename?: 'Query';
+  thoughtTalkRoom: {
+    __typename?: 'ThoughtTalkRoom';
+    id: number;
+    createdAt?: string | null | undefined;
+    allMessageSeen?: boolean | null | undefined;
+    members?:
+      | {
+          __typename?: 'ThoughtTalkRoomMemberConnection';
+          edges: Array<{
+            __typename?: 'ThoughtTalkRoomMemberEdge';
+            cursor: string;
+            node: {
+              __typename?: 'ThoughtTalkRoomMember';
+              id: number;
+              user: {
+                __typename?: 'User';
+                id: string;
+                name: string;
+                bio?: string | null | undefined;
+                imageUrl?: string | null | undefined;
+                facebook?: string | null | undefined;
+                twitter?: string | null | undefined;
+                linkedin?: string | null | undefined;
+                instagram?: string | null | undefined;
+              };
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+    thought?:
+      | {
+          __typename?: 'Thought';
+          id: string;
+          title?: string | null | undefined;
+          text: string;
+          contributor?: { __typename?: 'User'; id: string } | null | undefined;
+        }
+      | null
+      | undefined;
+    messages?:
+      | {
+          __typename?: 'ThoughtTalkRoomMessageConnection';
+          edges: Array<{
+            __typename?: 'ThoughtTalkRoomMessageEdge';
+            cursor: string;
+            node: {
+              __typename?: 'ThoughtTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              roomId?: number | null | undefined;
+              sender?:
+                | {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    bio?: string | null | undefined;
+                    imageUrl?: string | null | undefined;
+                    facebook?: string | null | undefined;
+                    twitter?: string | null | undefined;
+                    linkedin?: string | null | undefined;
+                    instagram?: string | null | undefined;
+                  }
+                | null
+                | undefined;
+              replyMessage?:
+                | {
+                    __typename?: 'ThoughtTalkRoomMessage';
+                    id: number;
+                    text: string;
+                    createdAt: string;
+                    sender?:
+                      | { __typename?: 'User'; id: string; name: string }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  };
+};
 
 export type GetThoughtTalkRoomMembersQueryVariables = Exact<{
   talkRoomId: Scalars['Int'];
   after?: InputMaybe<Scalars['String']>;
 }>;
 
-
-export type GetThoughtTalkRoomMembersQuery = { __typename?: 'Query', thoughtTalkRoom: { __typename?: 'ThoughtTalkRoom', id: number, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetThoughtTalkRoomMembersQuery = {
+  __typename?: 'Query';
+  thoughtTalkRoom: {
+    __typename?: 'ThoughtTalkRoom';
+    id: number;
+    members?:
+      | {
+          __typename?: 'ThoughtTalkRoomMemberConnection';
+          edges: Array<{
+            __typename?: 'ThoughtTalkRoomMemberEdge';
+            cursor: string;
+            node: {
+              __typename?: 'ThoughtTalkRoomMember';
+              id: number;
+              user: {
+                __typename?: 'User';
+                id: string;
+                name: string;
+                bio?: string | null | undefined;
+                imageUrl?: string | null | undefined;
+                facebook?: string | null | undefined;
+                twitter?: string | null | undefined;
+                linkedin?: string | null | undefined;
+                instagram?: string | null | undefined;
+              };
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  };
+};
 
 export type GetThoughtTalkRoomMessagesQueryVariables = Exact<{
   id: Scalars['Int'];
   messageCursor?: InputMaybe<Scalars['String']>;
 }>;
 
+export type GetThoughtTalkRoomMessagesQuery = {
+  __typename?: 'Query';
+  thoughtTalkRoom: {
+    __typename?: 'ThoughtTalkRoom';
+    id: number;
+    messages?:
+      | {
+          __typename?: 'ThoughtTalkRoomMessageConnection';
+          edges: Array<{
+            __typename?: 'ThoughtTalkRoomMessageEdge';
+            cursor: string;
+            node: {
+              __typename?: 'ThoughtTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              roomId?: number | null | undefined;
+              sender?:
+                | {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    bio?: string | null | undefined;
+                    imageUrl?: string | null | undefined;
+                    facebook?: string | null | undefined;
+                    twitter?: string | null | undefined;
+                    linkedin?: string | null | undefined;
+                    instagram?: string | null | undefined;
+                  }
+                | null
+                | undefined;
+              replyMessage?:
+                | {
+                    __typename?: 'ThoughtTalkRoomMessage';
+                    id: number;
+                    text: string;
+                    createdAt: string;
+                    sender?:
+                      | { __typename?: 'User'; id: string; name: string }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  };
+};
 
-export type GetThoughtTalkRoomMessagesQuery = { __typename?: 'Query', thoughtTalkRoom: { __typename?: 'ThoughtTalkRoom', id: number, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetThoughtTalkRoomsQueryVariables = Exact<{ [key: string]: never }>;
 
-export type GetThoughtTalkRoomsQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type GetThoughtTalkRoomsQuery = { __typename?: 'Query', thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
+export type GetThoughtTalkRoomsQuery = {
+  __typename?: 'Query';
+  thoughtTalkRooms: Array<
+    | {
+        __typename?: 'ThoughtTalkRoom';
+        id: number;
+        createdAt?: string | null | undefined;
+        allMessageSeen?: boolean | null | undefined;
+        members?:
+          | {
+              __typename?: 'ThoughtTalkRoomMemberConnection';
+              edges: Array<{
+                __typename?: 'ThoughtTalkRoomMemberEdge';
+                cursor: string;
+                node: {
+                  __typename?: 'ThoughtTalkRoomMember';
+                  id: number;
+                  user: {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    bio?: string | null | undefined;
+                    imageUrl?: string | null | undefined;
+                    facebook?: string | null | undefined;
+                    twitter?: string | null | undefined;
+                    linkedin?: string | null | undefined;
+                    instagram?: string | null | undefined;
+                  };
+                };
+              }>;
+              pageInfo: {
+                __typename?: 'PageInfo';
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+                startCursor?: string | null | undefined;
+                endCursor?: string | null | undefined;
+              };
+            }
+          | null
+          | undefined;
+        thought?:
+          | {
+              __typename?: 'Thought';
+              id: string;
+              title?: string | null | undefined;
+              text: string;
+              contributor?:
+                | { __typename?: 'User'; id: string }
+                | null
+                | undefined;
+            }
+          | null
+          | undefined;
+        messages?:
+          | {
+              __typename?: 'ThoughtTalkRoomMessageConnection';
+              edges: Array<{
+                __typename?: 'ThoughtTalkRoomMessageEdge';
+                cursor: string;
+                node: {
+                  __typename?: 'ThoughtTalkRoomMessage';
+                  id: number;
+                  text: string;
+                  createdAt: string;
+                  roomId?: number | null | undefined;
+                  sender?:
+                    | {
+                        __typename?: 'User';
+                        id: string;
+                        name: string;
+                        bio?: string | null | undefined;
+                        imageUrl?: string | null | undefined;
+                        facebook?: string | null | undefined;
+                        twitter?: string | null | undefined;
+                        linkedin?: string | null | undefined;
+                        instagram?: string | null | undefined;
+                      }
+                    | null
+                    | undefined;
+                  replyMessage?:
+                    | {
+                        __typename?: 'ThoughtTalkRoomMessage';
+                        id: number;
+                        text: string;
+                        createdAt: string;
+                        sender?:
+                          | { __typename?: 'User'; id: string; name: string }
+                          | null
+                          | undefined;
+                      }
+                    | null
+                    | undefined;
+                };
+              }>;
+              pageInfo: {
+                __typename?: 'PageInfo';
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+                startCursor?: string | null | undefined;
+                endCursor?: string | null | undefined;
+              };
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined
+  >;
+};
 
 export type GetThoughtTalkRoomParentQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
 
+export type GetThoughtTalkRoomParentQuery = {
+  __typename?: 'Query';
+  thoughtTalkRoom: {
+    __typename?: 'ThoughtTalkRoom';
+    id: number;
+    thought?:
+      | {
+          __typename?: 'Thought';
+          id: string;
+          title?: string | null | undefined;
+          text: string;
+          contributor?: { __typename?: 'User'; id: string } | null | undefined;
+        }
+      | null
+      | undefined;
+  };
+};
 
-export type GetThoughtTalkRoomParentQuery = { __typename?: 'Query', thoughtTalkRoom: { __typename?: 'ThoughtTalkRoom', id: number, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined } };
+export type InitialDataQueryVariables = Exact<{ [key: string]: never }>;
 
-export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
+export type InitialDataQuery = {
+  __typename?: 'Query';
+  me: {
+    __typename?: 'Me';
+    id: string;
+    name: string;
+    bio?: string | null | undefined;
+    imageUrl?: string | null | undefined;
+    facebook?: string | null | undefined;
+    twitter?: string | null | undefined;
+    instagram?: string | null | undefined;
+    linkedin?: string | null | undefined;
+  };
+  thoughtTalkRooms: Array<
+    | {
+        __typename?: 'ThoughtTalkRoom';
+        id: number;
+        createdAt?: string | null | undefined;
+        allMessageSeen?: boolean | null | undefined;
+        members?:
+          | {
+              __typename?: 'ThoughtTalkRoomMemberConnection';
+              edges: Array<{
+                __typename?: 'ThoughtTalkRoomMemberEdge';
+                cursor: string;
+                node: {
+                  __typename?: 'ThoughtTalkRoomMember';
+                  id: number;
+                  user: {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    bio?: string | null | undefined;
+                    imageUrl?: string | null | undefined;
+                    facebook?: string | null | undefined;
+                    twitter?: string | null | undefined;
+                    linkedin?: string | null | undefined;
+                    instagram?: string | null | undefined;
+                  };
+                };
+              }>;
+              pageInfo: {
+                __typename?: 'PageInfo';
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+                startCursor?: string | null | undefined;
+                endCursor?: string | null | undefined;
+              };
+            }
+          | null
+          | undefined;
+        thought?:
+          | {
+              __typename?: 'Thought';
+              id: string;
+              title?: string | null | undefined;
+              text: string;
+              contributor?:
+                | { __typename?: 'User'; id: string }
+                | null
+                | undefined;
+            }
+          | null
+          | undefined;
+        messages?:
+          | {
+              __typename?: 'ThoughtTalkRoomMessageConnection';
+              edges: Array<{
+                __typename?: 'ThoughtTalkRoomMessageEdge';
+                cursor: string;
+                node: {
+                  __typename?: 'ThoughtTalkRoomMessage';
+                  id: number;
+                  text: string;
+                  createdAt: string;
+                  roomId?: number | null | undefined;
+                  sender?:
+                    | {
+                        __typename?: 'User';
+                        id: string;
+                        name: string;
+                        bio?: string | null | undefined;
+                        imageUrl?: string | null | undefined;
+                        facebook?: string | null | undefined;
+                        twitter?: string | null | undefined;
+                        linkedin?: string | null | undefined;
+                        instagram?: string | null | undefined;
+                      }
+                    | null
+                    | undefined;
+                  replyMessage?:
+                    | {
+                        __typename?: 'ThoughtTalkRoomMessage';
+                        id: number;
+                        text: string;
+                        createdAt: string;
+                        sender?:
+                          | { __typename?: 'User'; id: string; name: string }
+                          | null
+                          | undefined;
+                      }
+                    | null
+                    | undefined;
+                };
+              }>;
+              pageInfo: {
+                __typename?: 'PageInfo';
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+                startCursor?: string | null | undefined;
+                endCursor?: string | null | undefined;
+              };
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined
+  >;
+  newsTalkRooms: Array<{
+    __typename?: 'NewsTalkRoom';
+    id: number;
+    allMessageSeen?: boolean | null | undefined;
+    members?:
+      | {
+          __typename?: 'NewsTalkRoomMemberConnection';
+          edges: Array<{
+            __typename?: 'NewsTalkRoomMemberEdge';
+            cursor: string;
+            node: {
+              __typename?: 'NewsTalkRoomMember';
+              id: number;
+              user: {
+                __typename?: 'User';
+                id: string;
+                name: string;
+                bio?: string | null | undefined;
+                imageUrl?: string | null | undefined;
+                facebook?: string | null | undefined;
+                twitter?: string | null | undefined;
+                linkedin?: string | null | undefined;
+                instagram?: string | null | undefined;
+              };
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+    news?:
+      | {
+          __typename?: 'News';
+          id: number;
+          title: string;
+          link: string;
+          image?: string | null | undefined;
+          articleCreatedAt?: string | null | undefined;
+          genre: NewsGenre;
+          provider?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    messages?:
+      | {
+          __typename?: 'NewsTalkRoomMessageConnection';
+          edges: Array<{
+            __typename?: 'NewsTalkRoomMessageEdge';
+            cursor: string;
+            node: {
+              __typename?: 'NewsTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              roomId?: number | null | undefined;
+              sender?:
+                | {
+                    __typename?: 'User';
+                    id: string;
+                    name: string;
+                    bio?: string | null | undefined;
+                    imageUrl?: string | null | undefined;
+                    facebook?: string | null | undefined;
+                    twitter?: string | null | undefined;
+                    linkedin?: string | null | undefined;
+                    instagram?: string | null | undefined;
+                  }
+                | null
+                | undefined;
+              replyMessage?:
+                | {
+                    __typename?: 'NewsTalkRoomMessage';
+                    id: number;
+                    text: string;
+                    createdAt: string;
+                    sender?:
+                      | { __typename?: 'User'; id: string; name: string }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            };
+          }>;
+          pageInfo: {
+            __typename?: 'PageInfo';
+            hasNextPage: boolean;
+            hasPreviousPage: boolean;
+            startCursor?: string | null | undefined;
+            endCursor?: string | null | undefined;
+          };
+        }
+      | null
+      | undefined;
+  }>;
+  oneOnONeTalkRooms: Array<
+    | {
+        __typename?: 'OneOnOneTalkRoom';
+        id: number;
+        allMessageSeen?: boolean | null | undefined;
+        updatedAt: string;
+        sender?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        recipient?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        messages?:
+          | {
+              __typename?: 'OneOnOneTalkRoomMessageConnection';
+              edges: Array<{
+                __typename?: 'OneOnOneTalkRoomMessageEdge';
+                cursor: string;
+                node: {
+                  __typename?: 'OneOnOneTalkRoomMessage';
+                  id: number;
+                  text: string;
+                  createdAt: string;
+                  roomId?: number | null | undefined;
+                  sender?:
+                    | {
+                        __typename?: 'User';
+                        id: string;
+                        name: string;
+                        imageUrl?: string | null | undefined;
+                      }
+                    | null
+                    | undefined;
+                  replyMessage?:
+                    | {
+                        __typename?: 'OneOnOneTalkRoomMessage';
+                        id: number;
+                        text: string;
+                        createdAt: string;
+                        sender?:
+                          | {
+                              __typename?: 'User';
+                              id: string;
+                              name: string;
+                              imageUrl?: string | null | undefined;
+                            }
+                          | null
+                          | undefined;
+                      }
+                    | null
+                    | undefined;
+                };
+              }>;
+              pageInfo: {
+                __typename?: 'PageInfo';
+                hasNextPage: boolean;
+                hasPreviousPage: boolean;
+                startCursor?: string | null | undefined;
+                endCursor?: string | null | undefined;
+              };
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined
+  >;
+};
 
+export type MeQueryVariables = Exact<{ [key: string]: never }>;
 
-export type InitialDataQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined }, thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined>, newsTalkRooms: Array<{ __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined }>, oneOnONeTalkRooms: Array<{ __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
-
-export type MeQueryVariables = Exact<{ [key: string]: never; }>;
-
-
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined } };
+export type MeQuery = {
+  __typename?: 'Query';
+  me: {
+    __typename?: 'Me';
+    id: string;
+    name: string;
+    bio?: string | null | undefined;
+    imageUrl?: string | null | undefined;
+    facebook?: string | null | undefined;
+    twitter?: string | null | undefined;
+    instagram?: string | null | undefined;
+    linkedin?: string | null | undefined;
+  };
+};
 
 export type NewsQueryVariables = Exact<{
   genre: NewsGenre;
   cursor?: InputMaybe<Scalars['String']>;
 }>;
 
-
-export type NewsQuery = { __typename?: 'Query', news?: { __typename?: 'NewsConnection', edges: Array<{ __typename?: 'NewsEdge', cursor: string, node: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
+export type NewsQuery = {
+  __typename?: 'Query';
+  news?:
+    | {
+        __typename?: 'NewsConnection';
+        edges: Array<{
+          __typename?: 'NewsEdge';
+          cursor: string;
+          node: {
+            __typename?: 'News';
+            picked: boolean;
+            id: number;
+            title: string;
+            link: string;
+            image?: string | null | undefined;
+            articleCreatedAt?: string | null | undefined;
+            genre: NewsGenre;
+            provider?: string | null | undefined;
+          };
+        }>;
+        pageInfo: {
+          __typename?: 'PageInfo';
+          hasNextPage: boolean;
+          hasPreviousPage: boolean;
+          startCursor?: string | null | undefined;
+          endCursor?: string | null | undefined;
+        };
+      }
+    | null
+    | undefined;
+};
 
 export type PickedThoughtsQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']>;
 }>;
 
-
-export type PickedThoughtsQuery = { __typename?: 'Query', pickedThoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type PickedThoughtsQuery = {
+  __typename?: 'Query';
+  pickedThoughts: {
+    __typename?: 'ThoughtsConnection';
+    edges: Array<{
+      __typename?: 'ThoughtEdge';
+      cursor: string;
+      node: {
+        __typename?: 'Thought';
+        id: string;
+        title?: string | null | undefined;
+        text: string;
+        createdAt?: string | null | undefined;
+        picked?: boolean | null | undefined;
+        contributor?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        images: Array<
+          | {
+              __typename?: 'ThoughtImage';
+              id: string;
+              url: string;
+              width?: number | null | undefined;
+              height?: number | null | undefined;
+            }
+          | null
+          | undefined
+        >;
+      };
+    }>;
+    pageInfo: {
+      __typename?: 'PageInfo';
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null | undefined;
+      endCursor?: string | null | undefined;
+    };
+  };
+};
 
 export type ThoughtsQueryVariables = Exact<{
   genre?: InputMaybe<Genre>;
@@ -1211,185 +3780,438 @@ export type ThoughtsQueryVariables = Exact<{
   follow?: InputMaybe<Scalars['Boolean']>;
 }>;
 
-
-export type ThoughtsQuery = { __typename?: 'Query', thoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type ThoughtsQuery = {
+  __typename?: 'Query';
+  thoughts: {
+    __typename?: 'ThoughtsConnection';
+    edges: Array<{
+      __typename?: 'ThoughtEdge';
+      cursor: string;
+      node: {
+        __typename?: 'Thought';
+        id: string;
+        title?: string | null | undefined;
+        text: string;
+        createdAt?: string | null | undefined;
+        picked?: boolean | null | undefined;
+        contributor?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        images: Array<
+          | {
+              __typename?: 'ThoughtImage';
+              id: string;
+              url: string;
+              width?: number | null | undefined;
+              height?: number | null | undefined;
+            }
+          | null
+          | undefined
+        >;
+      };
+    }>;
+    pageInfo: {
+      __typename?: 'PageInfo';
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null | undefined;
+      endCursor?: string | null | undefined;
+    };
+  };
+};
 
 export type UserQueryVariables = Exact<{
   id: Scalars['ID'];
 }>;
 
-
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', blocking?: boolean | null | undefined, follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type UserQuery = {
+  __typename?: 'Query';
+  user: {
+    __typename?: 'User';
+    blocking?: boolean | null | undefined;
+    follow?: boolean | null | undefined;
+    id: string;
+    name: string;
+    bio?: string | null | undefined;
+    imageUrl?: string | null | undefined;
+    facebook?: string | null | undefined;
+    twitter?: string | null | undefined;
+    linkedin?: string | null | undefined;
+    instagram?: string | null | undefined;
+  };
+};
 
 export type UserThoughtsQueryVariables = Exact<{
   userId: Scalars['ID'];
   cursor?: InputMaybe<Scalars['String']>;
 }>;
 
-
-export type UserThoughtsQuery = { __typename?: 'Query', userThoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type UserThoughtsQuery = {
+  __typename?: 'Query';
+  userThoughts: {
+    __typename?: 'ThoughtsConnection';
+    edges: Array<{
+      __typename?: 'ThoughtEdge';
+      cursor: string;
+      node: {
+        __typename?: 'Thought';
+        id: string;
+        title?: string | null | undefined;
+        text: string;
+        createdAt?: string | null | undefined;
+        picked?: boolean | null | undefined;
+        contributor?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        images: Array<
+          | {
+              __typename?: 'ThoughtImage';
+              id: string;
+              url: string;
+              width?: number | null | undefined;
+              height?: number | null | undefined;
+            }
+          | null
+          | undefined
+        >;
+      };
+    }>;
+    pageInfo: {
+      __typename?: 'PageInfo';
+      hasNextPage: boolean;
+      hasPreviousPage: boolean;
+      startCursor?: string | null | undefined;
+      endCursor?: string | null | undefined;
+    };
+  };
+};
 
 export type OnNewsTalkRoomMessageCreatedSubscriptionVariables = Exact<{
   roomIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
   userId: Scalars['ID'];
 }>;
 
-
-export type OnNewsTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', newsTalkRoomMessageCreated: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, talkRoom?: { __typename?: 'NewsTalkRoom', id: number, updatedAt?: string | null | undefined, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, news?: { __typename?: 'News', id: number, title: string } | null | undefined } | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } };
+export type OnNewsTalkRoomMessageCreatedSubscription = {
+  __typename?: 'Subscription';
+  newsTalkRoomMessageCreated: {
+    __typename?: 'NewsTalkRoomMessage';
+    id: number;
+    text: string;
+    createdAt: string;
+    roomId?: number | null | undefined;
+    talkRoom?:
+      | {
+          __typename?: 'NewsTalkRoom';
+          id: number;
+          updatedAt?: string | null | undefined;
+          createdAt?: string | null | undefined;
+          allMessageSeen?: boolean | null | undefined;
+          news?:
+            | { __typename?: 'News'; id: number; title: string }
+            | null
+            | undefined;
+        }
+      | null
+      | undefined;
+    sender?:
+      | {
+          __typename?: 'User';
+          id: string;
+          name: string;
+          bio?: string | null | undefined;
+          imageUrl?: string | null | undefined;
+          facebook?: string | null | undefined;
+          twitter?: string | null | undefined;
+          linkedin?: string | null | undefined;
+          instagram?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    replyMessage?:
+      | {
+          __typename?: 'NewsTalkRoomMessage';
+          id: number;
+          text: string;
+          createdAt: string;
+          sender?:
+            | { __typename?: 'User'; id: string; name: string }
+            | null
+            | undefined;
+        }
+      | null
+      | undefined;
+  };
+};
 
 export type OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables = Exact<{
   userId: Scalars['ID'];
 }>;
 
-
-export type OnOneOnOneTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', oneOnOneTalkRoomMessageCreated: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } };
+export type OnOneOnOneTalkRoomMessageCreatedSubscription = {
+  __typename?: 'Subscription';
+  oneOnOneTalkRoomMessageCreated: {
+    __typename?: 'OneOnOneTalkRoomMessage';
+    id: number;
+    text: string;
+    createdAt: string;
+    roomId?: number | null | undefined;
+    sender?:
+      | {
+          __typename?: 'User';
+          id: string;
+          name: string;
+          imageUrl?: string | null | undefined;
+        }
+      | null
+      | undefined;
+    replyMessage?:
+      | {
+          __typename?: 'OneOnOneTalkRoomMessage';
+          id: number;
+          text: string;
+          createdAt: string;
+          sender?:
+            | {
+                __typename?: 'User';
+                id: string;
+                name: string;
+                imageUrl?: string | null | undefined;
+              }
+            | null
+            | undefined;
+        }
+      | null
+      | undefined;
+  };
+};
 
 export type OnThoughtTalkRoomMessageCreatedSubscriptionVariables = Exact<{
   roomIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
   userId: Scalars['ID'];
 }>;
 
-
-export type OnThoughtTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', thoughtTalkRoomMessageCreated?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, talkRoom?: { __typename?: 'ThoughtTalkRoom', id: number, updatedAt?: string | null | undefined, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } | null | undefined };
+export type OnThoughtTalkRoomMessageCreatedSubscription = {
+  __typename?: 'Subscription';
+  thoughtTalkRoomMessageCreated?:
+    | {
+        __typename?: 'ThoughtTalkRoomMessage';
+        id: number;
+        text: string;
+        createdAt: string;
+        roomId?: number | null | undefined;
+        talkRoom?:
+          | {
+              __typename?: 'ThoughtTalkRoom';
+              id: number;
+              updatedAt?: string | null | undefined;
+              createdAt?: string | null | undefined;
+              allMessageSeen?: boolean | null | undefined;
+              thought?:
+                | {
+                    __typename?: 'Thought';
+                    id: string;
+                    title?: string | null | undefined;
+                    text: string;
+                    contributor?:
+                      | {
+                          __typename?: 'User';
+                          id: string;
+                          name: string;
+                          imageUrl?: string | null | undefined;
+                        }
+                      | null
+                      | undefined;
+                  }
+                | null
+                | undefined;
+            }
+          | null
+          | undefined;
+        sender?:
+          | {
+              __typename?: 'User';
+              id: string;
+              name: string;
+              bio?: string | null | undefined;
+              imageUrl?: string | null | undefined;
+              facebook?: string | null | undefined;
+              twitter?: string | null | undefined;
+              linkedin?: string | null | undefined;
+              instagram?: string | null | undefined;
+            }
+          | null
+          | undefined;
+        replyMessage?:
+          | {
+              __typename?: 'ThoughtTalkRoomMessage';
+              id: number;
+              text: string;
+              createdAt: string;
+              sender?:
+                | { __typename?: 'User'; id: string; name: string }
+                | null
+                | undefined;
+            }
+          | null
+          | undefined;
+      }
+    | null
+    | undefined;
+};
 
 export const NewsFieldsFragmentDoc = gql`
-    fragment NewsFields on News {
-  id
-  title
-  link
-  image
-  articleCreatedAt
-  genre
-  provider
-  picked
-}
-    `;
+  fragment NewsFields on News {
+    id
+    title
+    link
+    image
+    articleCreatedAt
+    genre
+    provider
+    picked
+  }
+`;
 export const NewsPartsFragmentDoc = gql`
-    fragment NewsParts on News {
-  id
-  title
-  link
-  image
-  articleCreatedAt
-  genre
-  provider
-}
-    `;
+  fragment NewsParts on News {
+    id
+    title
+    link
+    image
+    articleCreatedAt
+    genre
+    provider
+  }
+`;
 export const PageInfoPartsFragmentDoc = gql`
-    fragment PageInfoParts on PageInfo {
-  hasNextPage
-  hasPreviousPage
-  startCursor
-  endCursor
-}
-    `;
+  fragment PageInfoParts on PageInfo {
+    hasNextPage
+    hasPreviousPage
+    startCursor
+    endCursor
+  }
+`;
 export const NewsConnectionPartsFragmentDoc = gql`
-    fragment NewsConnectionParts on NewsConnection {
-  edges {
-    node {
-      picked
-      ...NewsParts
+  fragment NewsConnectionParts on NewsConnection {
+    edges {
+      node {
+        picked
+        ...NewsParts
+      }
+      cursor
     }
-    cursor
+    pageInfo {
+      ...PageInfoParts
+    }
   }
-  pageInfo {
-    ...PageInfoParts
-  }
-}
-    ${NewsPartsFragmentDoc}
-${PageInfoPartsFragmentDoc}`;
+  ${NewsPartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+`;
 export const NewsTalkRoomParentPartsFragmentDoc = gql`
-    fragment NewsTalkRoomParentParts on News {
-  id
-  title
-  link
-  image
-  articleCreatedAt
-  genre
-  provider
-}
-    `;
-export const UserPartsFragmentDoc = gql`
-    fragment UserParts on User {
-  id
-  name
-  bio
-  imageUrl
-  facebook
-  twitter
-  linkedin
-  instagram
-}
-    `;
-export const NewsTalkRoomMessagePartsFragmentDoc = gql`
-    fragment NewsTalkRoomMessageParts on NewsTalkRoomMessage {
-  id
-  text
-  createdAt
-  sender {
-    ...UserParts
+  fragment NewsTalkRoomParentParts on News {
+    id
+    title
+    link
+    image
+    articleCreatedAt
+    genre
+    provider
   }
-  roomId
-  replyMessage {
+`;
+export const UserPartsFragmentDoc = gql`
+  fragment UserParts on User {
+    id
+    name
+    bio
+    imageUrl
+    facebook
+    twitter
+    linkedin
+    instagram
+  }
+`;
+export const NewsTalkRoomMessagePartsFragmentDoc = gql`
+  fragment NewsTalkRoomMessageParts on NewsTalkRoomMessage {
     id
     text
     createdAt
     sender {
+      ...UserParts
+    }
+    roomId
+    replyMessage {
       id
-      name
-    }
-  }
-}
-    ${UserPartsFragmentDoc}`;
-export const NewsTalkRoomPartsFragmentDoc = gql`
-    fragment NewsTalkRoomParts on NewsTalkRoom {
-  id
-  allMessageSeen
-  members {
-    edges {
-      node {
+      text
+      createdAt
+      sender {
         id
-        user {
-          ...UserParts
-        }
+        name
       }
-      cursor
-    }
-    pageInfo {
-      ...PageInfoParts
     }
   }
-  news {
-    ...NewsParts
-  }
-  messages(first: 20) {
-    edges {
-      node {
-        ...NewsTalkRoomMessageParts
-      }
-      cursor
-    }
-    pageInfo {
-      ...PageInfoParts
-    }
-  }
-}
-    ${UserPartsFragmentDoc}
-${PageInfoPartsFragmentDoc}
-${NewsPartsFragmentDoc}
-${NewsTalkRoomMessagePartsFragmentDoc}`;
-export const OneOnOneTalkRoomMessagePartsFragmentDoc = gql`
-    fragment OneOnOneTalkRoomMessageParts on OneOnOneTalkRoomMessage {
-  id
-  text
-  createdAt
-  sender {
+  ${UserPartsFragmentDoc}
+`;
+export const NewsTalkRoomPartsFragmentDoc = gql`
+  fragment NewsTalkRoomParts on NewsTalkRoom {
     id
-    name
-    imageUrl
+    allMessageSeen
+    members {
+      edges {
+        node {
+          id
+          user {
+            ...UserParts
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+    news {
+      ...NewsParts
+    }
+    messages(first: 20) {
+      edges {
+        node {
+          ...NewsTalkRoomMessageParts
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
   }
-  roomId
-  replyMessage {
+  ${UserPartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+  ${NewsPartsFragmentDoc}
+  ${NewsTalkRoomMessagePartsFragmentDoc}
+`;
+export const OneOnOneTalkRoomMessagePartsFragmentDoc = gql`
+  fragment OneOnOneTalkRoomMessageParts on OneOnOneTalkRoomMessage {
     id
     text
     createdAt
@@ -1398,91 +4220,140 @@ export const OneOnOneTalkRoomMessagePartsFragmentDoc = gql`
       name
       imageUrl
     }
-  }
-}
-    `;
-export const OneOnOneTalkRoomPartsFragmentDoc = gql`
-    fragment OneOnOneTalkRoomParts on OneOnOneTalkRoom {
-  id
-  allMessageSeen
-  updatedAt
-  sender {
-    ...UserParts
-  }
-  recipient {
-    ...UserParts
-  }
-  messages(first: 20) {
-    edges {
-      node {
-        ...OneOnOneTalkRoomMessageParts
+    roomId
+    replyMessage {
+      id
+      text
+      createdAt
+      sender {
+        id
+        name
+        imageUrl
       }
-      cursor
-    }
-    pageInfo {
-      ...PageInfoParts
     }
   }
-}
-    ${UserPartsFragmentDoc}
-${OneOnOneTalkRoomMessagePartsFragmentDoc}
-${PageInfoPartsFragmentDoc}`;
-export const ThoughtTalkRoomParentPartsFragmentDoc = gql`
-    fragment ThoughtTalkRoomParentParts on Thought {
-  id
-  title
-  text
-  contributor {
+`;
+export const OneOnOneTalkRoomPartsFragmentDoc = gql`
+  fragment OneOnOneTalkRoomParts on OneOnOneTalkRoom {
     id
+    allMessageSeen
+    updatedAt
+    sender {
+      ...UserParts
+    }
+    recipient {
+      ...UserParts
+    }
+    messages(first: 20) {
+      edges {
+        node {
+          ...OneOnOneTalkRoomMessageParts
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
   }
-}
-    `;
+  ${UserPartsFragmentDoc}
+  ${OneOnOneTalkRoomMessagePartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+`;
+export const ThoughtTalkRoomParentPartsFragmentDoc = gql`
+  fragment ThoughtTalkRoomParentParts on Thought {
+    id
+    title
+    text
+    contributor {
+      id
+    }
+  }
+`;
 export const ThoughtTalkRoomMessagePartsFragmentDoc = gql`
-    fragment ThoughtTalkRoomMessageParts on ThoughtTalkRoomMessage {
-  id
-  text
-  createdAt
-  sender {
-    ...UserParts
-  }
-  roomId
-  replyMessage {
+  fragment ThoughtTalkRoomMessageParts on ThoughtTalkRoomMessage {
     id
     text
     createdAt
     sender {
+      ...UserParts
+    }
+    roomId
+    replyMessage {
       id
-      name
-    }
-  }
-}
-    ${UserPartsFragmentDoc}`;
-export const ThoughtTalkRoomPartsFragmentDoc = gql`
-    fragment ThoughtTalkRoomParts on ThoughtTalkRoom {
-  id
-  createdAt
-  allMessageSeen
-  members {
-    edges {
-      node {
+      text
+      createdAt
+      sender {
         id
-        user {
-          ...UserParts
-        }
+        name
       }
-      cursor
-    }
-    pageInfo {
-      ...PageInfoParts
     }
   }
-  thought {
-    ...ThoughtTalkRoomParentParts
+  ${UserPartsFragmentDoc}
+`;
+export const ThoughtTalkRoomPartsFragmentDoc = gql`
+  fragment ThoughtTalkRoomParts on ThoughtTalkRoom {
+    id
+    createdAt
+    allMessageSeen
+    members {
+      edges {
+        node {
+          id
+          user {
+            ...UserParts
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+    thought {
+      ...ThoughtTalkRoomParentParts
+    }
+    messages(first: 20) {
+      edges {
+        node {
+          ...ThoughtTalkRoomMessageParts
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
   }
-  messages(first: 20) {
+  ${UserPartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+  ${ThoughtTalkRoomParentPartsFragmentDoc}
+  ${ThoughtTalkRoomMessagePartsFragmentDoc}
+`;
+export const ThoughtPartsFragmentDoc = gql`
+  fragment ThoughtParts on Thought {
+    id
+    title
+    text
+    createdAt
+    contributor {
+      ...UserParts
+    }
+    picked
+    images {
+      id
+      url
+      width
+      height
+    }
+  }
+  ${UserPartsFragmentDoc}
+`;
+export const ThoughtsConnectionPartsFragmentDoc = gql`
+  fragment ThoughtsConnectionParts on ThoughtsConnection {
     edges {
       node {
-        ...ThoughtTalkRoomMessageParts
+        ...ThoughtParts
       }
       cursor
     }
@@ -1490,65 +4361,35 @@ export const ThoughtTalkRoomPartsFragmentDoc = gql`
       ...PageInfoParts
     }
   }
-}
-    ${UserPartsFragmentDoc}
-${PageInfoPartsFragmentDoc}
-${ThoughtTalkRoomParentPartsFragmentDoc}
-${ThoughtTalkRoomMessagePartsFragmentDoc}`;
-export const ThoughtPartsFragmentDoc = gql`
-    fragment ThoughtParts on Thought {
-  id
-  title
-  text
-  createdAt
-  contributor {
-    ...UserParts
-  }
-  picked
-  images {
-    id
-    url
-    width
-    height
-  }
-}
-    ${UserPartsFragmentDoc}`;
-export const ThoughtsConnectionPartsFragmentDoc = gql`
-    fragment ThoughtsConnectionParts on ThoughtsConnection {
-  edges {
-    node {
-      ...ThoughtParts
-    }
-    cursor
-  }
-  pageInfo {
-    ...PageInfoParts
-  }
-}
-    ${ThoughtPartsFragmentDoc}
-${PageInfoPartsFragmentDoc}`;
+  ${ThoughtPartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+`;
 export const UserProfileFragmentDoc = gql`
-    fragment UserProfile on User {
-  id
-  name
-  bio
-  imageUrl
-  facebook
-  twitter
-  linkedin
-  instagram
-}
-    `;
-export const BlockDocument = gql`
-    mutation Block($blockTo: ID!) {
-  block(blockTo: $blockTo) {
-    blocking
-    follow
-    ...UserParts
+  fragment UserProfile on User {
+    id
+    name
+    bio
+    imageUrl
+    facebook
+    twitter
+    linkedin
+    instagram
   }
-}
-    ${UserPartsFragmentDoc}`;
-export type BlockMutationFn = Apollo.MutationFunction<BlockMutation, BlockMutationVariables>;
+`;
+export const BlockDocument = gql`
+  mutation Block($blockTo: ID!) {
+    block(blockTo: $blockTo) {
+      blocking
+      follow
+      ...UserParts
+    }
+  }
+  ${UserPartsFragmentDoc}
+`;
+export type BlockMutationFn = Apollo.MutationFunction<
+  BlockMutation,
+  BlockMutationVariables
+>;
 
 /**
  * __useBlockMutation__
@@ -1567,25 +4408,39 @@ export type BlockMutationFn = Apollo.MutationFunction<BlockMutation, BlockMutati
  *   },
  * });
  */
-export function useBlockMutation(baseOptions?: Apollo.MutationHookOptions<BlockMutation, BlockMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<BlockMutation, BlockMutationVariables>(BlockDocument, options);
-      }
+export function useBlockMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    BlockMutation,
+    BlockMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<BlockMutation, BlockMutationVariables>(
+    BlockDocument,
+    options
+  );
+}
 export type BlockMutationHookResult = ReturnType<typeof useBlockMutation>;
 export type BlockMutationResult = Apollo.MutationResult<BlockMutation>;
-export type BlockMutationOptions = Apollo.BaseMutationOptions<BlockMutation, BlockMutationVariables>;
+export type BlockMutationOptions = Apollo.BaseMutationOptions<
+  BlockMutation,
+  BlockMutationVariables
+>;
 export const CreateNewsPickDocument = gql`
-    mutation CreateNewsPick($input: CreateNewsPickInput!) {
-  createNewsPick(input: $input) {
-    id
-    news {
+  mutation CreateNewsPick($input: CreateNewsPickInput!) {
+    createNewsPick(input: $input) {
       id
-      picked
+      news {
+        id
+        picked
+      }
     }
   }
-}
-    `;
-export type CreateNewsPickMutationFn = Apollo.MutationFunction<CreateNewsPickMutation, CreateNewsPickMutationVariables>;
+`;
+export type CreateNewsPickMutationFn = Apollo.MutationFunction<
+  CreateNewsPickMutation,
+  CreateNewsPickMutationVariables
+>;
 
 /**
  * __useCreateNewsPickMutation__
@@ -1604,21 +4459,39 @@ export type CreateNewsPickMutationFn = Apollo.MutationFunction<CreateNewsPickMut
  *   },
  * });
  */
-export function useCreateNewsPickMutation(baseOptions?: Apollo.MutationHookOptions<CreateNewsPickMutation, CreateNewsPickMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateNewsPickMutation, CreateNewsPickMutationVariables>(CreateNewsPickDocument, options);
-      }
-export type CreateNewsPickMutationHookResult = ReturnType<typeof useCreateNewsPickMutation>;
-export type CreateNewsPickMutationResult = Apollo.MutationResult<CreateNewsPickMutation>;
-export type CreateNewsPickMutationOptions = Apollo.BaseMutationOptions<CreateNewsPickMutation, CreateNewsPickMutationVariables>;
-export const CreateNewsTalkRoomMessageDocument = gql`
-    mutation CreateNewsTalkRoomMessage($input: CreateNewsTalkRoomMessageInput!) {
-  createNewsTalkRoomMessage(input: $input) {
-    ...NewsTalkRoomMessageParts
-  }
+export function useCreateNewsPickMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateNewsPickMutation,
+    CreateNewsPickMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateNewsPickMutation,
+    CreateNewsPickMutationVariables
+  >(CreateNewsPickDocument, options);
 }
-    ${NewsTalkRoomMessagePartsFragmentDoc}`;
-export type CreateNewsTalkRoomMessageMutationFn = Apollo.MutationFunction<CreateNewsTalkRoomMessageMutation, CreateNewsTalkRoomMessageMutationVariables>;
+export type CreateNewsPickMutationHookResult = ReturnType<
+  typeof useCreateNewsPickMutation
+>;
+export type CreateNewsPickMutationResult =
+  Apollo.MutationResult<CreateNewsPickMutation>;
+export type CreateNewsPickMutationOptions = Apollo.BaseMutationOptions<
+  CreateNewsPickMutation,
+  CreateNewsPickMutationVariables
+>;
+export const CreateNewsTalkRoomMessageDocument = gql`
+  mutation CreateNewsTalkRoomMessage($input: CreateNewsTalkRoomMessageInput!) {
+    createNewsTalkRoomMessage(input: $input) {
+      ...NewsTalkRoomMessageParts
+    }
+  }
+  ${NewsTalkRoomMessagePartsFragmentDoc}
+`;
+export type CreateNewsTalkRoomMessageMutationFn = Apollo.MutationFunction<
+  CreateNewsTalkRoomMessageMutation,
+  CreateNewsTalkRoomMessageMutationVariables
+>;
 
 /**
  * __useCreateNewsTalkRoomMessageMutation__
@@ -1637,21 +4510,40 @@ export type CreateNewsTalkRoomMessageMutationFn = Apollo.MutationFunction<Create
  *   },
  * });
  */
-export function useCreateNewsTalkRoomMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateNewsTalkRoomMessageMutation, CreateNewsTalkRoomMessageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateNewsTalkRoomMessageMutation, CreateNewsTalkRoomMessageMutationVariables>(CreateNewsTalkRoomMessageDocument, options);
-      }
-export type CreateNewsTalkRoomMessageMutationHookResult = ReturnType<typeof useCreateNewsTalkRoomMessageMutation>;
-export type CreateNewsTalkRoomMessageMutationResult = Apollo.MutationResult<CreateNewsTalkRoomMessageMutation>;
-export type CreateNewsTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<CreateNewsTalkRoomMessageMutation, CreateNewsTalkRoomMessageMutationVariables>;
-export const CreateOneOnOneTalkRoomDocument = gql`
-    mutation CreateOneOnOneTalkRoom($input: CreateOneOnOneTalkRoomInput!) {
-  createOneOnOneTalkRoom(input: $input) {
-    ...OneOnOneTalkRoomParts
-  }
+export function useCreateNewsTalkRoomMessageMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateNewsTalkRoomMessageMutation,
+    CreateNewsTalkRoomMessageMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateNewsTalkRoomMessageMutation,
+    CreateNewsTalkRoomMessageMutationVariables
+  >(CreateNewsTalkRoomMessageDocument, options);
 }
-    ${OneOnOneTalkRoomPartsFragmentDoc}`;
-export type CreateOneOnOneTalkRoomMutationFn = Apollo.MutationFunction<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>;
+export type CreateNewsTalkRoomMessageMutationHookResult = ReturnType<
+  typeof useCreateNewsTalkRoomMessageMutation
+>;
+export type CreateNewsTalkRoomMessageMutationResult =
+  Apollo.MutationResult<CreateNewsTalkRoomMessageMutation>;
+export type CreateNewsTalkRoomMessageMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateNewsTalkRoomMessageMutation,
+    CreateNewsTalkRoomMessageMutationVariables
+  >;
+export const CreateOneOnOneTalkRoomDocument = gql`
+  mutation CreateOneOnOneTalkRoom($input: CreateOneOnOneTalkRoomInput!) {
+    createOneOnOneTalkRoom(input: $input) {
+      ...OneOnOneTalkRoomParts
+    }
+  }
+  ${OneOnOneTalkRoomPartsFragmentDoc}
+`;
+export type CreateOneOnOneTalkRoomMutationFn = Apollo.MutationFunction<
+  CreateOneOnOneTalkRoomMutation,
+  CreateOneOnOneTalkRoomMutationVariables
+>;
 
 /**
  * __useCreateOneOnOneTalkRoomMutation__
@@ -1670,21 +4562,41 @@ export type CreateOneOnOneTalkRoomMutationFn = Apollo.MutationFunction<CreateOne
  *   },
  * });
  */
-export function useCreateOneOnOneTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>(CreateOneOnOneTalkRoomDocument, options);
-      }
-export type CreateOneOnOneTalkRoomMutationHookResult = ReturnType<typeof useCreateOneOnOneTalkRoomMutation>;
-export type CreateOneOnOneTalkRoomMutationResult = Apollo.MutationResult<CreateOneOnOneTalkRoomMutation>;
-export type CreateOneOnOneTalkRoomMutationOptions = Apollo.BaseMutationOptions<CreateOneOnOneTalkRoomMutation, CreateOneOnOneTalkRoomMutationVariables>;
-export const CreateOneOnOneTalkRoomMessageDocument = gql`
-    mutation CreateOneOnOneTalkRoomMessage($input: CreateOneOnOneTalkRoomMessageInput!) {
-  createOneOnOneTalkRoomMessage(input: $input) {
-    ...OneOnOneTalkRoomMessageParts
-  }
+export function useCreateOneOnOneTalkRoomMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOneOnOneTalkRoomMutation,
+    CreateOneOnOneTalkRoomMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateOneOnOneTalkRoomMutation,
+    CreateOneOnOneTalkRoomMutationVariables
+  >(CreateOneOnOneTalkRoomDocument, options);
 }
-    ${OneOnOneTalkRoomMessagePartsFragmentDoc}`;
-export type CreateOneOnOneTalkRoomMessageMutationFn = Apollo.MutationFunction<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>;
+export type CreateOneOnOneTalkRoomMutationHookResult = ReturnType<
+  typeof useCreateOneOnOneTalkRoomMutation
+>;
+export type CreateOneOnOneTalkRoomMutationResult =
+  Apollo.MutationResult<CreateOneOnOneTalkRoomMutation>;
+export type CreateOneOnOneTalkRoomMutationOptions = Apollo.BaseMutationOptions<
+  CreateOneOnOneTalkRoomMutation,
+  CreateOneOnOneTalkRoomMutationVariables
+>;
+export const CreateOneOnOneTalkRoomMessageDocument = gql`
+  mutation CreateOneOnOneTalkRoomMessage(
+    $input: CreateOneOnOneTalkRoomMessageInput!
+  ) {
+    createOneOnOneTalkRoomMessage(input: $input) {
+      ...OneOnOneTalkRoomMessageParts
+    }
+  }
+  ${OneOnOneTalkRoomMessagePartsFragmentDoc}
+`;
+export type CreateOneOnOneTalkRoomMessageMutationFn = Apollo.MutationFunction<
+  CreateOneOnOneTalkRoomMessageMutation,
+  CreateOneOnOneTalkRoomMessageMutationVariables
+>;
 
 /**
  * __useCreateOneOnOneTalkRoomMessageMutation__
@@ -1703,22 +4615,40 @@ export type CreateOneOnOneTalkRoomMessageMutationFn = Apollo.MutationFunction<Cr
  *   },
  * });
  */
-export function useCreateOneOnOneTalkRoomMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>(CreateOneOnOneTalkRoomMessageDocument, options);
-      }
-export type CreateOneOnOneTalkRoomMessageMutationHookResult = ReturnType<typeof useCreateOneOnOneTalkRoomMessageMutation>;
-export type CreateOneOnOneTalkRoomMessageMutationResult = Apollo.MutationResult<CreateOneOnOneTalkRoomMessageMutation>;
-export type CreateOneOnOneTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<CreateOneOnOneTalkRoomMessageMutation, CreateOneOnOneTalkRoomMessageMutationVariables>;
-export const CreatePickDocument = gql`
-    mutation CreatePick($input: CreatePickInput!) {
-  createPick(input: $input) {
-    id
-    thoughtId
-  }
+export function useCreateOneOnOneTalkRoomMessageMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateOneOnOneTalkRoomMessageMutation,
+    CreateOneOnOneTalkRoomMessageMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateOneOnOneTalkRoomMessageMutation,
+    CreateOneOnOneTalkRoomMessageMutationVariables
+  >(CreateOneOnOneTalkRoomMessageDocument, options);
 }
-    `;
-export type CreatePickMutationFn = Apollo.MutationFunction<CreatePickMutation, CreatePickMutationVariables>;
+export type CreateOneOnOneTalkRoomMessageMutationHookResult = ReturnType<
+  typeof useCreateOneOnOneTalkRoomMessageMutation
+>;
+export type CreateOneOnOneTalkRoomMessageMutationResult =
+  Apollo.MutationResult<CreateOneOnOneTalkRoomMessageMutation>;
+export type CreateOneOnOneTalkRoomMessageMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateOneOnOneTalkRoomMessageMutation,
+    CreateOneOnOneTalkRoomMessageMutationVariables
+  >;
+export const CreatePickDocument = gql`
+  mutation CreatePick($input: CreatePickInput!) {
+    createPick(input: $input) {
+      id
+      thoughtId
+    }
+  }
+`;
+export type CreatePickMutationFn = Apollo.MutationFunction<
+  CreatePickMutation,
+  CreatePickMutationVariables
+>;
 
 /**
  * __useCreatePickMutation__
@@ -1737,21 +4667,38 @@ export type CreatePickMutationFn = Apollo.MutationFunction<CreatePickMutation, C
  *   },
  * });
  */
-export function useCreatePickMutation(baseOptions?: Apollo.MutationHookOptions<CreatePickMutation, CreatePickMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreatePickMutation, CreatePickMutationVariables>(CreatePickDocument, options);
-      }
-export type CreatePickMutationHookResult = ReturnType<typeof useCreatePickMutation>;
-export type CreatePickMutationResult = Apollo.MutationResult<CreatePickMutation>;
-export type CreatePickMutationOptions = Apollo.BaseMutationOptions<CreatePickMutation, CreatePickMutationVariables>;
-export const CreateThoughtDocument = gql`
-    mutation CreateThought($input: CreateThoughtInput!) {
-  createThought(input: $input) {
-    id
-  }
+export function useCreatePickMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreatePickMutation,
+    CreatePickMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreatePickMutation, CreatePickMutationVariables>(
+    CreatePickDocument,
+    options
+  );
 }
-    `;
-export type CreateThoughtMutationFn = Apollo.MutationFunction<CreateThoughtMutation, CreateThoughtMutationVariables>;
+export type CreatePickMutationHookResult = ReturnType<
+  typeof useCreatePickMutation
+>;
+export type CreatePickMutationResult =
+  Apollo.MutationResult<CreatePickMutation>;
+export type CreatePickMutationOptions = Apollo.BaseMutationOptions<
+  CreatePickMutation,
+  CreatePickMutationVariables
+>;
+export const CreateThoughtDocument = gql`
+  mutation CreateThought($input: CreateThoughtInput!) {
+    createThought(input: $input) {
+      id
+    }
+  }
+`;
+export type CreateThoughtMutationFn = Apollo.MutationFunction<
+  CreateThoughtMutation,
+  CreateThoughtMutationVariables
+>;
 
 /**
  * __useCreateThoughtMutation__
@@ -1770,21 +4717,41 @@ export type CreateThoughtMutationFn = Apollo.MutationFunction<CreateThoughtMutat
  *   },
  * });
  */
-export function useCreateThoughtMutation(baseOptions?: Apollo.MutationHookOptions<CreateThoughtMutation, CreateThoughtMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateThoughtMutation, CreateThoughtMutationVariables>(CreateThoughtDocument, options);
-      }
-export type CreateThoughtMutationHookResult = ReturnType<typeof useCreateThoughtMutation>;
-export type CreateThoughtMutationResult = Apollo.MutationResult<CreateThoughtMutation>;
-export type CreateThoughtMutationOptions = Apollo.BaseMutationOptions<CreateThoughtMutation, CreateThoughtMutationVariables>;
-export const CreateThoughtTalkRoomMessageDocument = gql`
-    mutation CreateThoughtTalkRoomMessage($input: CreateThoughtTalkRoomMessageInput!) {
-  createThoughtTalkRoomMessage(input: $input) {
-    ...ThoughtTalkRoomMessageParts
-  }
+export function useCreateThoughtMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateThoughtMutation,
+    CreateThoughtMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateThoughtMutation,
+    CreateThoughtMutationVariables
+  >(CreateThoughtDocument, options);
 }
-    ${ThoughtTalkRoomMessagePartsFragmentDoc}`;
-export type CreateThoughtTalkRoomMessageMutationFn = Apollo.MutationFunction<CreateThoughtTalkRoomMessageMutation, CreateThoughtTalkRoomMessageMutationVariables>;
+export type CreateThoughtMutationHookResult = ReturnType<
+  typeof useCreateThoughtMutation
+>;
+export type CreateThoughtMutationResult =
+  Apollo.MutationResult<CreateThoughtMutation>;
+export type CreateThoughtMutationOptions = Apollo.BaseMutationOptions<
+  CreateThoughtMutation,
+  CreateThoughtMutationVariables
+>;
+export const CreateThoughtTalkRoomMessageDocument = gql`
+  mutation CreateThoughtTalkRoomMessage(
+    $input: CreateThoughtTalkRoomMessageInput!
+  ) {
+    createThoughtTalkRoomMessage(input: $input) {
+      ...ThoughtTalkRoomMessageParts
+    }
+  }
+  ${ThoughtTalkRoomMessagePartsFragmentDoc}
+`;
+export type CreateThoughtTalkRoomMessageMutationFn = Apollo.MutationFunction<
+  CreateThoughtTalkRoomMessageMutation,
+  CreateThoughtTalkRoomMessageMutationVariables
+>;
 
 /**
  * __useCreateThoughtTalkRoomMessageMutation__
@@ -1803,22 +4770,40 @@ export type CreateThoughtTalkRoomMessageMutationFn = Apollo.MutationFunction<Cre
  *   },
  * });
  */
-export function useCreateThoughtTalkRoomMessageMutation(baseOptions?: Apollo.MutationHookOptions<CreateThoughtTalkRoomMessageMutation, CreateThoughtTalkRoomMessageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateThoughtTalkRoomMessageMutation, CreateThoughtTalkRoomMessageMutationVariables>(CreateThoughtTalkRoomMessageDocument, options);
-      }
-export type CreateThoughtTalkRoomMessageMutationHookResult = ReturnType<typeof useCreateThoughtTalkRoomMessageMutation>;
-export type CreateThoughtTalkRoomMessageMutationResult = Apollo.MutationResult<CreateThoughtTalkRoomMessageMutation>;
-export type CreateThoughtTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<CreateThoughtTalkRoomMessageMutation, CreateThoughtTalkRoomMessageMutationVariables>;
-export const CreateUserDocument = gql`
-    mutation CreateUser($input: CreateUserInput!) {
-  createUser(input: $input) {
-    id
-    name
-  }
+export function useCreateThoughtTalkRoomMessageMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateThoughtTalkRoomMessageMutation,
+    CreateThoughtTalkRoomMessageMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateThoughtTalkRoomMessageMutation,
+    CreateThoughtTalkRoomMessageMutationVariables
+  >(CreateThoughtTalkRoomMessageDocument, options);
 }
-    `;
-export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, CreateUserMutationVariables>;
+export type CreateThoughtTalkRoomMessageMutationHookResult = ReturnType<
+  typeof useCreateThoughtTalkRoomMessageMutation
+>;
+export type CreateThoughtTalkRoomMessageMutationResult =
+  Apollo.MutationResult<CreateThoughtTalkRoomMessageMutation>;
+export type CreateThoughtTalkRoomMessageMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateThoughtTalkRoomMessageMutation,
+    CreateThoughtTalkRoomMessageMutationVariables
+  >;
+export const CreateUserDocument = gql`
+  mutation CreateUser($input: CreateUserInput!) {
+    createUser(input: $input) {
+      id
+      name
+    }
+  }
+`;
+export type CreateUserMutationFn = Apollo.MutationFunction<
+  CreateUserMutation,
+  CreateUserMutationVariables
+>;
 
 /**
  * __useCreateUserMutation__
@@ -1837,22 +4822,42 @@ export type CreateUserMutationFn = Apollo.MutationFunction<CreateUserMutation, C
  *   },
  * });
  */
-export function useCreateUserMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserMutation, CreateUserMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(CreateUserDocument, options);
-      }
-export type CreateUserMutationHookResult = ReturnType<typeof useCreateUserMutation>;
-export type CreateUserMutationResult = Apollo.MutationResult<CreateUserMutation>;
-export type CreateUserMutationOptions = Apollo.BaseMutationOptions<CreateUserMutation, CreateUserMutationVariables>;
-export const CreateUserNewsTalkRoomMessageSeenDocument = gql`
-    mutation CreateUserNewsTalkRoomMessageSeen($input: CreateUserNewsTalkRoomMessageSeenInput!) {
-  createUserNewsTalkRoomMessageSeen(input: $input) {
-    id
-    allMessageSeen
-  }
+export function useCreateUserMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUserMutation,
+    CreateUserMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<CreateUserMutation, CreateUserMutationVariables>(
+    CreateUserDocument,
+    options
+  );
 }
-    `;
-export type CreateUserNewsTalkRoomMessageSeenMutationFn = Apollo.MutationFunction<CreateUserNewsTalkRoomMessageSeenMutation, CreateUserNewsTalkRoomMessageSeenMutationVariables>;
+export type CreateUserMutationHookResult = ReturnType<
+  typeof useCreateUserMutation
+>;
+export type CreateUserMutationResult =
+  Apollo.MutationResult<CreateUserMutation>;
+export type CreateUserMutationOptions = Apollo.BaseMutationOptions<
+  CreateUserMutation,
+  CreateUserMutationVariables
+>;
+export const CreateUserNewsTalkRoomMessageSeenDocument = gql`
+  mutation CreateUserNewsTalkRoomMessageSeen(
+    $input: CreateUserNewsTalkRoomMessageSeenInput!
+  ) {
+    createUserNewsTalkRoomMessageSeen(input: $input) {
+      id
+      allMessageSeen
+    }
+  }
+`;
+export type CreateUserNewsTalkRoomMessageSeenMutationFn =
+  Apollo.MutationFunction<
+    CreateUserNewsTalkRoomMessageSeenMutation,
+    CreateUserNewsTalkRoomMessageSeenMutationVariables
+  >;
 
 /**
  * __useCreateUserNewsTalkRoomMessageSeenMutation__
@@ -1871,22 +4876,43 @@ export type CreateUserNewsTalkRoomMessageSeenMutationFn = Apollo.MutationFunctio
  *   },
  * });
  */
-export function useCreateUserNewsTalkRoomMessageSeenMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserNewsTalkRoomMessageSeenMutation, CreateUserNewsTalkRoomMessageSeenMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateUserNewsTalkRoomMessageSeenMutation, CreateUserNewsTalkRoomMessageSeenMutationVariables>(CreateUserNewsTalkRoomMessageSeenDocument, options);
-      }
-export type CreateUserNewsTalkRoomMessageSeenMutationHookResult = ReturnType<typeof useCreateUserNewsTalkRoomMessageSeenMutation>;
-export type CreateUserNewsTalkRoomMessageSeenMutationResult = Apollo.MutationResult<CreateUserNewsTalkRoomMessageSeenMutation>;
-export type CreateUserNewsTalkRoomMessageSeenMutationOptions = Apollo.BaseMutationOptions<CreateUserNewsTalkRoomMessageSeenMutation, CreateUserNewsTalkRoomMessageSeenMutationVariables>;
-export const CreateUserThoughtTalkRoomMessageSeenDocument = gql`
-    mutation CreateUserThoughtTalkRoomMessageSeen($input: CreateUserThoughtTalkRoomMessageSeenInput!) {
-  createUserThoughtTalkRoomMessageSeen(input: $input) {
-    id
-    allMessageSeen
-  }
+export function useCreateUserNewsTalkRoomMessageSeenMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUserNewsTalkRoomMessageSeenMutation,
+    CreateUserNewsTalkRoomMessageSeenMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateUserNewsTalkRoomMessageSeenMutation,
+    CreateUserNewsTalkRoomMessageSeenMutationVariables
+  >(CreateUserNewsTalkRoomMessageSeenDocument, options);
 }
-    `;
-export type CreateUserThoughtTalkRoomMessageSeenMutationFn = Apollo.MutationFunction<CreateUserThoughtTalkRoomMessageSeenMutation, CreateUserThoughtTalkRoomMessageSeenMutationVariables>;
+export type CreateUserNewsTalkRoomMessageSeenMutationHookResult = ReturnType<
+  typeof useCreateUserNewsTalkRoomMessageSeenMutation
+>;
+export type CreateUserNewsTalkRoomMessageSeenMutationResult =
+  Apollo.MutationResult<CreateUserNewsTalkRoomMessageSeenMutation>;
+export type CreateUserNewsTalkRoomMessageSeenMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateUserNewsTalkRoomMessageSeenMutation,
+    CreateUserNewsTalkRoomMessageSeenMutationVariables
+  >;
+export const CreateUserThoughtTalkRoomMessageSeenDocument = gql`
+  mutation CreateUserThoughtTalkRoomMessageSeen(
+    $input: CreateUserThoughtTalkRoomMessageSeenInput!
+  ) {
+    createUserThoughtTalkRoomMessageSeen(input: $input) {
+      id
+      allMessageSeen
+    }
+  }
+`;
+export type CreateUserThoughtTalkRoomMessageSeenMutationFn =
+  Apollo.MutationFunction<
+    CreateUserThoughtTalkRoomMessageSeenMutation,
+    CreateUserThoughtTalkRoomMessageSeenMutationVariables
+  >;
 
 /**
  * __useCreateUserThoughtTalkRoomMessageSeenMutation__
@@ -1905,22 +4931,40 @@ export type CreateUserThoughtTalkRoomMessageSeenMutationFn = Apollo.MutationFunc
  *   },
  * });
  */
-export function useCreateUserThoughtTalkRoomMessageSeenMutation(baseOptions?: Apollo.MutationHookOptions<CreateUserThoughtTalkRoomMessageSeenMutation, CreateUserThoughtTalkRoomMessageSeenMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<CreateUserThoughtTalkRoomMessageSeenMutation, CreateUserThoughtTalkRoomMessageSeenMutationVariables>(CreateUserThoughtTalkRoomMessageSeenDocument, options);
-      }
-export type CreateUserThoughtTalkRoomMessageSeenMutationHookResult = ReturnType<typeof useCreateUserThoughtTalkRoomMessageSeenMutation>;
-export type CreateUserThoughtTalkRoomMessageSeenMutationResult = Apollo.MutationResult<CreateUserThoughtTalkRoomMessageSeenMutation>;
-export type CreateUserThoughtTalkRoomMessageSeenMutationOptions = Apollo.BaseMutationOptions<CreateUserThoughtTalkRoomMessageSeenMutation, CreateUserThoughtTalkRoomMessageSeenMutationVariables>;
-export const DeleteNewsPickDocument = gql`
-    mutation DeleteNewsPick($input: DeleteNewsPickInput!) {
-  deleteNewsPick(input: $input) {
-    id
-    picked
-  }
+export function useCreateUserThoughtTalkRoomMessageSeenMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    CreateUserThoughtTalkRoomMessageSeenMutation,
+    CreateUserThoughtTalkRoomMessageSeenMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    CreateUserThoughtTalkRoomMessageSeenMutation,
+    CreateUserThoughtTalkRoomMessageSeenMutationVariables
+  >(CreateUserThoughtTalkRoomMessageSeenDocument, options);
 }
-    `;
-export type DeleteNewsPickMutationFn = Apollo.MutationFunction<DeleteNewsPickMutation, DeleteNewsPickMutationVariables>;
+export type CreateUserThoughtTalkRoomMessageSeenMutationHookResult = ReturnType<
+  typeof useCreateUserThoughtTalkRoomMessageSeenMutation
+>;
+export type CreateUserThoughtTalkRoomMessageSeenMutationResult =
+  Apollo.MutationResult<CreateUserThoughtTalkRoomMessageSeenMutation>;
+export type CreateUserThoughtTalkRoomMessageSeenMutationOptions =
+  Apollo.BaseMutationOptions<
+    CreateUserThoughtTalkRoomMessageSeenMutation,
+    CreateUserThoughtTalkRoomMessageSeenMutationVariables
+  >;
+export const DeleteNewsPickDocument = gql`
+  mutation DeleteNewsPick($input: DeleteNewsPickInput!) {
+    deleteNewsPick(input: $input) {
+      id
+      picked
+    }
+  }
+`;
+export type DeleteNewsPickMutationFn = Apollo.MutationFunction<
+  DeleteNewsPickMutation,
+  DeleteNewsPickMutationVariables
+>;
 
 /**
  * __useDeleteNewsPickMutation__
@@ -1939,19 +4983,36 @@ export type DeleteNewsPickMutationFn = Apollo.MutationFunction<DeleteNewsPickMut
  *   },
  * });
  */
-export function useDeleteNewsPickMutation(baseOptions?: Apollo.MutationHookOptions<DeleteNewsPickMutation, DeleteNewsPickMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteNewsPickMutation, DeleteNewsPickMutationVariables>(DeleteNewsPickDocument, options);
-      }
-export type DeleteNewsPickMutationHookResult = ReturnType<typeof useDeleteNewsPickMutation>;
-export type DeleteNewsPickMutationResult = Apollo.MutationResult<DeleteNewsPickMutation>;
-export type DeleteNewsPickMutationOptions = Apollo.BaseMutationOptions<DeleteNewsPickMutation, DeleteNewsPickMutationVariables>;
-export const DeleteOneOnOneTalkRoomDocument = gql`
-    mutation DeleteOneOnOneTalkRoom($input: DeleteOneOnOneTalkRoonInput!) {
-  deleteOneOnOneTalkRoom(input: $input)
+export function useDeleteNewsPickMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteNewsPickMutation,
+    DeleteNewsPickMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteNewsPickMutation,
+    DeleteNewsPickMutationVariables
+  >(DeleteNewsPickDocument, options);
 }
-    `;
-export type DeleteOneOnOneTalkRoomMutationFn = Apollo.MutationFunction<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>;
+export type DeleteNewsPickMutationHookResult = ReturnType<
+  typeof useDeleteNewsPickMutation
+>;
+export type DeleteNewsPickMutationResult =
+  Apollo.MutationResult<DeleteNewsPickMutation>;
+export type DeleteNewsPickMutationOptions = Apollo.BaseMutationOptions<
+  DeleteNewsPickMutation,
+  DeleteNewsPickMutationVariables
+>;
+export const DeleteOneOnOneTalkRoomDocument = gql`
+  mutation DeleteOneOnOneTalkRoom($input: DeleteOneOnOneTalkRoonInput!) {
+    deleteOneOnOneTalkRoom(input: $input)
+  }
+`;
+export type DeleteOneOnOneTalkRoomMutationFn = Apollo.MutationFunction<
+  DeleteOneOnOneTalkRoomMutation,
+  DeleteOneOnOneTalkRoomMutationVariables
+>;
 
 /**
  * __useDeleteOneOnOneTalkRoomMutation__
@@ -1970,22 +5031,39 @@ export type DeleteOneOnOneTalkRoomMutationFn = Apollo.MutationFunction<DeleteOne
  *   },
  * });
  */
-export function useDeleteOneOnOneTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>(DeleteOneOnOneTalkRoomDocument, options);
-      }
-export type DeleteOneOnOneTalkRoomMutationHookResult = ReturnType<typeof useDeleteOneOnOneTalkRoomMutation>;
-export type DeleteOneOnOneTalkRoomMutationResult = Apollo.MutationResult<DeleteOneOnOneTalkRoomMutation>;
-export type DeleteOneOnOneTalkRoomMutationOptions = Apollo.BaseMutationOptions<DeleteOneOnOneTalkRoomMutation, DeleteOneOnOneTalkRoomMutationVariables>;
-export const DeletePickDocument = gql`
-    mutation DeletePick($thoughtId: ID!) {
-  deletePick(thoughtId: $thoughtId) {
-    id
-    thoughtId
-  }
+export function useDeleteOneOnOneTalkRoomMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteOneOnOneTalkRoomMutation,
+    DeleteOneOnOneTalkRoomMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteOneOnOneTalkRoomMutation,
+    DeleteOneOnOneTalkRoomMutationVariables
+  >(DeleteOneOnOneTalkRoomDocument, options);
 }
-    `;
-export type DeletePickMutationFn = Apollo.MutationFunction<DeletePickMutation, DeletePickMutationVariables>;
+export type DeleteOneOnOneTalkRoomMutationHookResult = ReturnType<
+  typeof useDeleteOneOnOneTalkRoomMutation
+>;
+export type DeleteOneOnOneTalkRoomMutationResult =
+  Apollo.MutationResult<DeleteOneOnOneTalkRoomMutation>;
+export type DeleteOneOnOneTalkRoomMutationOptions = Apollo.BaseMutationOptions<
+  DeleteOneOnOneTalkRoomMutation,
+  DeleteOneOnOneTalkRoomMutationVariables
+>;
+export const DeletePickDocument = gql`
+  mutation DeletePick($thoughtId: ID!) {
+    deletePick(thoughtId: $thoughtId) {
+      id
+      thoughtId
+    }
+  }
+`;
+export type DeletePickMutationFn = Apollo.MutationFunction<
+  DeletePickMutation,
+  DeletePickMutationVariables
+>;
 
 /**
  * __useDeletePickMutation__
@@ -2004,21 +5082,38 @@ export type DeletePickMutationFn = Apollo.MutationFunction<DeletePickMutation, D
  *   },
  * });
  */
-export function useDeletePickMutation(baseOptions?: Apollo.MutationHookOptions<DeletePickMutation, DeletePickMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeletePickMutation, DeletePickMutationVariables>(DeletePickDocument, options);
-      }
-export type DeletePickMutationHookResult = ReturnType<typeof useDeletePickMutation>;
-export type DeletePickMutationResult = Apollo.MutationResult<DeletePickMutation>;
-export type DeletePickMutationOptions = Apollo.BaseMutationOptions<DeletePickMutation, DeletePickMutationVariables>;
-export const DeleteThoughtDocument = gql`
-    mutation DeleteThought($input: DeleteThoughtInput!) {
-  deleteThought(input: $input) {
-    id
-  }
+export function useDeletePickMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeletePickMutation,
+    DeletePickMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<DeletePickMutation, DeletePickMutationVariables>(
+    DeletePickDocument,
+    options
+  );
 }
-    `;
-export type DeleteThoughtMutationFn = Apollo.MutationFunction<DeleteThoughtMutation, DeleteThoughtMutationVariables>;
+export type DeletePickMutationHookResult = ReturnType<
+  typeof useDeletePickMutation
+>;
+export type DeletePickMutationResult =
+  Apollo.MutationResult<DeletePickMutation>;
+export type DeletePickMutationOptions = Apollo.BaseMutationOptions<
+  DeletePickMutation,
+  DeletePickMutationVariables
+>;
+export const DeleteThoughtDocument = gql`
+  mutation DeleteThought($input: DeleteThoughtInput!) {
+    deleteThought(input: $input) {
+      id
+    }
+  }
+`;
+export type DeleteThoughtMutationFn = Apollo.MutationFunction<
+  DeleteThoughtMutation,
+  DeleteThoughtMutationVariables
+>;
 
 /**
  * __useDeleteThoughtMutation__
@@ -2037,19 +5132,36 @@ export type DeleteThoughtMutationFn = Apollo.MutationFunction<DeleteThoughtMutat
  *   },
  * });
  */
-export function useDeleteThoughtMutation(baseOptions?: Apollo.MutationHookOptions<DeleteThoughtMutation, DeleteThoughtMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteThoughtMutation, DeleteThoughtMutationVariables>(DeleteThoughtDocument, options);
-      }
-export type DeleteThoughtMutationHookResult = ReturnType<typeof useDeleteThoughtMutation>;
-export type DeleteThoughtMutationResult = Apollo.MutationResult<DeleteThoughtMutation>;
-export type DeleteThoughtMutationOptions = Apollo.BaseMutationOptions<DeleteThoughtMutation, DeleteThoughtMutationVariables>;
-export const DeleteThoughtTalkRoomDocument = gql`
-    mutation DeleteThoughtTalkRoom($input: DeleteThoughtTalkRoomInput!) {
-  deleteThoughtTalkRoom(input: $input)
+export function useDeleteThoughtMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteThoughtMutation,
+    DeleteThoughtMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteThoughtMutation,
+    DeleteThoughtMutationVariables
+  >(DeleteThoughtDocument, options);
 }
-    `;
-export type DeleteThoughtTalkRoomMutationFn = Apollo.MutationFunction<DeleteThoughtTalkRoomMutation, DeleteThoughtTalkRoomMutationVariables>;
+export type DeleteThoughtMutationHookResult = ReturnType<
+  typeof useDeleteThoughtMutation
+>;
+export type DeleteThoughtMutationResult =
+  Apollo.MutationResult<DeleteThoughtMutation>;
+export type DeleteThoughtMutationOptions = Apollo.BaseMutationOptions<
+  DeleteThoughtMutation,
+  DeleteThoughtMutationVariables
+>;
+export const DeleteThoughtTalkRoomDocument = gql`
+  mutation DeleteThoughtTalkRoom($input: DeleteThoughtTalkRoomInput!) {
+    deleteThoughtTalkRoom(input: $input)
+  }
+`;
+export type DeleteThoughtTalkRoomMutationFn = Apollo.MutationFunction<
+  DeleteThoughtTalkRoomMutation,
+  DeleteThoughtTalkRoomMutationVariables
+>;
 
 /**
  * __useDeleteThoughtTalkRoomMutation__
@@ -2068,21 +5180,40 @@ export type DeleteThoughtTalkRoomMutationFn = Apollo.MutationFunction<DeleteThou
  *   },
  * });
  */
-export function useDeleteThoughtTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<DeleteThoughtTalkRoomMutation, DeleteThoughtTalkRoomMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteThoughtTalkRoomMutation, DeleteThoughtTalkRoomMutationVariables>(DeleteThoughtTalkRoomDocument, options);
-      }
-export type DeleteThoughtTalkRoomMutationHookResult = ReturnType<typeof useDeleteThoughtTalkRoomMutation>;
-export type DeleteThoughtTalkRoomMutationResult = Apollo.MutationResult<DeleteThoughtTalkRoomMutation>;
-export type DeleteThoughtTalkRoomMutationOptions = Apollo.BaseMutationOptions<DeleteThoughtTalkRoomMutation, DeleteThoughtTalkRoomMutationVariables>;
-export const DeleteThoughtTalkRoomMemberDocument = gql`
-    mutation DeleteThoughtTalkRoomMember($input: DeleteThoughtTalkRoomMemberInput!) {
-  deleteThoughtTalkRoomMember(input: $input) {
-    id
-  }
+export function useDeleteThoughtTalkRoomMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteThoughtTalkRoomMutation,
+    DeleteThoughtTalkRoomMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteThoughtTalkRoomMutation,
+    DeleteThoughtTalkRoomMutationVariables
+  >(DeleteThoughtTalkRoomDocument, options);
 }
-    `;
-export type DeleteThoughtTalkRoomMemberMutationFn = Apollo.MutationFunction<DeleteThoughtTalkRoomMemberMutation, DeleteThoughtTalkRoomMemberMutationVariables>;
+export type DeleteThoughtTalkRoomMutationHookResult = ReturnType<
+  typeof useDeleteThoughtTalkRoomMutation
+>;
+export type DeleteThoughtTalkRoomMutationResult =
+  Apollo.MutationResult<DeleteThoughtTalkRoomMutation>;
+export type DeleteThoughtTalkRoomMutationOptions = Apollo.BaseMutationOptions<
+  DeleteThoughtTalkRoomMutation,
+  DeleteThoughtTalkRoomMutationVariables
+>;
+export const DeleteThoughtTalkRoomMemberDocument = gql`
+  mutation DeleteThoughtTalkRoomMember(
+    $input: DeleteThoughtTalkRoomMemberInput!
+  ) {
+    deleteThoughtTalkRoomMember(input: $input) {
+      id
+    }
+  }
+`;
+export type DeleteThoughtTalkRoomMemberMutationFn = Apollo.MutationFunction<
+  DeleteThoughtTalkRoomMemberMutation,
+  DeleteThoughtTalkRoomMemberMutationVariables
+>;
 
 /**
  * __useDeleteThoughtTalkRoomMemberMutation__
@@ -2101,22 +5232,41 @@ export type DeleteThoughtTalkRoomMemberMutationFn = Apollo.MutationFunction<Dele
  *   },
  * });
  */
-export function useDeleteThoughtTalkRoomMemberMutation(baseOptions?: Apollo.MutationHookOptions<DeleteThoughtTalkRoomMemberMutation, DeleteThoughtTalkRoomMemberMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<DeleteThoughtTalkRoomMemberMutation, DeleteThoughtTalkRoomMemberMutationVariables>(DeleteThoughtTalkRoomMemberDocument, options);
-      }
-export type DeleteThoughtTalkRoomMemberMutationHookResult = ReturnType<typeof useDeleteThoughtTalkRoomMemberMutation>;
-export type DeleteThoughtTalkRoomMemberMutationResult = Apollo.MutationResult<DeleteThoughtTalkRoomMemberMutation>;
-export type DeleteThoughtTalkRoomMemberMutationOptions = Apollo.BaseMutationOptions<DeleteThoughtTalkRoomMemberMutation, DeleteThoughtTalkRoomMemberMutationVariables>;
-export const FollowDocument = gql`
-    mutation Follow($followeeId: ID!) {
-  follow(followeeId: $followeeId) {
-    follow
-    ...UserParts
-  }
+export function useDeleteThoughtTalkRoomMemberMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    DeleteThoughtTalkRoomMemberMutation,
+    DeleteThoughtTalkRoomMemberMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    DeleteThoughtTalkRoomMemberMutation,
+    DeleteThoughtTalkRoomMemberMutationVariables
+  >(DeleteThoughtTalkRoomMemberDocument, options);
 }
-    ${UserPartsFragmentDoc}`;
-export type FollowMutationFn = Apollo.MutationFunction<FollowMutation, FollowMutationVariables>;
+export type DeleteThoughtTalkRoomMemberMutationHookResult = ReturnType<
+  typeof useDeleteThoughtTalkRoomMemberMutation
+>;
+export type DeleteThoughtTalkRoomMemberMutationResult =
+  Apollo.MutationResult<DeleteThoughtTalkRoomMemberMutation>;
+export type DeleteThoughtTalkRoomMemberMutationOptions =
+  Apollo.BaseMutationOptions<
+    DeleteThoughtTalkRoomMemberMutation,
+    DeleteThoughtTalkRoomMemberMutationVariables
+  >;
+export const FollowDocument = gql`
+  mutation Follow($followeeId: ID!) {
+    follow(followeeId: $followeeId) {
+      follow
+      ...UserParts
+    }
+  }
+  ${UserPartsFragmentDoc}
+`;
+export type FollowMutationFn = Apollo.MutationFunction<
+  FollowMutation,
+  FollowMutationVariables
+>;
 
 /**
  * __useFollowMutation__
@@ -2135,19 +5285,33 @@ export type FollowMutationFn = Apollo.MutationFunction<FollowMutation, FollowMut
  *   },
  * });
  */
-export function useFollowMutation(baseOptions?: Apollo.MutationHookOptions<FollowMutation, FollowMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<FollowMutation, FollowMutationVariables>(FollowDocument, options);
-      }
+export function useFollowMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    FollowMutation,
+    FollowMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<FollowMutation, FollowMutationVariables>(
+    FollowDocument,
+    options
+  );
+}
 export type FollowMutationHookResult = ReturnType<typeof useFollowMutation>;
 export type FollowMutationResult = Apollo.MutationResult<FollowMutation>;
-export type FollowMutationOptions = Apollo.BaseMutationOptions<FollowMutation, FollowMutationVariables>;
+export type FollowMutationOptions = Apollo.BaseMutationOptions<
+  FollowMutation,
+  FollowMutationVariables
+>;
 export const GetOutNewsTalkRoomDocument = gql`
-    mutation GetOutNewsTalkRoom($input: GetOutNewsTalkRoomInput!) {
-  getOutNewsTalkRoom(input: $input)
-}
-    `;
-export type GetOutNewsTalkRoomMutationFn = Apollo.MutationFunction<GetOutNewsTalkRoomMutation, GetOutNewsTalkRoomMutationVariables>;
+  mutation GetOutNewsTalkRoom($input: GetOutNewsTalkRoomInput!) {
+    getOutNewsTalkRoom(input: $input)
+  }
+`;
+export type GetOutNewsTalkRoomMutationFn = Apollo.MutationFunction<
+  GetOutNewsTalkRoomMutation,
+  GetOutNewsTalkRoomMutationVariables
+>;
 
 /**
  * __useGetOutNewsTalkRoomMutation__
@@ -2166,19 +5330,36 @@ export type GetOutNewsTalkRoomMutationFn = Apollo.MutationFunction<GetOutNewsTal
  *   },
  * });
  */
-export function useGetOutNewsTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<GetOutNewsTalkRoomMutation, GetOutNewsTalkRoomMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<GetOutNewsTalkRoomMutation, GetOutNewsTalkRoomMutationVariables>(GetOutNewsTalkRoomDocument, options);
-      }
-export type GetOutNewsTalkRoomMutationHookResult = ReturnType<typeof useGetOutNewsTalkRoomMutation>;
-export type GetOutNewsTalkRoomMutationResult = Apollo.MutationResult<GetOutNewsTalkRoomMutation>;
-export type GetOutNewsTalkRoomMutationOptions = Apollo.BaseMutationOptions<GetOutNewsTalkRoomMutation, GetOutNewsTalkRoomMutationVariables>;
-export const GetOutThoughtTalkRoomDocument = gql`
-    mutation GetOutThoughtTalkRoom($input: GetOutThoughtTalkRoomInput!) {
-  getOutThoughtTalkRoom(input: $input)
+export function useGetOutNewsTalkRoomMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    GetOutNewsTalkRoomMutation,
+    GetOutNewsTalkRoomMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    GetOutNewsTalkRoomMutation,
+    GetOutNewsTalkRoomMutationVariables
+  >(GetOutNewsTalkRoomDocument, options);
 }
-    `;
-export type GetOutThoughtTalkRoomMutationFn = Apollo.MutationFunction<GetOutThoughtTalkRoomMutation, GetOutThoughtTalkRoomMutationVariables>;
+export type GetOutNewsTalkRoomMutationHookResult = ReturnType<
+  typeof useGetOutNewsTalkRoomMutation
+>;
+export type GetOutNewsTalkRoomMutationResult =
+  Apollo.MutationResult<GetOutNewsTalkRoomMutation>;
+export type GetOutNewsTalkRoomMutationOptions = Apollo.BaseMutationOptions<
+  GetOutNewsTalkRoomMutation,
+  GetOutNewsTalkRoomMutationVariables
+>;
+export const GetOutThoughtTalkRoomDocument = gql`
+  mutation GetOutThoughtTalkRoom($input: GetOutThoughtTalkRoomInput!) {
+    getOutThoughtTalkRoom(input: $input)
+  }
+`;
+export type GetOutThoughtTalkRoomMutationFn = Apollo.MutationFunction<
+  GetOutThoughtTalkRoomMutation,
+  GetOutThoughtTalkRoomMutationVariables
+>;
 
 /**
  * __useGetOutThoughtTalkRoomMutation__
@@ -2197,21 +5378,39 @@ export type GetOutThoughtTalkRoomMutationFn = Apollo.MutationFunction<GetOutThou
  *   },
  * });
  */
-export function useGetOutThoughtTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<GetOutThoughtTalkRoomMutation, GetOutThoughtTalkRoomMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<GetOutThoughtTalkRoomMutation, GetOutThoughtTalkRoomMutationVariables>(GetOutThoughtTalkRoomDocument, options);
-      }
-export type GetOutThoughtTalkRoomMutationHookResult = ReturnType<typeof useGetOutThoughtTalkRoomMutation>;
-export type GetOutThoughtTalkRoomMutationResult = Apollo.MutationResult<GetOutThoughtTalkRoomMutation>;
-export type GetOutThoughtTalkRoomMutationOptions = Apollo.BaseMutationOptions<GetOutThoughtTalkRoomMutation, GetOutThoughtTalkRoomMutationVariables>;
-export const JoinNewsTalkRoomDocument = gql`
-    mutation JoinNewsTalkRoom($input: JoinNewsTalkRoomInput!) {
-  joinNewsTalkRoom(input: $input) {
-    ...NewsTalkRoomParts
-  }
+export function useGetOutThoughtTalkRoomMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    GetOutThoughtTalkRoomMutation,
+    GetOutThoughtTalkRoomMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    GetOutThoughtTalkRoomMutation,
+    GetOutThoughtTalkRoomMutationVariables
+  >(GetOutThoughtTalkRoomDocument, options);
 }
-    ${NewsTalkRoomPartsFragmentDoc}`;
-export type JoinNewsTalkRoomMutationFn = Apollo.MutationFunction<JoinNewsTalkRoomMutation, JoinNewsTalkRoomMutationVariables>;
+export type GetOutThoughtTalkRoomMutationHookResult = ReturnType<
+  typeof useGetOutThoughtTalkRoomMutation
+>;
+export type GetOutThoughtTalkRoomMutationResult =
+  Apollo.MutationResult<GetOutThoughtTalkRoomMutation>;
+export type GetOutThoughtTalkRoomMutationOptions = Apollo.BaseMutationOptions<
+  GetOutThoughtTalkRoomMutation,
+  GetOutThoughtTalkRoomMutationVariables
+>;
+export const JoinNewsTalkRoomDocument = gql`
+  mutation JoinNewsTalkRoom($input: JoinNewsTalkRoomInput!) {
+    joinNewsTalkRoom(input: $input) {
+      ...NewsTalkRoomParts
+    }
+  }
+  ${NewsTalkRoomPartsFragmentDoc}
+`;
+export type JoinNewsTalkRoomMutationFn = Apollo.MutationFunction<
+  JoinNewsTalkRoomMutation,
+  JoinNewsTalkRoomMutationVariables
+>;
 
 /**
  * __useJoinNewsTalkRoomMutation__
@@ -2230,21 +5429,39 @@ export type JoinNewsTalkRoomMutationFn = Apollo.MutationFunction<JoinNewsTalkRoo
  *   },
  * });
  */
-export function useJoinNewsTalkRoomMutation(baseOptions?: Apollo.MutationHookOptions<JoinNewsTalkRoomMutation, JoinNewsTalkRoomMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<JoinNewsTalkRoomMutation, JoinNewsTalkRoomMutationVariables>(JoinNewsTalkRoomDocument, options);
-      }
-export type JoinNewsTalkRoomMutationHookResult = ReturnType<typeof useJoinNewsTalkRoomMutation>;
-export type JoinNewsTalkRoomMutationResult = Apollo.MutationResult<JoinNewsTalkRoomMutation>;
-export type JoinNewsTalkRoomMutationOptions = Apollo.BaseMutationOptions<JoinNewsTalkRoomMutation, JoinNewsTalkRoomMutationVariables>;
-export const JoinThoughtTalkDocument = gql`
-    mutation JoinThoughtTalk($input: JoinTalkInput!) {
-  joinThoughtTalk(input: $input) {
-    ...ThoughtTalkRoomParts
-  }
+export function useJoinNewsTalkRoomMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    JoinNewsTalkRoomMutation,
+    JoinNewsTalkRoomMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    JoinNewsTalkRoomMutation,
+    JoinNewsTalkRoomMutationVariables
+  >(JoinNewsTalkRoomDocument, options);
 }
-    ${ThoughtTalkRoomPartsFragmentDoc}`;
-export type JoinThoughtTalkMutationFn = Apollo.MutationFunction<JoinThoughtTalkMutation, JoinThoughtTalkMutationVariables>;
+export type JoinNewsTalkRoomMutationHookResult = ReturnType<
+  typeof useJoinNewsTalkRoomMutation
+>;
+export type JoinNewsTalkRoomMutationResult =
+  Apollo.MutationResult<JoinNewsTalkRoomMutation>;
+export type JoinNewsTalkRoomMutationOptions = Apollo.BaseMutationOptions<
+  JoinNewsTalkRoomMutation,
+  JoinNewsTalkRoomMutationVariables
+>;
+export const JoinThoughtTalkDocument = gql`
+  mutation JoinThoughtTalk($input: JoinTalkInput!) {
+    joinThoughtTalk(input: $input) {
+      ...ThoughtTalkRoomParts
+    }
+  }
+  ${ThoughtTalkRoomPartsFragmentDoc}
+`;
+export type JoinThoughtTalkMutationFn = Apollo.MutationFunction<
+  JoinThoughtTalkMutation,
+  JoinThoughtTalkMutationVariables
+>;
 
 /**
  * __useJoinThoughtTalkMutation__
@@ -2263,19 +5480,39 @@ export type JoinThoughtTalkMutationFn = Apollo.MutationFunction<JoinThoughtTalkM
  *   },
  * });
  */
-export function useJoinThoughtTalkMutation(baseOptions?: Apollo.MutationHookOptions<JoinThoughtTalkMutation, JoinThoughtTalkMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<JoinThoughtTalkMutation, JoinThoughtTalkMutationVariables>(JoinThoughtTalkDocument, options);
-      }
-export type JoinThoughtTalkMutationHookResult = ReturnType<typeof useJoinThoughtTalkMutation>;
-export type JoinThoughtTalkMutationResult = Apollo.MutationResult<JoinThoughtTalkMutation>;
-export type JoinThoughtTalkMutationOptions = Apollo.BaseMutationOptions<JoinThoughtTalkMutation, JoinThoughtTalkMutationVariables>;
-export const RequestNewsTalkRoomMemberDeletionDocument = gql`
-    mutation RequestNewsTalkRoomMemberDeletion($input: RequestNewsTalkRoomMemberDeletionInput!) {
-  requestNewsTalkRoomMemberDeletion(input: $input)
+export function useJoinThoughtTalkMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    JoinThoughtTalkMutation,
+    JoinThoughtTalkMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    JoinThoughtTalkMutation,
+    JoinThoughtTalkMutationVariables
+  >(JoinThoughtTalkDocument, options);
 }
-    `;
-export type RequestNewsTalkRoomMemberDeletionMutationFn = Apollo.MutationFunction<RequestNewsTalkRoomMemberDeletionMutation, RequestNewsTalkRoomMemberDeletionMutationVariables>;
+export type JoinThoughtTalkMutationHookResult = ReturnType<
+  typeof useJoinThoughtTalkMutation
+>;
+export type JoinThoughtTalkMutationResult =
+  Apollo.MutationResult<JoinThoughtTalkMutation>;
+export type JoinThoughtTalkMutationOptions = Apollo.BaseMutationOptions<
+  JoinThoughtTalkMutation,
+  JoinThoughtTalkMutationVariables
+>;
+export const RequestNewsTalkRoomMemberDeletionDocument = gql`
+  mutation RequestNewsTalkRoomMemberDeletion(
+    $input: RequestNewsTalkRoomMemberDeletionInput!
+  ) {
+    requestNewsTalkRoomMemberDeletion(input: $input)
+  }
+`;
+export type RequestNewsTalkRoomMemberDeletionMutationFn =
+  Apollo.MutationFunction<
+    RequestNewsTalkRoomMemberDeletionMutation,
+    RequestNewsTalkRoomMemberDeletionMutationVariables
+  >;
 
 /**
  * __useRequestNewsTalkRoomMemberDeletionMutation__
@@ -2294,22 +5531,42 @@ export type RequestNewsTalkRoomMemberDeletionMutationFn = Apollo.MutationFunctio
  *   },
  * });
  */
-export function useRequestNewsTalkRoomMemberDeletionMutation(baseOptions?: Apollo.MutationHookOptions<RequestNewsTalkRoomMemberDeletionMutation, RequestNewsTalkRoomMemberDeletionMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<RequestNewsTalkRoomMemberDeletionMutation, RequestNewsTalkRoomMemberDeletionMutationVariables>(RequestNewsTalkRoomMemberDeletionDocument, options);
-      }
-export type RequestNewsTalkRoomMemberDeletionMutationHookResult = ReturnType<typeof useRequestNewsTalkRoomMemberDeletionMutation>;
-export type RequestNewsTalkRoomMemberDeletionMutationResult = Apollo.MutationResult<RequestNewsTalkRoomMemberDeletionMutation>;
-export type RequestNewsTalkRoomMemberDeletionMutationOptions = Apollo.BaseMutationOptions<RequestNewsTalkRoomMemberDeletionMutation, RequestNewsTalkRoomMemberDeletionMutationVariables>;
-export const SeenOneOnOneTalkRoomMessageDocument = gql`
-    mutation SeenOneOnOneTalkRoomMessage($input: SeenOneOnOneTalkRoomMessageInput!) {
-  seenOneOnOneTalkRoomMessage(input: $input) {
-    id
-    allMessageSeen
-  }
+export function useRequestNewsTalkRoomMemberDeletionMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    RequestNewsTalkRoomMemberDeletionMutation,
+    RequestNewsTalkRoomMemberDeletionMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    RequestNewsTalkRoomMemberDeletionMutation,
+    RequestNewsTalkRoomMemberDeletionMutationVariables
+  >(RequestNewsTalkRoomMemberDeletionDocument, options);
 }
-    `;
-export type SeenOneOnOneTalkRoomMessageMutationFn = Apollo.MutationFunction<SeenOneOnOneTalkRoomMessageMutation, SeenOneOnOneTalkRoomMessageMutationVariables>;
+export type RequestNewsTalkRoomMemberDeletionMutationHookResult = ReturnType<
+  typeof useRequestNewsTalkRoomMemberDeletionMutation
+>;
+export type RequestNewsTalkRoomMemberDeletionMutationResult =
+  Apollo.MutationResult<RequestNewsTalkRoomMemberDeletionMutation>;
+export type RequestNewsTalkRoomMemberDeletionMutationOptions =
+  Apollo.BaseMutationOptions<
+    RequestNewsTalkRoomMemberDeletionMutation,
+    RequestNewsTalkRoomMemberDeletionMutationVariables
+  >;
+export const SeenOneOnOneTalkRoomMessageDocument = gql`
+  mutation SeenOneOnOneTalkRoomMessage(
+    $input: SeenOneOnOneTalkRoomMessageInput!
+  ) {
+    seenOneOnOneTalkRoomMessage(input: $input) {
+      id
+      allMessageSeen
+    }
+  }
+`;
+export type SeenOneOnOneTalkRoomMessageMutationFn = Apollo.MutationFunction<
+  SeenOneOnOneTalkRoomMessageMutation,
+  SeenOneOnOneTalkRoomMessageMutationVariables
+>;
 
 /**
  * __useSeenOneOnOneTalkRoomMessageMutation__
@@ -2328,21 +5585,39 @@ export type SeenOneOnOneTalkRoomMessageMutationFn = Apollo.MutationFunction<Seen
  *   },
  * });
  */
-export function useSeenOneOnOneTalkRoomMessageMutation(baseOptions?: Apollo.MutationHookOptions<SeenOneOnOneTalkRoomMessageMutation, SeenOneOnOneTalkRoomMessageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SeenOneOnOneTalkRoomMessageMutation, SeenOneOnOneTalkRoomMessageMutationVariables>(SeenOneOnOneTalkRoomMessageDocument, options);
-      }
-export type SeenOneOnOneTalkRoomMessageMutationHookResult = ReturnType<typeof useSeenOneOnOneTalkRoomMessageMutation>;
-export type SeenOneOnOneTalkRoomMessageMutationResult = Apollo.MutationResult<SeenOneOnOneTalkRoomMessageMutation>;
-export type SeenOneOnOneTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<SeenOneOnOneTalkRoomMessageMutation, SeenOneOnOneTalkRoomMessageMutationVariables>;
-export const SignOutDocument = gql`
-    mutation SignOut {
-  signOut {
-    id
-  }
+export function useSeenOneOnOneTalkRoomMessageMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SeenOneOnOneTalkRoomMessageMutation,
+    SeenOneOnOneTalkRoomMessageMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    SeenOneOnOneTalkRoomMessageMutation,
+    SeenOneOnOneTalkRoomMessageMutationVariables
+  >(SeenOneOnOneTalkRoomMessageDocument, options);
 }
-    `;
-export type SignOutMutationFn = Apollo.MutationFunction<SignOutMutation, SignOutMutationVariables>;
+export type SeenOneOnOneTalkRoomMessageMutationHookResult = ReturnType<
+  typeof useSeenOneOnOneTalkRoomMessageMutation
+>;
+export type SeenOneOnOneTalkRoomMessageMutationResult =
+  Apollo.MutationResult<SeenOneOnOneTalkRoomMessageMutation>;
+export type SeenOneOnOneTalkRoomMessageMutationOptions =
+  Apollo.BaseMutationOptions<
+    SeenOneOnOneTalkRoomMessageMutation,
+    SeenOneOnOneTalkRoomMessageMutationVariables
+  >;
+export const SignOutDocument = gql`
+  mutation SignOut {
+    signOut {
+      id
+    }
+  }
+`;
+export type SignOutMutationFn = Apollo.MutationFunction<
+  SignOutMutation,
+  SignOutMutationVariables
+>;
 
 /**
  * __useSignOutMutation__
@@ -2360,22 +5635,36 @@ export type SignOutMutationFn = Apollo.MutationFunction<SignOutMutation, SignOut
  *   },
  * });
  */
-export function useSignOutMutation(baseOptions?: Apollo.MutationHookOptions<SignOutMutation, SignOutMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<SignOutMutation, SignOutMutationVariables>(SignOutDocument, options);
-      }
+export function useSignOutMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    SignOutMutation,
+    SignOutMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<SignOutMutation, SignOutMutationVariables>(
+    SignOutDocument,
+    options
+  );
+}
 export type SignOutMutationHookResult = ReturnType<typeof useSignOutMutation>;
 export type SignOutMutationResult = Apollo.MutationResult<SignOutMutation>;
-export type SignOutMutationOptions = Apollo.BaseMutationOptions<SignOutMutation, SignOutMutationVariables>;
+export type SignOutMutationOptions = Apollo.BaseMutationOptions<
+  SignOutMutation,
+  SignOutMutationVariables
+>;
 export const UnBlockDocument = gql`
-    mutation UnBlock($blockedUserId: ID!) {
-  unblock(blockedUserId: $blockedUserId) {
-    id
-    blocking
+  mutation UnBlock($blockedUserId: ID!) {
+    unblock(blockedUserId: $blockedUserId) {
+      id
+      blocking
+    }
   }
-}
-    `;
-export type UnBlockMutationFn = Apollo.MutationFunction<UnBlockMutation, UnBlockMutationVariables>;
+`;
+export type UnBlockMutationFn = Apollo.MutationFunction<
+  UnBlockMutation,
+  UnBlockMutationVariables
+>;
 
 /**
  * __useUnBlockMutation__
@@ -2394,22 +5683,37 @@ export type UnBlockMutationFn = Apollo.MutationFunction<UnBlockMutation, UnBlock
  *   },
  * });
  */
-export function useUnBlockMutation(baseOptions?: Apollo.MutationHookOptions<UnBlockMutation, UnBlockMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UnBlockMutation, UnBlockMutationVariables>(UnBlockDocument, options);
-      }
+export function useUnBlockMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnBlockMutation,
+    UnBlockMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UnBlockMutation, UnBlockMutationVariables>(
+    UnBlockDocument,
+    options
+  );
+}
 export type UnBlockMutationHookResult = ReturnType<typeof useUnBlockMutation>;
 export type UnBlockMutationResult = Apollo.MutationResult<UnBlockMutation>;
-export type UnBlockMutationOptions = Apollo.BaseMutationOptions<UnBlockMutation, UnBlockMutationVariables>;
+export type UnBlockMutationOptions = Apollo.BaseMutationOptions<
+  UnBlockMutation,
+  UnBlockMutationVariables
+>;
 export const UnfollowDocument = gql`
-    mutation Unfollow($followeeId: ID!) {
-  unfollow(followeeId: $followeeId) {
-    follow
-    ...UserParts
+  mutation Unfollow($followeeId: ID!) {
+    unfollow(followeeId: $followeeId) {
+      follow
+      ...UserParts
+    }
   }
-}
-    ${UserPartsFragmentDoc}`;
-export type UnfollowMutationFn = Apollo.MutationFunction<UnfollowMutation, UnfollowMutationVariables>;
+  ${UserPartsFragmentDoc}
+`;
+export type UnfollowMutationFn = Apollo.MutationFunction<
+  UnfollowMutation,
+  UnfollowMutationVariables
+>;
 
 /**
  * __useUnfollowMutation__
@@ -2428,21 +5732,35 @@ export type UnfollowMutationFn = Apollo.MutationFunction<UnfollowMutation, Unfol
  *   },
  * });
  */
-export function useUnfollowMutation(baseOptions?: Apollo.MutationHookOptions<UnfollowMutation, UnfollowMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UnfollowMutation, UnfollowMutationVariables>(UnfollowDocument, options);
-      }
+export function useUnfollowMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UnfollowMutation,
+    UnfollowMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UnfollowMutation, UnfollowMutationVariables>(
+    UnfollowDocument,
+    options
+  );
+}
 export type UnfollowMutationHookResult = ReturnType<typeof useUnfollowMutation>;
 export type UnfollowMutationResult = Apollo.MutationResult<UnfollowMutation>;
-export type UnfollowMutationOptions = Apollo.BaseMutationOptions<UnfollowMutation, UnfollowMutationVariables>;
+export type UnfollowMutationOptions = Apollo.BaseMutationOptions<
+  UnfollowMutation,
+  UnfollowMutationVariables
+>;
 export const UpdateMeDocument = gql`
-    mutation UpdateMe($input: UpdateMeInput!) {
-  updateMe(input: $input) {
-    id
+  mutation UpdateMe($input: UpdateMeInput!) {
+    updateMe(input: $input) {
+      id
+    }
   }
-}
-    `;
-export type UpdateMeMutationFn = Apollo.MutationFunction<UpdateMeMutation, UpdateMeMutationVariables>;
+`;
+export type UpdateMeMutationFn = Apollo.MutationFunction<
+  UpdateMeMutation,
+  UpdateMeMutationVariables
+>;
 
 /**
  * __useUpdateMeMutation__
@@ -2461,21 +5779,35 @@ export type UpdateMeMutationFn = Apollo.MutationFunction<UpdateMeMutation, Updat
  *   },
  * });
  */
-export function useUpdateMeMutation(baseOptions?: Apollo.MutationHookOptions<UpdateMeMutation, UpdateMeMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UpdateMeMutation, UpdateMeMutationVariables>(UpdateMeDocument, options);
-      }
+export function useUpdateMeMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UpdateMeMutation,
+    UpdateMeMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UpdateMeMutation, UpdateMeMutationVariables>(
+    UpdateMeDocument,
+    options
+  );
+}
 export type UpdateMeMutationHookResult = ReturnType<typeof useUpdateMeMutation>;
 export type UpdateMeMutationResult = Apollo.MutationResult<UpdateMeMutation>;
-export type UpdateMeMutationOptions = Apollo.BaseMutationOptions<UpdateMeMutation, UpdateMeMutationVariables>;
+export type UpdateMeMutationOptions = Apollo.BaseMutationOptions<
+  UpdateMeMutation,
+  UpdateMeMutationVariables
+>;
 export const UploadImageDocument = gql`
-    mutation UploadImage($file: Upload!) {
-  uploadImage(file: $file) {
-    url
+  mutation UploadImage($file: Upload!) {
+    uploadImage(file: $file) {
+      url
+    }
   }
-}
-    `;
-export type UploadImageMutationFn = Apollo.MutationFunction<UploadImageMutation, UploadImageMutationVariables>;
+`;
+export type UploadImageMutationFn = Apollo.MutationFunction<
+  UploadImageMutation,
+  UploadImageMutationVariables
+>;
 
 /**
  * __useUploadImageMutation__
@@ -2494,25 +5826,42 @@ export type UploadImageMutationFn = Apollo.MutationFunction<UploadImageMutation,
  *   },
  * });
  */
-export function useUploadImageMutation(baseOptions?: Apollo.MutationHookOptions<UploadImageMutation, UploadImageMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UploadImageMutation, UploadImageMutationVariables>(UploadImageDocument, options);
-      }
-export type UploadImageMutationHookResult = ReturnType<typeof useUploadImageMutation>;
-export type UploadImageMutationResult = Apollo.MutationResult<UploadImageMutation>;
-export type UploadImageMutationOptions = Apollo.BaseMutationOptions<UploadImageMutation, UploadImageMutationVariables>;
+export function useUploadImageMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UploadImageMutation,
+    UploadImageMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<UploadImageMutation, UploadImageMutationVariables>(
+    UploadImageDocument,
+    options
+  );
+}
+export type UploadImageMutationHookResult = ReturnType<
+  typeof useUploadImageMutation
+>;
+export type UploadImageMutationResult =
+  Apollo.MutationResult<UploadImageMutation>;
+export type UploadImageMutationOptions = Apollo.BaseMutationOptions<
+  UploadImageMutation,
+  UploadImageMutationVariables
+>;
 export const UploadThoughtImagesDocument = gql`
-    mutation UploadThoughtImages($files: [Upload!]!) {
-  uploadThoughtImages(files: $files) {
-    images {
-      url
-      width
-      height
+  mutation UploadThoughtImages($files: [Upload!]!) {
+    uploadThoughtImages(files: $files) {
+      images {
+        url
+        width
+        height
+      }
     }
   }
-}
-    `;
-export type UploadThoughtImagesMutationFn = Apollo.MutationFunction<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
+`;
+export type UploadThoughtImagesMutationFn = Apollo.MutationFunction<
+  UploadThoughtImagesMutation,
+  UploadThoughtImagesMutationVariables
+>;
 
 /**
  * __useUploadThoughtImagesMutation__
@@ -2531,20 +5880,35 @@ export type UploadThoughtImagesMutationFn = Apollo.MutationFunction<UploadThough
  *   },
  * });
  */
-export function useUploadThoughtImagesMutation(baseOptions?: Apollo.MutationHookOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useMutation<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>(UploadThoughtImagesDocument, options);
-      }
-export type UploadThoughtImagesMutationHookResult = ReturnType<typeof useUploadThoughtImagesMutation>;
-export type UploadThoughtImagesMutationResult = Apollo.MutationResult<UploadThoughtImagesMutation>;
-export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
-export const BlockingUsersDocument = gql`
-    query BlockingUsers {
-  blockingUsers {
-    ...UserParts
-  }
+export function useUploadThoughtImagesMutation(
+  baseOptions?: Apollo.MutationHookOptions<
+    UploadThoughtImagesMutation,
+    UploadThoughtImagesMutationVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useMutation<
+    UploadThoughtImagesMutation,
+    UploadThoughtImagesMutationVariables
+  >(UploadThoughtImagesDocument, options);
 }
-    ${UserPartsFragmentDoc}`;
+export type UploadThoughtImagesMutationHookResult = ReturnType<
+  typeof useUploadThoughtImagesMutation
+>;
+export type UploadThoughtImagesMutationResult =
+  Apollo.MutationResult<UploadThoughtImagesMutation>;
+export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<
+  UploadThoughtImagesMutation,
+  UploadThoughtImagesMutationVariables
+>;
+export const BlockingUsersDocument = gql`
+  query BlockingUsers {
+    blockingUsers {
+      ...UserParts
+    }
+  }
+  ${UserPartsFragmentDoc}
+`;
 
 /**
  * __useBlockingUsersQuery__
@@ -2561,34 +5925,58 @@ export const BlockingUsersDocument = gql`
  *   },
  * });
  */
-export function useBlockingUsersQuery(baseOptions?: Apollo.QueryHookOptions<BlockingUsersQuery, BlockingUsersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<BlockingUsersQuery, BlockingUsersQueryVariables>(BlockingUsersDocument, options);
-      }
-export function useBlockingUsersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<BlockingUsersQuery, BlockingUsersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<BlockingUsersQuery, BlockingUsersQueryVariables>(BlockingUsersDocument, options);
-        }
-export type BlockingUsersQueryHookResult = ReturnType<typeof useBlockingUsersQuery>;
-export type BlockingUsersLazyQueryHookResult = ReturnType<typeof useBlockingUsersLazyQuery>;
-export type BlockingUsersQueryResult = Apollo.QueryResult<BlockingUsersQuery, BlockingUsersQueryVariables>;
+export function useBlockingUsersQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    BlockingUsersQuery,
+    BlockingUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<BlockingUsersQuery, BlockingUsersQueryVariables>(
+    BlockingUsersDocument,
+    options
+  );
+}
+export function useBlockingUsersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    BlockingUsersQuery,
+    BlockingUsersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<BlockingUsersQuery, BlockingUsersQueryVariables>(
+    BlockingUsersDocument,
+    options
+  );
+}
+export type BlockingUsersQueryHookResult = ReturnType<
+  typeof useBlockingUsersQuery
+>;
+export type BlockingUsersLazyQueryHookResult = ReturnType<
+  typeof useBlockingUsersLazyQuery
+>;
+export type BlockingUsersQueryResult = Apollo.QueryResult<
+  BlockingUsersQuery,
+  BlockingUsersQueryVariables
+>;
 export const FollowsDocument = gql`
-    query Follows($cursor: String, $q: String) {
-  follows(first: 30, after: $cursor, q: $q) {
-    edges {
-      node {
-        follow
-        ...UserParts
+  query Follows($cursor: String, $q: String) {
+    follows(first: 30, after: $cursor, q: $q) {
+      edges {
+        node {
+          follow
+          ...UserParts
+        }
+        cursor
       }
-      cursor
-    }
-    pageInfo {
-      ...PageInfoParts
+      pageInfo {
+        ...PageInfoParts
+      }
     }
   }
-}
-    ${UserPartsFragmentDoc}
-${PageInfoPartsFragmentDoc}`;
+  ${UserPartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+`;
 
 /**
  * __useFollowsQuery__
@@ -2607,32 +5995,46 @@ ${PageInfoPartsFragmentDoc}`;
  *   },
  * });
  */
-export function useFollowsQuery(baseOptions?: Apollo.QueryHookOptions<FollowsQuery, FollowsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<FollowsQuery, FollowsQueryVariables>(FollowsDocument, options);
-      }
-export function useFollowsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<FollowsQuery, FollowsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<FollowsQuery, FollowsQueryVariables>(FollowsDocument, options);
-        }
+export function useFollowsQuery(
+  baseOptions?: Apollo.QueryHookOptions<FollowsQuery, FollowsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<FollowsQuery, FollowsQueryVariables>(
+    FollowsDocument,
+    options
+  );
+}
+export function useFollowsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<FollowsQuery, FollowsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<FollowsQuery, FollowsQueryVariables>(
+    FollowsDocument,
+    options
+  );
+}
 export type FollowsQueryHookResult = ReturnType<typeof useFollowsQuery>;
 export type FollowsLazyQueryHookResult = ReturnType<typeof useFollowsLazyQuery>;
-export type FollowsQueryResult = Apollo.QueryResult<FollowsQuery, FollowsQueryVariables>;
+export type FollowsQueryResult = Apollo.QueryResult<
+  FollowsQuery,
+  FollowsQueryVariables
+>;
 export const GetActiveDataDocument = gql`
-    query GetActiveData {
-  thoughtTalkRooms: thoughtTalkRooms {
-    ...ThoughtTalkRoomParts
+  query GetActiveData {
+    thoughtTalkRooms: thoughtTalkRooms {
+      ...ThoughtTalkRoomParts
+    }
+    newsTalkRooms: newsTalkRooms {
+      ...NewsTalkRoomParts
+    }
+    oneOnOneTalkRooms: oneOnOneTalkRooms {
+      ...OneOnOneTalkRoomParts
+    }
   }
-  newsTalkRooms: newsTalkRooms {
-    ...NewsTalkRoomParts
-  }
-  oneOnOneTalkRooms: oneOnOneTalkRooms {
-    ...OneOnOneTalkRoomParts
-  }
-}
-    ${ThoughtTalkRoomPartsFragmentDoc}
-${NewsTalkRoomPartsFragmentDoc}
-${OneOnOneTalkRoomPartsFragmentDoc}`;
+  ${ThoughtTalkRoomPartsFragmentDoc}
+  ${NewsTalkRoomPartsFragmentDoc}
+  ${OneOnOneTalkRoomPartsFragmentDoc}
+`;
 
 /**
  * __useGetActiveDataQuery__
@@ -2649,39 +6051,63 @@ ${OneOnOneTalkRoomPartsFragmentDoc}`;
  *   },
  * });
  */
-export function useGetActiveDataQuery(baseOptions?: Apollo.QueryHookOptions<GetActiveDataQuery, GetActiveDataQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetActiveDataQuery, GetActiveDataQueryVariables>(GetActiveDataDocument, options);
-      }
-export function useGetActiveDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetActiveDataQuery, GetActiveDataQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetActiveDataQuery, GetActiveDataQueryVariables>(GetActiveDataDocument, options);
-        }
-export type GetActiveDataQueryHookResult = ReturnType<typeof useGetActiveDataQuery>;
-export type GetActiveDataLazyQueryHookResult = ReturnType<typeof useGetActiveDataLazyQuery>;
-export type GetActiveDataQueryResult = Apollo.QueryResult<GetActiveDataQuery, GetActiveDataQueryVariables>;
+export function useGetActiveDataQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetActiveDataQuery,
+    GetActiveDataQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetActiveDataQuery, GetActiveDataQueryVariables>(
+    GetActiveDataDocument,
+    options
+  );
+}
+export function useGetActiveDataLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetActiveDataQuery,
+    GetActiveDataQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetActiveDataQuery, GetActiveDataQueryVariables>(
+    GetActiveDataDocument,
+    options
+  );
+}
+export type GetActiveDataQueryHookResult = ReturnType<
+  typeof useGetActiveDataQuery
+>;
+export type GetActiveDataLazyQueryHookResult = ReturnType<
+  typeof useGetActiveDataLazyQuery
+>;
+export type GetActiveDataQueryResult = Apollo.QueryResult<
+  GetActiveDataQuery,
+  GetActiveDataQueryVariables
+>;
 export const GetNewsTalkRoomMembersDocument = gql`
-    query GetNewsTalkRoomMembers($talkRoomId: Int!, $after: String) {
-  newsTalkRoom(id: $talkRoomId) {
-    id
-    members(first: 20, after: $after) {
-      edges {
-        node {
-          id
-          user {
-            ...UserParts
+  query GetNewsTalkRoomMembers($talkRoomId: Int!, $after: String) {
+    newsTalkRoom(id: $talkRoomId) {
+      id
+      members(first: 20, after: $after) {
+        edges {
+          node {
+            id
+            user {
+              ...UserParts
+            }
           }
+          cursor
         }
-        cursor
-      }
-      pageInfo {
-        ...PageInfoParts
+        pageInfo {
+          ...PageInfoParts
+        }
       }
     }
   }
-}
-    ${UserPartsFragmentDoc}
-${PageInfoPartsFragmentDoc}`;
+  ${UserPartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+`;
 
 /**
  * __useGetNewsTalkRoomMembersQuery__
@@ -2700,36 +6126,60 @@ ${PageInfoPartsFragmentDoc}`;
  *   },
  * });
  */
-export function useGetNewsTalkRoomMembersQuery(baseOptions: Apollo.QueryHookOptions<GetNewsTalkRoomMembersQuery, GetNewsTalkRoomMembersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetNewsTalkRoomMembersQuery, GetNewsTalkRoomMembersQueryVariables>(GetNewsTalkRoomMembersDocument, options);
-      }
-export function useGetNewsTalkRoomMembersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNewsTalkRoomMembersQuery, GetNewsTalkRoomMembersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetNewsTalkRoomMembersQuery, GetNewsTalkRoomMembersQueryVariables>(GetNewsTalkRoomMembersDocument, options);
-        }
-export type GetNewsTalkRoomMembersQueryHookResult = ReturnType<typeof useGetNewsTalkRoomMembersQuery>;
-export type GetNewsTalkRoomMembersLazyQueryHookResult = ReturnType<typeof useGetNewsTalkRoomMembersLazyQuery>;
-export type GetNewsTalkRoomMembersQueryResult = Apollo.QueryResult<GetNewsTalkRoomMembersQuery, GetNewsTalkRoomMembersQueryVariables>;
+export function useGetNewsTalkRoomMembersQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetNewsTalkRoomMembersQuery,
+    GetNewsTalkRoomMembersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetNewsTalkRoomMembersQuery,
+    GetNewsTalkRoomMembersQueryVariables
+  >(GetNewsTalkRoomMembersDocument, options);
+}
+export function useGetNewsTalkRoomMembersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetNewsTalkRoomMembersQuery,
+    GetNewsTalkRoomMembersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetNewsTalkRoomMembersQuery,
+    GetNewsTalkRoomMembersQueryVariables
+  >(GetNewsTalkRoomMembersDocument, options);
+}
+export type GetNewsTalkRoomMembersQueryHookResult = ReturnType<
+  typeof useGetNewsTalkRoomMembersQuery
+>;
+export type GetNewsTalkRoomMembersLazyQueryHookResult = ReturnType<
+  typeof useGetNewsTalkRoomMembersLazyQuery
+>;
+export type GetNewsTalkRoomMembersQueryResult = Apollo.QueryResult<
+  GetNewsTalkRoomMembersQuery,
+  GetNewsTalkRoomMembersQueryVariables
+>;
 export const GetNewsTalkRoomMessagesDocument = gql`
-    query GetNewsTalkRoomMessages($talkRoomId: Int!, $messageCursor: String) {
-  newsTalkRoom(id: $talkRoomId) {
-    id
-    messages(first: 20, after: $messageCursor) {
-      edges {
-        node {
-          ...NewsTalkRoomMessageParts
+  query GetNewsTalkRoomMessages($talkRoomId: Int!, $messageCursor: String) {
+    newsTalkRoom(id: $talkRoomId) {
+      id
+      messages(first: 20, after: $messageCursor) {
+        edges {
+          node {
+            ...NewsTalkRoomMessageParts
+          }
+          cursor
         }
-        cursor
-      }
-      pageInfo {
-        ...PageInfoParts
+        pageInfo {
+          ...PageInfoParts
+        }
       }
     }
   }
-}
-    ${NewsTalkRoomMessagePartsFragmentDoc}
-${PageInfoPartsFragmentDoc}`;
+  ${NewsTalkRoomMessagePartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+`;
 
 /**
  * __useGetNewsTalkRoomMessagesQuery__
@@ -2748,24 +6198,48 @@ ${PageInfoPartsFragmentDoc}`;
  *   },
  * });
  */
-export function useGetNewsTalkRoomMessagesQuery(baseOptions: Apollo.QueryHookOptions<GetNewsTalkRoomMessagesQuery, GetNewsTalkRoomMessagesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetNewsTalkRoomMessagesQuery, GetNewsTalkRoomMessagesQueryVariables>(GetNewsTalkRoomMessagesDocument, options);
-      }
-export function useGetNewsTalkRoomMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNewsTalkRoomMessagesQuery, GetNewsTalkRoomMessagesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetNewsTalkRoomMessagesQuery, GetNewsTalkRoomMessagesQueryVariables>(GetNewsTalkRoomMessagesDocument, options);
-        }
-export type GetNewsTalkRoomMessagesQueryHookResult = ReturnType<typeof useGetNewsTalkRoomMessagesQuery>;
-export type GetNewsTalkRoomMessagesLazyQueryHookResult = ReturnType<typeof useGetNewsTalkRoomMessagesLazyQuery>;
-export type GetNewsTalkRoomMessagesQueryResult = Apollo.QueryResult<GetNewsTalkRoomMessagesQuery, GetNewsTalkRoomMessagesQueryVariables>;
-export const GetNewsTalkRoomsDocument = gql`
-    query GetNewsTalkRooms {
-  newsTalkRooms {
-    ...NewsTalkRoomParts
-  }
+export function useGetNewsTalkRoomMessagesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetNewsTalkRoomMessagesQuery,
+    GetNewsTalkRoomMessagesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetNewsTalkRoomMessagesQuery,
+    GetNewsTalkRoomMessagesQueryVariables
+  >(GetNewsTalkRoomMessagesDocument, options);
 }
-    ${NewsTalkRoomPartsFragmentDoc}`;
+export function useGetNewsTalkRoomMessagesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetNewsTalkRoomMessagesQuery,
+    GetNewsTalkRoomMessagesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetNewsTalkRoomMessagesQuery,
+    GetNewsTalkRoomMessagesQueryVariables
+  >(GetNewsTalkRoomMessagesDocument, options);
+}
+export type GetNewsTalkRoomMessagesQueryHookResult = ReturnType<
+  typeof useGetNewsTalkRoomMessagesQuery
+>;
+export type GetNewsTalkRoomMessagesLazyQueryHookResult = ReturnType<
+  typeof useGetNewsTalkRoomMessagesLazyQuery
+>;
+export type GetNewsTalkRoomMessagesQueryResult = Apollo.QueryResult<
+  GetNewsTalkRoomMessagesQuery,
+  GetNewsTalkRoomMessagesQueryVariables
+>;
+export const GetNewsTalkRoomsDocument = gql`
+  query GetNewsTalkRooms {
+    newsTalkRooms {
+      ...NewsTalkRoomParts
+    }
+  }
+  ${NewsTalkRoomPartsFragmentDoc}
+`;
 
 /**
  * __useGetNewsTalkRoomsQuery__
@@ -2782,25 +6256,49 @@ export const GetNewsTalkRoomsDocument = gql`
  *   },
  * });
  */
-export function useGetNewsTalkRoomsQuery(baseOptions?: Apollo.QueryHookOptions<GetNewsTalkRoomsQuery, GetNewsTalkRoomsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetNewsTalkRoomsQuery, GetNewsTalkRoomsQueryVariables>(GetNewsTalkRoomsDocument, options);
-      }
-export function useGetNewsTalkRoomsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNewsTalkRoomsQuery, GetNewsTalkRoomsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetNewsTalkRoomsQuery, GetNewsTalkRoomsQueryVariables>(GetNewsTalkRoomsDocument, options);
-        }
-export type GetNewsTalkRoomsQueryHookResult = ReturnType<typeof useGetNewsTalkRoomsQuery>;
-export type GetNewsTalkRoomsLazyQueryHookResult = ReturnType<typeof useGetNewsTalkRoomsLazyQuery>;
-export type GetNewsTalkRoomsQueryResult = Apollo.QueryResult<GetNewsTalkRoomsQuery, GetNewsTalkRoomsQueryVariables>;
-export const GetOneNewsDocument = gql`
-    query GetOneNews($id: Int!) {
-  oneNews(id: $id) {
-    ...NewsParts
-    picked
-  }
+export function useGetNewsTalkRoomsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetNewsTalkRoomsQuery,
+    GetNewsTalkRoomsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetNewsTalkRoomsQuery, GetNewsTalkRoomsQueryVariables>(
+    GetNewsTalkRoomsDocument,
+    options
+  );
 }
-    ${NewsPartsFragmentDoc}`;
+export function useGetNewsTalkRoomsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetNewsTalkRoomsQuery,
+    GetNewsTalkRoomsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetNewsTalkRoomsQuery,
+    GetNewsTalkRoomsQueryVariables
+  >(GetNewsTalkRoomsDocument, options);
+}
+export type GetNewsTalkRoomsQueryHookResult = ReturnType<
+  typeof useGetNewsTalkRoomsQuery
+>;
+export type GetNewsTalkRoomsLazyQueryHookResult = ReturnType<
+  typeof useGetNewsTalkRoomsLazyQuery
+>;
+export type GetNewsTalkRoomsQueryResult = Apollo.QueryResult<
+  GetNewsTalkRoomsQuery,
+  GetNewsTalkRoomsQueryVariables
+>;
+export const GetOneNewsDocument = gql`
+  query GetOneNews($id: Int!) {
+    oneNews(id: $id) {
+      ...NewsParts
+      picked
+    }
+  }
+  ${NewsPartsFragmentDoc}
+`;
 
 /**
  * __useGetOneNewsQuery__
@@ -2818,24 +6316,46 @@ export const GetOneNewsDocument = gql`
  *   },
  * });
  */
-export function useGetOneNewsQuery(baseOptions: Apollo.QueryHookOptions<GetOneNewsQuery, GetOneNewsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOneNewsQuery, GetOneNewsQueryVariables>(GetOneNewsDocument, options);
-      }
-export function useGetOneNewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneNewsQuery, GetOneNewsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOneNewsQuery, GetOneNewsQueryVariables>(GetOneNewsDocument, options);
-        }
-export type GetOneNewsQueryHookResult = ReturnType<typeof useGetOneNewsQuery>;
-export type GetOneNewsLazyQueryHookResult = ReturnType<typeof useGetOneNewsLazyQuery>;
-export type GetOneNewsQueryResult = Apollo.QueryResult<GetOneNewsQuery, GetOneNewsQueryVariables>;
-export const GetOneOnOneTalkRoomDocument = gql`
-    query GetOneOnOneTalkRoom($id: Int!) {
-  oneOnOneTalkRoom(id: $id) {
-    ...OneOnOneTalkRoomParts
-  }
+export function useGetOneNewsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetOneNewsQuery,
+    GetOneNewsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetOneNewsQuery, GetOneNewsQueryVariables>(
+    GetOneNewsDocument,
+    options
+  );
 }
-    ${OneOnOneTalkRoomPartsFragmentDoc}`;
+export function useGetOneNewsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOneNewsQuery,
+    GetOneNewsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetOneNewsQuery, GetOneNewsQueryVariables>(
+    GetOneNewsDocument,
+    options
+  );
+}
+export type GetOneNewsQueryHookResult = ReturnType<typeof useGetOneNewsQuery>;
+export type GetOneNewsLazyQueryHookResult = ReturnType<
+  typeof useGetOneNewsLazyQuery
+>;
+export type GetOneNewsQueryResult = Apollo.QueryResult<
+  GetOneNewsQuery,
+  GetOneNewsQueryVariables
+>;
+export const GetOneOnOneTalkRoomDocument = gql`
+  query GetOneOnOneTalkRoom($id: Int!) {
+    oneOnOneTalkRoom(id: $id) {
+      ...OneOnOneTalkRoomParts
+    }
+  }
+  ${OneOnOneTalkRoomPartsFragmentDoc}
+`;
 
 /**
  * __useGetOneOnOneTalkRoomQuery__
@@ -2853,36 +6373,60 @@ export const GetOneOnOneTalkRoomDocument = gql`
  *   },
  * });
  */
-export function useGetOneOnOneTalkRoomQuery(baseOptions: Apollo.QueryHookOptions<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>(GetOneOnOneTalkRoomDocument, options);
-      }
-export function useGetOneOnOneTalkRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>(GetOneOnOneTalkRoomDocument, options);
-        }
-export type GetOneOnOneTalkRoomQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomQuery>;
-export type GetOneOnOneTalkRoomLazyQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomLazyQuery>;
-export type GetOneOnOneTalkRoomQueryResult = Apollo.QueryResult<GetOneOnOneTalkRoomQuery, GetOneOnOneTalkRoomQueryVariables>;
+export function useGetOneOnOneTalkRoomQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetOneOnOneTalkRoomQuery,
+    GetOneOnOneTalkRoomQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetOneOnOneTalkRoomQuery,
+    GetOneOnOneTalkRoomQueryVariables
+  >(GetOneOnOneTalkRoomDocument, options);
+}
+export function useGetOneOnOneTalkRoomLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOneOnOneTalkRoomQuery,
+    GetOneOnOneTalkRoomQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOneOnOneTalkRoomQuery,
+    GetOneOnOneTalkRoomQueryVariables
+  >(GetOneOnOneTalkRoomDocument, options);
+}
+export type GetOneOnOneTalkRoomQueryHookResult = ReturnType<
+  typeof useGetOneOnOneTalkRoomQuery
+>;
+export type GetOneOnOneTalkRoomLazyQueryHookResult = ReturnType<
+  typeof useGetOneOnOneTalkRoomLazyQuery
+>;
+export type GetOneOnOneTalkRoomQueryResult = Apollo.QueryResult<
+  GetOneOnOneTalkRoomQuery,
+  GetOneOnOneTalkRoomQueryVariables
+>;
 export const GetOneOnOneTalkRoomMessagesDocument = gql`
-    query GetOneOnOneTalkRoomMessages($id: Int!, $after: String) {
-  oneOnOneTalkRoom(id: $id) {
-    id
-    messages(first: 20, after: $after) {
-      edges {
-        node {
-          ...OneOnOneTalkRoomMessageParts
+  query GetOneOnOneTalkRoomMessages($id: Int!, $after: String) {
+    oneOnOneTalkRoom(id: $id) {
+      id
+      messages(first: 20, after: $after) {
+        edges {
+          node {
+            ...OneOnOneTalkRoomMessageParts
+          }
+          cursor
         }
-        cursor
-      }
-      pageInfo {
-        ...PageInfoParts
+        pageInfo {
+          ...PageInfoParts
+        }
       }
     }
   }
-}
-    ${OneOnOneTalkRoomMessagePartsFragmentDoc}
-${PageInfoPartsFragmentDoc}`;
+  ${OneOnOneTalkRoomMessagePartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+`;
 
 /**
  * __useGetOneOnOneTalkRoomMessagesQuery__
@@ -2901,24 +6445,48 @@ ${PageInfoPartsFragmentDoc}`;
  *   },
  * });
  */
-export function useGetOneOnOneTalkRoomMessagesQuery(baseOptions: Apollo.QueryHookOptions<GetOneOnOneTalkRoomMessagesQuery, GetOneOnOneTalkRoomMessagesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOneOnOneTalkRoomMessagesQuery, GetOneOnOneTalkRoomMessagesQueryVariables>(GetOneOnOneTalkRoomMessagesDocument, options);
-      }
-export function useGetOneOnOneTalkRoomMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneOnOneTalkRoomMessagesQuery, GetOneOnOneTalkRoomMessagesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOneOnOneTalkRoomMessagesQuery, GetOneOnOneTalkRoomMessagesQueryVariables>(GetOneOnOneTalkRoomMessagesDocument, options);
-        }
-export type GetOneOnOneTalkRoomMessagesQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomMessagesQuery>;
-export type GetOneOnOneTalkRoomMessagesLazyQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomMessagesLazyQuery>;
-export type GetOneOnOneTalkRoomMessagesQueryResult = Apollo.QueryResult<GetOneOnOneTalkRoomMessagesQuery, GetOneOnOneTalkRoomMessagesQueryVariables>;
-export const GetOneOnOneTalkRoomsDocument = gql`
-    query GetOneOnOneTalkRooms {
-  oneOnOneTalkRooms {
-    ...OneOnOneTalkRoomParts
-  }
+export function useGetOneOnOneTalkRoomMessagesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetOneOnOneTalkRoomMessagesQuery,
+    GetOneOnOneTalkRoomMessagesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetOneOnOneTalkRoomMessagesQuery,
+    GetOneOnOneTalkRoomMessagesQueryVariables
+  >(GetOneOnOneTalkRoomMessagesDocument, options);
 }
-    ${OneOnOneTalkRoomPartsFragmentDoc}`;
+export function useGetOneOnOneTalkRoomMessagesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOneOnOneTalkRoomMessagesQuery,
+    GetOneOnOneTalkRoomMessagesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOneOnOneTalkRoomMessagesQuery,
+    GetOneOnOneTalkRoomMessagesQueryVariables
+  >(GetOneOnOneTalkRoomMessagesDocument, options);
+}
+export type GetOneOnOneTalkRoomMessagesQueryHookResult = ReturnType<
+  typeof useGetOneOnOneTalkRoomMessagesQuery
+>;
+export type GetOneOnOneTalkRoomMessagesLazyQueryHookResult = ReturnType<
+  typeof useGetOneOnOneTalkRoomMessagesLazyQuery
+>;
+export type GetOneOnOneTalkRoomMessagesQueryResult = Apollo.QueryResult<
+  GetOneOnOneTalkRoomMessagesQuery,
+  GetOneOnOneTalkRoomMessagesQueryVariables
+>;
+export const GetOneOnOneTalkRoomsDocument = gql`
+  query GetOneOnOneTalkRooms {
+    oneOnOneTalkRooms {
+      ...OneOnOneTalkRoomParts
+    }
+  }
+  ${OneOnOneTalkRoomPartsFragmentDoc}
+`;
 
 /**
  * __useGetOneOnOneTalkRoomsQuery__
@@ -2935,37 +6503,61 @@ export const GetOneOnOneTalkRoomsDocument = gql`
  *   },
  * });
  */
-export function useGetOneOnOneTalkRoomsQuery(baseOptions?: Apollo.QueryHookOptions<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>(GetOneOnOneTalkRoomsDocument, options);
-      }
-export function useGetOneOnOneTalkRoomsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>(GetOneOnOneTalkRoomsDocument, options);
-        }
-export type GetOneOnOneTalkRoomsQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomsQuery>;
-export type GetOneOnOneTalkRoomsLazyQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomsLazyQuery>;
-export type GetOneOnOneTalkRoomsQueryResult = Apollo.QueryResult<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>;
+export function useGetOneOnOneTalkRoomsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetOneOnOneTalkRoomsQuery,
+    GetOneOnOneTalkRoomsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetOneOnOneTalkRoomsQuery,
+    GetOneOnOneTalkRoomsQueryVariables
+  >(GetOneOnOneTalkRoomsDocument, options);
+}
+export function useGetOneOnOneTalkRoomsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetOneOnOneTalkRoomsQuery,
+    GetOneOnOneTalkRoomsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetOneOnOneTalkRoomsQuery,
+    GetOneOnOneTalkRoomsQueryVariables
+  >(GetOneOnOneTalkRoomsDocument, options);
+}
+export type GetOneOnOneTalkRoomsQueryHookResult = ReturnType<
+  typeof useGetOneOnOneTalkRoomsQuery
+>;
+export type GetOneOnOneTalkRoomsLazyQueryHookResult = ReturnType<
+  typeof useGetOneOnOneTalkRoomsLazyQuery
+>;
+export type GetOneOnOneTalkRoomsQueryResult = Apollo.QueryResult<
+  GetOneOnOneTalkRoomsQuery,
+  GetOneOnOneTalkRoomsQueryVariables
+>;
 export const GetPickedNewsDocument = gql`
-    query GetPickedNews($cursor: String) {
-  pickedNews(first: 20, after: $cursor) {
-    edges {
-      node {
-        id
-        news {
-          ...NewsParts
-          picked
+  query GetPickedNews($cursor: String) {
+    pickedNews(first: 20, after: $cursor) {
+      edges {
+        node {
+          id
+          news {
+            ...NewsParts
+            picked
+          }
         }
+        cursor
       }
-      cursor
-    }
-    pageInfo {
-      ...PageInfoParts
+      pageInfo {
+        ...PageInfoParts
+      }
     }
   }
-}
-    ${NewsPartsFragmentDoc}
-${PageInfoPartsFragmentDoc}`;
+  ${NewsPartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+`;
 
 /**
  * __useGetPickedNewsQuery__
@@ -2983,25 +6575,49 @@ ${PageInfoPartsFragmentDoc}`;
  *   },
  * });
  */
-export function useGetPickedNewsQuery(baseOptions?: Apollo.QueryHookOptions<GetPickedNewsQuery, GetPickedNewsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetPickedNewsQuery, GetPickedNewsQueryVariables>(GetPickedNewsDocument, options);
-      }
-export function useGetPickedNewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetPickedNewsQuery, GetPickedNewsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetPickedNewsQuery, GetPickedNewsQueryVariables>(GetPickedNewsDocument, options);
-        }
-export type GetPickedNewsQueryHookResult = ReturnType<typeof useGetPickedNewsQuery>;
-export type GetPickedNewsLazyQueryHookResult = ReturnType<typeof useGetPickedNewsLazyQuery>;
-export type GetPickedNewsQueryResult = Apollo.QueryResult<GetPickedNewsQuery, GetPickedNewsQueryVariables>;
-export const GetThoughtDocument = gql`
-    query GetThought($id: ID!) {
-  thought(id: $id) {
-    ...ThoughtParts
-    picked
-  }
+export function useGetPickedNewsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetPickedNewsQuery,
+    GetPickedNewsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetPickedNewsQuery, GetPickedNewsQueryVariables>(
+    GetPickedNewsDocument,
+    options
+  );
 }
-    ${ThoughtPartsFragmentDoc}`;
+export function useGetPickedNewsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetPickedNewsQuery,
+    GetPickedNewsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetPickedNewsQuery, GetPickedNewsQueryVariables>(
+    GetPickedNewsDocument,
+    options
+  );
+}
+export type GetPickedNewsQueryHookResult = ReturnType<
+  typeof useGetPickedNewsQuery
+>;
+export type GetPickedNewsLazyQueryHookResult = ReturnType<
+  typeof useGetPickedNewsLazyQuery
+>;
+export type GetPickedNewsQueryResult = Apollo.QueryResult<
+  GetPickedNewsQuery,
+  GetPickedNewsQueryVariables
+>;
+export const GetThoughtDocument = gql`
+  query GetThought($id: ID!) {
+    thought(id: $id) {
+      ...ThoughtParts
+      picked
+    }
+  }
+  ${ThoughtPartsFragmentDoc}
+`;
 
 /**
  * __useGetThoughtQuery__
@@ -3019,24 +6635,46 @@ export const GetThoughtDocument = gql`
  *   },
  * });
  */
-export function useGetThoughtQuery(baseOptions: Apollo.QueryHookOptions<GetThoughtQuery, GetThoughtQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetThoughtQuery, GetThoughtQueryVariables>(GetThoughtDocument, options);
-      }
-export function useGetThoughtLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThoughtQuery, GetThoughtQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetThoughtQuery, GetThoughtQueryVariables>(GetThoughtDocument, options);
-        }
-export type GetThoughtQueryHookResult = ReturnType<typeof useGetThoughtQuery>;
-export type GetThoughtLazyQueryHookResult = ReturnType<typeof useGetThoughtLazyQuery>;
-export type GetThoughtQueryResult = Apollo.QueryResult<GetThoughtQuery, GetThoughtQueryVariables>;
-export const GetThoughtTalkRoomDocument = gql`
-    query GetThoughtTalkRoom($id: Int!) {
-  thoughtTalkRoom(id: $id) {
-    ...ThoughtTalkRoomParts
-  }
+export function useGetThoughtQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetThoughtQuery,
+    GetThoughtQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<GetThoughtQuery, GetThoughtQueryVariables>(
+    GetThoughtDocument,
+    options
+  );
 }
-    ${ThoughtTalkRoomPartsFragmentDoc}`;
+export function useGetThoughtLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetThoughtQuery,
+    GetThoughtQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<GetThoughtQuery, GetThoughtQueryVariables>(
+    GetThoughtDocument,
+    options
+  );
+}
+export type GetThoughtQueryHookResult = ReturnType<typeof useGetThoughtQuery>;
+export type GetThoughtLazyQueryHookResult = ReturnType<
+  typeof useGetThoughtLazyQuery
+>;
+export type GetThoughtQueryResult = Apollo.QueryResult<
+  GetThoughtQuery,
+  GetThoughtQueryVariables
+>;
+export const GetThoughtTalkRoomDocument = gql`
+  query GetThoughtTalkRoom($id: Int!) {
+    thoughtTalkRoom(id: $id) {
+      ...ThoughtTalkRoomParts
+    }
+  }
+  ${ThoughtTalkRoomPartsFragmentDoc}
+`;
 
 /**
  * __useGetThoughtTalkRoomQuery__
@@ -3054,39 +6692,63 @@ export const GetThoughtTalkRoomDocument = gql`
  *   },
  * });
  */
-export function useGetThoughtTalkRoomQuery(baseOptions: Apollo.QueryHookOptions<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>(GetThoughtTalkRoomDocument, options);
-      }
-export function useGetThoughtTalkRoomLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>(GetThoughtTalkRoomDocument, options);
-        }
-export type GetThoughtTalkRoomQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomQuery>;
-export type GetThoughtTalkRoomLazyQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomLazyQuery>;
-export type GetThoughtTalkRoomQueryResult = Apollo.QueryResult<GetThoughtTalkRoomQuery, GetThoughtTalkRoomQueryVariables>;
+export function useGetThoughtTalkRoomQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetThoughtTalkRoomQuery,
+    GetThoughtTalkRoomQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetThoughtTalkRoomQuery,
+    GetThoughtTalkRoomQueryVariables
+  >(GetThoughtTalkRoomDocument, options);
+}
+export function useGetThoughtTalkRoomLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetThoughtTalkRoomQuery,
+    GetThoughtTalkRoomQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetThoughtTalkRoomQuery,
+    GetThoughtTalkRoomQueryVariables
+  >(GetThoughtTalkRoomDocument, options);
+}
+export type GetThoughtTalkRoomQueryHookResult = ReturnType<
+  typeof useGetThoughtTalkRoomQuery
+>;
+export type GetThoughtTalkRoomLazyQueryHookResult = ReturnType<
+  typeof useGetThoughtTalkRoomLazyQuery
+>;
+export type GetThoughtTalkRoomQueryResult = Apollo.QueryResult<
+  GetThoughtTalkRoomQuery,
+  GetThoughtTalkRoomQueryVariables
+>;
 export const GetThoughtTalkRoomMembersDocument = gql`
-    query GetThoughtTalkRoomMembers($talkRoomId: Int!, $after: String) {
-  thoughtTalkRoom(id: $talkRoomId) {
-    id
-    members(first: 20, after: $after) {
-      edges {
-        node {
-          id
-          user {
-            ...UserParts
+  query GetThoughtTalkRoomMembers($talkRoomId: Int!, $after: String) {
+    thoughtTalkRoom(id: $talkRoomId) {
+      id
+      members(first: 20, after: $after) {
+        edges {
+          node {
+            id
+            user {
+              ...UserParts
+            }
           }
+          cursor
         }
-        cursor
-      }
-      pageInfo {
-        ...PageInfoParts
+        pageInfo {
+          ...PageInfoParts
+        }
       }
     }
   }
-}
-    ${UserPartsFragmentDoc}
-${PageInfoPartsFragmentDoc}`;
+  ${UserPartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+`;
 
 /**
  * __useGetThoughtTalkRoomMembersQuery__
@@ -3105,36 +6767,60 @@ ${PageInfoPartsFragmentDoc}`;
  *   },
  * });
  */
-export function useGetThoughtTalkRoomMembersQuery(baseOptions: Apollo.QueryHookOptions<GetThoughtTalkRoomMembersQuery, GetThoughtTalkRoomMembersQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetThoughtTalkRoomMembersQuery, GetThoughtTalkRoomMembersQueryVariables>(GetThoughtTalkRoomMembersDocument, options);
-      }
-export function useGetThoughtTalkRoomMembersLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThoughtTalkRoomMembersQuery, GetThoughtTalkRoomMembersQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetThoughtTalkRoomMembersQuery, GetThoughtTalkRoomMembersQueryVariables>(GetThoughtTalkRoomMembersDocument, options);
-        }
-export type GetThoughtTalkRoomMembersQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomMembersQuery>;
-export type GetThoughtTalkRoomMembersLazyQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomMembersLazyQuery>;
-export type GetThoughtTalkRoomMembersQueryResult = Apollo.QueryResult<GetThoughtTalkRoomMembersQuery, GetThoughtTalkRoomMembersQueryVariables>;
+export function useGetThoughtTalkRoomMembersQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetThoughtTalkRoomMembersQuery,
+    GetThoughtTalkRoomMembersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetThoughtTalkRoomMembersQuery,
+    GetThoughtTalkRoomMembersQueryVariables
+  >(GetThoughtTalkRoomMembersDocument, options);
+}
+export function useGetThoughtTalkRoomMembersLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetThoughtTalkRoomMembersQuery,
+    GetThoughtTalkRoomMembersQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetThoughtTalkRoomMembersQuery,
+    GetThoughtTalkRoomMembersQueryVariables
+  >(GetThoughtTalkRoomMembersDocument, options);
+}
+export type GetThoughtTalkRoomMembersQueryHookResult = ReturnType<
+  typeof useGetThoughtTalkRoomMembersQuery
+>;
+export type GetThoughtTalkRoomMembersLazyQueryHookResult = ReturnType<
+  typeof useGetThoughtTalkRoomMembersLazyQuery
+>;
+export type GetThoughtTalkRoomMembersQueryResult = Apollo.QueryResult<
+  GetThoughtTalkRoomMembersQuery,
+  GetThoughtTalkRoomMembersQueryVariables
+>;
 export const GetThoughtTalkRoomMessagesDocument = gql`
-    query GetThoughtTalkRoomMessages($id: Int!, $messageCursor: String) {
-  thoughtTalkRoom(id: $id) {
-    id
-    messages(first: 20, after: $messageCursor) {
-      edges {
-        node {
-          ...ThoughtTalkRoomMessageParts
+  query GetThoughtTalkRoomMessages($id: Int!, $messageCursor: String) {
+    thoughtTalkRoom(id: $id) {
+      id
+      messages(first: 20, after: $messageCursor) {
+        edges {
+          node {
+            ...ThoughtTalkRoomMessageParts
+          }
+          cursor
         }
-        cursor
-      }
-      pageInfo {
-        ...PageInfoParts
+        pageInfo {
+          ...PageInfoParts
+        }
       }
     }
   }
-}
-    ${ThoughtTalkRoomMessagePartsFragmentDoc}
-${PageInfoPartsFragmentDoc}`;
+  ${ThoughtTalkRoomMessagePartsFragmentDoc}
+  ${PageInfoPartsFragmentDoc}
+`;
 
 /**
  * __useGetThoughtTalkRoomMessagesQuery__
@@ -3153,24 +6839,48 @@ ${PageInfoPartsFragmentDoc}`;
  *   },
  * });
  */
-export function useGetThoughtTalkRoomMessagesQuery(baseOptions: Apollo.QueryHookOptions<GetThoughtTalkRoomMessagesQuery, GetThoughtTalkRoomMessagesQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetThoughtTalkRoomMessagesQuery, GetThoughtTalkRoomMessagesQueryVariables>(GetThoughtTalkRoomMessagesDocument, options);
-      }
-export function useGetThoughtTalkRoomMessagesLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThoughtTalkRoomMessagesQuery, GetThoughtTalkRoomMessagesQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetThoughtTalkRoomMessagesQuery, GetThoughtTalkRoomMessagesQueryVariables>(GetThoughtTalkRoomMessagesDocument, options);
-        }
-export type GetThoughtTalkRoomMessagesQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomMessagesQuery>;
-export type GetThoughtTalkRoomMessagesLazyQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomMessagesLazyQuery>;
-export type GetThoughtTalkRoomMessagesQueryResult = Apollo.QueryResult<GetThoughtTalkRoomMessagesQuery, GetThoughtTalkRoomMessagesQueryVariables>;
-export const GetThoughtTalkRoomsDocument = gql`
-    query GetThoughtTalkRooms {
-  thoughtTalkRooms {
-    ...ThoughtTalkRoomParts
-  }
+export function useGetThoughtTalkRoomMessagesQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetThoughtTalkRoomMessagesQuery,
+    GetThoughtTalkRoomMessagesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetThoughtTalkRoomMessagesQuery,
+    GetThoughtTalkRoomMessagesQueryVariables
+  >(GetThoughtTalkRoomMessagesDocument, options);
 }
-    ${ThoughtTalkRoomPartsFragmentDoc}`;
+export function useGetThoughtTalkRoomMessagesLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetThoughtTalkRoomMessagesQuery,
+    GetThoughtTalkRoomMessagesQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetThoughtTalkRoomMessagesQuery,
+    GetThoughtTalkRoomMessagesQueryVariables
+  >(GetThoughtTalkRoomMessagesDocument, options);
+}
+export type GetThoughtTalkRoomMessagesQueryHookResult = ReturnType<
+  typeof useGetThoughtTalkRoomMessagesQuery
+>;
+export type GetThoughtTalkRoomMessagesLazyQueryHookResult = ReturnType<
+  typeof useGetThoughtTalkRoomMessagesLazyQuery
+>;
+export type GetThoughtTalkRoomMessagesQueryResult = Apollo.QueryResult<
+  GetThoughtTalkRoomMessagesQuery,
+  GetThoughtTalkRoomMessagesQueryVariables
+>;
+export const GetThoughtTalkRoomsDocument = gql`
+  query GetThoughtTalkRooms {
+    thoughtTalkRooms {
+      ...ThoughtTalkRoomParts
+    }
+  }
+  ${ThoughtTalkRoomPartsFragmentDoc}
+`;
 
 /**
  * __useGetThoughtTalkRoomsQuery__
@@ -3187,27 +6897,51 @@ export const GetThoughtTalkRoomsDocument = gql`
  *   },
  * });
  */
-export function useGetThoughtTalkRoomsQuery(baseOptions?: Apollo.QueryHookOptions<GetThoughtTalkRoomsQuery, GetThoughtTalkRoomsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetThoughtTalkRoomsQuery, GetThoughtTalkRoomsQueryVariables>(GetThoughtTalkRoomsDocument, options);
-      }
-export function useGetThoughtTalkRoomsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThoughtTalkRoomsQuery, GetThoughtTalkRoomsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetThoughtTalkRoomsQuery, GetThoughtTalkRoomsQueryVariables>(GetThoughtTalkRoomsDocument, options);
-        }
-export type GetThoughtTalkRoomsQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomsQuery>;
-export type GetThoughtTalkRoomsLazyQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomsLazyQuery>;
-export type GetThoughtTalkRoomsQueryResult = Apollo.QueryResult<GetThoughtTalkRoomsQuery, GetThoughtTalkRoomsQueryVariables>;
+export function useGetThoughtTalkRoomsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    GetThoughtTalkRoomsQuery,
+    GetThoughtTalkRoomsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetThoughtTalkRoomsQuery,
+    GetThoughtTalkRoomsQueryVariables
+  >(GetThoughtTalkRoomsDocument, options);
+}
+export function useGetThoughtTalkRoomsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetThoughtTalkRoomsQuery,
+    GetThoughtTalkRoomsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetThoughtTalkRoomsQuery,
+    GetThoughtTalkRoomsQueryVariables
+  >(GetThoughtTalkRoomsDocument, options);
+}
+export type GetThoughtTalkRoomsQueryHookResult = ReturnType<
+  typeof useGetThoughtTalkRoomsQuery
+>;
+export type GetThoughtTalkRoomsLazyQueryHookResult = ReturnType<
+  typeof useGetThoughtTalkRoomsLazyQuery
+>;
+export type GetThoughtTalkRoomsQueryResult = Apollo.QueryResult<
+  GetThoughtTalkRoomsQuery,
+  GetThoughtTalkRoomsQueryVariables
+>;
 export const GetThoughtTalkRoomParentDocument = gql`
-    query GetThoughtTalkRoomParent($id: Int!) {
-  thoughtTalkRoom(id: $id) {
-    id
-    thought {
-      ...ThoughtTalkRoomParentParts
+  query GetThoughtTalkRoomParent($id: Int!) {
+    thoughtTalkRoom(id: $id) {
+      id
+      thought {
+        ...ThoughtTalkRoomParentParts
+      }
     }
   }
-}
-    ${ThoughtTalkRoomParentPartsFragmentDoc}`;
+  ${ThoughtTalkRoomParentPartsFragmentDoc}
+`;
 
 /**
  * __useGetThoughtTalkRoomParentQuery__
@@ -3225,42 +6959,66 @@ export const GetThoughtTalkRoomParentDocument = gql`
  *   },
  * });
  */
-export function useGetThoughtTalkRoomParentQuery(baseOptions: Apollo.QueryHookOptions<GetThoughtTalkRoomParentQuery, GetThoughtTalkRoomParentQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<GetThoughtTalkRoomParentQuery, GetThoughtTalkRoomParentQueryVariables>(GetThoughtTalkRoomParentDocument, options);
-      }
-export function useGetThoughtTalkRoomParentLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetThoughtTalkRoomParentQuery, GetThoughtTalkRoomParentQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<GetThoughtTalkRoomParentQuery, GetThoughtTalkRoomParentQueryVariables>(GetThoughtTalkRoomParentDocument, options);
-        }
-export type GetThoughtTalkRoomParentQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomParentQuery>;
-export type GetThoughtTalkRoomParentLazyQueryHookResult = ReturnType<typeof useGetThoughtTalkRoomParentLazyQuery>;
-export type GetThoughtTalkRoomParentQueryResult = Apollo.QueryResult<GetThoughtTalkRoomParentQuery, GetThoughtTalkRoomParentQueryVariables>;
-export const InitialDataDocument = gql`
-    query InitialData {
-  me: me {
-    id
-    name
-    bio
-    imageUrl
-    facebook
-    twitter
-    instagram
-    linkedin
-  }
-  thoughtTalkRooms: thoughtTalkRooms {
-    ...ThoughtTalkRoomParts
-  }
-  newsTalkRooms: newsTalkRooms {
-    ...NewsTalkRoomParts
-  }
-  oneOnONeTalkRooms: oneOnOneTalkRooms {
-    ...OneOnOneTalkRoomParts
-  }
+export function useGetThoughtTalkRoomParentQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    GetThoughtTalkRoomParentQuery,
+    GetThoughtTalkRoomParentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<
+    GetThoughtTalkRoomParentQuery,
+    GetThoughtTalkRoomParentQueryVariables
+  >(GetThoughtTalkRoomParentDocument, options);
 }
-    ${ThoughtTalkRoomPartsFragmentDoc}
-${NewsTalkRoomPartsFragmentDoc}
-${OneOnOneTalkRoomPartsFragmentDoc}`;
+export function useGetThoughtTalkRoomParentLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    GetThoughtTalkRoomParentQuery,
+    GetThoughtTalkRoomParentQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<
+    GetThoughtTalkRoomParentQuery,
+    GetThoughtTalkRoomParentQueryVariables
+  >(GetThoughtTalkRoomParentDocument, options);
+}
+export type GetThoughtTalkRoomParentQueryHookResult = ReturnType<
+  typeof useGetThoughtTalkRoomParentQuery
+>;
+export type GetThoughtTalkRoomParentLazyQueryHookResult = ReturnType<
+  typeof useGetThoughtTalkRoomParentLazyQuery
+>;
+export type GetThoughtTalkRoomParentQueryResult = Apollo.QueryResult<
+  GetThoughtTalkRoomParentQuery,
+  GetThoughtTalkRoomParentQueryVariables
+>;
+export const InitialDataDocument = gql`
+  query InitialData {
+    me: me {
+      id
+      name
+      bio
+      imageUrl
+      facebook
+      twitter
+      instagram
+      linkedin
+    }
+    thoughtTalkRooms: thoughtTalkRooms {
+      ...ThoughtTalkRoomParts
+    }
+    newsTalkRooms: newsTalkRooms {
+      ...NewsTalkRoomParts
+    }
+    oneOnONeTalkRooms: oneOnOneTalkRooms {
+      ...OneOnOneTalkRoomParts
+    }
+  }
+  ${ThoughtTalkRoomPartsFragmentDoc}
+  ${NewsTalkRoomPartsFragmentDoc}
+  ${OneOnOneTalkRoomPartsFragmentDoc}
+`;
 
 /**
  * __useInitialDataQuery__
@@ -3277,31 +7035,52 @@ ${OneOnOneTalkRoomPartsFragmentDoc}`;
  *   },
  * });
  */
-export function useInitialDataQuery(baseOptions?: Apollo.QueryHookOptions<InitialDataQuery, InitialDataQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<InitialDataQuery, InitialDataQueryVariables>(InitialDataDocument, options);
-      }
-export function useInitialDataLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<InitialDataQuery, InitialDataQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<InitialDataQuery, InitialDataQueryVariables>(InitialDataDocument, options);
-        }
-export type InitialDataQueryHookResult = ReturnType<typeof useInitialDataQuery>;
-export type InitialDataLazyQueryHookResult = ReturnType<typeof useInitialDataLazyQuery>;
-export type InitialDataQueryResult = Apollo.QueryResult<InitialDataQuery, InitialDataQueryVariables>;
-export const MeDocument = gql`
-    query Me {
-  me {
-    id
-    name
-    bio
-    imageUrl
-    facebook
-    twitter
-    instagram
-    linkedin
-  }
+export function useInitialDataQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    InitialDataQuery,
+    InitialDataQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<InitialDataQuery, InitialDataQueryVariables>(
+    InitialDataDocument,
+    options
+  );
 }
-    `;
+export function useInitialDataLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    InitialDataQuery,
+    InitialDataQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<InitialDataQuery, InitialDataQueryVariables>(
+    InitialDataDocument,
+    options
+  );
+}
+export type InitialDataQueryHookResult = ReturnType<typeof useInitialDataQuery>;
+export type InitialDataLazyQueryHookResult = ReturnType<
+  typeof useInitialDataLazyQuery
+>;
+export type InitialDataQueryResult = Apollo.QueryResult<
+  InitialDataQuery,
+  InitialDataQueryVariables
+>;
+export const MeDocument = gql`
+  query Me {
+    me {
+      id
+      name
+      bio
+      imageUrl
+      facebook
+      twitter
+      instagram
+      linkedin
+    }
+  }
+`;
 
 /**
  * __useMeQuery__
@@ -3318,24 +7097,29 @@ export const MeDocument = gql`
  *   },
  * });
  */
-export function useMeQuery(baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-      }
-export function useMeLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
-        }
+export function useMeQuery(
+  baseOptions?: Apollo.QueryHookOptions<MeQuery, MeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+}
+export function useMeLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<MeQuery, MeQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<MeQuery, MeQueryVariables>(MeDocument, options);
+}
 export type MeQueryHookResult = ReturnType<typeof useMeQuery>;
 export type MeLazyQueryHookResult = ReturnType<typeof useMeLazyQuery>;
 export type MeQueryResult = Apollo.QueryResult<MeQuery, MeQueryVariables>;
 export const NewsDocument = gql`
-    query News($genre: NewsGenre!, $cursor: String) {
-  news(genre: $genre, first: 20, after: $cursor) {
-    ...NewsConnectionParts
+  query News($genre: NewsGenre!, $cursor: String) {
+    news(genre: $genre, first: 20, after: $cursor) {
+      ...NewsConnectionParts
+    }
   }
-}
-    ${NewsConnectionPartsFragmentDoc}`;
+  ${NewsConnectionPartsFragmentDoc}
+`;
 
 /**
  * __useNewsQuery__
@@ -3354,24 +7138,32 @@ export const NewsDocument = gql`
  *   },
  * });
  */
-export function useNewsQuery(baseOptions: Apollo.QueryHookOptions<NewsQuery, NewsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<NewsQuery, NewsQueryVariables>(NewsDocument, options);
-      }
-export function useNewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<NewsQuery, NewsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<NewsQuery, NewsQueryVariables>(NewsDocument, options);
-        }
+export function useNewsQuery(
+  baseOptions: Apollo.QueryHookOptions<NewsQuery, NewsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<NewsQuery, NewsQueryVariables>(NewsDocument, options);
+}
+export function useNewsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<NewsQuery, NewsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<NewsQuery, NewsQueryVariables>(
+    NewsDocument,
+    options
+  );
+}
 export type NewsQueryHookResult = ReturnType<typeof useNewsQuery>;
 export type NewsLazyQueryHookResult = ReturnType<typeof useNewsLazyQuery>;
 export type NewsQueryResult = Apollo.QueryResult<NewsQuery, NewsQueryVariables>;
 export const PickedThoughtsDocument = gql`
-    query PickedThoughts($cursor: String) {
-  pickedThoughts(first: 20, after: $cursor) {
-    ...ThoughtsConnectionParts
+  query PickedThoughts($cursor: String) {
+    pickedThoughts(first: 20, after: $cursor) {
+      ...ThoughtsConnectionParts
+    }
   }
-}
-    ${ThoughtsConnectionPartsFragmentDoc}`;
+  ${ThoughtsConnectionPartsFragmentDoc}
+`;
 
 /**
  * __usePickedThoughtsQuery__
@@ -3389,24 +7181,48 @@ export const PickedThoughtsDocument = gql`
  *   },
  * });
  */
-export function usePickedThoughtsQuery(baseOptions?: Apollo.QueryHookOptions<PickedThoughtsQuery, PickedThoughtsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<PickedThoughtsQuery, PickedThoughtsQueryVariables>(PickedThoughtsDocument, options);
-      }
-export function usePickedThoughtsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<PickedThoughtsQuery, PickedThoughtsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<PickedThoughtsQuery, PickedThoughtsQueryVariables>(PickedThoughtsDocument, options);
-        }
-export type PickedThoughtsQueryHookResult = ReturnType<typeof usePickedThoughtsQuery>;
-export type PickedThoughtsLazyQueryHookResult = ReturnType<typeof usePickedThoughtsLazyQuery>;
-export type PickedThoughtsQueryResult = Apollo.QueryResult<PickedThoughtsQuery, PickedThoughtsQueryVariables>;
-export const ThoughtsDocument = gql`
-    query Thoughts($genre: Genre, $cursor: String, $follow: Boolean) {
-  thoughts(genre: $genre, first: 20, after: $cursor, follow: $follow) {
-    ...ThoughtsConnectionParts
-  }
+export function usePickedThoughtsQuery(
+  baseOptions?: Apollo.QueryHookOptions<
+    PickedThoughtsQuery,
+    PickedThoughtsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<PickedThoughtsQuery, PickedThoughtsQueryVariables>(
+    PickedThoughtsDocument,
+    options
+  );
 }
-    ${ThoughtsConnectionPartsFragmentDoc}`;
+export function usePickedThoughtsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    PickedThoughtsQuery,
+    PickedThoughtsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<PickedThoughtsQuery, PickedThoughtsQueryVariables>(
+    PickedThoughtsDocument,
+    options
+  );
+}
+export type PickedThoughtsQueryHookResult = ReturnType<
+  typeof usePickedThoughtsQuery
+>;
+export type PickedThoughtsLazyQueryHookResult = ReturnType<
+  typeof usePickedThoughtsLazyQuery
+>;
+export type PickedThoughtsQueryResult = Apollo.QueryResult<
+  PickedThoughtsQuery,
+  PickedThoughtsQueryVariables
+>;
+export const ThoughtsDocument = gql`
+  query Thoughts($genre: Genre, $cursor: String, $follow: Boolean) {
+    thoughts(genre: $genre, first: 20, after: $cursor, follow: $follow) {
+      ...ThoughtsConnectionParts
+    }
+  }
+  ${ThoughtsConnectionPartsFragmentDoc}
+`;
 
 /**
  * __useThoughtsQuery__
@@ -3426,26 +7242,45 @@ export const ThoughtsDocument = gql`
  *   },
  * });
  */
-export function useThoughtsQuery(baseOptions?: Apollo.QueryHookOptions<ThoughtsQuery, ThoughtsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<ThoughtsQuery, ThoughtsQueryVariables>(ThoughtsDocument, options);
-      }
-export function useThoughtsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<ThoughtsQuery, ThoughtsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<ThoughtsQuery, ThoughtsQueryVariables>(ThoughtsDocument, options);
-        }
-export type ThoughtsQueryHookResult = ReturnType<typeof useThoughtsQuery>;
-export type ThoughtsLazyQueryHookResult = ReturnType<typeof useThoughtsLazyQuery>;
-export type ThoughtsQueryResult = Apollo.QueryResult<ThoughtsQuery, ThoughtsQueryVariables>;
-export const UserDocument = gql`
-    query User($id: ID!) {
-  user(id: $id) {
-    ...UserParts
-    blocking
-    follow
-  }
+export function useThoughtsQuery(
+  baseOptions?: Apollo.QueryHookOptions<ThoughtsQuery, ThoughtsQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<ThoughtsQuery, ThoughtsQueryVariables>(
+    ThoughtsDocument,
+    options
+  );
 }
-    ${UserPartsFragmentDoc}`;
+export function useThoughtsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    ThoughtsQuery,
+    ThoughtsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<ThoughtsQuery, ThoughtsQueryVariables>(
+    ThoughtsDocument,
+    options
+  );
+}
+export type ThoughtsQueryHookResult = ReturnType<typeof useThoughtsQuery>;
+export type ThoughtsLazyQueryHookResult = ReturnType<
+  typeof useThoughtsLazyQuery
+>;
+export type ThoughtsQueryResult = Apollo.QueryResult<
+  ThoughtsQuery,
+  ThoughtsQueryVariables
+>;
+export const UserDocument = gql`
+  query User($id: ID!) {
+    user(id: $id) {
+      ...UserParts
+      blocking
+      follow
+    }
+  }
+  ${UserPartsFragmentDoc}
+`;
 
 /**
  * __useUserQuery__
@@ -3463,24 +7298,32 @@ export const UserDocument = gql`
  *   },
  * });
  */
-export function useUserQuery(baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
-      }
-export function useUserLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(UserDocument, options);
-        }
+export function useUserQuery(
+  baseOptions: Apollo.QueryHookOptions<UserQuery, UserQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<UserQuery, UserQueryVariables>(UserDocument, options);
+}
+export function useUserLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<UserQuery, UserQueryVariables>
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<UserQuery, UserQueryVariables>(
+    UserDocument,
+    options
+  );
+}
 export type UserQueryHookResult = ReturnType<typeof useUserQuery>;
 export type UserLazyQueryHookResult = ReturnType<typeof useUserLazyQuery>;
 export type UserQueryResult = Apollo.QueryResult<UserQuery, UserQueryVariables>;
 export const UserThoughtsDocument = gql`
-    query UserThoughts($userId: ID!, $cursor: String) {
-  userThoughts(userId: $userId, first: 20, after: $cursor) {
-    ...ThoughtsConnectionParts
+  query UserThoughts($userId: ID!, $cursor: String) {
+    userThoughts(userId: $userId, first: 20, after: $cursor) {
+      ...ThoughtsConnectionParts
+    }
   }
-}
-    ${ThoughtsConnectionPartsFragmentDoc}`;
+  ${ThoughtsConnectionPartsFragmentDoc}
+`;
 
 /**
  * __useUserThoughtsQuery__
@@ -3499,34 +7342,58 @@ export const UserThoughtsDocument = gql`
  *   },
  * });
  */
-export function useUserThoughtsQuery(baseOptions: Apollo.QueryHookOptions<UserThoughtsQuery, UserThoughtsQueryVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useQuery<UserThoughtsQuery, UserThoughtsQueryVariables>(UserThoughtsDocument, options);
-      }
-export function useUserThoughtsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<UserThoughtsQuery, UserThoughtsQueryVariables>) {
-          const options = {...defaultOptions, ...baseOptions}
-          return Apollo.useLazyQuery<UserThoughtsQuery, UserThoughtsQueryVariables>(UserThoughtsDocument, options);
-        }
-export type UserThoughtsQueryHookResult = ReturnType<typeof useUserThoughtsQuery>;
-export type UserThoughtsLazyQueryHookResult = ReturnType<typeof useUserThoughtsLazyQuery>;
-export type UserThoughtsQueryResult = Apollo.QueryResult<UserThoughtsQuery, UserThoughtsQueryVariables>;
+export function useUserThoughtsQuery(
+  baseOptions: Apollo.QueryHookOptions<
+    UserThoughtsQuery,
+    UserThoughtsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useQuery<UserThoughtsQuery, UserThoughtsQueryVariables>(
+    UserThoughtsDocument,
+    options
+  );
+}
+export function useUserThoughtsLazyQuery(
+  baseOptions?: Apollo.LazyQueryHookOptions<
+    UserThoughtsQuery,
+    UserThoughtsQueryVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useLazyQuery<UserThoughtsQuery, UserThoughtsQueryVariables>(
+    UserThoughtsDocument,
+    options
+  );
+}
+export type UserThoughtsQueryHookResult = ReturnType<
+  typeof useUserThoughtsQuery
+>;
+export type UserThoughtsLazyQueryHookResult = ReturnType<
+  typeof useUserThoughtsLazyQuery
+>;
+export type UserThoughtsQueryResult = Apollo.QueryResult<
+  UserThoughtsQuery,
+  UserThoughtsQueryVariables
+>;
 export const OnNewsTalkRoomMessageCreatedDocument = gql`
-    subscription OnNewsTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
-  newsTalkRoomMessageCreated(roomIds: $roomIds, userId: $userId) {
-    ...NewsTalkRoomMessageParts
-    talkRoom {
-      id
-      updatedAt
-      createdAt
-      allMessageSeen
-      news {
+  subscription OnNewsTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
+    newsTalkRoomMessageCreated(roomIds: $roomIds, userId: $userId) {
+      ...NewsTalkRoomMessageParts
+      talkRoom {
         id
-        title
+        updatedAt
+        createdAt
+        allMessageSeen
+        news {
+          id
+          title
+        }
       }
     }
   }
-}
-    ${NewsTalkRoomMessagePartsFragmentDoc}`;
+  ${NewsTalkRoomMessagePartsFragmentDoc}
+`;
 
 /**
  * __useOnNewsTalkRoomMessageCreatedSubscription__
@@ -3545,19 +7412,31 @@ export const OnNewsTalkRoomMessageCreatedDocument = gql`
  *   },
  * });
  */
-export function useOnNewsTalkRoomMessageCreatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OnNewsTalkRoomMessageCreatedSubscription, OnNewsTalkRoomMessageCreatedSubscriptionVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<OnNewsTalkRoomMessageCreatedSubscription, OnNewsTalkRoomMessageCreatedSubscriptionVariables>(OnNewsTalkRoomMessageCreatedDocument, options);
-      }
-export type OnNewsTalkRoomMessageCreatedSubscriptionHookResult = ReturnType<typeof useOnNewsTalkRoomMessageCreatedSubscription>;
-export type OnNewsTalkRoomMessageCreatedSubscriptionResult = Apollo.SubscriptionResult<OnNewsTalkRoomMessageCreatedSubscription>;
-export const OnOneOnOneTalkRoomMessageCreatedDocument = gql`
-    subscription OnOneOnOneTalkRoomMessageCreated($userId: ID!) {
-  oneOnOneTalkRoomMessageCreated(userId: $userId) {
-    ...OneOnOneTalkRoomMessageParts
-  }
+export function useOnNewsTalkRoomMessageCreatedSubscription(
+  baseOptions: Apollo.SubscriptionHookOptions<
+    OnNewsTalkRoomMessageCreatedSubscription,
+    OnNewsTalkRoomMessageCreatedSubscriptionVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSubscription<
+    OnNewsTalkRoomMessageCreatedSubscription,
+    OnNewsTalkRoomMessageCreatedSubscriptionVariables
+  >(OnNewsTalkRoomMessageCreatedDocument, options);
 }
-    ${OneOnOneTalkRoomMessagePartsFragmentDoc}`;
+export type OnNewsTalkRoomMessageCreatedSubscriptionHookResult = ReturnType<
+  typeof useOnNewsTalkRoomMessageCreatedSubscription
+>;
+export type OnNewsTalkRoomMessageCreatedSubscriptionResult =
+  Apollo.SubscriptionResult<OnNewsTalkRoomMessageCreatedSubscription>;
+export const OnOneOnOneTalkRoomMessageCreatedDocument = gql`
+  subscription OnOneOnOneTalkRoomMessageCreated($userId: ID!) {
+    oneOnOneTalkRoomMessageCreated(userId: $userId) {
+      ...OneOnOneTalkRoomMessageParts
+    }
+  }
+  ${OneOnOneTalkRoomMessagePartsFragmentDoc}
+`;
 
 /**
  * __useOnOneOnOneTalkRoomMessageCreatedSubscription__
@@ -3575,35 +7454,47 @@ export const OnOneOnOneTalkRoomMessageCreatedDocument = gql`
  *   },
  * });
  */
-export function useOnOneOnOneTalkRoomMessageCreatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OnOneOnOneTalkRoomMessageCreatedSubscription, OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<OnOneOnOneTalkRoomMessageCreatedSubscription, OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables>(OnOneOnOneTalkRoomMessageCreatedDocument, options);
-      }
-export type OnOneOnOneTalkRoomMessageCreatedSubscriptionHookResult = ReturnType<typeof useOnOneOnOneTalkRoomMessageCreatedSubscription>;
-export type OnOneOnOneTalkRoomMessageCreatedSubscriptionResult = Apollo.SubscriptionResult<OnOneOnOneTalkRoomMessageCreatedSubscription>;
+export function useOnOneOnOneTalkRoomMessageCreatedSubscription(
+  baseOptions: Apollo.SubscriptionHookOptions<
+    OnOneOnOneTalkRoomMessageCreatedSubscription,
+    OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSubscription<
+    OnOneOnOneTalkRoomMessageCreatedSubscription,
+    OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables
+  >(OnOneOnOneTalkRoomMessageCreatedDocument, options);
+}
+export type OnOneOnOneTalkRoomMessageCreatedSubscriptionHookResult = ReturnType<
+  typeof useOnOneOnOneTalkRoomMessageCreatedSubscription
+>;
+export type OnOneOnOneTalkRoomMessageCreatedSubscriptionResult =
+  Apollo.SubscriptionResult<OnOneOnOneTalkRoomMessageCreatedSubscription>;
 export const OnThoughtTalkRoomMessageCreatedDocument = gql`
-    subscription OnThoughtTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
-  thoughtTalkRoomMessageCreated(roomIds: $roomIds, userId: $userId) {
-    talkRoom {
-      id
-      updatedAt
-      createdAt
-      allMessageSeen
-      thought {
+  subscription OnThoughtTalkRoomMessageCreated($roomIds: [Int]!, $userId: ID!) {
+    thoughtTalkRoomMessageCreated(roomIds: $roomIds, userId: $userId) {
+      talkRoom {
         id
-        title
-        text
-        contributor {
+        updatedAt
+        createdAt
+        allMessageSeen
+        thought {
           id
-          name
-          imageUrl
+          title
+          text
+          contributor {
+            id
+            name
+            imageUrl
+          }
         }
       }
+      ...ThoughtTalkRoomMessageParts
     }
-    ...ThoughtTalkRoomMessageParts
   }
-}
-    ${ThoughtTalkRoomMessagePartsFragmentDoc}`;
+  ${ThoughtTalkRoomMessagePartsFragmentDoc}
+`;
 
 /**
  * __useOnThoughtTalkRoomMessageCreatedSubscription__
@@ -3622,9 +7513,20 @@ export const OnThoughtTalkRoomMessageCreatedDocument = gql`
  *   },
  * });
  */
-export function useOnThoughtTalkRoomMessageCreatedSubscription(baseOptions: Apollo.SubscriptionHookOptions<OnThoughtTalkRoomMessageCreatedSubscription, OnThoughtTalkRoomMessageCreatedSubscriptionVariables>) {
-        const options = {...defaultOptions, ...baseOptions}
-        return Apollo.useSubscription<OnThoughtTalkRoomMessageCreatedSubscription, OnThoughtTalkRoomMessageCreatedSubscriptionVariables>(OnThoughtTalkRoomMessageCreatedDocument, options);
-      }
-export type OnThoughtTalkRoomMessageCreatedSubscriptionHookResult = ReturnType<typeof useOnThoughtTalkRoomMessageCreatedSubscription>;
-export type OnThoughtTalkRoomMessageCreatedSubscriptionResult = Apollo.SubscriptionResult<OnThoughtTalkRoomMessageCreatedSubscription>;
+export function useOnThoughtTalkRoomMessageCreatedSubscription(
+  baseOptions: Apollo.SubscriptionHookOptions<
+    OnThoughtTalkRoomMessageCreatedSubscription,
+    OnThoughtTalkRoomMessageCreatedSubscriptionVariables
+  >
+) {
+  const options = { ...defaultOptions, ...baseOptions };
+  return Apollo.useSubscription<
+    OnThoughtTalkRoomMessageCreatedSubscription,
+    OnThoughtTalkRoomMessageCreatedSubscriptionVariables
+  >(OnThoughtTalkRoomMessageCreatedDocument, options);
+}
+export type OnThoughtTalkRoomMessageCreatedSubscriptionHookResult = ReturnType<
+  typeof useOnThoughtTalkRoomMessageCreatedSubscription
+>;
+export type OnThoughtTalkRoomMessageCreatedSubscriptionResult =
+  Apollo.SubscriptionResult<OnThoughtTalkRoomMessageCreatedSubscription>;

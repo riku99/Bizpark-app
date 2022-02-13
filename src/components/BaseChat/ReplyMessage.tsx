@@ -1,8 +1,8 @@
-import React, { ComponentProps } from "react";
-import { Box, HStack, Text, ScrollView } from "native-base";
-import { IMessage } from "react-native-gifted-chat";
-import { StyleSheet } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import React, { ComponentProps } from 'react';
+import { Box, HStack, Text, ScrollView } from 'native-base';
+import { IMessage } from 'react-native-gifted-chat';
+import { StyleSheet } from 'react-native';
+import { AntDesign } from '@expo/vector-icons';
 
 type Props = {
   replyMessage: IMessage | null;

@@ -1,8 +1,8 @@
-import { MyPage } from "src/screens/MyPage";
-import React from "react";
-import { UserProfileScreen } from "src/screens/UserProfile";
-import { useNavigationHeaderStyle } from "src/hooks/theme";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { MyPage } from 'src/screens/MyPage';
+import React from 'react';
+import { UserProfileScreen } from 'src/screens/UserProfile';
+import { useNavigationHeaderStyle } from 'src/hooks/theme';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
 const Stack = createNativeStackNavigator();
 

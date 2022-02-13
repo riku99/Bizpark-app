@@ -1,15 +1,15 @@
-import React, { useLayoutEffect } from "react";
-import { RootNavigationScreenProp } from "src/types";
-import { HeaderBackButton } from "@react-navigation/elements";
+import React, { useLayoutEffect } from 'react';
+import { RootNavigationScreenProp } from 'src/types';
+import { HeaderBackButton } from '@react-navigation/elements';
 import {
   useGetOneOnOneTalkRoomMessagesQuery,
   useCreateOneOnOneTalkRoomMessageMutation,
   useSeenOneOnOneTalkRoomMessageMutation,
-} from "src/generated/graphql";
-import { TalkRoomMessage } from "src/components/TalkRoomMessage";
-import { useDeleteOneOnOneTalkRoomFromCache } from "src/hooks/oneOnOneTalkRoom";
+} from 'src/generated/graphql';
+import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
+import { useDeleteOneOnOneTalkRoomFromCache } from 'src/hooks/oneOnOneTalkRoom';
 
-type Props = RootNavigationScreenProp<"OneOnOneTalkRoomMain">;
+type Props = RootNavigationScreenProp<'OneOnOneTalkRoomMain'>;
 
 export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
   const talkRoomId = route.params.id;
@@ -19,16 +19,15 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       id: talkRoomId,
     },
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const [createMessageMutation] = useCreateOneOnOneTalkRoomMessageMutation();
 
   const [seenMutation] = useSeenOneOnOneTalkRoomMessageMutation();
 
-  const {
-    deleteOneOnOneTalkRoomFromCache,
-  } = useDeleteOneOnOneTalkRoomFromCache();
+  const { deleteOneOnOneTalkRoomFromCache } =
+    useDeleteOneOnOneTalkRoomFromCache();
 
   useLayoutEffect(() => {
     navigation.setOptions({

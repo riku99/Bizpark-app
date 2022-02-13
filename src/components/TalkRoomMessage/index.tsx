@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 import {
   useMeQuery,
   GetThoughtTalkRoomMessagesQuery,
@@ -21,52 +21,52 @@ import {
   OneOnOneTalkRoomMessage,
   CreateOneOnOneTalkRoomMessageMutationFn,
   GetOneOnOneTalkRoomMessagesQuery,
-} from "src/generated/graphql";
-import { IMessage } from "react-native-gifted-chat";
-import { BaseChat } from "src/components/BaseChat";
-import { NO_USER_IMAGE_URL } from "src/constants";
-import { createRandomStr } from "src/utils";
-import { logJson, getGraphQLError } from "src/utils";
-import { btoa } from "react-native-quick-base64";
-import { Alert } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
+} from 'src/generated/graphql';
+import { IMessage } from 'react-native-gifted-chat';
+import { BaseChat } from 'src/components/BaseChat';
+import { NO_USER_IMAGE_URL } from 'src/constants';
+import { createRandomStr } from 'src/utils';
+import { logJson, getGraphQLError } from 'src/utils';
+import { btoa } from 'react-native-quick-base64';
+import { Alert } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
 
 type Props =
   | {
-      type: "Thought";
+      type: 'Thought';
       roomId: number;
-      messageData: GetThoughtTalkRoomMessagesQueryResult["data"];
-      messageFetchMore: GetThoughtTalkRoomMessagesQueryResult["fetchMore"];
+      messageData: GetThoughtTalkRoomMessagesQueryResult['data'];
+      messageFetchMore: GetThoughtTalkRoomMessagesQueryResult['fetchMore'];
       createMessage: CreateThoughtTalkRoomMessageMutationFn;
       createSeen: CreateUserThoughtTalkRoomMessageSeenMutationFn;
       deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
     }
   | {
-      type: "News";
+      type: 'News';
       roomId: number;
-      messageData: GetNewsTalkRoomMessagesQueryResult["data"];
-      messageFetchMore: GetNewsTalkRoomMessagesQueryResult["fetchMore"];
+      messageData: GetNewsTalkRoomMessagesQueryResult['data'];
+      messageFetchMore: GetNewsTalkRoomMessagesQueryResult['fetchMore'];
       createMessage: CreateNewsTalkRoomMessageMutationFn;
       createSeen: CreateUserNewsTalkRoomMessageSeenMutationFn;
       deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
     }
   | {
-      type: "OneOnOne";
+      type: 'OneOnOne';
       roomId: number;
-      messageData: GetOneOnOneTalkRoomMessagesQueryResult["data"];
-      messageFetchMore: GetOneOnOneTalkRoomMessagesQueryResult["fetchMore"];
+      messageData: GetOneOnOneTalkRoomMessagesQueryResult['data'];
+      messageFetchMore: GetOneOnOneTalkRoomMessagesQueryResult['fetchMore'];
       createMessage: CreateOneOnOneTalkRoomMessageMutationFn;
       createSeen: SeenOneOnOneTalkRoomMessageMutationFn;
       deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
     };
 
-const isTmp = (str: string) => str.slice(0, 3) === "tmp";
+const isTmp = (str: string) => str.slice(0, 3) === 'tmp';
 
 export const TalkRoomMessage = (props: Props) => {
   const { roomId } = props;
 
-  const navigation = useNavigation<RootNavigationProp<"ThoughtTalkRoom">>();
+  const navigation = useNavigation<RootNavigationProp<'ThoughtTalkRoom'>>();
 
   const {
     data: { me },
@@ -74,11 +74,11 @@ export const TalkRoomMessage = (props: Props) => {
 
   const [pageInfo, setPageInfo] = useState<PageInfo>(() => {
     switch (props.type) {
-      case "Thought":
+      case 'Thought':
         return props.messageData?.thoughtTalkRoom.messages.pageInfo;
-      case "News":
+      case 'News':
         return props.messageData?.newsTalkRoom.messages.pageInfo;
-      case "OneOnOne":
+      case 'OneOnOne':
         return props.messageData.oneOnOneTalkRoom.messages.pageInfo;
     }
   });
@@ -88,13 +88,13 @@ export const TalkRoomMessage = (props: Props) => {
       let newPageInfo: PageInfo;
 
       switch (props.type) {
-        case "Thought":
+        case 'Thought':
           newPageInfo = props.messageData.thoughtTalkRoom.messages.pageInfo;
           break;
-        case "News":
+        case 'News':
           newPageInfo = props.messageData.newsTalkRoom.messages.pageInfo;
           break;
-        case "OneOnOne":
+        case 'OneOnOne':
           newPageInfo = props.messageData.oneOnOneTalkRoom.messages.pageInfo;
       }
 
@@ -164,13 +164,13 @@ export const TalkRoomMessage = (props: Props) => {
       )[];
 
       switch (props.type) {
-        case "Thought":
+        case 'Thought':
           edges = props.messageData.thoughtTalkRoom.messages.edges;
           break;
-        case "News":
+        case 'News':
           edges = props.messageData.newsTalkRoom.messages.edges;
           break;
-        case "OneOnOne":
+        case 'OneOnOne':
           edges = props.messageData.oneOnOneTalkRoom.messages.edges;
       }
 
@@ -192,13 +192,13 @@ export const TalkRoomMessage = (props: Props) => {
       )[];
 
       switch (props.type) {
-        case "Thought":
+        case 'Thought':
           messageEdges = props.messageData.thoughtTalkRoom.messages.edges;
           break;
-        case "News":
+        case 'News':
           messageEdges = props.messageData.newsTalkRoom.messages.edges;
           break;
-        case "OneOnOne":
+        case 'OneOnOne':
           messageEdges = props.messageData.oneOnOneTalkRoom.messages.edges;
       }
 
@@ -243,7 +243,7 @@ export const TalkRoomMessage = (props: Props) => {
       if (latestMessage && latestMessage.user._id !== me.id) {
         try {
           switch (props.type) {
-            case "Thought":
+            case 'Thought':
               await props.createSeen({
                 variables: {
                   input: {
@@ -254,7 +254,7 @@ export const TalkRoomMessage = (props: Props) => {
               });
               break;
 
-            case "News":
+            case 'News':
               await props.createSeen({
                 variables: {
                   input: {
@@ -265,7 +265,7 @@ export const TalkRoomMessage = (props: Props) => {
               });
               break;
 
-            case "OneOnOne":
+            case 'OneOnOne':
               await props.createSeen({
                 variables: {
                   input: {
@@ -290,7 +290,7 @@ export const TalkRoomMessage = (props: Props) => {
   const onSendPress = async (inputMessages: IMessage[]) => {
     const newMessageData = inputMessages[0];
 
-    const tempId = "tmp" + createRandomStr();
+    const tempId = 'tmp' + createRandomStr();
 
     setReplyMessage(null);
 
@@ -327,18 +327,17 @@ export const TalkRoomMessage = (props: Props) => {
       const replyTo = replyMessage ? Number(replyMessage._id) : null;
 
       switch (props.type) {
-        case "Thought":
-          const {
-            data: createdThoughtTalkRoomMessageData,
-          } = await props.createMessage({
-            variables: {
-              input: {
-                text,
-                roomId,
-                replyTo,
+        case 'Thought':
+          const { data: createdThoughtTalkRoomMessageData } =
+            await props.createMessage({
+              variables: {
+                input: {
+                  text,
+                  roomId,
+                  replyTo,
+                },
               },
-            },
-          });
+            });
 
           if (createdThoughtTalkRoomMessageData) {
             newIMessageData = createNewIMessage(
@@ -347,18 +346,17 @@ export const TalkRoomMessage = (props: Props) => {
           }
           break;
 
-        case "News":
-          const {
-            data: createdNewsTalkRoomMessageData,
-          } = await props.createMessage({
-            variables: {
-              input: {
-                text,
-                talkRoomId: roomId,
-                replyTo,
+        case 'News':
+          const { data: createdNewsTalkRoomMessageData } =
+            await props.createMessage({
+              variables: {
+                input: {
+                  text,
+                  talkRoomId: roomId,
+                  replyTo,
+                },
               },
-            },
-          });
+            });
 
           if (createdNewsTalkRoomMessageData) {
             newIMessageData = createNewIMessage(
@@ -367,18 +365,17 @@ export const TalkRoomMessage = (props: Props) => {
           }
           break;
 
-        case "OneOnOne":
-          const {
-            data: createdOneOnOneTalkRoomData,
-          } = await props.createMessage({
-            variables: {
-              input: {
-                text,
-                talkRoomId: roomId,
-                replyTo,
+        case 'OneOnOne':
+          const { data: createdOneOnOneTalkRoomData } =
+            await props.createMessage({
+              variables: {
+                input: {
+                  text,
+                  talkRoomId: roomId,
+                  replyTo,
+                },
               },
-            },
-          });
+            });
 
           if (createdOneOnOneTalkRoomData) {
             newIMessageData = createNewIMessage(
@@ -402,9 +399,9 @@ export const TalkRoomMessage = (props: Props) => {
 
       // トークルームが削除されている or メンバーから削除されている場合はキャッシュからトークルーム消す
       if (error?.code === CustomErrorResponseCode.InvalidRequest) {
-        Alert.alert(error.message, "", [
+        Alert.alert(error.message, '', [
           {
-            text: "OK",
+            text: 'OK',
             onPress: async () => {
               props.deleteTalkRoomFromCache({ talkRoomId: roomId });
               navigation.goBack();
@@ -445,7 +442,7 @@ export const TalkRoomMessage = (props: Props) => {
 
         const messageCursor = endCursor ? btoa(endCursor) : null;
 
-        if (props.type === "Thought") {
+        if (props.type === 'Thought') {
           const { data } = await props.messageFetchMore<
             GetThoughtTalkRoomMessagesQuery,
             { messageCursor: string }
@@ -462,7 +459,7 @@ export const TalkRoomMessage = (props: Props) => {
           }
         }
 
-        if (props.type === "News") {
+        if (props.type === 'News') {
           const { data } = await props.messageFetchMore<
             GetNewsTalkRoomMessagesQuery,
             { messageCursor: string }
@@ -479,7 +476,7 @@ export const TalkRoomMessage = (props: Props) => {
           }
         }
 
-        if (props.type === "OneOnOne") {
+        if (props.type === 'OneOnOne') {
           const { data } = await props.messageFetchMore<
             GetOneOnOneTalkRoomMessagesQuery,
             { after: string }
@@ -510,7 +507,7 @@ export const TalkRoomMessage = (props: Props) => {
       onSend={onSendPress}
       infiniteLoad={infiniteLoad}
       onPressAvatar={(user) => {
-        navigation.navigate("UserProfile", {
+        navigation.navigate('UserProfile', {
           id: user._id.toString(),
         });
       }}

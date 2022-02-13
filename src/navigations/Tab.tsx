@@ -1,22 +1,22 @@
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { AntDesign } from "@expo/vector-icons";
-import { MyPageStack } from "./MyPage";
-import { TalkListScreen } from "src/screens/TalkRoomList";
-import { NewsScreen } from "src/screens/News";
-import { useColorModeValue, useTheme, Box } from "native-base";
-import React, { useMemo } from "react";
-import { HomeStack } from "./Home";
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { AntDesign } from '@expo/vector-icons';
+import { MyPageStack } from './MyPage';
+import { TalkListScreen } from 'src/screens/TalkRoomList';
+import { NewsScreen } from 'src/screens/News';
+import { useColorModeValue, useTheme, Box } from 'native-base';
+import React, { useMemo } from 'react';
+import { HomeStack } from './Home';
 import {
   useGetThoughtTalkRoomsQuery,
   useGetNewsTalkRoomsQuery,
   useGetOneOnOneTalkRoomsQuery,
-} from "src/generated/graphql";
-import { Badge } from "src/components/Badge";
-import { StyleSheet } from "react-native";
-import { useToughtTalkRoomsWithSubsciption } from "src/hooks/thoughtTalkRoom";
-import { useActiveData } from "src/hooks/active";
-import { useNewsTalkRoomsWithSusbscription } from "src/hooks/newsTalkRoom";
-import { useOneOnOneTalkRoomsWithSubscription } from "src/hooks/oneOnOneTalkRoom";
+} from 'src/generated/graphql';
+import { Badge } from 'src/components/Badge';
+import { StyleSheet } from 'react-native';
+import { useToughtTalkRoomsWithSubsciption } from 'src/hooks/thoughtTalkRoom';
+import { useActiveData } from 'src/hooks/active';
+import { useNewsTalkRoomsWithSusbscription } from 'src/hooks/newsTalkRoom';
+import { useOneOnOneTalkRoomsWithSubscription } from 'src/hooks/oneOnOneTalkRoom';
 
 type TabParamList = {
   Home: undefined;
@@ -31,15 +31,15 @@ export const BottomTab = () => {
   const { colors } = useTheme();
 
   const { data: thoughtTalkRoomData } = useGetThoughtTalkRoomsQuery({
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const { data: newsTalkRoomData } = useGetNewsTalkRoomsQuery({
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const { data: oneOnOneTalkRoomData } = useGetOneOnOneTalkRoomsQuery({
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const notThoughtTalkRoomAllSeen = useMemo(() => {
@@ -93,13 +93,13 @@ export const BottomTab = () => {
           backgroundColor: useColorModeValue(colors.lt.bg, colors.dt.bg),
         },
         headerTitleStyle: {
-          color: useColorModeValue(colors.textBlack, "white"),
+          color: useColorModeValue(colors.textBlack, 'white'),
         },
         tabBarStyle: {
           backgroundColor: useColorModeValue(colors.lt.bg, colors.dt.bg),
         },
         tabBarActiveTintColor: colors.pink,
-        tabBarInactiveTintColor: useColorModeValue("#969696", "#c9c9c9"),
+        tabBarInactiveTintColor: useColorModeValue('#969696', '#c9c9c9'),
       }}
     >
       <Tab.Screen
@@ -110,7 +110,7 @@ export const BottomTab = () => {
           tabBarIcon: ({ color }) => (
             <AntDesign name="home" size={ICON_SIZE} color={color} />
           ),
-          tabBarLabel: "ホーム",
+          tabBarLabel: 'ホーム',
         }}
       />
       <Tab.Screen
@@ -120,7 +120,7 @@ export const BottomTab = () => {
           tabBarIcon: ({ color }) => (
             <AntDesign name="profile" size={ICON_SIZE} color={color} />
           ),
-          tabBarLabel: "ニュース",
+          tabBarLabel: 'ニュース',
         }}
       />
       <Tab.Screen
@@ -133,7 +133,7 @@ export const BottomTab = () => {
               {talkBadgeVisible && <Badge containerStyle={styles.badge} />}
             </Box>
           ),
-          tabBarLabel: "トーク",
+          tabBarLabel: 'トーク',
         }}
       />
       <Tab.Screen
@@ -145,7 +145,7 @@ export const BottomTab = () => {
           tabBarIcon: ({ color }) => (
             <AntDesign name="user" size={ICON_SIZE} color={color} />
           ),
-          tabBarLabel: "マイページ",
+          tabBarLabel: 'マイページ',
         }}
       />
     </Tab.Navigator>
@@ -156,7 +156,7 @@ const ICON_SIZE = 24;
 
 const styles = StyleSheet.create({
   badge: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     transform: [{ translateX: 10 }],
   },

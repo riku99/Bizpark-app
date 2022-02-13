@@ -1,6 +1,6 @@
-import React, { ComponentProps } from "react";
-import { Box } from "native-base";
-import { MotiView } from "moti";
+import React, { ComponentProps } from 'react';
+import { Box } from 'native-base';
+import { MotiView } from 'moti';
 
 type Props = {
   containerStyle?: ComponentProps<typeof Box>;
@@ -16,7 +16,7 @@ export const Badge = ({ containerStyle, ...props }: Props) => {
         animate={{
           scale: 1,
         }}
-        transition={{ type: "timing", duration: 200 }}
+        transition={{ type: 'timing', duration: 200 }}
       >
         <Box bg="pink" rounded="full" size="2" {...props} />
       </MotiView>

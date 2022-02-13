@@ -1,17 +1,17 @@
-import React, { useLayoutEffect } from "react";
-import { Box } from "native-base";
-import { RootNavigationScreenProp } from "src/types";
-import { ListItem } from "src/components/ListItem";
-import { RightIcon } from "src/components/RightIcon";
-import { Alert } from "react-native";
-import { useSignOut } from "src/hooks/auth";
+import React, { useLayoutEffect } from 'react';
+import { Box } from 'native-base';
+import { RootNavigationScreenProp } from 'src/types';
+import { ListItem } from 'src/components/ListItem';
+import { RightIcon } from 'src/components/RightIcon';
+import { Alert } from 'react-native';
+import { useSignOut } from 'src/hooks/auth';
 
-type Props = RootNavigationScreenProp<"AccountSettings">;
+type Props = RootNavigationScreenProp<'AccountSettings'>;
 
 export const AccountSettingsScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "アカウント",
+      title: 'アカウント',
     });
   }, [navigation]);
 
@@ -19,16 +19,16 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
 
   const list = [
     {
-      title: "ログアウト",
+      title: 'ログアウト',
       onPress: async () => {
-        Alert.alert("ログアウト", "ログアウトしてよろしいですか?", [
+        Alert.alert('ログアウト', 'ログアウトしてよろしいですか?', [
           {
-            text: "キャンセル",
-            style: "cancel",
+            text: 'キャンセル',
+            style: 'cancel',
           },
           {
-            text: "ログアウト",
-            style: "destructive",
+            text: 'ログアウト',
+            style: 'destructive',
             onPress: async () => {
               await signOut();
             },

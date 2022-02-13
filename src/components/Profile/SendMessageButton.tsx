@@ -1,17 +1,17 @@
-import React, { ComponentProps } from "react";
-import { Pressable, Text, useColorModeValue } from "native-base";
+import React, { ComponentProps } from 'react';
+import { Pressable, Text, useColorModeValue } from 'native-base';
 import {
   GetOneOnOneTalkRoomsDocument,
   GetOneOnOneTalkRoomsQuery,
   useCreateOneOnOneTalkRoomMutation,
   CustomErrorResponseCode,
-} from "src/generated/graphql";
-import { spinnerVisibleVar } from "src/stores/spinner";
-import { useFindOneOnOneTalkRoomFromUserId } from "src/hooks/oneOnOneTalkRoom";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
-import { getGraphQLError } from "src/utils";
-import { Alert } from "react-native";
+} from 'src/generated/graphql';
+import { spinnerVisibleVar } from 'src/stores/spinner';
+import { useFindOneOnOneTalkRoomFromUserId } from 'src/hooks/oneOnOneTalkRoom';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
+import { getGraphQLError } from 'src/utils';
+import { Alert } from 'react-native';
 
 type Props = {
   user: {
@@ -21,13 +21,13 @@ type Props = {
 } & ComponentProps<typeof Pressable>;
 
 export const SendMessageButton = ({ user, ...props }: Props) => {
-  const borderColor = useColorModeValue("textBlack", "textWhite");
+  const borderColor = useColorModeValue('textBlack', 'textWhite');
 
   const [createTalkRoomMutation] = useCreateOneOnOneTalkRoomMutation();
 
   const { findOneOnOneTalkRoom } = useFindOneOnOneTalkRoomFromUserId();
 
-  const navigation = useNavigation<RootNavigationProp<"UserProfile">>();
+  const navigation = useNavigation<RootNavigationProp<'UserProfile'>>();
 
   const onPress = async () => {
     let talkRoomId: number | null = null;
@@ -83,8 +83,8 @@ export const SendMessageButton = ({ user, ...props }: Props) => {
     }
 
     if (talkRoomId) {
-      navigation.navigate("OneOnOneTalkRoom", {
-        screen: "OneOnOneTalkRoomMain",
+      navigation.navigate('OneOnOneTalkRoom', {
+        screen: 'OneOnOneTalkRoomMain',
         params: {
           id: talkRoomId,
           user: {

@@ -1,18 +1,18 @@
-import React, { useLayoutEffect } from "react";
-import { AddButton } from "src/components/AddButton";
-import { CreatingToast } from "src/components/CreatingToast";
-import { useReactiveVar } from "@apollo/client";
-import { creatingThoughtVar } from "src/stores/thought";
-import { RootNavigationScreenProp } from "src/types";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import { useTopTabBarStyle } from "src/hooks/theme";
-import { Picks } from "./Picks";
-import { Thouhgts } from "./Thoughts";
-import { Follows } from "./Follows";
-import { MyProfile } from "./Profile";
-import { HeaderRight } from "./HeaderRight";
+import React, { useLayoutEffect } from 'react';
+import { AddButton } from 'src/components/AddButton';
+import { CreatingToast } from 'src/components/CreatingToast';
+import { useReactiveVar } from '@apollo/client';
+import { creatingThoughtVar } from 'src/stores/thought';
+import { RootNavigationScreenProp } from 'src/types';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useTopTabBarStyle } from 'src/hooks/theme';
+import { Picks } from './Picks';
+import { Thouhgts } from './Thoughts';
+import { Follows } from './Follows';
+import { MyProfile } from './Profile';
+import { HeaderRight } from './HeaderRight';
 
-type Props = RootNavigationScreenProp<"Tab">;
+type Props = RootNavigationScreenProp<'Tab'>;
 
 const TopTab = createMaterialTopTabNavigator();
 
@@ -20,16 +20,13 @@ export const MyPage = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShadowVisible: false,
-      headerTitle: "",
+      headerTitle: '',
       headerRight: () => <HeaderRight />,
     });
   }, [navigation]);
 
-  const {
-    defaultScreenStyle,
-    style,
-    sceneContainerStyle,
-  } = useTopTabBarStyle();
+  const { defaultScreenStyle, style, sceneContainerStyle } =
+    useTopTabBarStyle();
 
   const creatingThought = useReactiveVar(creatingThoughtVar);
 
@@ -40,7 +37,7 @@ export const MyPage = ({ navigation }: Props) => {
           ...defaultScreenStyle,
           tabBarLabelStyle: {
             fontSize: 11,
-            fontWeight: "bold",
+            fontWeight: 'bold',
           },
           lazy: true,
         }}

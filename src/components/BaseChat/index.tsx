@@ -4,7 +4,7 @@ import React, {
   useEffect,
   useState,
   useRef,
-} from "react";
+} from 'react';
 import {
   GiftedChat,
   IMessage,
@@ -12,22 +12,22 @@ import {
   Composer,
   Send,
   InputToolbar,
-} from "react-native-gifted-chat";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import { useColorModeValue, Text, Box, HStack } from "native-base";
+} from 'react-native-gifted-chat';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useColorModeValue, Text, Box, HStack } from 'native-base';
 import {
   StyleSheet,
   NativeScrollEvent,
   Dimensions,
   Keyboard,
-} from "react-native";
-import { Indicator } from "src/components/Indicator";
-import { INITIAL_MESSAGE_COUNT } from "src/constants";
-import { CustomBubble } from "./CustomBubble";
-import { BubbleActions } from "./BubbleActions";
-import { ReplyMessage, REPLY_MESSAGE_CONTAINER_HEIGHT } from "./ReplyMessage";
-import { useHeaderHeight } from "@react-navigation/elements";
-import { useMeQuery } from "src/generated/graphql";
+} from 'react-native';
+import { Indicator } from 'src/components/Indicator';
+import { INITIAL_MESSAGE_COUNT } from 'src/constants';
+import { CustomBubble } from './CustomBubble';
+import { BubbleActions } from './BubbleActions';
+import { ReplyMessage, REPLY_MESSAGE_CONTAINER_HEIGHT } from './ReplyMessage';
+import { useHeaderHeight } from '@react-navigation/elements';
+import { useMeQuery } from 'src/generated/graphql';
 
 type Props = {
   infiniteLoad?: () => Promise<void>;
@@ -38,24 +38,24 @@ type Props = {
 export const BaseChat = React.memo(
   ({ infiniteLoad, replyMessage, setReplyMessage, ...props }: Props) => {
     const { bottom } = useSafeAreaInsets();
-    const leftTextColor = useColorModeValue("black", "white");
-    const inputTextColor = useColorModeValue("black", "white");
-    const keyboard = useColorModeValue("light", "dark");
-    const inputContainerBg = useColorModeValue("#f0f0f0", "#292522");
-    const leftReplyMesageTextColor = useColorModeValue("#4d4d4d", "#d1d1d1");
-    const rightReplyMessageTextColor = useColorModeValue("#e3e3e3", "#d1d1d1");
+    const leftTextColor = useColorModeValue('black', 'white');
+    const inputTextColor = useColorModeValue('black', 'white');
+    const keyboard = useColorModeValue('light', 'dark');
+    const inputContainerBg = useColorModeValue('#f0f0f0', '#292522');
+    const leftReplyMesageTextColor = useColorModeValue('#4d4d4d', '#d1d1d1');
+    const rightReplyMessageTextColor = useColorModeValue('#e3e3e3', '#d1d1d1');
     const [infiniteLoading, setInfiniteLoading] = useState(false);
 
     const [keyboardHeight, setKeyboardHeight] = useState(0);
     useEffect(() => {
       const willShowListnener = Keyboard.addListener(
-        "keyboardWillShow",
+        'keyboardWillShow',
         (e) => {
           setKeyboardHeight(e.endCoordinates.height);
         }
       );
 
-      const willHideListener = Keyboard.addListener("keyboardWillHide", (e) => {
+      const willHideListener = Keyboard.addListener('keyboardWillHide', (e) => {
         setKeyboardHeight(0);
       });
 
@@ -75,10 +75,8 @@ export const BaseChat = React.memo(
       data: { me },
     } = useMeQuery();
 
-    const [
-      longPressedMessage,
-      setLongPressedMessage,
-    ] = useState<IMessage | null>(null);
+    const [longPressedMessage, setLongPressedMessage] =
+      useState<IMessage | null>(null);
 
     const [messageContainerHeight, setMessageContainerHeight] = useState<
       number | null
@@ -119,7 +117,7 @@ export const BaseChat = React.memo(
               left: {
                 color: leftTextColor,
               },
-              right: { color: "white" },
+              right: { color: 'white' },
             }}
           />
         );
@@ -150,7 +148,7 @@ export const BaseChat = React.memo(
                 paddingHorizontal: 4,
                 backgroundColor: inputContainerBg,
                 borderRadius: 20,
-                width: "94%",
+                width: '94%',
                 marginLeft: INPUT_PADDING_X,
               }}
             />
@@ -212,7 +210,7 @@ export const BaseChat = React.memo(
               style={{
                 width: 5,
                 borderRadius: 10,
-                height: "100%",
+                height: '100%',
                 marginRight: 8,
               }}
             />
@@ -302,7 +300,7 @@ export const BaseChat = React.memo(
   }
 );
 
-const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get("screen");
+const { width: SCREEN_WIDTH, height: SCREEN_HEIGHT } = Dimensions.get('screen');
 
 const INPUT_PADDING_X = SCREEN_WIDTH * 0.03;
 const PADDING_BOTTOM_FROM_KEYBOARD = 5;
@@ -310,13 +308,13 @@ const INPUT_CONTAINER_HEIGHT = 45;
 
 const styles = StyleSheet.create({
   sendContainer: {
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     marginRight: 10,
   },
   sendButtonTitile: {
-    color: "#4444ff",
-    fontWeight: "bold",
+    color: '#4444ff',
+    fontWeight: 'bold',
     fontSize: 16,
   },
 });

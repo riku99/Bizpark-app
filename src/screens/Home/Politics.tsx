@@ -1,10 +1,10 @@
-import React from "react";
-import { VStack } from "native-base";
-import { Bg } from "src/components/Bg";
-import { useThoughtsQuery, Genre } from "src/generated/graphql";
-import { List } from "../../components/ThoughtList";
-import { Indicator } from "src/components/Indicator";
-import { btoa } from "react-native-quick-base64";
+import React from 'react';
+import { VStack } from 'native-base';
+import { Bg } from 'src/components/Bg';
+import { useThoughtsQuery, Genre } from 'src/generated/graphql';
+import { List } from '../../components/ThoughtList';
+import { Indicator } from 'src/components/Indicator';
+import { btoa } from 'react-native-quick-base64';
 
 export const Politics = React.memo(() => {
   const { data, refetch, fetchMore } = useThoughtsQuery({

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from "react";
-import { Box, Pressable, Text, Image, HStack, Button } from "native-base";
-import { ImageBackground, StyleSheet } from "react-native";
-import CameraRoll from "@react-native-community/cameraroll";
-import { MaterialIcons } from "@expo/vector-icons";
-import { CloseButton } from "src/components/CloseButton";
+import React, { useEffect, useState } from 'react';
+import { Box, Pressable, Text, Image, HStack, Button } from 'native-base';
+import { ImageBackground, StyleSheet } from 'react-native';
+import CameraRoll from '@react-native-community/cameraroll';
+import { MaterialIcons } from '@expo/vector-icons';
+import { CloseButton } from 'src/components/CloseButton';
 
 type Props = {
   text: string;
@@ -67,7 +67,7 @@ export const TextKeyboardAccessory = React.memo(
                     size={IMAGE_SIZE}
                     borderRadius={8}
                     key={img.url}
-                    alt={""}
+                    alt={''}
                   />
                   <CloseButton
                     size={6}
@@ -84,7 +84,7 @@ export const TextKeyboardAccessory = React.memo(
           </HStack>
           <Text
             fontWeight="bold"
-            color={text.length > 500 ? "red.900" : undefined}
+            color={text.length > 500 ? 'red.900' : undefined}
           >
             {text.length} / 500
           </Text>
@@ -99,11 +99,11 @@ const styles = StyleSheet.create({
   imageContainer: {
     width: IMAGE_SIZE,
     height: IMAGE_SIZE,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
   image: {
     borderRadius: 8,
-    backgroundColor: "gray",
+    backgroundColor: 'gray',
   },
 });

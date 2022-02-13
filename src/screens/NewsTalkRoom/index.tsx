@@ -1,21 +1,21 @@
-import React, { useLayoutEffect, useMemo, useCallback, useState } from "react";
-import { HeaderBackButton } from "@react-navigation/elements";
-import { RootNavigationScreenProp } from "src/types";
+import React, { useLayoutEffect, useMemo, useCallback, useState } from 'react';
+import { HeaderBackButton } from '@react-navigation/elements';
+import { RootNavigationScreenProp } from 'src/types';
 import {
   useGetNewsTalkRoomMessagesQuery,
   useCreateNewsTalkRoomMessageMutation,
   useCreateUserNewsTalkRoomMessageSeenMutation,
   useGetNewsTalkRoomMembersQuery,
   NewsTalkRoom,
-} from "src/generated/graphql";
-import { TalkRoomMessage } from "src/components/TalkRoomMessage";
-import { useDeleteNewsTalkRoomFromCache } from "src/hooks/newsTalkRoom";
-import { TalkRoomUserImagesHeader } from "src/components/TalkRoomUserImagseHeader";
-import { DotsHorizontal } from "src/components/DotsHorizontal";
-import { Menu } from "./Menu";
-import { useApolloClient, gql } from "@apollo/client";
+} from 'src/generated/graphql';
+import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
+import { useDeleteNewsTalkRoomFromCache } from 'src/hooks/newsTalkRoom';
+import { TalkRoomUserImagesHeader } from 'src/components/TalkRoomUserImagseHeader';
+import { DotsHorizontal } from 'src/components/DotsHorizontal';
+import { Menu } from './Menu';
+import { useApolloClient, gql } from '@apollo/client';
 
-type Props = RootNavigationScreenProp<"NewsTalkRoomMain">;
+type Props = RootNavigationScreenProp<'NewsTalkRoomMain'>;
 
 export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
@@ -24,7 +24,7 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       talkRoomId: id,
     },
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const { data: membersData } = useGetNewsTalkRoomMembersQuery({
@@ -58,7 +58,7 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
       <TalkRoomUserImagesHeader
         imageUrls={memberImageUrls}
         onPress={() => {
-          navigation.navigate("NewsTalkRoomMembers", {
+          navigation.navigate('NewsTalkRoomMembers', {
             talkRoomId: id,
           });
         }}

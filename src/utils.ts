@@ -1,5 +1,5 @@
-import { ErrorResponse } from "@apollo/client/link/error";
-import { ApolloError } from "@apollo/client";
+import { ErrorResponse } from '@apollo/client/link/error';
+import { ApolloError } from '@apollo/client';
 
 export const getGraphQLErrorCode = (error: any) => {
   return error.graphQLErrors[0].extensions.code;

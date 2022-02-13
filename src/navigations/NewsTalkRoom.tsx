@@ -1,8 +1,8 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { NewsTalkRoomScreen } from "src/screens/NewsTalkRoom";
-import { useNavigationHeaderStyle } from "src/hooks/theme";
-import { NewsTalkRoomMembersScreen } from "src/screens/NewsTalkRoomMembers";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NewsTalkRoomScreen } from 'src/screens/NewsTalkRoom';
+import { useNavigationHeaderStyle } from 'src/hooks/theme';
+import { NewsTalkRoomMembersScreen } from 'src/screens/NewsTalkRoomMembers';
 
 export type NewsTalkRoomStackParamList = {
   NewsTalkRoomMain: {

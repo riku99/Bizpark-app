@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useState } from 'react';
 import {
   Box,
   FlatList,
@@ -6,38 +6,38 @@ import {
   useTheme,
   Pressable,
   Text,
-} from "native-base";
+} from 'native-base';
 import {
   useGetOneOnOneTalkRoomsQuery,
   GetOneOnOneTalkRoomsQuery,
   useMeQuery,
   useDeleteOneOnOneTalkRoomMutation,
-} from "src/generated/graphql";
-import { ListItem } from "react-native-elements";
-import { UserImage } from "src/components/UserImage";
-import { Badge } from "src/components/Badge";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
-import { StyleSheet, Alert } from "react-native";
-import { useDeleteOneOnOneTalkRoomFromCache } from "src/hooks/oneOnOneTalkRoom";
-import * as Haptics from "expo-haptics";
+} from 'src/generated/graphql';
+import { ListItem } from 'react-native-elements';
+import { UserImage } from 'src/components/UserImage';
+import { Badge } from 'src/components/Badge';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
+import { StyleSheet, Alert } from 'react-native';
+import { useDeleteOneOnOneTalkRoomFromCache } from 'src/hooks/oneOnOneTalkRoom';
+import * as Haptics from 'expo-haptics';
 import {
   InstaLikeModal,
   ListItem as MenuListItem,
-} from "src/components/InstaLikeModal";
-import { useToast } from "react-native-toast-notifications";
+} from 'src/components/InstaLikeModal';
+import { useToast } from 'react-native-toast-notifications';
 
-type Item = GetOneOnOneTalkRoomsQuery["oneOnOneTalkRooms"][number];
+type Item = GetOneOnOneTalkRoomsQuery['oneOnOneTalkRooms'][number];
 
 export const OneOnOneTalkRoomList = React.memo(() => {
   const { data: talkRoomData } = useGetOneOnOneTalkRoomsQuery({
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const { colors } = useTheme();
 
-  const bg = useColorModeValue("lt.bg", "dt.bg");
-  const itemPressedColor = useColorModeValue("lt.pressed", "dt.pressed");
+  const bg = useColorModeValue('lt.bg', 'dt.bg');
+  const itemPressedColor = useColorModeValue('lt.pressed', 'dt.pressed');
   const nameColor = useColorModeValue(colors.textBlack, colors.textWhite);
   const messageColor = useColorModeValue(
     colors.lt.textGray,
@@ -47,10 +47,10 @@ export const OneOnOneTalkRoomList = React.memo(() => {
   const {
     data: { me },
   } = useMeQuery({
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
-  const navigation = useNavigation<RootNavigationProp<"Tab">>();
+  const navigation = useNavigation<RootNavigationProp<'Tab'>>();
 
   const [menuData, setMenuData] = useState<{ roomId: number | null }>(null);
 
@@ -60,28 +60,27 @@ export const OneOnOneTalkRoomList = React.memo(() => {
 
   const [deleteTalkRoomMutation] = useDeleteOneOnOneTalkRoomMutation();
 
-  const {
-    deleteOneOnOneTalkRoomFromCache,
-  } = useDeleteOneOnOneTalkRoomFromCache();
+  const { deleteOneOnOneTalkRoomFromCache } =
+    useDeleteOneOnOneTalkRoomFromCache();
 
   const toast = useToast();
 
   const menuList: MenuListItem[] = [
     {
-      title: "トークルームを削除",
-      color: "red",
+      title: 'トークルームを削除',
+      color: 'red',
       onPress: () => {
         Alert.alert(
-          "トークルームを削除",
-          "メッセージが全て削除され元に戻すことはできません。削除しますか?",
+          'トークルームを削除',
+          'メッセージが全て削除され元に戻すことはできません。削除しますか?',
           [
             {
-              text: "キャンセル",
-              style: "cancel",
+              text: 'キャンセル',
+              style: 'cancel',
             },
             {
-              text: "削除",
-              style: "destructive",
+              text: '削除',
+              style: 'destructive',
               onPress: async () => {
                 if (menuData) {
                   try {
@@ -97,7 +96,7 @@ export const OneOnOneTalkRoomList = React.memo(() => {
                       talkRoomId: menuData.roomId,
                     });
 
-                    toast.show("削除しました", { type: "success" });
+                    toast.show('削除しました', { type: 'success' });
                   } catch (e) {
                     console.log(e);
                   } finally {
@@ -125,8 +124,8 @@ export const OneOnOneTalkRoomList = React.memo(() => {
       const user = me.id === sender.id ? recipient : sender;
 
       const onPress = () => {
-        navigation.navigate("OneOnOneTalkRoom", {
-          screen: "OneOnOneTalkRoomMain",
+        navigation.navigate('OneOnOneTalkRoom', {
+          screen: 'OneOnOneTalkRoomMain',
           params: {
             id,
             user: {
@@ -192,10 +191,10 @@ export const OneOnOneTalkRoomList = React.memo(() => {
 
 const styles = StyleSheet.create({
   itemContainer: {
-    backgroundColor: "transparent",
+    backgroundColor: 'transparent',
   },
   title: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
     fontSize: 16,
   },
 });

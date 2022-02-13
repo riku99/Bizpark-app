@@ -1,10 +1,10 @@
-import React from "react";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { SettingsScreen } from "src/screens/Settings";
-import { useNavigationHeaderStyle } from "src/hooks/theme";
-import { UserSettingsScreen } from "src/screens/UserSettings";
-import { BlockingUsersScreen } from "src/screens/BlockingUsers";
-import { AccountSettingsScreen } from "src/screens/AccountSettings";
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { SettingsScreen } from 'src/screens/Settings';
+import { useNavigationHeaderStyle } from 'src/hooks/theme';
+import { UserSettingsScreen } from 'src/screens/UserSettings';
+import { BlockingUsersScreen } from 'src/screens/BlockingUsers';
+import { AccountSettingsScreen } from 'src/screens/AccountSettings';
 
 export type SettingsParamList = {
   SettingList: undefined;

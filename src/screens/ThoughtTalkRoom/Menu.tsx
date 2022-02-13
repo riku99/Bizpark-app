@@ -1,7 +1,7 @@
-import React from "react";
-import { InstaLikeModal, ListItem } from "src/components/InstaLikeModal";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
+import React from 'react';
+import { InstaLikeModal, ListItem } from 'src/components/InstaLikeModal';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
 
 type Props = {
   isVisible: boolean;
@@ -16,14 +16,14 @@ export const Menu = ({
   talkRoomId,
   thoughtId,
 }: Props) => {
-  const navigation = useNavigation<RootNavigationProp<"ThoughtTalkRoomMain">>();
+  const navigation = useNavigation<RootNavigationProp<'ThoughtTalkRoomMain'>>();
 
   const menuList: ListItem[] = [
     {
-      title: "元の投稿を見る",
+      title: '元の投稿を見る',
       onPress: () => {
         closeMenu();
-        navigation.navigate("Thought", {
+        navigation.navigate('Thought', {
           id: thoughtId,
         });
       },

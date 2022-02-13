@@ -1,27 +1,27 @@
-import React, { useState } from "react";
-import { Pressable } from "native-base";
+import React, { useState } from 'react';
+import { Pressable } from 'native-base';
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
-} from "react-native-gesture-handler";
+} from 'react-native-gesture-handler';
 import Animated, {
   useAnimatedGestureHandler,
   useSharedValue,
   useAnimatedStyle,
   withTiming,
-} from "react-native-reanimated";
-import { ListItem } from "src/components/ListItem";
-import { UserImage } from "src/components/UserImage";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
-import { StyleSheet, Alert } from "react-native";
-import { Feather } from "@expo/vector-icons";
+} from 'react-native-reanimated';
+import { ListItem } from 'src/components/ListItem';
+import { UserImage } from 'src/components/UserImage';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
+import { StyleSheet, Alert } from 'react-native';
+import { Feather } from '@expo/vector-icons';
 import {
   CustomErrorResponseCode,
   useRequestNewsTalkRoomMemberDeletionMutation,
-} from "src/generated/graphql";
-import { useToast } from "react-native-toast-notifications";
-import { getGraphQLError } from "src/utils";
+} from 'src/generated/graphql';
+import { useToast } from 'react-native-toast-notifications';
+import { getGraphQLError } from 'src/utils';
 
 type Props = {
   talkRoomId: number;
@@ -38,9 +38,8 @@ const AnimatedPressable = Animated.createAnimatedComponent(Pressable);
 
 export const MemberListItem = React.memo(
   ({ user, swipeEnabled, talkRoomId, memberId }: Props) => {
-    const navigation = useNavigation<
-      RootNavigationProp<"ThoughtTalkRoomMembers">
-    >();
+    const navigation =
+      useNavigation<RootNavigationProp<'ThoughtTalkRoomMembers'>>();
 
     const translateX = useSharedValue(0);
     const itemHeight = useSharedValue(DEFAULT_ITEM_HEIGHT);
@@ -61,8 +60,8 @@ export const MemberListItem = React.memo(
       };
     });
 
-    const panGestureHandler = useAnimatedGestureHandler<PanGestureHandlerGestureEvent>(
-      {
+    const panGestureHandler =
+      useAnimatedGestureHandler<PanGestureHandlerGestureEvent>({
         onStart: (_, ctx) => {},
         onActive: (event, ctx) => {
           translateX.value = event.translationX;
@@ -75,27 +74,25 @@ export const MemberListItem = React.memo(
             translateX.value = withTiming(0);
           }
         },
-      }
-    );
+      });
 
-    const [
-      requestDeletionMutation,
-    ] = useRequestNewsTalkRoomMemberDeletionMutation();
+    const [requestDeletionMutation] =
+      useRequestNewsTalkRoomMemberDeletionMutation();
 
     const toast = useToast();
 
     const onRequestPress = () => {
       Alert.alert(
-        "削除を申請",
+        '削除を申請',
         `${user.name}をこのトークルームから削除することを申請しますか?\n2人以上のユーザーがこのユーザーに対して申請を行なった場合、このユーザーはトークルームから削除されます`,
         [
           {
-            text: "キャンセル",
-            style: "cancel",
+            text: 'キャンセル',
+            style: 'cancel',
           },
           {
-            text: "申請",
-            style: "destructive",
+            text: '申請',
+            style: 'destructive',
             onPress: async () => {
               try {
                 await requestDeletionMutation({
@@ -107,14 +104,14 @@ export const MemberListItem = React.memo(
                   },
                 });
 
-                toast.show("申請しました", { type: "success" });
+                toast.show('申請しました', { type: 'success' });
               } catch (e) {
                 const gqlError = getGraphQLError(e, 0);
                 if (
                   gqlError &&
                   gqlError.code === CustomErrorResponseCode.InvalidRequest
                 ) {
-                  toast.show(gqlError.message, { type: "danger" });
+                  toast.show(gqlError.message, { type: 'danger' });
                 }
                 console.log(e);
               } finally {
@@ -152,7 +149,7 @@ export const MemberListItem = React.memo(
               ItemLeft={<UserImage uri={user.imageUrl} size="8" />}
               py="3"
               onPress={() => {
-                navigation.navigate("UserProfile", {
+                navigation.navigate('UserProfile', {
                   id: user.id,
                 });
               }}
@@ -170,10 +167,10 @@ const DEFAULT_ITEM_HEIGHT = 56;
 const styles = StyleSheet.create({
   itemContainer: {},
   deleteContainer: {
-    position: "absolute",
+    position: 'absolute',
     right: 0,
     width: DELETE_CONTAINER_WIDTH,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
   },
 });

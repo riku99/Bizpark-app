@@ -1,13 +1,13 @@
-import React, { useState, ComponentProps, useEffect } from "react";
-import { Pressable, Text, useColorModeValue } from "native-base";
+import React, { useState, ComponentProps, useEffect } from 'react';
+import { Pressable, Text, useColorModeValue } from 'native-base';
 import {
   CustomErrorResponseCode,
   useFollowMutation,
   useUnfollowMutation,
-} from "src/generated/graphql";
-import { useToast } from "react-native-toast-notifications";
-import { getGraphQLErrorCode } from "src/utils";
-import * as Haptics from "expo-haptics";
+} from 'src/generated/graphql';
+import { useToast } from 'react-native-toast-notifications';
+import { getGraphQLErrorCode } from 'src/utils';
+import * as Haptics from 'expo-haptics';
 
 type Props = {
   userId: string;
@@ -26,7 +26,7 @@ export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
     setIsFollowing(follow);
   }, [follow]);
 
-  const borderColor = useColorModeValue("textBlack", "textWhite");
+  const borderColor = useColorModeValue('textBlack', 'textWhite');
 
   const onPress = async () => {
     Haptics.selectionAsync();
@@ -50,8 +50,8 @@ export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
       setIsFollowing((c) => !c);
       const code = getGraphQLErrorCode(error);
       if (code === CustomErrorResponseCode.InvalidRequest) {
-        toast.show("ブロックを解除してください", {
-          type: "danger",
+        toast.show('ブロックを解除してください', {
+          type: 'danger',
         });
       }
     }
@@ -59,9 +59,9 @@ export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
 
   return (
     <Pressable
-      borderWidth={isFollowing || loading ? "1" : "0"}
+      borderWidth={isFollowing || loading ? '1' : '0'}
       borderColor={isFollowing || loading ? borderColor : undefined}
-      bg={isFollowing || loading ? undefined : "pink"}
+      bg={isFollowing || loading ? undefined : 'pink'}
       px="2"
       py="1"
       borderRadius="2xl"
@@ -73,10 +73,10 @@ export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
     >
       <Text
         fontWeight="bold"
-        color={isFollowing || loading ? undefined : "textWhite"}
+        color={isFollowing || loading ? undefined : 'textWhite'}
         fontSize="13"
       >
-        {loading ? "読み込み中" : isFollowing ? "フォロー中" : "フォローする"}
+        {loading ? '読み込み中' : isFollowing ? 'フォロー中' : 'フォローする'}
       </Text>
     </Pressable>
   );

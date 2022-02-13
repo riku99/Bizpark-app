@@ -1,5 +1,5 @@
-import React from "react";
-import { Box, Text } from "native-base";
+import React from 'react';
+import { Box, Text } from 'native-base';
 
 type Props = {
   title: string;
@@ -14,7 +14,7 @@ export const TitleKeyboardAccessory = ({ title }: Props) => {
       px={4}
       justifyContent="flex-end"
     >
-      <Text fontWeight="bold" color={title.length > 30 ? "red.900" : undefined}>
+      <Text fontWeight="bold" color={title.length > 30 ? 'red.900' : undefined}>
         {title.length} / 30
       </Text>
     </Box>

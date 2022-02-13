@@ -1,4 +1,4 @@
-import React, { ComponentProps, useLayoutEffect } from "react";
+import React, { ComponentProps, useLayoutEffect } from 'react';
 import {
   Box,
   Input,
@@ -6,12 +6,12 @@ import {
   Text,
   useTheme,
   KeyboardAvoidingView,
-} from "native-base";
-import { RootNavigationScreenProp } from "src/types";
-import { TouchableWithoutFeedback, Keyboard } from "react-native";
-import { useForm, Controller, UseControllerProps } from "react-hook-form";
-import { Button } from "react-native-elements";
-import { useSignUpWithEmail, useSignInWithEmail } from "src/hooks/auth";
+} from 'native-base';
+import { RootNavigationScreenProp } from 'src/types';
+import { TouchableWithoutFeedback, Keyboard } from 'react-native';
+import { useForm, Controller, UseControllerProps } from 'react-hook-form';
+import { Button } from 'react-native-elements';
+import { useSignUpWithEmail, useSignInWithEmail } from 'src/hooks/auth';
 
 type FormProps<T> = {
   label: string;
@@ -54,7 +54,7 @@ const Form = <T extends {}>({
   );
 };
 
-type Props = {} & RootNavigationScreenProp<"MailForm">;
+type Props = {} & RootNavigationScreenProp<'MailForm'>;
 type FormData = {
   email: string;
   password: string;
@@ -66,7 +66,7 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: type === "signUp" ? "ユーザー登録" : "ログイン",
+      title: type === 'signUp' ? 'ユーザー登録' : 'ログイン',
     });
   }, [navigation]);
 
@@ -76,17 +76,17 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
 
   const { control, handleSubmit, watch } = useForm<FormData>();
 
-  const email = watch("email");
-  const password = watch("password");
-  const name = watch("name");
+  const email = watch('email');
+  const password = watch('password');
+  const name = watch('name');
 
   const emailAndPaswordDisabled = !email || !password || password.length < 8;
   const disabled =
-    emailAndPaswordDisabled || (type === "signUp" ? !name : undefined);
+    emailAndPaswordDisabled || (type === 'signUp' ? !name : undefined);
 
   const onSubmmitPress = () => {
     handleSubmit(async (data) => {
-      if (type === "signUp") {
+      if (type === 'signUp') {
         await registerUser({
           email: data.email,
           password: data.password,
@@ -96,7 +96,7 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
         return;
       }
 
-      if (type === "signIn") {
+      if (type === 'signIn') {
         await signInWithEmail({
           email: data.email,
           password: data.password,
@@ -117,36 +117,36 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
             <Form<FormData>
               label="メールアドレス"
               inputProps={{
-                placeholder: "メールアドレス",
+                placeholder: 'メールアドレス',
               }}
               controllerProps={{
                 control,
-                name: "email",
+                name: 'email',
               }}
             />
             <Form
               label="パスワード"
               password
               inputProps={{
-                placeholder: "パスワード(8文字以上)",
-                type: "password",
+                placeholder: 'パスワード(8文字以上)',
+                type: 'password',
               }}
-              controllerProps={{ control, name: "password" }}
+              controllerProps={{ control, name: 'password' }}
             />
-            {type === "signUp" && (
+            {type === 'signUp' && (
               <Form
                 label="名前"
                 inputProps={{
-                  placeholder: "名前(後で編集可能)",
+                  placeholder: '名前(後で編集可能)',
                 }}
                 controllerProps={{
                   control,
-                  name: "name",
+                  name: 'name',
                 }}
               />
             )}
             <Button
-              title={type === "signUp" ? "登録" : "ログイン"}
+              title={type === 'signUp' ? '登録' : 'ログイン'}
               buttonStyle={{
                 backgroundColor: colors.pink,
               }}
@@ -154,7 +154,7 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
                 marginTop: 20,
               }}
               titleStyle={{
-                fontWeight: "bold",
+                fontWeight: 'bold',
               }}
               disabled={disabled}
               activeOpacity={1}

@@ -1,6 +1,6 @@
-import { NativeBaseProvider, extendTheme } from "native-base";
-import React from "react";
-import { LinearGradient } from "expo-linear-gradient";
+import { NativeBaseProvider, extendTheme } from 'native-base';
+import React from 'react';
+import { LinearGradient } from 'expo-linear-gradient';
 
 type Props = {
   children: JSX.Element;
@@ -8,56 +8,56 @@ type Props = {
 
 const themeConfig = {
   useSystemColorMode: false,
-  initialColorMode: "dark",
+  initialColorMode: 'dark',
 };
 
 export const colors = {
   dt: {
-    bg: "#1c1917",
-    darkGray: "#292524",
-    pressed: "#211d1b",
-    textGray: "#c4c4c4",
+    bg: '#1c1917',
+    darkGray: '#292524',
+    pressed: '#211d1b',
+    textGray: '#c4c4c4',
   },
   lt: {
-    bg: "#fcfcfc",
-    pressed: "#f5f5f5",
-    textGray: "#6e6a6a",
+    bg: '#fcfcfc',
+    pressed: '#f5f5f5',
+    textGray: '#6e6a6a',
   },
-  pink: "#ff937d",
-  purple: "#4444ff",
-  bluePurple: "#4a7dff",
-  textBlack: "#0d0d0d",
-  textWhite: "white",
-  lightGray: "#c2c2c2",
-  darkGray: "#303030",
-  red: "#ed1607",
+  pink: '#ff937d',
+  purple: '#4444ff',
+  bluePurple: '#4a7dff',
+  textBlack: '#0d0d0d',
+  textWhite: 'white',
+  lightGray: '#c2c2c2',
+  darkGray: '#303030',
+  red: '#ed1607',
 };
 
 const components = {
   Text: {
     baseStyle: ({ colorMode }) => ({
-      color: colorMode === "dark" ? "textWhite" : "textBlack",
+      color: colorMode === 'dark' ? 'textWhite' : 'textBlack',
     }),
   },
   Button: {
     baseStyle: {
-      rounded: "sm",
+      rounded: 'sm',
       _text: {
-        color: "textWhite",
+        color: 'textWhite',
       },
     },
     defaultProps: {
       h: 10,
-      bg: "pink",
+      bg: 'pink',
       _pressed: {
-        bg: "pink",
+        bg: 'pink',
       },
     },
   },
   Input: {
     baseStyle: ({ colorMode }) => ({
       borderWidth: 0,
-      keyboardAppearance: colorMode === "light" ? "light" : "dark",
+      keyboardAppearance: colorMode === 'light' ? 'light' : 'dark',
       // fontWeight: "bold",
     }),
     defaultProps: ({ colorMode }) => ({}),
@@ -72,13 +72,13 @@ const theme = extendTheme({
 
 const config = {
   dependencies: {
-    "linear-gradient": LinearGradient,
+    'linear-gradient': LinearGradient,
   },
 };
 
 type CustomThemeType = typeof theme;
 
-declare module "native-base" {
+declare module 'native-base' {
   interface ICustomTheme extends CustomThemeType {}
 }
 

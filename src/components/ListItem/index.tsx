@@ -1,5 +1,5 @@
-import React, { ComponentProps } from "react";
-import { HStack, Text, Pressable, useColorModeValue } from "native-base";
+import React, { ComponentProps } from 'react';
+import { HStack, Text, Pressable, useColorModeValue } from 'native-base';
 
 type Props = {
   Icon?: JSX.Element;
@@ -18,9 +18,9 @@ export const ListItem = ({
 }: Props) => {
   return (
     <Pressable
-      bg={useColorModeValue("lt.bg", "dt.bg")}
+      bg={useColorModeValue('lt.bg', 'dt.bg')}
       _pressed={{
-        bg: useColorModeValue("lt.pressed", "dt.pressed"),
+        bg: useColorModeValue('lt.pressed', 'dt.pressed'),
       }}
       px="4"
       py="4"
@@ -29,7 +29,7 @@ export const ListItem = ({
       <HStack justifyContent="space-between" alignItems="center">
         <HStack alignItems="center">
           {ItemLeft && ItemLeft}
-          <Text fontWeight="bold" ml={ItemLeft ? "4" : 0} {...titleStyle}>
+          <Text fontWeight="bold" ml={ItemLeft ? '4' : 0} {...titleStyle}>
             {title}
           </Text>
         </HStack>

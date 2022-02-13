@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Box,
   Pressable,
@@ -6,9 +6,9 @@ import {
   Text,
   Divider,
   useColorModeValue,
-} from "native-base";
-import { UserImages } from "../UserImages";
-import { Badge } from "../Badge";
+} from 'native-base';
+import { UserImages } from '../UserImages';
+import { Badge } from '../Badge';
 
 type Props = {
   title: string;
@@ -27,8 +27,8 @@ export const TalkRoomListItem = ({
   onLongPress,
   userImageUrls,
 }: Props) => {
-  const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
-  const textGray = useColorModeValue("lt.textGray", "dt.textGray");
+  const pressedColor = useColorModeValue('lt.pressed', 'dt.pressed');
+  const textGray = useColorModeValue('lt.textGray', 'dt.textGray');
 
   return (
     <Pressable
@@ -54,7 +54,7 @@ export const TalkRoomListItem = ({
           <Text
             color={allMessageSeen ? textGray : undefined}
             h="7"
-            fontWeight={!allMessageSeen ? "bold" : undefined}
+            fontWeight={!allMessageSeen ? 'bold' : undefined}
             ellipsizeMode="tail"
             numberOfLines={1}
           >

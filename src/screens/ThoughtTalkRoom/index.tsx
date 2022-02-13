@@ -1,6 +1,6 @@
-import React, { useMemo, useState, useLayoutEffect, useCallback } from "react";
-import { TalkRoomMessage } from "src/components/TalkRoomMessage";
-import { RootNavigationScreenProp } from "src/types";
+import React, { useMemo, useState, useLayoutEffect, useCallback } from 'react';
+import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
+import { RootNavigationScreenProp } from 'src/types';
 import {
   useGetThoughtTalkRoomMessagesQuery,
   useGetThoughtTalkRoomMembersQuery,
@@ -8,14 +8,14 @@ import {
   useMeQuery,
   useCreateThoughtTalkRoomMessageMutation,
   useCreateUserThoughtTalkRoomMessageSeenMutation,
-} from "src/generated/graphql";
-import { Menu } from "./Menu";
-import { DotsHorizontal } from "src/components/DotsHorizontal";
-import { HeaderBackButton } from "@react-navigation/elements";
-import { TalkRoomUserImagesHeader } from "src/components/TalkRoomUserImagseHeader";
-import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoom";
+} from 'src/generated/graphql';
+import { Menu } from './Menu';
+import { DotsHorizontal } from 'src/components/DotsHorizontal';
+import { HeaderBackButton } from '@react-navigation/elements';
+import { TalkRoomUserImagesHeader } from 'src/components/TalkRoomUserImagseHeader';
+import { useDeleteThoughtTalkRoomsItemFromCache } from 'src/hooks/thoughtTalkRoom';
 
-type Props = RootNavigationScreenProp<"ThoughtTalkRoomMain">;
+type Props = RootNavigationScreenProp<'ThoughtTalkRoomMain'>;
 
 export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
@@ -26,7 +26,7 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       id,
     },
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const { data: membersData } = useGetThoughtTalkRoomMembersQuery({
@@ -43,9 +43,8 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
 
   const [createMessageMutation] = useCreateThoughtTalkRoomMessageMutation();
 
-  const [
-    createSeenMutation,
-  ] = useCreateUserThoughtTalkRoomMessageSeenMutation();
+  const [createSeenMutation] =
+    useCreateUserThoughtTalkRoomMessageSeenMutation();
 
   const { deleteThoghtTalkRoom } = useDeleteThoughtTalkRoomsItemFromCache();
 
@@ -54,7 +53,7 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
       <TalkRoomUserImagesHeader
         imageUrls={memberImageUrls}
         onPress={() => {
-          navigation.navigate("ThoughtTalkRoomMembers", {
+          navigation.navigate('ThoughtTalkRoomMembers', {
             talkRoomId: id,
           });
         }}

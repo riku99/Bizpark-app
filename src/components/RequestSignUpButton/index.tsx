@@ -1,7 +1,7 @@
-import React, { ComponentProps } from "react";
-import { Button, Text, Box } from "native-base";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
+import React, { ComponentProps } from 'react';
+import { Button, Text, Box } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
 
 type Props = {} & ComponentProps<typeof Box>;
 
@@ -9,7 +9,7 @@ export const RequestSignUpButton = ({ ...props }: Props) => {
   const navigation = useNavigation<RootNavigationProp<any>>();
 
   const onPress = () => {
-    navigation.push("Signup");
+    navigation.push('Signup');
   };
 
   return (
@@ -19,7 +19,7 @@ export const RequestSignUpButton = ({ ...props }: Props) => {
         onPress={onPress}
         bg="pink"
         _pressed={{
-          bg: "pink",
+          bg: 'pink',
         }}
         mt={2}
       >

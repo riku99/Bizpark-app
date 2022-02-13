@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState } from "react";
+import React, { useLayoutEffect, useState } from 'react';
 import {
   Box,
   Pressable,
@@ -7,22 +7,22 @@ import {
   ScrollView,
   Image,
   HStack,
-} from "native-base";
-import { RootNavigationScreenProp } from "src/types";
-import { CloseButton } from "src/components/BackButon";
+} from 'native-base';
+import { RootNavigationScreenProp } from 'src/types';
+import { CloseButton } from 'src/components/BackButon';
 import {
   useUploadThoughtImagesMutation,
   useCreateThoughtMutation,
   ImageInput,
   Genre,
-} from "src/generated/graphql";
-import { ReactNativeFile } from "apollo-upload-client";
-import { Alert } from "react-native";
-import { GenreMenu } from "./GenreMenu";
-import { creatingThoughtVar } from "src/stores/thought";
-import { useToast } from "react-native-toast-notifications";
+} from 'src/generated/graphql';
+import { ReactNativeFile } from 'apollo-upload-client';
+import { Alert } from 'react-native';
+import { GenreMenu } from './GenreMenu';
+import { creatingThoughtVar } from 'src/stores/thought';
+import { useToast } from 'react-native-toast-notifications';
 
-type Props = RootNavigationScreenProp<"ThoughtShare">;
+type Props = RootNavigationScreenProp<'ThoughtShare'>;
 
 export const ThoughtShareScreen = ({ navigation, route }: Props) => {
   const { title, text, images } = route.params;
@@ -35,14 +35,14 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
   const onSharePress = async () => {
     if (!text) {
       Alert.alert(
-        "テキストがありません",
-        "前のページに戻りテキストを入力してください"
+        'テキストがありません',
+        '前のページに戻りテキストを入力してください'
       );
       return;
     }
 
     if (!genre) {
-      Alert.alert("ジャンルが選択されていません", "ジャンルを選択してください");
+      Alert.alert('ジャンルが選択されていません', 'ジャンルを選択してください');
       return;
     }
 
@@ -50,7 +50,7 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
 
     try {
       creatingThoughtVar(true);
-      navigation.navigate("Tab");
+      navigation.navigate('Tab');
       if (images.length) {
         const files = images.map(
           (image) =>
@@ -85,7 +85,7 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
         },
       });
 
-      toast.show("シェアしました", { type: "success" });
+      toast.show('シェアしました', { type: 'success' });
     } catch (e) {
     } finally {
       creatingThoughtVar(false);
@@ -94,13 +94,13 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "",
+      title: '',
       headerLeft: () => <CloseButton />,
       headerRight: () => (
         <Pressable>
           <Text
             fontWeight="bold"
-            color={genre ? "pink" : "lightGray"}
+            color={genre ? 'pink' : 'lightGray'}
             fontSize={16}
             onPress={onSharePress}
           >
@@ -119,16 +119,16 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
   if (genre) {
     switch (genre) {
       case Genre.Business:
-        menuText = "Business";
+        menuText = 'Business';
         break;
       case Genre.Politics:
-        menuText = "Politics";
+        menuText = 'Politics';
         break;
       case Genre.Economy:
-        menuText = "Economy";
+        menuText = 'Economy';
         break;
       case Genre.Society:
-        menuText = "Society";
+        menuText = 'Society';
         break;
     }
   }
@@ -170,7 +170,7 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
               w={IMAGE_SIZE}
               h={IMAGE_SIZE}
               size={IMAGE_SIZE}
-              alt={""}
+              alt={''}
             />
           ))}
         </HStack>

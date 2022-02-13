@@ -1,23 +1,23 @@
-import React, { useLayoutEffect } from "react";
-import { Box } from "native-base";
-import { RootNavigationScreenProp } from "src/types";
-import { ListItem } from "src/components/ListItem";
-import { RightIcon } from "src/components/RightIcon";
+import React, { useLayoutEffect } from 'react';
+import { Box } from 'native-base';
+import { RootNavigationScreenProp } from 'src/types';
+import { ListItem } from 'src/components/ListItem';
+import { RightIcon } from 'src/components/RightIcon';
 
-type Props = RootNavigationScreenProp<"UserSettings">;
+type Props = RootNavigationScreenProp<'UserSettings'>;
 
 export const UserSettingsScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "ユーザー",
+      title: 'ユーザー',
     });
   }, [navigation]);
 
   const list = [
     {
-      title: "ブロックしているユーザー",
+      title: 'ブロックしているユーザー',
       onPress: () => {
-        navigation.navigate("BlockingUsers");
+        navigation.navigate('BlockingUsers');
       },
     },
   ];
@@ -29,7 +29,7 @@ export const UserSettingsScreen = ({ navigation }: Props) => {
           key={idx}
           title={item.title}
           titleStyle={{
-            fontSize: "16",
+            fontSize: '16',
           }}
           onPress={item.onPress}
           ItemRight={<RightIcon />}

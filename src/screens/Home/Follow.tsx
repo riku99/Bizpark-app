@@ -1,10 +1,10 @@
-import React from "react";
-import { Box, VStack } from "native-base";
-import { useThoughtsQuery } from "src/generated/graphql";
-import { Indicator } from "src/components/Indicator";
-import { btoa } from "react-native-quick-base64";
-import { List } from "../../components/ThoughtList";
-import { Bg } from "src/components/Bg";
+import React from 'react';
+import { Box, VStack } from 'native-base';
+import { useThoughtsQuery } from 'src/generated/graphql';
+import { Indicator } from 'src/components/Indicator';
+import { btoa } from 'react-native-quick-base64';
+import { List } from '../../components/ThoughtList';
+import { Bg } from 'src/components/Bg';
 
 export const Follow = React.memo(() => {
   const { data, refetch, fetchMore } = useThoughtsQuery({

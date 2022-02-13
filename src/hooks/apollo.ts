@@ -1,5 +1,5 @@
-import { gql, useApolloClient } from "@apollo/client";
-import { useCallback } from "react";
+import { gql, useApolloClient } from '@apollo/client';
+import { useCallback } from 'react';
 import {
   Thought,
   useCreatePickMutation,
@@ -8,7 +8,7 @@ import {
   News,
   useCreateNewsPickMutation,
   useDeleteNewsPickMutation,
-} from "src/generated/graphql";
+} from 'src/generated/graphql';
 
 export const useThoughtCacheFragment = () => {
   const { cache } = useApolloClient();
@@ -49,7 +49,7 @@ export const useNewsCacheFragment = () => {
   const readNewsFragment = useCallback(({ id }: { id: number }) => {
     const data = cache.readFragment<News>({
       id: cache.identify({
-        __typename: "News",
+        __typename: 'News',
         id,
       }),
       fragment: NewsFieldsFragmentDoc,
@@ -68,7 +68,7 @@ export const useCreatePick = () => {
     update: (cache, { data }) => {
       cache.writeFragment({
         id: cache.identify({
-          __typename: "Thought",
+          __typename: 'Thought',
           id: data.createPick.thoughtId,
         }),
         fragment: gql`
@@ -91,7 +91,7 @@ export const useDeletePick = () => {
     update: (cache, { data }) => {
       cache.writeFragment({
         id: cache.identify({
-          __typename: "Thought",
+          __typename: 'Thought',
           id: data.deletePick.thoughtId,
         }),
         fragment: gql`
@@ -114,7 +114,7 @@ export const useCreateNewsPick = () => {
     update: (cache, { data }) => {
       cache.writeFragment({
         id: cache.identify({
-          __typename: "News",
+          __typename: 'News',
           id: data.createNewsPick.newsId,
         }),
         fragment: gql`
@@ -137,7 +137,7 @@ export const useDeleteNewsPick = () => {
     update: (cache, { data }) => {
       cache.writeFragment({
         id: cache.identify({
-          __typename: "News",
+          __typename: 'News',
           id: data.deleteNewsPick.newsId,
         }),
         fragment: gql`

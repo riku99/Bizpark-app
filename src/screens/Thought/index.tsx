@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useState, useEffect } from "react";
+import React, { useLayoutEffect, useState, useEffect } from 'react';
 import {
   Box,
   Text,
@@ -8,36 +8,36 @@ import {
   HStack,
   Pressable,
   useTheme,
-} from "native-base";
-import { RootNavigationScreenProp } from "src/types";
-import { Alert, StyleSheet } from "react-native";
-import { CheckBox } from "src/components/CheckBox";
+} from 'native-base';
+import { RootNavigationScreenProp } from 'src/types';
+import { Alert, StyleSheet } from 'react-native';
+import { CheckBox } from 'src/components/CheckBox';
 import {
   useThoughtCacheFragment,
   useCreatePick,
   useDeletePick,
-} from "src/hooks/apollo";
-import { MotiView } from "moti";
-import { Image } from "src/components/Image";
-import { useSafeAreaInsets } from "react-native-safe-area-context";
-import ImageView from "react-native-image-viewing";
-import { UserImage } from "src/components/UserImage";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { Menu } from "./Menu";
-import { meVar } from "src/stores/me";
-import { useReactiveVar } from "@apollo/client";
+} from 'src/hooks/apollo';
+import { MotiView } from 'moti';
+import { Image } from 'src/components/Image';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import ImageView from 'react-native-image-viewing';
+import { UserImage } from 'src/components/UserImage';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { Menu } from './Menu';
+import { meVar } from 'src/stores/me';
+import { useReactiveVar } from '@apollo/client';
 import {
   useDeleteThoughtMutation,
   CustomErrorResponseCode,
   useGetThoughtQuery,
-} from "src/generated/graphql";
-import { spinnerVisibleVar } from "src/stores/spinner";
-import { useToast } from "react-native-toast-notifications";
-import { JoinButton } from "./JoinButton";
-import { Indicator } from "src/components/Indicator";
-import { getGraphQLError } from "src/utils";
+} from 'src/generated/graphql';
+import { spinnerVisibleVar } from 'src/stores/spinner';
+import { useToast } from 'react-native-toast-notifications';
+import { JoinButton } from './JoinButton';
+import { Indicator } from 'src/components/Indicator';
+import { getGraphQLError } from 'src/utils';
 
-type Props = {} & RootNavigationScreenProp<"Thought">;
+type Props = {} & RootNavigationScreenProp<'Thought'>;
 
 export const ThoughtScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
@@ -52,9 +52,9 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
     if (error) {
       const gqlError = getGraphQLError(error, 0);
       if (gqlError && gqlError.code === CustomErrorResponseCode.NotFound) {
-        Alert.alert("投稿が見つかりませんでした", "", [
+        Alert.alert('投稿が見つかりませんでした', '', [
           {
-            text: "OK",
+            text: 'OK',
             onPress: () => {
               navigation.goBack();
             },
@@ -79,7 +79,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: thoughtData?.thought.title ?? "",
+      title: thoughtData?.thought.title ?? '',
     });
   }, [navigation, thoughtData]);
 
@@ -132,15 +132,15 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
         },
       });
       navigation.goBack();
-      toast.show("削除しました", { type: "success" });
+      toast.show('削除しました', { type: 'success' });
     } catch (error) {
       const firstError = error.graphQLErrors[0];
       const code = firstError.extensions.code;
 
       if (code === CustomErrorResponseCode.InvalidRequest) {
-        Alert.alert("エラー", "既に削除されています", [
+        Alert.alert('エラー', '既に削除されています', [
           {
-            text: "OK",
+            text: 'OK',
             onPress: () => {
               navigation.goBack();
             },
@@ -153,15 +153,15 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   };
 
   const onMenuAction = async (id: string) => {
-    if (id === "delete") {
-      Alert.alert("削除する", "削除してよろしいですか?", [
+    if (id === 'delete') {
+      Alert.alert('削除する', '削除してよろしいですか?', [
         {
-          text: "キャンセル",
-          style: "cancel",
+          text: 'キャンセル',
+          style: 'cancel',
         },
         {
-          text: "削除",
-          style: "destructive",
+          text: '削除',
+          style: 'destructive',
           onPress: async () => {
             await deleteThought();
           },
@@ -186,7 +186,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
         >
           <Pressable
             onPress={() => {
-              navigation.navigate("UserProfile", {
+              navigation.navigate('UserProfile', {
                 id: contributor.id,
               });
             }}
@@ -231,16 +231,16 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
             return (
               <Pressable
                 key={img.id}
-                w={"49%"}
-                h={"32"}
+                w={'49%'}
+                h={'32'}
                 mt={2}
                 onPress={() => {
                   setImageViewing(idx);
                 }}
               >
                 <Image
-                  w={"100%"}
-                  h={"100%"}
+                  w={'100%'}
+                  h={'100%'}
                   borderRadius="md"
                   source={{ uri: img.url }}
                 />
@@ -253,12 +253,12 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
       <MotiView
         from={{ translateY: 180 }}
         animate={{ translateY: 0 }}
-        transition={{ type: "timing", duration: 400 }}
+        transition={{ type: 'timing', duration: 400 }}
         style={{ height: BOTTOM_CONTENTS_HEIGHT }}
       >
         <Box
           position="absolute"
-          bg={useColorModeValue("lt.bg", "dt.bg")}
+          bg={useColorModeValue('lt.bg', 'dt.bg')}
           w="100%"
           h={BOTTOM_CONTENTS_HEIGHT}
           bottom={0}

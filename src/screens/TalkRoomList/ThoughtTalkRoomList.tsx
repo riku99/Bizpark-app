@@ -1,23 +1,23 @@
-import React, { useCallback, useState } from "react";
-import { Box, FlatList, useColorModeValue } from "native-base";
+import React, { useCallback, useState } from 'react';
+import { Box, FlatList, useColorModeValue } from 'native-base';
 import {
   useGetThoughtTalkRoomsQuery,
   useGetOutThoughtTalkRoomMutation,
   GetThoughtTalkRoomsQueryResult,
   useDeleteThoughtTalkRoomMutation,
   useMeQuery,
-} from "src/generated/graphql";
-import { RootNavigationProp } from "src/types";
-import { useNavigation } from "@react-navigation/native";
-import { InstaLikeModal } from "src/components/InstaLikeModal";
-import { Alert } from "react-native";
-import { useToast } from "react-native-toast-notifications";
-import * as Haptics from "expo-haptics";
-import { useDeleteThoughtTalkRoomsItemFromCache } from "src/hooks/thoughtTalkRoom";
-import { TalkRoomListItem } from "src/components/TalkRoomListItem";
-import { spinnerVisibleVar } from "src/stores/spinner";
+} from 'src/generated/graphql';
+import { RootNavigationProp } from 'src/types';
+import { useNavigation } from '@react-navigation/native';
+import { InstaLikeModal } from 'src/components/InstaLikeModal';
+import { Alert } from 'react-native';
+import { useToast } from 'react-native-toast-notifications';
+import * as Haptics from 'expo-haptics';
+import { useDeleteThoughtTalkRoomsItemFromCache } from 'src/hooks/thoughtTalkRoom';
+import { TalkRoomListItem } from 'src/components/TalkRoomListItem';
+import { spinnerVisibleVar } from 'src/stores/spinner';
 
-type Item = GetThoughtTalkRoomsQueryResult["data"]["thoughtTalkRooms"][number];
+type Item = GetThoughtTalkRoomsQueryResult['data']['thoughtTalkRooms'][number];
 
 export const ThoughtTalkRoomList = React.memo(() => {
   const { data } = useGetThoughtTalkRoomsQuery();
@@ -28,10 +28,10 @@ export const ThoughtTalkRoomList = React.memo(() => {
     data: { me },
   } = useMeQuery();
 
-  const pressedColor = useColorModeValue("lt.pressed", "dt.pressed");
-  const textGray = useColorModeValue("lt.textGray", "dt.textGray");
+  const pressedColor = useColorModeValue('lt.pressed', 'dt.pressed');
+  const textGray = useColorModeValue('lt.textGray', 'dt.textGray');
 
-  const navigation = useNavigation<RootNavigationProp<"Tab">>();
+  const navigation = useNavigation<RootNavigationProp<'Tab'>>();
 
   const toast = useToast();
 
@@ -48,20 +48,20 @@ export const ThoughtTalkRoomList = React.memo(() => {
 
   const baseMenuList = [
     {
-      title: "トークから抜ける",
-      color: "red",
+      title: 'トークから抜ける',
+      color: 'red',
       onPress: () => {
         Alert.alert(
-          "トークから抜ける",
-          "このトークルームは表示されなくなります。トークから抜けてよろしいですか?",
+          'トークから抜ける',
+          'このトークルームは表示されなくなります。トークから抜けてよろしいですか?',
           [
             {
-              text: "キャンセル",
-              style: "cancel",
+              text: 'キャンセル',
+              style: 'cancel',
             },
             {
-              text: "抜ける",
-              style: "destructive",
+              text: '抜ける',
+              style: 'destructive',
               onPress: async () => {
                 if (modalData) {
                   try {
@@ -76,7 +76,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
                       },
                     });
 
-                    toast.show("削除しました", { type: "success" });
+                    toast.show('削除しました', { type: 'success' });
                   } catch (e) {
                   } finally {
                     setModalData(null);
@@ -92,20 +92,20 @@ export const ThoughtTalkRoomList = React.memo(() => {
 
   const meMenuList = [
     {
-      title: "トークルームを解散",
-      color: "red",
+      title: 'トークルームを解散',
+      color: 'red',
       onPress: () => {
         Alert.alert(
-          "トークルームを解散",
-          "全てのメンバー、メッセージが削除されます。解散してよろしいですか?",
+          'トークルームを解散',
+          '全てのメンバー、メッセージが削除されます。解散してよろしいですか?',
           [
             {
-              text: "キャンセル",
-              style: "cancel",
+              text: 'キャンセル',
+              style: 'cancel',
             },
             {
-              text: "解散",
-              style: "destructive",
+              text: '解散',
+              style: 'destructive',
               onPress: async () => {
                 if (modalData) {
                   spinnerVisibleVar(true);
@@ -118,7 +118,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
                       },
                       update: () => {
                         deleteThoghtTalkRoom({ talkRoomId: modalData.roomId });
-                        toast.show("解散しました", { type: "success" });
+                        toast.show('解散しました', { type: 'success' });
                       },
                     });
                   } catch (e) {
@@ -151,14 +151,14 @@ export const ThoughtTalkRoomList = React.memo(() => {
       }
 
       const title = item.thought.title ? item.thought.title : item.thought.text;
-      const text = edges.length ? edges[0].node.text : "";
+      const text = edges.length ? edges[0].node.text : '';
       const allMessageSeen = item.allMessageSeen;
 
       const isMyThoughtData = item.thought.contributor.id === me.id;
 
       const onPress = () => {
-        navigation.navigate("ThoughtTalkRoom", {
-          screen: "ThoughtTalkRoomMain",
+        navigation.navigate('ThoughtTalkRoom', {
+          screen: 'ThoughtTalkRoomMain',
           params: {
             id: item.id,
           },

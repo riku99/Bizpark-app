@@ -1,6 +1,6 @@
-import React, { ComponentProps } from "react";
-import { Pressable } from "native-base";
-import { AntDesign } from "@expo/vector-icons";
+import React, { ComponentProps } from 'react';
+import { Pressable } from 'native-base';
+import { AntDesign } from '@expo/vector-icons';
 
 type Props = {
   size: number;

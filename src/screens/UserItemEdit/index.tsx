@@ -1,35 +1,35 @@
-import React, { useLayoutEffect, useState } from "react";
-import { Box, Input, Text, useColorModeValue, Pressable } from "native-base";
-import { RootNavigationScreenProp } from "src/types";
+import React, { useLayoutEffect, useState } from 'react';
+import { Box, Input, Text, useColorModeValue, Pressable } from 'native-base';
+import { RootNavigationScreenProp } from 'src/types';
 
-type Props = RootNavigationScreenProp<"UserItemEdit">;
+type Props = RootNavigationScreenProp<'UserItemEdit'>;
 
 export const UserItemEditScreen = ({ navigation, route }: Props) => {
   const { type, value, setValue } = route.params;
-  let title = "";
-  let placeholder = "";
+  let title = '';
+  let placeholder = '';
   switch (type) {
-    case "name":
-      title = "名前";
+    case 'name':
+      title = '名前';
       break;
-    case "bio":
-      title = "自己紹介";
+    case 'bio':
+      title = '自己紹介';
       break;
-    case "facebook":
-      title = "Facebook";
-      placeholder = "プロフィールのリンクを入力してください";
+    case 'facebook':
+      title = 'Facebook';
+      placeholder = 'プロフィールのリンクを入力してください';
       break;
-    case "instagram":
-      title = "Instagram";
-      placeholder = "ユーザーネームを入力してください";
+    case 'instagram':
+      title = 'Instagram';
+      placeholder = 'ユーザーネームを入力してください';
       break;
-    case "linkedin":
-      title = "LinkedIn";
-      placeholder = "公開プロフィールURLを入力してください";
+    case 'linkedin':
+      title = 'LinkedIn';
+      placeholder = '公開プロフィールURLを入力してください';
       break;
-    case "twitter":
-      title = "Twitter";
-      placeholder = "ユーザー名を入力してください (@は必要ないです)";
+    case 'twitter':
+      title = 'Twitter';
+      placeholder = 'ユーザー名を入力してください (@は必要ないです)';
       break;
   }
 
@@ -63,11 +63,11 @@ export const UserItemEditScreen = ({ navigation, route }: Props) => {
           mt="2"
           fontSize="16"
           _focus={{
-            borderBottomColor: "lightGray",
+            borderBottomColor: 'lightGray',
           }}
-          multiline={type === "bio"}
+          multiline={type === 'bio'}
           autoFocus
-          keyboardAppearance={useColorModeValue("light", "dark")}
+          keyboardAppearance={useColorModeValue('light', 'dark')}
           onChangeText={setNewValue}
           defaultValue={value}
           // placeholder={placeholder}

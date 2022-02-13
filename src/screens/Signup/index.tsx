@@ -1,14 +1,14 @@
-import React, { useLayoutEffect, useEffect } from "react";
-import { Box, VStack, Text, Pressable } from "native-base";
-import { RootNavigationScreenProp } from "src/types";
-import { SafeAreaView } from "react-native";
-import { Bg } from "src/components/Bg";
-import { SwipeContent } from "./SwipeContent";
-import { Mail, Apple, Google } from "src/components/AuthButton";
-import { HIGHER_8_DEVICE } from "src/constants";
-import { useSignupWithApple, useSignupWithGoogle } from "src/hooks/auth";
+import React, { useLayoutEffect, useEffect } from 'react';
+import { Box, VStack, Text, Pressable } from 'native-base';
+import { RootNavigationScreenProp } from 'src/types';
+import { SafeAreaView } from 'react-native';
+import { Bg } from 'src/components/Bg';
+import { SwipeContent } from './SwipeContent';
+import { Mail, Apple, Google } from 'src/components/AuthButton';
+import { HIGHER_8_DEVICE } from 'src/constants';
+import { useSignupWithApple, useSignupWithGoogle } from 'src/hooks/auth';
 
-type Props = RootNavigationScreenProp<"Signup">;
+type Props = RootNavigationScreenProp<'Signup'>;
 
 export const SignupScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
@@ -21,8 +21,8 @@ export const SignupScreen = ({ navigation }: Props) => {
   const { signupWithGoogle } = useSignupWithGoogle();
 
   const onMailPress = () => {
-    navigation.navigate("MailForm", {
-      type: "signUp",
+    navigation.navigate('MailForm', {
+      type: 'signUp',
     });
   };
 
@@ -49,7 +49,7 @@ export const SignupScreen = ({ navigation }: Props) => {
           <Text color="textBlack">既に登録済みの方</Text>
           <Pressable
             onPress={() => {
-              navigation.navigate("Signin");
+              navigation.navigate('Signin');
             }}
           >
             <Text ml={8} textDecorationLine="underline" color="textBlack">

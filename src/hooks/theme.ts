@@ -1,5 +1,5 @@
-import { useColorModeValue, useTheme } from "native-base";
-import { MaterialTopTabNavigationOptions } from "@react-navigation/material-top-tabs";
+import { useColorModeValue, useTheme } from 'native-base';
+import { MaterialTopTabNavigationOptions } from '@react-navigation/material-top-tabs';
 
 export const useBgColor = () => {
   const { colors } = useTheme();
@@ -19,10 +19,10 @@ export const useTopTabBarStyle = () => {
       backgroundColor: colors.pink,
     },
     tabBarLabelStyle: {
-      textTransform: "none",
-      fontWeight: "bold",
+      textTransform: 'none',
+      fontWeight: 'bold',
     },
-    tabBarActiveTintColor: useColorModeValue("black", "white"),
+    tabBarActiveTintColor: useColorModeValue('black', 'white'),
   };
   const style = {
     backgroundColor: bgColor,
@@ -43,7 +43,7 @@ export const useNavigationHeaderStyle = () => {
   };
 
   const headerTitleStyle = {
-    color: useColorModeValue(colors.textBlack, "white"),
+    color: useColorModeValue(colors.textBlack, 'white'),
   };
 
   return {

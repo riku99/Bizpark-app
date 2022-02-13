@@ -1,6 +1,6 @@
-import React, { ComponentProps } from "react";
-import { ActivityIndicator } from "react-native";
-import { useColorModeValue, useTheme } from "native-base";
+import React, { ComponentProps } from 'react';
+import { ActivityIndicator } from 'react-native';
+import { useColorModeValue, useTheme } from 'native-base';
 
 type Props = ComponentProps<typeof ActivityIndicator>;
 

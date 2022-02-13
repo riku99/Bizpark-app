@@ -1,9 +1,9 @@
-import React from "react";
-import { useUserThoughtsQuery } from "src/generated/graphql";
-import { btoa } from "react-native-quick-base64";
-import { Indicator } from "src/components/Indicator";
-import { Box } from "native-base";
-import { List } from "src/components/ThoughtList";
+import React from 'react';
+import { useUserThoughtsQuery } from 'src/generated/graphql';
+import { btoa } from 'react-native-quick-base64';
+import { Indicator } from 'src/components/Indicator';
+import { Box } from 'native-base';
+import { List } from 'src/components/ThoughtList';
 
 type Props = {
   id: string;

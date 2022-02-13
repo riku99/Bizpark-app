@@ -1,25 +1,25 @@
-import React, { useCallback, useState } from "react";
-import { Box, FlatList } from "native-base";
+import React, { useCallback, useState } from 'react';
+import { Box, FlatList } from 'native-base';
 import {
   useGetNewsTalkRoomsQuery,
   GetNewsTalkRoomsQueryResult,
   useGetOutNewsTalkRoomMutation,
-} from "src/generated/graphql";
-import { TalkRoomListItem } from "src/components/TalkRoomListItem";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
-import { InstaLikeModal, ListItem } from "src/components/InstaLikeModal";
-import { Alert } from "react-native";
-import * as Haptics from "expo-haptics";
-import { useToast } from "react-native-toast-notifications";
-import { useDeleteNewsTalkRoomFromCache } from "src/hooks/newsTalkRoom";
+} from 'src/generated/graphql';
+import { TalkRoomListItem } from 'src/components/TalkRoomListItem';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
+import { InstaLikeModal, ListItem } from 'src/components/InstaLikeModal';
+import { Alert } from 'react-native';
+import * as Haptics from 'expo-haptics';
+import { useToast } from 'react-native-toast-notifications';
+import { useDeleteNewsTalkRoomFromCache } from 'src/hooks/newsTalkRoom';
 
-type Item = GetNewsTalkRoomsQueryResult["data"]["newsTalkRooms"][number];
+type Item = GetNewsTalkRoomsQueryResult['data']['newsTalkRooms'][number];
 
 export const NewsTalkRoomList = React.memo(() => {
   const { data: talkRoomData } = useGetNewsTalkRoomsQuery();
 
-  const navigation = useNavigation<RootNavigationProp<"Tab">>();
+  const navigation = useNavigation<RootNavigationProp<'Tab'>>();
 
   const [getOutTalkRoomMutation] = useGetOutNewsTalkRoomMutation();
 
@@ -35,20 +35,20 @@ export const NewsTalkRoomList = React.memo(() => {
 
   const modalList: ListItem[] = [
     {
-      title: "トークから抜ける",
-      color: "red",
+      title: 'トークから抜ける',
+      color: 'red',
       onPress: () => {
         Alert.alert(
-          "トークから抜ける",
-          "このトークルームは表示されなくなります。トークから抜けてよろしいですか?",
+          'トークから抜ける',
+          'このトークルームは表示されなくなります。トークから抜けてよろしいですか?',
           [
             {
-              text: "キャンセル",
-              style: "cancel",
+              text: 'キャンセル',
+              style: 'cancel',
             },
             {
-              text: "抜ける",
-              style: "destructive",
+              text: '抜ける',
+              style: 'destructive',
               onPress: async () => {
                 if (modalData) {
                   try {
@@ -64,7 +64,7 @@ export const NewsTalkRoomList = React.memo(() => {
                       },
                     });
 
-                    toast.show("削除しました", { type: "success" });
+                    toast.show('削除しました', { type: 'success' });
                   } catch (e) {
                     console.log(e);
                   } finally {
@@ -92,12 +92,12 @@ export const NewsTalkRoomList = React.memo(() => {
     }
 
     const title = item.news.title;
-    const text = edges.length ? edges[0].node.text : "";
+    const text = edges.length ? edges[0].node.text : '';
     const allMessageSeen = item.allMessageSeen;
 
     const onPress = () => {
-      navigation.navigate("NewsTalkRoom", {
-        screen: "NewsTalkRoomMain",
+      navigation.navigate('NewsTalkRoom', {
+        screen: 'NewsTalkRoomMain',
         params: {
           id: item.id,
         },

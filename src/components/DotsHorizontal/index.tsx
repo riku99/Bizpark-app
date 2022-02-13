@@ -1,6 +1,6 @@
-import React, { ComponentProps } from "react";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
-import { useColorModeValue, useTheme } from "native-base";
+import React, { ComponentProps } from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { useColorModeValue, useTheme } from 'native-base';
 
 type Props = {} & Partial<ComponentProps<typeof MaterialCommunityIcons>>;
 

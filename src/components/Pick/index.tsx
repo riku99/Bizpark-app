@@ -1,6 +1,6 @@
-import React, { ComponentProps } from "react";
-import { CheckBox } from "../CheckBox";
-import { Box, Text } from "native-base";
+import React, { ComponentProps } from 'react';
+import { CheckBox } from '../CheckBox';
+import { Box, Text } from 'native-base';
 
 type Props = {
   textProp?: ComponentProps<typeof Text>;

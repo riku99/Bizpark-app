@@ -6,12 +6,12 @@ import {
   OnThoughtTalkRoomMessageCreatedSubscriptionVariables,
   useGetThoughtTalkRoomsQuery,
   useGetThoughtTalkRoomLazyQuery,
-} from "src/generated/graphql";
-import { useEffect, useCallback, useMemo, useState } from "react";
-import { useReactiveVar, useApolloClient } from "@apollo/client";
-import { meVar } from "src/stores/me";
-import { logJson } from "src/utils";
-import { AppState, AppStateStatus } from "react-native";
+} from 'src/generated/graphql';
+import { useEffect, useCallback, useMemo, useState } from 'react';
+import { useReactiveVar, useApolloClient } from '@apollo/client';
+import { meVar } from 'src/stores/me';
+import { logJson } from 'src/utils';
+import { AppState, AppStateStatus } from 'react-native';
 
 export const useToughtTalkRoomsWithSubsciption = () => {
   const myId = useReactiveVar(meVar.id);
@@ -19,7 +19,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
   const { cache } = useApolloClient();
 
   const { data: talkRoomsData, subscribeToMore } = useGetThoughtTalkRoomsQuery({
-    fetchPolicy: "cache-only",
+    fetchPolicy: 'cache-only',
   });
 
   const [isActive, setIsActive] = useState(true);
@@ -35,17 +35,17 @@ export const useToughtTalkRoomsWithSubsciption = () => {
   // Active時、非アクティブ時の処理
   useEffect(() => {
     const onChange = (nextState: AppStateStatus) => {
-      if (nextState === "active") {
+      if (nextState === 'active') {
         setIsActive(true);
       } else {
         setIsActive(false);
       }
     };
 
-    AppState.addEventListener("change", onChange);
+    AppState.addEventListener('change', onChange);
 
     return () => {
-      AppState.removeEventListener("change", onChange);
+      AppState.removeEventListener('change', onChange);
     };
   }, [setIsActive]);
 
@@ -55,7 +55,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
 
   useEffect(() => {
     if (isActive && myId) {
-      console.log("⚡️ subscribe for ThoughtTalkRooms");
+      console.log('⚡️ subscribe for ThoughtTalkRooms');
 
       const _unsubscribe = subscribeToMore<
         OnThoughtTalkRoomMessageCreatedSubscription,
@@ -72,9 +72,9 @@ export const useToughtTalkRoomsWithSubsciption = () => {
             subscriptionData.data.thoughtTalkRoomMessageCreated.roomId;
           const rooms = prev.thoughtTalkRooms;
           const targetRoom = rooms.find((r) => r.id === roomId);
-          const {
-            contributor,
-          } = subscriptionData.data.thoughtTalkRoomMessageCreated.talkRoom.thought;
+          const { contributor } =
+            subscriptionData.data.thoughtTalkRoomMessageCreated.talkRoom
+              .thought;
 
           if (!targetRoom) {
             if (contributor.id === myId) {
@@ -89,7 +89,8 @@ export const useToughtTalkRoomsWithSubsciption = () => {
 
           const newEdge = {
             node: subscriptionData.data.thoughtTalkRoomMessageCreated,
-            cursor: subscriptionData.data.thoughtTalkRoomMessageCreated.id.toString(),
+            cursor:
+              subscriptionData.data.thoughtTalkRoomMessageCreated.id.toString(),
           };
 
           const newConnection = {
@@ -123,7 +124,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
       // isActiveの変更によってここも実行される
       return () => {
         if (_unsubscribe) {
-          console.log("案サブスク");
+          console.log('案サブスク');
           _unsubscribe();
         }
       };

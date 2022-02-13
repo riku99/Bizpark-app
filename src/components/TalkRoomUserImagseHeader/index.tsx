@@ -1,7 +1,7 @@
-import React from "react";
-import { Pressable } from "native-base";
-import { UserImages, TRANSLATE_IMAGE_X } from "src/components/UserImages";
-import { Indicator } from "src/components/Indicator";
+import React from 'react';
+import { Pressable } from 'native-base';
+import { UserImages, TRANSLATE_IMAGE_X } from 'src/components/UserImages';
+import { Indicator } from 'src/components/Indicator';
 
 type Props = {
   imageUrls?: string[];

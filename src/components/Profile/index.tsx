@@ -1,22 +1,22 @@
-import React from "react";
-import { Box, useColorModeValue, Text, HStack, Pressable } from "native-base";
-import { ContentsCard } from "src/components/ContentsCard";
-import { UserImage } from "src/components/UserImage";
-import { SocialIcon, SocialIconProps } from "react-native-elements";
-import { StyleSheet } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { RootNavigationProp } from "src/types";
-import { Linking, Alert } from "react-native";
-import { INSTAGRAM_BASE_URL, TWITTER_BASE_URL } from "src/constants";
-import { FollowButton } from "../FollowButton";
-import { SendMessageButton } from "./SendMessageButton";
+import React from 'react';
+import { Box, useColorModeValue, Text, HStack, Pressable } from 'native-base';
+import { ContentsCard } from 'src/components/ContentsCard';
+import { UserImage } from 'src/components/UserImage';
+import { SocialIcon, SocialIconProps } from 'react-native-elements';
+import { StyleSheet } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
+import { Linking, Alert } from 'react-native';
+import { INSTAGRAM_BASE_URL, TWITTER_BASE_URL } from 'src/constants';
+import { FollowButton } from '../FollowButton';
+import { SendMessageButton } from './SendMessageButton';
 
 type Props = {
   id: string;
   name: string;
   imageUrl: string | null;
   bio: string | null;
-  socials: { type: SocialIconProps["type"]; value: string | null }[];
+  socials: { type: SocialIconProps['type']; value: string | null }[];
   follow?: boolean;
   isMe: boolean;
   loading?: boolean;
@@ -38,19 +38,19 @@ export const Profile = ({
     type,
     value,
   }: {
-    type: SocialIconProps["type"];
+    type: SocialIconProps['type'];
     value: string;
   }) => {
     const notSupportedAlert = () => {
-      Alert.alert("無効なURLです");
+      Alert.alert('無効なURLです');
     };
 
     let link = value;
     switch (type) {
-      case "instagram":
+      case 'instagram':
         link = `${INSTAGRAM_BASE_URL}/${value}`;
         break;
-      case "twitter":
+      case 'twitter':
         link = `${TWITTER_BASE_URL}/${value}`;
         break;
     }
@@ -102,7 +102,7 @@ export const Profile = ({
                   {!!l.value && (
                     <SocialIcon
                       type={l.type}
-                      iconType={"font-awesome"}
+                      iconType={'font-awesome'}
                       raised={false}
                       iconSize={20}
                       style={styles.social}
@@ -126,11 +126,11 @@ export const Profile = ({
               top="4"
               right="4"
               borderWidth="1"
-              borderColor={useColorModeValue("textBlack", "textWhite")}
+              borderColor={useColorModeValue('textBlack', 'textWhite')}
               p="2"
               borderRadius="2xl"
               onPress={() => {
-                navigation.navigate("UserEdit");
+                navigation.navigate('UserEdit');
               }}
             >
               <Text fontWeight="bold">編集</Text>
@@ -161,10 +161,10 @@ const styles = StyleSheet.create({
   imageOuter: {
     width: IMAGE_OUTER_SIZE,
     height: IMAGE_OUTER_SIZE,
-    justifyContent: "center",
-    alignItems: "center",
-    position: "absolute",
-    alignSelf: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    alignSelf: 'center',
     transform: [{ translateY: -40 }],
   },
   social: {

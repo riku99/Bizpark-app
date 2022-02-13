@@ -1,23 +1,23 @@
-import React, { useLayoutEffect, useState, useEffect } from "react";
-import { Box, ScrollView, VStack, Pressable, HStack, Text } from "native-base";
-import { RootNavigationScreenProp, Socials } from "src/types";
+import React, { useLayoutEffect, useState, useEffect } from 'react';
+import { Box, ScrollView, VStack, Pressable, HStack, Text } from 'native-base';
+import { RootNavigationScreenProp, Socials } from 'src/types';
 import {
   useMeQuery,
   useUploadImageMutation,
   useUpdateMeMutation,
-} from "src/generated/graphql";
-import { UserImage } from "src/components/UserImage";
-import { SocialIcon, SocialIconProps } from "react-native-elements";
-import { socialIcons } from "src/constants";
-import ImagePicker from "react-native-image-crop-picker";
-import { Item } from "./EditItem";
-import { AvatarMenu } from "./AvatarMenu";
-import { ReactNativeFile } from "apollo-upload-client";
-import { spinnerVisibleVar } from "src/stores/spinner";
-import { useToast } from "react-native-toast-notifications";
-import FastImage from "react-native-fast-image";
+} from 'src/generated/graphql';
+import { UserImage } from 'src/components/UserImage';
+import { SocialIcon, SocialIconProps } from 'react-native-elements';
+import { socialIcons } from 'src/constants';
+import ImagePicker from 'react-native-image-crop-picker';
+import { Item } from './EditItem';
+import { AvatarMenu } from './AvatarMenu';
+import { ReactNativeFile } from 'apollo-upload-client';
+import { spinnerVisibleVar } from 'src/stores/spinner';
+import { useToast } from 'react-native-toast-notifications';
+import FastImage from 'react-native-fast-image';
 
-type Props = RootNavigationScreenProp<"UserEdit">;
+type Props = RootNavigationScreenProp<'UserEdit'>;
 
 export const UserEditScreen = ({ navigation }: Props) => {
   const { data, refetch } = useMeQuery();
@@ -97,7 +97,7 @@ export const UserEditScreen = ({ navigation }: Props) => {
 
       await refetch();
       navigation.goBack();
-      toast.show("更新しました", { type: "success" });
+      toast.show('更新しました', { type: 'success' });
     } catch (e) {
       console.log(e);
     } finally {
@@ -107,7 +107,7 @@ export const UserEditScreen = ({ navigation }: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: "プロフィール編集",
+      title: 'プロフィール編集',
       headerRight: () => (
         <Pressable onPress={onCompletePress}>
           <Text fontWeight="bold" color="pink" fontSize="17">
@@ -120,27 +120,27 @@ export const UserEditScreen = ({ navigation }: Props) => {
 
   const socialsStateData = socialIcons.map((s) => {
     switch (s) {
-      case "facebook":
+      case 'facebook':
         return {
-          type: "facebook",
+          type: 'facebook',
           value: facebook,
           setValue: setFacebook,
         };
-      case "twitter":
+      case 'twitter':
         return {
-          type: "twitter",
+          type: 'twitter',
           value: twitter,
           setValue: setTwitter,
         };
-      case "linkedin":
+      case 'linkedin':
         return {
-          type: "linkedin",
+          type: 'linkedin',
           value: linkedin,
           setValue: setLinkedin,
         };
-      case "instagram":
+      case 'instagram':
         return {
-          type: "instagram",
+          type: 'instagram',
           value: instagram,
           setValue: setInstagram,
         };
@@ -148,11 +148,11 @@ export const UserEditScreen = ({ navigation }: Props) => {
   });
 
   const onAvatarAction = async (id: string) => {
-    if (id === "select") {
+    if (id === 'select') {
       try {
         const image = await ImagePicker.openPicker({
           multiple: false,
-          mediaType: "photo",
+          mediaType: 'photo',
         });
         setNewImage({
           url: image.sourceURL,
@@ -162,7 +162,7 @@ export const UserEditScreen = ({ navigation }: Props) => {
       } catch (e) {}
     }
 
-    if (id === "delete") {
+    if (id === 'delete') {
       setNewImage(null);
       setImageDeleted(true);
     }
@@ -183,8 +183,8 @@ export const UserEditScreen = ({ navigation }: Props) => {
           label="名前"
           value={name}
           onPress={() => {
-            navigation.navigate("UserItemEdit", {
-              type: "name",
+            navigation.navigate('UserItemEdit', {
+              type: 'name',
               value: name,
               setValue: setName,
             });
@@ -195,8 +195,8 @@ export const UserEditScreen = ({ navigation }: Props) => {
           value={bio}
           maxH="20"
           onPress={() => {
-            navigation.navigate("UserItemEdit", {
-              type: "bio",
+            navigation.navigate('UserItemEdit', {
+              type: 'bio',
               value: bio,
               setValue: setBio,
             });
@@ -208,7 +208,7 @@ export const UserEditScreen = ({ navigation }: Props) => {
         {socialsStateData.map((s, idx) => {
           return (
             <SocialIcon
-              type={s.type as SocialIconProps["type"]}
+              type={s.type as SocialIconProps['type']}
               iconType="font-awesome"
               key={idx}
               raised={false}
@@ -217,7 +217,7 @@ export const UserEditScreen = ({ navigation }: Props) => {
                 height: 40,
               }}
               onPress={() => {
-                navigation.navigate("UserItemEdit", {
+                navigation.navigate('UserItemEdit', {
                   type: s.type as Socials,
                   value: s.value,
                   setValue: s.setValue,
