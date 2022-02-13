@@ -10,7 +10,9 @@
     "generate": "graphql-codegen",
     "reset": "npx react-native start -- --reset-cache",
     "ios:dev": "npx react-native run-ios --scheme bizpark-dev",
-    "watch:d": "watchman watch-del-all"
+    "watch:d": "watchman watch-del-all",
+    "lint": "eslint . --ext .ts,.tsx",
+    "fmt": "prettier --write src/**/*.{ts,tsx}"
   },
   "dependencies": {
     "@apollo/client": "^3.5.6",
