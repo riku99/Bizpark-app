@@ -23,14 +23,12 @@ type Props = {
   children: JSX.Element;
 };
 
-// 172.20.10.3
-
 const uploadLink = createUploadLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: 'http://172.20.10.3:4000/graphql',
 });
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:4000/graphql',
+  uri: 'ws://172.20.10.3:4000/graphql',
   options: {
     reconnect: true,
     lazy: true,

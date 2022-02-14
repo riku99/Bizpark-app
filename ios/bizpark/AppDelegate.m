@@ -7,6 +7,12 @@
 #import <React/RCTLinkingManager.h>
 #import <React/RCTConvert.h>
 
+// リリースビルドでログ出力
+// #import <React/RCTLog.h>
+
+#import <UserNotifications/UserNotifications.h>
+#import <RNCPushNotificationIOS.h>
+
 #import <Firebase.h>
 #import "RNSplashScreen.h"
 #if defined(FB_SONARKIT_ENABLED) && __has_include(<FlipperKit/FlipperClient.h>)
@@ -57,6 +63,12 @@ NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil
 
   [RNSplashScreen show];
 
+  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+  center.delegate = self;
+
+  // リリースビルドでログ出力するために追加
+  // RCTSetLogThreshold(RCTLogLevelInfo);
+
   return YES;
  }
 
@@ -84,6 +96,19 @@ NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil
   return [RCTLinkingManager application:application
                    continueUserActivity:userActivity
                      restorationHandler:restorationHandler];
+}
+
+// Required for localNotification event
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void (^)(void))completionHandler
+{
+  [RNCPushNotificationIOS didReceiveNotificationResponse:response];
+}
+
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+{
+  completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
 }
 
 @end
