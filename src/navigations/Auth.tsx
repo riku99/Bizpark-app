@@ -1,12 +1,19 @@
 import React from 'react';
-import { RootStackParamList } from 'src/types';
 import { useTheme } from 'native-base';
 import { SignupScreen } from 'src/screens/Signup';
 import { SigninScreen } from 'src/screens/Siginin';
 import { MailFormScreen } from 'src/screens/MailForm';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+export type AuthSrackParamList = {
+  Signup: undefined;
+  Signin: undefined;
+  MailForm: {
+    type: 'signUp' | 'signIn';
+  };
+};
+
+const Stack = createNativeStackNavigator<AuthSrackParamList>();
 
 export const AuthStack = () => {
   const { colors } = useTheme();

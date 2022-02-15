@@ -1,6 +1,5 @@
 import React from 'react';
 import { BottomTab } from './Tab';
-import { RootStackParamList } from 'src/types';
 import { useColorModeValue, useTheme } from 'native-base';
 import { ThoughtScreen } from 'src/screens/Thought';
 import { ThoughtWritingScreen } from 'src/screens/ThoughtWriting';
@@ -14,8 +13,43 @@ import { ThoughtTalkRoomStack } from './ThoughtTalkRoom';
 import { NewsTalkRoomStack } from './NewsTalkRoom';
 import { OneOnOneTalkRoomStack } from './OneOnOneTalkRoom';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { NavigatorScreenParams } from '@react-navigation/native';
+import { ThoughtTalkRoomStackParamList } from 'src/navigations/ThoughtTalkRoom';
+import { NewsTalkRoomStackParamList } from 'src/navigations/NewsTalkRoom';
+import { OneOnOneTalkRoomStackParamList } from 'src/navigations/OneOnOneTalkRoom';
+import { ThoughtShare, Socials } from 'src/types';
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
+export type MainStackParamList = {
+  Tab: undefined;
+  Signup: undefined;
+  Signin: undefined;
+  MailForm: {
+    type: 'signUp' | 'signIn';
+  };
+  Thought: {
+    id: string;
+  };
+  ThoughtWriting: undefined;
+  ThoughtShare: ThoughtShare;
+  NewsWebView: {
+    id: number;
+  };
+  UserEdit: undefined;
+  UserItemEdit: {
+    type: 'name' | 'bio' | Socials;
+    value: string | null;
+    setValue: (v: string | null) => void;
+  };
+  UserProfile: {
+    id: string;
+  };
+  Settings: undefined;
+  ThoughtTalkRoom: NavigatorScreenParams<ThoughtTalkRoomStackParamList>;
+  NewsTalkRoom: NavigatorScreenParams<NewsTalkRoomStackParamList>;
+  OneOnOneTalkRoom: NavigatorScreenParams<OneOnOneTalkRoomStackParamList>;
+};
+
+const Stack = createNativeStackNavigator<MainStackParamList>();
 
 export const MainStack = () => {
   const { colors } = useTheme();

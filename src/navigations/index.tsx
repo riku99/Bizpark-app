@@ -1,12 +1,16 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { RootStackParamList } from 'src/types';
 import { useColorModeValue } from 'native-base';
 import { meVar } from 'src/stores/me';
 import { useReactiveVar } from '@apollo/client';
 import { MainStack } from './Main';
 import { AuthStack } from './Auth';
+
+export type RootStackParamList = {
+  Auth: undefined;
+  Main: undefined;
+};
 
 export const Stack = createNativeStackNavigator<RootStackParamList>();
 
