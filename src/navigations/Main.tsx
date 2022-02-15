@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BottomTab } from './Tab';
 import { useColorModeValue, useTheme } from 'native-base';
 import { ThoughtScreen } from 'src/screens/Thought';
@@ -18,6 +18,15 @@ import { ThoughtTalkRoomStackParamList } from 'src/navigations/ThoughtTalkRoom';
 import { NewsTalkRoomStackParamList } from 'src/navigations/NewsTalkRoom';
 import { OneOnOneTalkRoomStackParamList } from 'src/navigations/OneOnOneTalkRoom';
 import { ThoughtShare, Socials } from 'src/types';
+import { useToughtTalkRoomsWithSubsciption } from 'src/hooks/thoughtTalkRoom';
+import { useActiveData } from 'src/hooks/active';
+import { useNewsTalkRoomsWithSusbscription } from 'src/hooks/newsTalkRoom';
+import { useOneOnOneTalkRoomsWithSubscription } from 'src/hooks/oneOnOneTalkRoom';
+import {
+  useDeviceToken,
+  usePushNotification,
+} from 'src/hooks/pushNotificatoins';
+import { requestUserPermission } from 'src/helpers/pushNotifications';
 
 export type MainStackParamList = {
   Tab: undefined;
@@ -53,6 +62,20 @@ const Stack = createNativeStackNavigator<MainStackParamList>();
 
 export const MainStack = () => {
   const { colors } = useTheme();
+
+  useActiveData();
+  useToughtTalkRoomsWithSubsciption();
+  useNewsTalkRoomsWithSusbscription();
+  useOneOnOneTalkRoomsWithSubscription();
+  useDeviceToken();
+  usePushNotification();
+
+  // 通知許可はワークスルーで表示するようにする
+  useEffect(() => {
+    (async function () {
+      await requestUserPermission();
+    })();
+  }, []);
 
   return (
     <>

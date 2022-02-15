@@ -9,17 +9,13 @@ export const useActiveData = () => {
     nextFetchPolicy: 'cache-first',
   });
 
-  console.log('renderrrr');
-
   const isInitialMount = useRef(true);
 
   useEffect(() => {
     const onChange = async (nextAppState: AppStateStatus) => {
       if (nextAppState === 'active') {
         if (!isInitialMount.current) {
-          console.log('active query! 🌙');
-          const { data } = await activeDataQuery();
-          console.log(data.oneOnOneTalkRooms[0].messages.edges.length);
+          await activeDataQuery();
         } else {
           isInitialMount.current = false;
         }
