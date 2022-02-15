@@ -6,7 +6,10 @@ import { AppState, AppStateStatus } from 'react-native';
 export const useActiveData = () => {
   const [activeDataQuery] = useGetActiveDataLazyQuery({
     fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
   });
+
+  console.log('renderrrr');
 
   const isInitialMount = useRef(true);
 
@@ -14,7 +17,9 @@ export const useActiveData = () => {
     const onChange = async (nextAppState: AppStateStatus) => {
       if (nextAppState === 'active') {
         if (!isInitialMount.current) {
-          await activeDataQuery();
+          console.log('active query! 🌙');
+          const { data } = await activeDataQuery();
+          console.log(data.oneOnOneTalkRooms[0].messages.edges.length);
         } else {
           isInitialMount.current = false;
         }
@@ -26,5 +31,5 @@ export const useActiveData = () => {
     return () => {
       AppState.removeEventListener('change', onChange);
     };
-  }, [activeDataQuery]);
+  }, []);
 };

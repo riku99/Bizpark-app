@@ -22,17 +22,19 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
     fetchPolicy: 'cache-only',
   });
 
-  const { data: talkRoomData, loading } = useGetOneOnOneTalkRoomQuery({
-    variables: {
-      id: talkRoomId,
-    },
-  });
+  // const { data: talkRoomData, loading } = useGetOneOnOneTalkRoomQuery({
+  //   variables: {
+  //     id: talkRoomId,
+  //   },
+  // });
 
   const { data: messageData, fetchMore } = useGetOneOnOneTalkRoomMessagesQuery({
     variables: {
       id: talkRoomId,
     },
   });
+
+  console.log(messageData?.oneOnOneTalkRoom.messages.edges.length);
 
   const [createMessageMutation] = useCreateOneOnOneTalkRoomMessageMutation();
 
@@ -41,17 +43,19 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
   const { deleteOneOnOneTalkRoomFromCache } =
     useDeleteOneOnOneTalkRoomFromCache();
 
+  const talkRoomData = true;
+
   useLayoutEffect(() => {
     let headerTitle: string = '';
 
-    if (talkRoomData) {
-      const { recipient, sender } = talkRoomData.oneOnOneTalkRoom;
-      headerTitle = me.id === sender.id ? recipient.name : sender.name;
-    } else {
-      if (!loading) {
-        headerTitle = 'メンバーが存在しません';
-      }
-    }
+    // if (talkRoomData) {
+    //   const { recipient, sender } = talkRoomData.oneOnOneTalkRoom;
+    //   headerTitle = me.id === sender.id ? recipient.name : sender.name;
+    // } else {
+    //   if (!loading) {
+    //     headerTitle = 'メンバーが存在しません';
+    //   }
+    // }
 
     navigation.setOptions({
       headerLeft: () => (

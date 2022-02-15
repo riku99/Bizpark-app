@@ -10,8 +10,6 @@ import {
 } from 'src/generated/graphql';
 import { PushNotificationData, RootNavigationProp } from 'src/types';
 import { useNavigation } from '@react-navigation/native';
-import { useFindOneOnOneTalkRoom } from './oneOnOneTalkRoom';
-import { spinnerVisibleVar } from 'src/stores/spinner';
 
 const DEVICE_TOKEN_STORAGE_KEY = 'DEVICE_TOKEN';
 
@@ -68,6 +66,8 @@ export const useDeviceToken = () => {
 export const usePushNotification = () => {
   const navigation = useNavigation<RootNavigationProp<any>>();
 
+  const [getOneOnOneTalkRoomQuery] = useGetOneOnOneTalkRoomLazyQuery();
+
   const onOpened = useCallback(
     async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
       const data = remoteMessage.data as PushNotificationData;
@@ -77,6 +77,12 @@ export const usePushNotification = () => {
         navigation.navigate('OneOnOneTalkRoom', {
           screen: 'OneOnOneTalkRoomMain',
           params: {
+            id: talkRoomId,
+          },
+        });
+
+        await getOneOnOneTalkRoomQuery({
+          variables: {
             id: talkRoomId,
           },
         });
