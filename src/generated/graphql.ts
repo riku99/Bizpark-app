@@ -545,6 +545,19 @@ export type Pick = {
   thoughtId: Scalars['ID'];
 };
 
+export enum PushNotificationDataKind {
+  NewsTalkRoomMessage = 'NEWS_TALK_ROOM_MESSAGE',
+  OneOnOneTalkRoomMessage = 'ONE_ON_ONE_TALK_ROOM_MESSAGE',
+  ThoughtTalkRoomMessage = 'THOUGHT_TALK_ROOM_MESSAGE'
+}
+
+export type PushNotificationMessage = {
+  __typename?: 'PushNotificationMessage';
+  id: Scalars['String'];
+  roomId: Scalars['String'];
+  type: PushNotificationDataKind;
+};
+
 export type Query = {
   __typename?: 'Query';
   blockingUsers: Array<Maybe<User>>;

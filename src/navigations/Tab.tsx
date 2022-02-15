@@ -17,7 +17,10 @@ import { useToughtTalkRoomsWithSubsciption } from 'src/hooks/thoughtTalkRoom';
 import { useActiveData } from 'src/hooks/active';
 import { useNewsTalkRoomsWithSusbscription } from 'src/hooks/newsTalkRoom';
 import { useOneOnOneTalkRoomsWithSubscription } from 'src/hooks/oneOnOneTalkRoom';
-import { useDeviceToken } from 'src/hooks/pushNotificatoins';
+import {
+  useDeviceToken,
+  usePushNotification,
+} from 'src/hooks/pushNotificatoins';
 import { requestUserPermission } from 'src/helpers/pushNotifications';
 
 type TabParamList = {
@@ -88,6 +91,7 @@ export const BottomTab = () => {
   useNewsTalkRoomsWithSusbscription();
   useOneOnOneTalkRoomsWithSubscription();
   useDeviceToken();
+  usePushNotification();
 
   // 通知許可はワークスルーで表示するようにする
   useEffect(() => {

@@ -5,6 +5,8 @@ import {
   useGetOneOnOneTalkRoomMessagesQuery,
   useCreateOneOnOneTalkRoomMessageMutation,
   useSeenOneOnOneTalkRoomMessageMutation,
+  useMeQuery,
+  useGetOneOnOneTalkRoomQuery,
 } from 'src/generated/graphql';
 import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
 import { useDeleteOneOnOneTalkRoomFromCache } from 'src/hooks/oneOnOneTalkRoom';
@@ -13,13 +15,23 @@ type Props = RootNavigationScreenProp<'OneOnOneTalkRoomMain'>;
 
 export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
   const talkRoomId = route.params.id;
-  const { user } = route.params;
+
+  const {
+    data: { me },
+  } = useMeQuery({
+    fetchPolicy: 'cache-only',
+  });
+
+  const { data: talkRoomData, loading } = useGetOneOnOneTalkRoomQuery({
+    variables: {
+      id: talkRoomId,
+    },
+  });
 
   const { data: messageData, fetchMore } = useGetOneOnOneTalkRoomMessagesQuery({
     variables: {
       id: talkRoomId,
     },
-    fetchPolicy: 'cache-only',
   });
 
   const [createMessageMutation] = useCreateOneOnOneTalkRoomMessageMutation();
@@ -30,6 +42,17 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
     useDeleteOneOnOneTalkRoomFromCache();
 
   useLayoutEffect(() => {
+    let headerTitle: string = '';
+
+    if (talkRoomData) {
+      const { recipient, sender } = talkRoomData.oneOnOneTalkRoom;
+      headerTitle = me.id === sender.id ? recipient.name : sender.name;
+    } else {
+      if (!loading) {
+        headerTitle = 'メンバーが存在しません';
+      }
+    }
+
     navigation.setOptions({
       headerLeft: () => (
         <HeaderBackButton
@@ -38,11 +61,11 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
           }}
         />
       ),
-      headerTitle: user.name,
+      headerTitle,
     });
-  }, [navigation]);
+  }, [navigation, me, talkRoomData]);
 
-  if (!messageData) {
+  if (!messageData || !talkRoomData) {
     return null;
   }
 

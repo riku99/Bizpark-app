@@ -6,7 +6,7 @@ import { OneOnOneTalkRoomScreen } from 'src/screens/OneOnOneTalkRoom';
 export type OneOnOneTalkRoomStackParamList = {
   OneOnOneTalkRoomMain: {
     id: number;
-    user: {
+    user?: {
       name: string;
     };
   };

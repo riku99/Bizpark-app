@@ -63,7 +63,7 @@ type Props =
 
 const isTmp = (str: string) => str.slice(0, 3) === 'tmp';
 
-export const TalkRoomMessage = (props: Props) => {
+export const TalkRoomMessage = React.memo((props: Props) => {
   const { roomId } = props;
 
   const navigation = useNavigation<RootNavigationProp<'ThoughtTalkRoom'>>();
@@ -79,7 +79,7 @@ export const TalkRoomMessage = (props: Props) => {
       case 'News':
         return props.messageData?.newsTalkRoom.messages.pageInfo;
       case 'OneOnOne':
-        return props.messageData.oneOnOneTalkRoom.messages.pageInfo;
+        return props.messageData?.oneOnOneTalkRoom.messages.pageInfo;
     }
   });
 
@@ -513,4 +513,4 @@ export const TalkRoomMessage = (props: Props) => {
       }}
     />
   );
-};
+});

@@ -1,7 +1,17 @@
-import messaging from '@react-native-firebase/messaging';
-import { useEffect } from 'react';
+import messaging, {
+  FirebaseMessagingTypes,
+} from '@react-native-firebase/messaging';
+import { useEffect, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useAddDeviceTokenMutation } from 'src/generated/graphql';
+import {
+  useAddDeviceTokenMutation,
+  PushNotificationDataKind,
+  useGetOneOnOneTalkRoomLazyQuery,
+} from 'src/generated/graphql';
+import { PushNotificationData, RootNavigationProp } from 'src/types';
+import { useNavigation } from '@react-navigation/native';
+import { useFindOneOnOneTalkRoom } from './oneOnOneTalkRoom';
+import { spinnerVisibleVar } from 'src/stores/spinner';
 
 const DEVICE_TOKEN_STORAGE_KEY = 'DEVICE_TOKEN';
 
@@ -53,4 +63,33 @@ export const useDeviceToken = () => {
       })();
     });
   }, [addDeviceTokenMutation]);
+};
+
+export const usePushNotification = () => {
+  const navigation = useNavigation<RootNavigationProp<any>>();
+
+  const onOpened = useCallback(
+    async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
+      const data = remoteMessage.data as PushNotificationData;
+      if (data.type === PushNotificationDataKind.OneOnOneTalkRoomMessage) {
+        const talkRoomId = Number(data.roomId);
+
+        navigation.navigate('OneOnOneTalkRoom', {
+          screen: 'OneOnOneTalkRoomMain',
+          params: {
+            id: talkRoomId,
+          },
+        });
+      }
+    },
+    []
+  );
+
+  useEffect(() => {
+    const unsbscribe = messaging().onNotificationOpenedApp((remoteMessage) => {
+      onOpened(remoteMessage);
+    });
+
+    return unsbscribe;
+  }, [onOpened]);
 };

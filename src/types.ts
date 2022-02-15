@@ -7,6 +7,9 @@ import { SettingsParamList } from 'src/navigations/Settings';
 import { ThoughtTalkRoomStackParamList } from 'src/navigations/ThoughtTalkRoom';
 import { NewsTalkRoomStackParamList } from 'src/navigations/NewsTalkRoom';
 import { OneOnOneTalkRoomStackParamList } from 'src/navigations/OneOnOneTalkRoom';
+import { PushNotificationMessage } from 'src/generated/graphql';
+
+export type PushNotificationData = PushNotificationMessage;
 
 type ThoughtShare = {
   title?: string;
