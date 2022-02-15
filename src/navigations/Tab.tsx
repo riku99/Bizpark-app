@@ -20,9 +20,6 @@ import { useOneOnOneTalkRoomsWithSubscription } from 'src/hooks/oneOnOneTalkRoom
 import { useDeviceToken } from 'src/hooks/pushNotificatoins';
 import { requestUserPermission } from 'src/helpers/pushNotifications';
 
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useToast } from 'react-native-toast-notifications';
-
 type TabParamList = {
   Home: undefined;
   News: undefined;
@@ -98,21 +95,6 @@ export const BottomTab = () => {
       await requestUserPermission();
     })();
   }, []);
-
-  const toast = useToast();
-
-  useEffect(() => {
-    (async function () {
-      toast.show('render');
-      const i = await AsyncStorage.getItem('QUIT');
-      toast.show(i);
-      console.log('👀 storage is ' + i);
-      if (i) {
-        // toast.show(i);
-        await AsyncStorage.removeItem('QUIT');
-      }
-    })();
-  }, [toast]);
 
   return (
     <Tab.Navigator
