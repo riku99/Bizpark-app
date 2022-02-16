@@ -96,6 +96,14 @@ export const usePushNotification = () => {
       onOpened(remoteMessage);
     });
 
+    messaging()
+      .getInitialNotification()
+      .then((remoteMessage) => {
+        if (remoteMessage) {
+          onOpened(remoteMessage);
+        }
+      });
+
     return unsbscribe;
   }, [onOpened]);
 };

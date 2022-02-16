@@ -10,6 +10,7 @@ function HeadlessCheck({ isHeadless }) {
   if (isHeadless) {
     // App has been launched in the background by iOS, ignore
     return <Facker />;
+    // return null;
   }
 
   return <App />;
@@ -18,4 +19,4 @@ function HeadlessCheck({ isHeadless }) {
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
 // the environment is set up appropriately
-registerRootComponent(HeadlessCheck);
+registerRootComponent(App);
