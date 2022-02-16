@@ -63,7 +63,7 @@ export const useDeviceToken = () => {
   }, [addDeviceTokenMutation]);
 };
 
-export const usePushNotification = () => {
+export const useFcmHandler = () => {
   const navigation = useNavigation<RootNavigationProp<any>>();
 
   const [getOneOnOneTalkRoomQuery] = useGetOneOnOneTalkRoomLazyQuery();
@@ -88,7 +88,7 @@ export const usePushNotification = () => {
         });
       }
     },
-    []
+    [navigation]
   );
 
   useEffect(() => {

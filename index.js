@@ -9,8 +9,7 @@ import { Facker } from './src/components/Facker';
 function HeadlessCheck({ isHeadless }) {
   if (isHeadless) {
     // App has been launched in the background by iOS, ignore
-    return <Facker />;
-    // return null;
+    return null;
   }
 
   return <App />;

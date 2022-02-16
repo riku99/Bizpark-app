@@ -12,6 +12,7 @@ import { CreatingToast } from 'src/components/CreatingToast';
 import { useReactiveVar } from '@apollo/client';
 import { creatingThoughtVar } from 'src/stores/thought';
 import { Follow } from './Follow';
+import { useFcmHandler } from 'src/hooks/pushNotificatoins';
 
 type Props = RootNavigationScreenProp<'Tab'>;
 
@@ -35,6 +36,8 @@ export const HomeScreen = ({ navigation }: Props) => {
   };
 
   const creatingThought = useReactiveVar(creatingThoughtVar);
+
+  useFcmHandler();
 
   return (
     <>

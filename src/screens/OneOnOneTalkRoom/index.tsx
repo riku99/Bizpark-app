@@ -10,17 +10,15 @@ import {
 } from 'src/generated/graphql';
 import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
 import { useDeleteOneOnOneTalkRoomFromCache } from 'src/hooks/oneOnOneTalkRoom';
+import { useReactiveVar } from '@apollo/client';
+import { meVar } from 'src/stores/me';
 
 type Props = RootNavigationScreenProp<'OneOnOneTalkRoomMain'>;
 
 export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
   const talkRoomId = route.params.id;
 
-  const {
-    data: { me },
-  } = useMeQuery({
-    fetchPolicy: 'cache-only',
-  });
+  const myId = useReactiveVar(meVar.id);
 
   const { data: talkRoomData, loading } = useGetOneOnOneTalkRoomQuery({
     variables: {
@@ -46,7 +44,7 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
 
     if (talkRoomData) {
       const { recipient, sender } = talkRoomData.oneOnOneTalkRoom;
-      headerTitle = me.id === sender.id ? recipient.name : sender.name;
+      headerTitle = myId === sender.id ? recipient.name : sender.name;
     } else {
       if (!loading) {
         headerTitle = 'メンバーが存在しません';
@@ -63,7 +61,7 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
       ),
       headerTitle,
     });
-  }, [navigation, me, talkRoomData]);
+  }, [navigation, myId, talkRoomData]);
 
   if (!messageData || !talkRoomData) {
     return null;

@@ -68,7 +68,7 @@ export const MainStack = () => {
   useNewsTalkRoomsWithSusbscription();
   useOneOnOneTalkRoomsWithSubscription();
   useDeviceToken();
-  usePushNotification();
+  // usePushNotification();
 
   // 通知許可はワークスルーで表示するようにする
   useEffect(() => {
