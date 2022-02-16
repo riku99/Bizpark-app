@@ -7,6 +7,9 @@
 #import <React/RCTLinkingManager.h>
 #import <React/RCTConvert.h>
 
+// react-native-bootsplash
+#import "RNBootSplash.h"
+
 // リリースビルドでログ出力
 // #import <React/RCTLog.h>
 
@@ -14,7 +17,6 @@
 #import <RNCPushNotificationIOS.h>
 
 #import <Firebase.h>
-#import "RNSplashScreen.h"
 #if defined(FB_SONARKIT_ENABLED) && __has_include(<FlipperKit/FlipperClient.h>)
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -61,13 +63,14 @@ NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil
 
   [super application:application didFinishLaunchingWithOptions:launchOptions];
 
-  [RNSplashScreen show];
-
   UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
   center.delegate = self;
 
   // リリースビルドでログ出力するために追加
   // RCTSetLogThreshold(RCTLogLevelInfo);
+
+  // react-native-bootsplash
+  [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView]; 
 
   return YES;
  }

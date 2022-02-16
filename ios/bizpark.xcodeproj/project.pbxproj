@@ -25,6 +25,9 @@
 		324906DF277C591200F54197 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		324906ED277C5BBF00F54197 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 324906EC277C5BBF00F54197 /* GoogleService-Info.plist */; };
 		324906F1277C5CA900F54197 /* GoogleService-Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 324906F0277C5CA900F54197 /* GoogleService-Info.plist */; };
+		329B019027BCF69C000F255F /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 329B018F27BCF69C000F255F /* BootSplash.storyboard */; };
+		329B019127BCF69C000F255F /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 329B018F27BCF69C000F255F /* BootSplash.storyboard */; };
+		329B019227BCF69C000F255F /* BootSplash.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 329B018F27BCF69C000F255F /* BootSplash.storyboard */; };
 		3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		525EB374797BC95931C97A65 /* libPods-bizpark-stg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20FD77AA2708644869EE9414 /* libPods-bizpark-stg.a */; };
 		5CB74F6504AA20252D01F74D /* libPods-bizpark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D473753CB87980FA54A35A /* libPods-bizpark.a */; };
@@ -53,6 +56,7 @@
 		324906E7277C591200F54197 /* bizpark copy2-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "bizpark copy2-Info.plist"; path = "/Users/riku/Myapp/bizpark/ios/bizpark copy2-Info.plist"; sourceTree = "<absolute>"; };
 		324906EC277C5BBF00F54197 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
 		324906F0277C5CA900F54197 /* GoogleService-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "GoogleService-Info.plist"; sourceTree = "<group>"; };
+		329B018F27BCF69C000F255F /* BootSplash.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = BootSplash.storyboard; path = bizpark/BootSplash.storyboard; sourceTree = "<group>"; };
 		4A46E4562538E6AA7699F4D1 /* ExpoModulesProvider.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ExpoModulesProvider.swift; path = "Pods/Target Support Files/Pods-bizpark-dev/ExpoModulesProvider.swift"; sourceTree = "<group>"; };
 		51D473753CB87980FA54A35A /* libPods-bizpark.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-bizpark.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6C2E3173556A471DD304B334 /* Pods-bizpark.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bizpark.debug.xcconfig"; path = "Target Support Files/Pods-bizpark/Pods-bizpark.debug.xcconfig"; sourceTree = "<group>"; };
@@ -103,6 +107,7 @@
 				324906BB277C4A7100F54197 /* bizpark.entitlements */,
 				BB2F792B24A3F905000567C9 /* Supporting */,
 				008F07F21AC5B25A0029DE68 /* main.jsbundle */,
+				329B018F27BCF69C000F255F /* BootSplash.storyboard */,
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
@@ -363,6 +368,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				329B019027BCF69C000F255F /* BootSplash.storyboard in Resources */,
 				BB2F792D24A3F905000567C9 /* Expo.plist in Resources */,
 				324906F1277C5CA900F54197 /* GoogleService-Info.plist in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
@@ -374,6 +380,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				329B019127BCF69C000F255F /* BootSplash.storyboard in Resources */,
 				324906C6277C58F800F54197 /* Expo.plist in Resources */,
 				324906C7277C58F800F54197 /* GoogleService-Info.plist in Resources */,
 				324906C8277C58F800F54197 /* Images.xcassets in Resources */,
@@ -385,6 +392,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				329B019227BCF69C000F255F /* BootSplash.storyboard in Resources */,
 				324906ED277C5BBF00F54197 /* GoogleService-Info.plist in Resources */,
 				324906DC277C591200F54197 /* Expo.plist in Resources */,
 				324906DE277C591200F54197 /* Images.xcassets in Resources */,
