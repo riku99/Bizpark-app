@@ -5,13 +5,13 @@ import {
   useGetOneOnOneTalkRoomMessagesQuery,
   useCreateOneOnOneTalkRoomMessageMutation,
   useSeenOneOnOneTalkRoomMessageMutation,
-  useMeQuery,
   useGetOneOnOneTalkRoomQuery,
 } from 'src/generated/graphql';
 import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
 import { useDeleteOneOnOneTalkRoomFromCache } from 'src/hooks/oneOnOneTalkRoom';
 import { useReactiveVar } from '@apollo/client';
 import { meVar } from 'src/stores/me';
+import { Indicator } from 'src/components/Indicator';
 
 type Props = RootNavigationScreenProp<'OneOnOneTalkRoomMain'>;
 
@@ -64,7 +64,7 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
   }, [navigation, myId, talkRoomData]);
 
   if (!messageData || !talkRoomData) {
-    return null;
+    return <Indicator />;
   }
 
   return (

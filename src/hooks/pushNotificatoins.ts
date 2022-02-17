@@ -24,7 +24,7 @@ export const useDeviceToken = () => {
         DEVICE_TOKEN_STORAGE_KEY
       );
 
-      if (true) {
+      if (!storageDeviceToken || token !== storageDeviceToken) {
         try {
           await addDeviceTokenMutation({
             variables: {
