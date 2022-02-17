@@ -21,6 +21,7 @@ export const Root = () => {
   const [checkedLogin, setCheckedLogin] = useState(false);
   const [initialDataQuery, { called }] = useInitialDataLazyQuery({
     fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'standby',
   });
   const client = useApolloClient();
 

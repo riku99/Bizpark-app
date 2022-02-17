@@ -6,7 +6,7 @@ import { AppState, AppStateStatus } from 'react-native';
 export const useActiveData = () => {
   const [activeDataQuery] = useGetActiveDataLazyQuery({
     fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-first',
+    nextFetchPolicy: 'standby',
   });
 
   const isInitialMount = useRef(true);
