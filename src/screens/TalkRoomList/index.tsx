@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useMemo, useCallback } from 'react';
+import React, { useLayoutEffect, useMemo, useCallback, useEffect } from 'react';
 import { RootNavigationScreenProp } from 'src/types';
 import { ThoughtTalkRoomList } from './ThoughtTalkRoomList';
 import { NewsTalkRoomList } from './NewsTalkRoomList';

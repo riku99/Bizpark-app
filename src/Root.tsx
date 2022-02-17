@@ -19,10 +19,15 @@ export const Root = () => {
   }, [myId]);
 
   const [checkedLogin, setCheckedLogin] = useState(false);
+
   const [initialDataQuery, { called }] = useInitialDataLazyQuery({
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'standby',
+    fetchPolicy: 'cache-only',
+    // nextFetchPolicy: 'standby',
   });
+
+  useEffect(() => {
+    console.log('render Root');
+  }, [initialDataQuery]);
 
   const client = useApolloClient();
 
