@@ -9,16 +9,15 @@ import {
 } from 'src/generated/graphql';
 import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
 import { useDeleteOneOnOneTalkRoomFromCache } from 'src/hooks/oneOnOneTalkRoom';
-import { useReactiveVar } from '@apollo/client';
-import { meVar } from 'src/stores/me';
 import { Indicator } from 'src/components/Indicator';
+import { useIsMe } from 'src/hooks/me';
 
 type Props = RootNavigationScreenProp<'OneOnOneTalkRoomMain'>;
 
 export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
   const talkRoomId = route.params.id;
 
-  const myId = useReactiveVar(meVar.id);
+  const { isMe } = useIsMe();
 
   const { data: talkRoomData, loading } = useGetOneOnOneTalkRoomQuery({
     variables: {
@@ -44,7 +43,7 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
 
     if (talkRoomData) {
       const { recipient, sender } = talkRoomData.oneOnOneTalkRoom;
-      headerTitle = myId === sender.id ? recipient.name : sender.name;
+      headerTitle = isMe({ userId: sender.id }) ? recipient.name : sender.name;
     } else {
       if (!loading) {
         headerTitle = 'メンバーが存在しません';
@@ -61,7 +60,7 @@ export const OneOnOneTalkRoomScreen = ({ navigation, route }: Props) => {
       ),
       headerTitle,
     });
-  }, [navigation, myId, talkRoomData]);
+  }, [navigation, isMe, talkRoomData]);
 
   if (!messageData || !talkRoomData) {
     return <Indicator />;

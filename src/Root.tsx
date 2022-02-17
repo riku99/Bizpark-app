@@ -3,13 +3,10 @@ import { RootNavigation } from 'src/navigations';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { meVar, storageKeys, getMeStorageData } from 'src/stores/me';
 import { useReactiveVar, useApolloClient } from '@apollo/client';
-// import SplashScreen from 'react-native-splash-screen';
 import { useInitialDataLazyQuery } from 'src/generated/graphql';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { spinnerVisibleVar } from 'src/stores/spinner';
 import FastImage from 'react-native-fast-image';
-import { gotInitialDataVar } from 'src/stores/initialData';
-import { useToughtTalkRoomsWithSubsciption } from 'src/hooks/thoughtTalkRoom';
 import RNBootSplash from 'react-native-bootsplash';
 
 export const Root = () => {
@@ -22,7 +19,9 @@ export const Root = () => {
   }, [myId]);
 
   const [checkedLogin, setCheckedLogin] = useState(false);
-  const [initialDataQuery, { called }] = useInitialDataLazyQuery();
+  const [initialDataQuery, { called }] = useInitialDataLazyQuery({
+    fetchPolicy: 'cache-and-network',
+  });
   const client = useApolloClient();
 
   // ストレージのリセット時は全て別の場所(signOut)で行うのでここではデータが存在した時のみ格納
