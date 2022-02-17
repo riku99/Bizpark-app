@@ -7,6 +7,8 @@ import {
   useAddDeviceTokenMutation,
   PushNotificationDataKind,
   useGetOneOnOneTalkRoomLazyQuery,
+  useGetNewsTalkRoomLazyQuery,
+  useGetThoughtTalkRoomLazyQuery,
 } from 'src/generated/graphql';
 import { PushNotificationData, RootNavigationProp } from 'src/types';
 import { useNavigation } from '@react-navigation/native';
@@ -66,11 +68,22 @@ export const useDeviceToken = () => {
 export const useFcmHandler = () => {
   const navigation = useNavigation<RootNavigationProp<any>>();
 
-  const [getOneOnOneTalkRoomQuery] = useGetOneOnOneTalkRoomLazyQuery();
+  const [getOneOnOneTalkRoomQuery] = useGetOneOnOneTalkRoomLazyQuery({
+    fetchPolicy: 'network-only',
+  });
+
+  const [getNewsTalkRoomQuery] = useGetNewsTalkRoomLazyQuery({
+    fetchPolicy: 'network-only',
+  });
+
+  const [getThoughtTalkRoomQuery] = useGetThoughtTalkRoomLazyQuery({
+    fetchPolicy: 'network-only',
+  });
 
   const onOpened = useCallback(
     async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
       const data = remoteMessage.data as PushNotificationData;
+
       if (data.type === PushNotificationDataKind.OneOnOneTalkRoomMessage) {
         const talkRoomId = Number(data.roomId);
 
@@ -86,6 +99,46 @@ export const useFcmHandler = () => {
             id: talkRoomId,
           },
         });
+
+        return;
+      }
+
+      if (data.type === PushNotificationDataKind.NewsTalkRoomMessage) {
+        const talkRoomId = Number(data.roomId);
+
+        navigation.navigate('NewsTalkRoom', {
+          screen: 'NewsTalkRoomMain',
+          params: {
+            id: talkRoomId,
+          },
+        });
+
+        await getNewsTalkRoomQuery({
+          variables: {
+            id: talkRoomId,
+          },
+        });
+
+        return;
+      }
+
+      if (data.type === PushNotificationDataKind.ThoughtTalkRoomMessage) {
+        const talkRoomId = Number(data.roomId);
+
+        navigation.navigate('ThoughtTalkRoom', {
+          screen: 'ThoughtTalkRoomMain',
+          params: {
+            id: talkRoomId,
+          },
+        });
+
+        await getThoughtTalkRoomQuery({
+          variables: {
+            id: talkRoomId,
+          },
+        });
+
+        return;
       }
     },
     [navigation]

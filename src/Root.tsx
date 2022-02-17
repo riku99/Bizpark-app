@@ -21,13 +21,8 @@ export const Root = () => {
   const [checkedLogin, setCheckedLogin] = useState(false);
 
   const [initialDataQuery, { called }] = useInitialDataLazyQuery({
-    fetchPolicy: 'cache-only',
-    // nextFetchPolicy: 'standby',
+    fetchPolicy: 'cache-and-network',
   });
-
-  useEffect(() => {
-    console.log('render Root');
-  }, [initialDataQuery]);
 
   const client = useApolloClient();
 

@@ -24,9 +24,9 @@ export const useActiveData = () => {
     const onChange = async (nextAppState: AppStateStatus) => {
       if (nextAppState === 'active') {
         await Promise.all([
-          thoughtTalkRoomQuery,
-          newsTalkRoomQuery,
-          oneOnOneTalkRoomQuery,
+          thoughtTalkRoomQuery(),
+          newsTalkRoomQuery(),
+          oneOnOneTalkRoomQuery(),
         ]);
       }
     };
