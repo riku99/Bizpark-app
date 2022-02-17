@@ -6,7 +6,6 @@ import { AppState, AppStateStatus } from 'react-native';
 export const useActiveData = () => {
   const [activeDataQuery] = useGetActiveDataLazyQuery({
     fetchPolicy: 'network-only',
-    nextFetchPolicy: 'standby',
   });
 
   const isInitialMount = useRef(true);
@@ -15,6 +14,7 @@ export const useActiveData = () => {
     const onChange = async (nextAppState: AppStateStatus) => {
       if (nextAppState === 'active') {
         if (!isInitialMount.current) {
+          console.log('called active query');
           await activeDataQuery();
         } else {
           isInitialMount.current = false;
@@ -27,5 +27,5 @@ export const useActiveData = () => {
     return () => {
       AppState.removeEventListener('change', onChange);
     };
-  }, []);
+  }, [activeDataQuery]);
 };

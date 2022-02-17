@@ -23,6 +23,7 @@ export const Root = () => {
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'standby',
   });
+
   const client = useApolloClient();
 
   // ストレージのリセット時は全て別の場所(signOut)で行うのでここではデータが存在した時のみ格納

@@ -57,7 +57,7 @@ export type MainStackParamList = {
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
-export const MainStack = () => {
+export const MainStack = React.memo(() => {
   const { colors } = useTheme();
 
   useActiveData();
@@ -131,4 +131,4 @@ export const MainStack = () => {
       </Stack.Navigator>
     </>
   );
-};
+});
