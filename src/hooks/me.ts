@@ -7,10 +7,12 @@ import {
 import { useCallback } from 'react';
 
 export const useLoggedIn = () => {
-  const { data } = useGetLoggedInQuery();
+  const { data } = useGetLoggedInQuery({
+    fetchPolicy: 'cache-only',
+  });
 
   if (!data) {
-    return null;
+    return false;
   }
 
   return data.me.loggedIn;
