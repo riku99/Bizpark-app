@@ -6,7 +6,9 @@ import {
 import { useCallback } from 'react';
 
 export const useMyId = () => {
-  const { data } = useGetMyIdQuery();
+  const { data } = useGetMyIdQuery({
+    fetchPolicy: 'cache-only',
+  });
 
   if (!data) {
     return null;

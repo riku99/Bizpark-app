@@ -6,13 +6,13 @@ import {
   GetNewsTalkRoomsQuery,
   GetNewsTalkRoomsDocument,
 } from 'src/generated/graphql';
-import { meVar } from 'src/stores/me';
-import { useReactiveVar, useApolloClient } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
+import { useMyId } from 'src/hooks/me';
 
 export const useNewsTalkRoomsWithSusbscription = () => {
-  const myId = useReactiveVar(meVar.id);
+  const myId = useMyId();
 
   const { data: talkRoomsData, subscribeToMore } = useGetNewsTalkRoomsQuery({
     fetchPolicy: 'cache-only',
@@ -26,7 +26,7 @@ export const useNewsTalkRoomsWithSusbscription = () => {
     }
 
     return talkRoomsData.newsTalkRooms.map((room) => room.id);
-  }, [talkRoomsData?.newsTalkRooms.length]);
+  }, [talkRoomsData?.newsTalkRooms.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // アクティブ、非アクティブの処理
   useEffect(() => {
