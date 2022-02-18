@@ -3,13 +3,14 @@ import { RootNavigationScreenProp } from 'src/types';
 import {
   useGetNewsTalkRoomMembersQuery,
   NewsTalkRoomMemberEdge,
-  useMeQuery,
 } from 'src/generated/graphql';
 import { MemberListItem } from './MemberListItem';
 import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
 import { SafeAreaView } from 'react-native';
 import { Indicator } from 'src/components/Indicator';
 import { btoa } from 'react-native-quick-base64';
+import { useMyId } from 'src/hooks/me';
+import { StyleSheet } from 'react-native';
 
 type Props = RootNavigationScreenProp<'NewsTalkRoomMembers'>;
 
@@ -19,9 +20,7 @@ export const NewsTalkRoomMembersScreen = React.memo(
   ({ navigation, route }: Props) => {
     const { talkRoomId } = route.params;
 
-    const {
-      data: { me },
-    } = useMeQuery();
+    const myId = useMyId();
 
     useLayoutEffect(() => {
       navigation.setOptions({
@@ -41,7 +40,7 @@ export const NewsTalkRoomMembersScreen = React.memo(
       ({ item }: { item: Item }) => {
         const { user } = item.node;
 
-        const swipeEnabled = user.id !== me.id;
+        const swipeEnabled = user.id !== myId;
 
         return (
           <MemberListItem
@@ -52,7 +51,7 @@ export const NewsTalkRoomMembersScreen = React.memo(
           />
         );
       },
-      [me.id, talkRoomId]
+      [myId, talkRoomId]
     );
 
     const inifiniteLoad = async () => {
@@ -70,11 +69,11 @@ export const NewsTalkRoomMembersScreen = React.memo(
     };
 
     if (!membersData) {
-      return <Indicator style={{ marginTop: 10 }} />;
+      return <Indicator style={styles.indicator} />;
     }
 
     return (
-      <SafeAreaView style={{ flex: 1 }}>
+      <SafeAreaView style={styles.container}>
         <InfiniteFlatList<Item>
           data={membersData.newsTalkRoom.members.edges}
           renderItem={renderItem}
@@ -86,3 +85,12 @@ export const NewsTalkRoomMembersScreen = React.memo(
     );
   }
 );
+
+const styles = StyleSheet.create({
+  indicator: {
+    marginTop: 10,
+  },
+  container: {
+    flex: 1,
+  },
+});
