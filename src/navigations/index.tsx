@@ -2,10 +2,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import React from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { useColorModeValue } from 'native-base';
-import { meVar } from 'src/stores/me';
-import { useReactiveVar } from '@apollo/client';
 import { MainStack } from './Main';
 import { AuthStack } from './Auth';
+import { useLoggedIn } from 'src/hooks/me';
 
 export type RootStackParamList = {
   Auth: undefined;
@@ -15,7 +14,7 @@ export type RootStackParamList = {
 export const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigation = React.memo(() => {
-  const loggedIn = useReactiveVar(meVar.loggedIn);
+  const loggedIn = useLoggedIn();
 
   return (
     <>

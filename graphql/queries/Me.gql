@@ -8,5 +8,6 @@ query Me {
     twitter
     instagram
     linkedin
+    loggedIn
   }
 }

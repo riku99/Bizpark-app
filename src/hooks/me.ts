@@ -2,8 +2,19 @@ import {
   useGetMyIdQuery,
   useGetMyNameQuery,
   useGetMyImageUrlQuery,
+  useGetLoggedInQuery,
 } from 'src/generated/graphql';
 import { useCallback } from 'react';
+
+export const useLoggedIn = () => {
+  const { data } = useGetLoggedInQuery();
+
+  if (!data) {
+    return null;
+  }
+
+  return data.me.loggedIn;
+};
 
 export const useMyId = () => {
   const { data } = useGetMyIdQuery({
