@@ -51,3 +51,9 @@ export const useNavigationHeaderStyle = () => {
     headerTitleStyle,
   };
 };
+
+export const useTextColor = () => {
+  const { colors } = useTheme();
+
+  return useColorModeValue(colors.textBlack, colors.textWhite);
+};

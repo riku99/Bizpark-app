@@ -4,19 +4,13 @@ import {
   Text,
   ScrollView,
   useColorModeValue,
-  Button,
   HStack,
   Pressable,
-  useTheme,
 } from 'native-base';
 import { RootNavigationScreenProp } from 'src/types';
 import { Alert, StyleSheet } from 'react-native';
 import { CheckBox } from 'src/components/CheckBox';
-import {
-  useThoughtCacheFragment,
-  useCreatePick,
-  useDeletePick,
-} from 'src/hooks/apollo';
+import { useCreatePick, useDeletePick } from 'src/hooks/apollo';
 import { MotiView } from 'moti';
 import { Image } from 'src/components/Image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -24,8 +18,6 @@ import ImageView from 'react-native-image-viewing';
 import { UserImage } from 'src/components/UserImage';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { Menu } from './Menu';
-import { meVar } from 'src/stores/me';
-import { useReactiveVar } from '@apollo/client';
 import {
   useDeleteThoughtMutation,
   CustomErrorResponseCode,
@@ -36,6 +28,8 @@ import { useToast } from 'react-native-toast-notifications';
 import { JoinButton } from './JoinButton';
 import { Indicator } from 'src/components/Indicator';
 import { getGraphQLError } from 'src/utils';
+import { useMyId } from 'src/hooks/me';
+import { useTextColor } from 'src/hooks/theme';
 
 type Props = {} & RootNavigationScreenProp<'Thought'>;
 
@@ -62,7 +56,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
         ]);
       }
     }
-  }, [error]);
+  }, [error, navigation]);
 
   const [createPickMutation] = useCreatePick();
   const [deletePickMutation] = useDeletePick();
@@ -73,8 +67,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   );
   const [imageViewing, setImageViewing] = useState<number | null>(null);
 
-  const { colors } = useTheme();
-  const myId = useReactiveVar(meVar.id);
+  const myId = useMyId();
   const toast = useToast();
 
   useLayoutEffect(() => {
@@ -107,11 +100,14 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  if (!thoughtData) {
-    return <Indicator style={{ marginTop: 10 }} />;
-  }
-
   const { bottom } = useSafeAreaInsets();
+
+  const dotsIconColor = useTextColor();
+  const bgColor = useColorModeValue('lt.bg', 'dt.bg');
+
+  if (!thoughtData) {
+    return <Indicator style={styles.indicator} />;
+  }
 
   const imageViewingData = thoughtData.thought.images.map((img) => ({
     uri: img.url,
@@ -133,8 +129,8 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
       });
       navigation.goBack();
       toast.show('削除しました', { type: 'success' });
-    } catch (error) {
-      const firstError = error.graphQLErrors[0];
+    } catch (e) {
+      const firstError = e.graphQLErrors[0];
       const code = firstError.extensions.code;
 
       if (code === CustomErrorResponseCode.InvalidRequest) {
@@ -152,8 +148,8 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
     }
   };
 
-  const onMenuAction = async (id: string) => {
-    if (id === 'delete') {
+  const onMenuAction = async (_id: string) => {
+    if (_id === 'delete') {
       Alert.alert('削除する', '削除してよろしいですか?', [
         {
           text: 'キャンセル',
@@ -205,7 +201,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
               <MaterialCommunityIcons
                 name="dots-horizontal"
                 size={24}
-                color={useColorModeValue(colors.textBlack, colors.textWhite)}
+                color={dotsIconColor}
               />
             </Menu>
           )}
@@ -216,7 +212,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
             Pick
           </Text>
           <CheckBox
-            style={{ height: 28, width: 28, marginLeft: 6 }}
+            style={styles.checkBox}
             checked={picked}
             onPress={onCheckPress}
           />
@@ -258,7 +254,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
       >
         <Box
           position="absolute"
-          bg={useColorModeValue('lt.bg', 'dt.bg')}
+          bg={bgColor}
           w="100%"
           h={BOTTOM_CONTENTS_HEIGHT}
           bottom={0}
@@ -296,5 +292,13 @@ const styles = StyleSheet.create({
     width: USER_IMAGE_SIZE,
     height: USER_IMAGE_SIZE,
     borderRadius: USER_IMAGE_SIZE,
+  },
+  indicator: {
+    marginTop: 10,
+  },
+  checkBox: {
+    height: 28,
+    width: 28,
+    marginLeft: 6,
   },
 });
