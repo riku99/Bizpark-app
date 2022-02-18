@@ -1,11 +1,10 @@
 import React, { useCallback, useState } from 'react';
-import { Box, FlatList, useColorModeValue } from 'native-base';
+import { Box, FlatList } from 'native-base';
 import {
   useGetThoughtTalkRoomsQuery,
   useGetOutThoughtTalkRoomMutation,
   GetThoughtTalkRoomsQueryResult,
   useDeleteThoughtTalkRoomMutation,
-  useMeQuery,
 } from 'src/generated/graphql';
 import { RootNavigationProp } from 'src/types';
 import { useNavigation } from '@react-navigation/native';
@@ -16,6 +15,7 @@ import * as Haptics from 'expo-haptics';
 import { useDeleteThoughtTalkRoomsItemFromCache } from 'src/hooks/thoughtTalkRoom';
 import { TalkRoomListItem } from 'src/components/TalkRoomListItem';
 import { spinnerVisibleVar } from 'src/stores/spinner';
+import { useMyId } from 'src/hooks/me';
 
 type Item = GetThoughtTalkRoomsQueryResult['data']['thoughtTalkRooms'][number];
 
@@ -24,12 +24,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
   const [getOutMutation] = useGetOutThoughtTalkRoomMutation();
   const [deleteTalkRoomMutation] = useDeleteThoughtTalkRoomMutation();
 
-  const {
-    data: { me },
-  } = useMeQuery();
-
-  const pressedColor = useColorModeValue('lt.pressed', 'dt.pressed');
-  const textGray = useColorModeValue('lt.textGray', 'dt.textGray');
+  const myId = useMyId();
 
   const navigation = useNavigation<RootNavigationProp<'Tab'>>();
 
@@ -154,7 +149,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
       const text = edges.length ? edges[0].node.text : '';
       const allMessageSeen = item.allMessageSeen;
 
-      const isMyThoughtData = item.thought.contributor.id === me.id;
+      const isMyThoughtData = item.thought.contributor.id === myId;
 
       const onPress = () => {
         navigation.navigate('ThoughtTalkRoom', {
@@ -181,7 +176,7 @@ export const ThoughtTalkRoomList = React.memo(() => {
         />
       );
     },
-    [pressedColor, textGray]
+    [myId, navigation]
   );
 
   if (!data) {
