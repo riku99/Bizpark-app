@@ -3,7 +3,6 @@ import { RootNavigationScreenProp } from 'src/types';
 import {
   useGetThoughtTalkRoomMembersQuery,
   ThoughtTalkRoomMemberEdge,
-  useMeQuery,
   useGetThoughtTalkRoomParentQuery,
 } from 'src/generated/graphql';
 import { Indicator } from 'src/components/Indicator';
@@ -11,6 +10,8 @@ import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
 import { btoa } from 'react-native-quick-base64';
 import { SafeAreaView } from 'react-native';
 import { MemberListItem } from './MemberListItem';
+import { useMyId } from 'src/hooks/me';
+import { StyleSheet } from 'react-native';
 
 type Props = RootNavigationScreenProp<'ThoughtTalkRoomMembers'>;
 
@@ -25,9 +26,7 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation]);
 
-  const {
-    data: { me },
-  } = useMeQuery();
+  const myId = useMyId();
 
   const { data: membersData, fetchMore } = useGetThoughtTalkRoomMembersQuery({
     variables: {
@@ -52,8 +51,8 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
       const { user } = item.node;
 
       const swipeEnabled =
-        me.id === talkRoomData?.thoughtTalkRoom.thought.contributor.id &&
-        user.id !== me.id;
+        myId === talkRoomData?.thoughtTalkRoom.thought.contributor.id &&
+        user.id !== myId;
 
       return (
         <MemberListItem
@@ -63,7 +62,7 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
         />
       );
     },
-    [talkRoomId]
+    [talkRoomId, myId, talkRoomData?.thoughtTalkRoom.thought.contributor.id]
   );
 
   const infiniteLoad = async () => {
@@ -83,11 +82,11 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
   };
 
   if (!membersData) {
-    return <Indicator style={{ marginTop: 10 }} />;
+    return <Indicator style={styles.indicator} />;
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={styles.container}>
       <InfiniteFlatList<Item>
         data={membersData.thoughtTalkRoom.members.edges}
         renderItem={renderItem}
@@ -98,3 +97,12 @@ export const TalkRoomMembersScreen = ({ navigation, route }: Props) => {
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  indicator: {
+    marginTop: 10,
+  },
+  container: {
+    flex: 1,
+  },
+});

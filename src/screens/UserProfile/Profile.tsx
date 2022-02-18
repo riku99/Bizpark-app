@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { ScrollView } from 'native-base';
 import {
   useUserQuery,
-  useMeQuery,
   UserProfileFragment,
   UserProfileFragmentDoc,
 } from 'src/generated/graphql';
@@ -11,6 +10,8 @@ import { Profile } from 'src/components/Profile';
 import { RefreshControl } from 'src/components/RefreshControl';
 import { useApolloClient } from '@apollo/client';
 import { Indicator } from 'src/components/Indicator';
+import { useMyId } from 'src/hooks/me';
+import { StyleSheet } from 'react-native';
 
 type Props = { id: string };
 
@@ -34,11 +35,8 @@ export const UserProfile = ({ id }: Props) => {
 
   const [refreshing, setRefreshing] = useState(false);
 
-  const {
-    data: { me },
-  } = useMeQuery();
-
-  const isMe = me.id === id;
+  const myId = useMyId();
+  const isMe = myId === id;
 
   const onRefresh = async () => {
     setRefreshing(true);
@@ -48,7 +46,7 @@ export const UserProfile = ({ id }: Props) => {
 
   if (!data && !cacheData) {
     if (loading) {
-      return <Indicator style={{ marginTop: 10 }} />;
+      return <Indicator style={styles.indicator} />;
     } else {
       return null;
     }
@@ -69,11 +67,7 @@ export const UserProfile = ({ id }: Props) => {
     <>
       <ScrollView
         flex={1}
-        contentContainerStyle={{
-          alignItems: 'center',
-          paddingTop: 60,
-          paddingBottom: 50,
-        }}
+        contentContainerStyle={styles.contentContainer}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }
@@ -92,3 +86,14 @@ export const UserProfile = ({ id }: Props) => {
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  indicator: {
+    marginTop: 10,
+  },
+  contentContainer: {
+    alignItems: 'center',
+    paddingTop: 60,
+    paddingBottom: 50,
+  },
+});

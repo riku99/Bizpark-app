@@ -10,7 +10,6 @@ import {
 import {
   useGetOneOnOneTalkRoomsQuery,
   GetOneOnOneTalkRoomsQuery,
-  useMeQuery,
   useDeleteOneOnOneTalkRoomMutation,
 } from 'src/generated/graphql';
 import { ListItem } from 'react-native-elements';
@@ -26,6 +25,7 @@ import {
   ListItem as MenuListItem,
 } from 'src/components/InstaLikeModal';
 import { useToast } from 'react-native-toast-notifications';
+import { useMyId } from 'src/hooks/me';
 
 type Item = GetOneOnOneTalkRoomsQuery['oneOnOneTalkRooms'][number];
 
@@ -44,11 +44,7 @@ export const OneOnOneTalkRoomList = React.memo(() => {
     colors.dt.textGray
   );
 
-  const {
-    data: { me },
-  } = useMeQuery({
-    fetchPolicy: 'cache-only',
-  });
+  const myId = useMyId();
 
   const navigation = useNavigation<RootNavigationProp<'Tab'>>();
 
@@ -113,7 +109,7 @@ export const OneOnOneTalkRoomList = React.memo(() => {
 
   const renderItem = useCallback(
     ({ item }: { item: Item }) => {
-      if (!me) {
+      if (!myId) {
         return null;
       }
 
@@ -121,7 +117,7 @@ export const OneOnOneTalkRoomList = React.memo(() => {
 
       const lastMessage = messages.edges[0]?.node.text;
 
-      const user = me.id === sender.id ? recipient : sender;
+      const user = myId === sender.id ? recipient : sender;
 
       const onPress = () => {
         navigation.navigate('OneOnOneTalkRoom', {
@@ -164,7 +160,7 @@ export const OneOnOneTalkRoomList = React.memo(() => {
         </Pressable>
       );
     },
-    [bg, nameColor, messageColor, itemPressedColor]
+    [bg, nameColor, messageColor, itemPressedColor, myId, navigation]
   );
 
   if (!talkRoomData) {
