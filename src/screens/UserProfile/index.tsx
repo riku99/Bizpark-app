@@ -3,7 +3,6 @@ import { useColorModeValue, useTheme } from 'native-base';
 import { RootNavigationScreenProp } from 'src/types';
 import {
   useUserQuery,
-  useMeQuery,
   UserProfileFragment,
   UserProfileFragmentDoc,
 } from 'src/generated/graphql';
@@ -16,6 +15,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import { useTopTabBarStyle } from 'src/hooks/theme';
 import { UserProfile } from './Profile';
 import { Thoughts } from './Thoughts';
+import { useMyId } from 'src/hooks/me';
 
 type Props = RootNavigationScreenProp<'UserProfile'>;
 
@@ -45,11 +45,8 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     nextFetchPolicy: 'cache-first',
   });
 
-  const {
-    data: { me },
-  } = useMeQuery();
-
-  const isMe = me.id === id;
+  const myId = useMyId();
+  const isMe = id === myId;
 
   const { colors } = useTheme();
   const iconColor = useColorModeValue(colors.textBlack, colors.textWhite);
@@ -79,7 +76,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
             )
           : undefined,
     });
-  }, [iconColor, isMe, loading, cacheData, data]);
+  }, [iconColor, isMe, loading, cacheData, data, navigation]);
 
   const { defaultScreenStyle, style, sceneContainerStyle } =
     useTopTabBarStyle();
