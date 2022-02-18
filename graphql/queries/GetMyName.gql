@@ -1,0 +1,5 @@
+query GetMyName {
+  me {
+    name
+  }
+}

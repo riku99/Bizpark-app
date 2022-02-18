@@ -1,7 +1,11 @@
-import { useGetMyIdQuery } from 'src/generated/graphql';
+import {
+  useGetMyIdQuery,
+  useGetMyNameQuery,
+  useGetMyImageUrlQuery,
+} from 'src/generated/graphql';
 import { useCallback } from 'react';
 
-const useMyId = () => {
+export const useMyId = () => {
   const { data } = useGetMyIdQuery();
 
   if (!data) {
@@ -9,6 +13,26 @@ const useMyId = () => {
   }
 
   return data.me.id;
+};
+
+export const useMyName = () => {
+  const { data } = useGetMyNameQuery();
+
+  if (!data) {
+    return null;
+  }
+
+  return data.me.name;
+};
+
+export const useMyImageUrl = () => {
+  const { data } = useGetMyImageUrlQuery();
+
+  if (!data) {
+    return null;
+  }
+
+  return data.me.imageUrl;
 };
 
 export const useIsMe = () => {

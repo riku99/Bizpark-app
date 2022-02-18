@@ -1127,6 +1127,16 @@ export type GetMyIdQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetMyIdQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string } };
 
+export type GetMyImageUrlQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyImageUrlQuery = { __typename?: 'Query', me: { __typename?: 'Me', imageUrl?: string | null | undefined } };
+
+export type GetMyNameQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyNameQuery = { __typename?: 'Query', me: { __typename?: 'Me', name: string } };
+
 export type GetNewsTalkRoomQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -2776,6 +2786,74 @@ export function useGetMyIdLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<Ge
 export type GetMyIdQueryHookResult = ReturnType<typeof useGetMyIdQuery>;
 export type GetMyIdLazyQueryHookResult = ReturnType<typeof useGetMyIdLazyQuery>;
 export type GetMyIdQueryResult = Apollo.QueryResult<GetMyIdQuery, GetMyIdQueryVariables>;
+export const GetMyImageUrlDocument = gql`
+    query GetMyImageUrl {
+  me {
+    imageUrl
+  }
+}
+    `;
+
+/**
+ * __useGetMyImageUrlQuery__
+ *
+ * To run a query within a React component, call `useGetMyImageUrlQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyImageUrlQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyImageUrlQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyImageUrlQuery(baseOptions?: Apollo.QueryHookOptions<GetMyImageUrlQuery, GetMyImageUrlQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyImageUrlQuery, GetMyImageUrlQueryVariables>(GetMyImageUrlDocument, options);
+      }
+export function useGetMyImageUrlLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyImageUrlQuery, GetMyImageUrlQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyImageUrlQuery, GetMyImageUrlQueryVariables>(GetMyImageUrlDocument, options);
+        }
+export type GetMyImageUrlQueryHookResult = ReturnType<typeof useGetMyImageUrlQuery>;
+export type GetMyImageUrlLazyQueryHookResult = ReturnType<typeof useGetMyImageUrlLazyQuery>;
+export type GetMyImageUrlQueryResult = Apollo.QueryResult<GetMyImageUrlQuery, GetMyImageUrlQueryVariables>;
+export const GetMyNameDocument = gql`
+    query GetMyName {
+  me {
+    name
+  }
+}
+    `;
+
+/**
+ * __useGetMyNameQuery__
+ *
+ * To run a query within a React component, call `useGetMyNameQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyNameQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyNameQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyNameQuery(baseOptions?: Apollo.QueryHookOptions<GetMyNameQuery, GetMyNameQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyNameQuery, GetMyNameQueryVariables>(GetMyNameDocument, options);
+      }
+export function useGetMyNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyNameQuery, GetMyNameQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyNameQuery, GetMyNameQueryVariables>(GetMyNameDocument, options);
+        }
+export type GetMyNameQueryHookResult = ReturnType<typeof useGetMyNameQuery>;
+export type GetMyNameLazyQueryHookResult = ReturnType<typeof useGetMyNameLazyQuery>;
+export type GetMyNameQueryResult = Apollo.QueryResult<GetMyNameQuery, GetMyNameQueryVariables>;
 export const GetNewsTalkRoomDocument = gql`
     query GetNewsTalkRoom($id: Int!) {
   newsTalkRoom(id: $id) {

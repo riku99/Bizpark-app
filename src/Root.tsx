@@ -22,6 +22,7 @@ export const Root = () => {
 
   const [initialDataQuery, { called }] = useInitialDataLazyQuery({
     fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-first',
   });
 
   const client = useApolloClient();

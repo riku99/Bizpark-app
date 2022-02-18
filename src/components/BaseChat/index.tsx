@@ -27,7 +27,7 @@ import { CustomBubble } from './CustomBubble';
 import { BubbleActions } from './BubbleActions';
 import { ReplyMessage, REPLY_MESSAGE_CONTAINER_HEIGHT } from './ReplyMessage';
 import { useHeaderHeight } from '@react-navigation/elements';
-import { useMeQuery } from 'src/generated/graphql';
+import { useIsMe } from 'src/hooks/me';
 
 type Props = {
   infiniteLoad?: () => Promise<void>;
@@ -71,9 +71,7 @@ export const BaseChat = React.memo(
       isInitialMount.current = false;
     }, []);
 
-    const {
-      data: { me },
-    } = useMeQuery();
+    const { isMe } = useIsMe();
 
     const [longPressedMessage, setLongPressedMessage] =
       useState<IMessage | null>(null);
@@ -196,7 +194,7 @@ export const BaseChat = React.memo(
           return null;
         }
 
-        const isMySendData = props.currentMessage.user._id === me.id;
+        const isMySendData = isMe({ userId: props.currentMessage.user._id });
 
         const textColor = isMySendData
           ? rightReplyMessageTextColor
