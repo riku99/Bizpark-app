@@ -1,0 +1,3 @@
+mutation AddDeviceToken($input: AddDeviceTokenInput!) {
+  addDeviceToken(input: $input)
+}

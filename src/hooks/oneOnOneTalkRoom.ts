@@ -179,6 +179,31 @@ export const useFindOneOnOneTalkRoomFromUserId = () => {
   };
 };
 
+export const useFindOneOnOneTalkRoom = () => {
+  const { cache } = useApolloClient();
+
+  const findOneOnOneTalkRoom = useCallback(
+    ({ talkRoomId }: { talkRoomId: number }) => {
+      const queryResult = cache.readQuery<GetOneOnOneTalkRoomsQuery>({
+        query: GetOneOnOneTalkRoomsDocument,
+      });
+
+      if (queryResult) {
+        const targetRoom = queryResult.oneOnOneTalkRooms.find(
+          (room) => room.id === talkRoomId
+        );
+
+        return targetRoom;
+      }
+    },
+    [cache]
+  );
+
+  return {
+    findOneOnOneTalkRoom,
+  };
+};
+
 export const useDeleteOneOnOneTalkRoomFromCache = () => {
   const { cache } = useApolloClient();
 

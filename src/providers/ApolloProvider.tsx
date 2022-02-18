@@ -4,10 +4,11 @@ import {
   ApolloProvider as ApolloProviderBase,
   from,
   split,
+  NormalizedCacheObject,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { useToast } from 'react-native-toast-notifications';
 import { CustomErrorResponseCode } from 'src/generated/graphql';
 import auth from '@react-native-firebase/auth';
@@ -18,6 +19,8 @@ import { createUploadLink } from 'apollo-upload-client';
 import { useCustomToast } from 'src/hooks/toast';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { persistCache, AsyncStorageWrapper } from 'apollo3-cache-persist';
 
 type Props = {
   children: JSX.Element;
@@ -211,10 +214,27 @@ export const ApolloProvider = ({ children }: Props) => {
     }
   });
 
-  const client = new ApolloClient({
-    link: from([errorLink, authLink, splitLink]),
-    cache,
-  });
+  const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>();
+
+  useEffect(() => {
+    (async () => {
+      await persistCache({
+        cache,
+        storage: new AsyncStorageWrapper(AsyncStorage),
+      });
+
+      setClient(
+        new ApolloClient({
+          link: from([errorLink, authLink, splitLink]),
+          cache,
+        })
+      );
+    })();
+  }, []);
+
+  if (!client) {
+    return null;
+  }
 
   return <ApolloProviderBase client={client}>{children}</ApolloProviderBase>;
 };

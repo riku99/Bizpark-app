@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {
-  useMeQuery,
   GetThoughtTalkRoomMessagesQuery,
   CustomErrorResponseCode,
   PageInfo,
@@ -26,11 +25,12 @@ import { IMessage } from 'react-native-gifted-chat';
 import { BaseChat } from 'src/components/BaseChat';
 import { NO_USER_IMAGE_URL } from 'src/constants';
 import { createRandomStr } from 'src/utils';
-import { logJson, getGraphQLError } from 'src/utils';
+import { getGraphQLError } from 'src/utils';
 import { btoa } from 'react-native-quick-base64';
 import { Alert } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from 'src/types';
+import { useMyId, useMyName, useMyImageUrl } from 'src/hooks/me';
 
 type Props =
   | {
@@ -63,14 +63,14 @@ type Props =
 
 const isTmp = (str: string) => str.slice(0, 3) === 'tmp';
 
-export const TalkRoomMessage = (props: Props) => {
+export const TalkRoomMessage = React.memo((props: Props) => {
   const { roomId } = props;
 
   const navigation = useNavigation<RootNavigationProp<'ThoughtTalkRoom'>>();
 
-  const {
-    data: { me },
-  } = useMeQuery();
+  const myId = useMyId();
+  const myName = useMyName();
+  const myImageUrl = useMyImageUrl();
 
   const [pageInfo, setPageInfo] = useState<PageInfo>(() => {
     switch (props.type) {
@@ -79,7 +79,7 @@ export const TalkRoomMessage = (props: Props) => {
       case 'News':
         return props.messageData?.newsTalkRoom.messages.pageInfo;
       case 'OneOnOne':
-        return props.messageData.oneOnOneTalkRoom.messages.pageInfo;
+        return props.messageData?.oneOnOneTalkRoom.messages.pageInfo;
     }
   });
 
@@ -107,7 +107,7 @@ export const TalkRoomMessage = (props: Props) => {
         }
       });
     }
-  }, [props.messageData]);
+  }, [props.messageData, props.type]);
 
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
@@ -130,7 +130,7 @@ export const TalkRoomMessage = (props: Props) => {
   >(
     message: T
   ): IMessage => {
-    const { replyMessage } = message;
+    const { replyMessage: _replyMessage } = message;
 
     return {
       _id: message.id,
@@ -143,11 +143,11 @@ export const TalkRoomMessage = (props: Props) => {
       },
       replyMessage: replyMessage
         ? {
-            id: Number(replyMessage.id),
-            text: replyMessage.text,
+            id: Number(_replyMessage.id),
+            text: _replyMessage.text,
             user: {
-              id: replyMessage.sender.id,
-              name: replyMessage.sender.name,
+              id: _replyMessage.sender.id,
+              name: _replyMessage.sender.name,
             },
           }
         : null,
@@ -180,7 +180,7 @@ export const TalkRoomMessage = (props: Props) => {
 
       setMessages(im);
     }
-  }, []);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
   // SubscriptionやActive時のデータの取得で新たに取得したメッセージ追加
   useEffect(() => {
@@ -206,7 +206,7 @@ export const TalkRoomMessage = (props: Props) => {
         const firstMessage = messageEdges[0].node;
 
         // 自分で送信したメッセージのサブスクライブは無視する
-        if (firstMessage.sender.id === me.id) {
+        if (firstMessage.sender.id === myId) {
           return;
         }
 
@@ -235,12 +235,12 @@ export const TalkRoomMessage = (props: Props) => {
         });
       }
     }
-  }, [props.messageData, setMessages]);
+  }, [props.messageData, setMessages, myId, props.type]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // 既読の作成
   useEffect(() => {
     (async function () {
-      if (latestMessage && latestMessage.user._id !== me.id) {
+      if (latestMessage && latestMessage.user._id !== myId) {
         try {
           switch (props.type) {
             case 'Thought':
@@ -274,6 +274,7 @@ export const TalkRoomMessage = (props: Props) => {
                   },
                 },
               });
+              break;
 
             default:
               break;
@@ -284,7 +285,7 @@ export const TalkRoomMessage = (props: Props) => {
         }
       }
     })();
-  }, [latestMessage]);
+  }, [latestMessage, myId, props, roomId]);
 
   // メッセージ送信
   const onSendPress = async (inputMessages: IMessage[]) => {
@@ -301,9 +302,9 @@ export const TalkRoomMessage = (props: Props) => {
         text,
         createdAt: new Date(Number(createdAt)),
         user: {
-          _id: me.id,
-          name: me.name,
-          avatar: me.imageUrl ?? NO_USER_IMAGE_URL,
+          _id: myId,
+          name: myName,
+          avatar: myImageUrl ?? NO_USER_IMAGE_URL,
         },
         replyMessage: replyMessage
           ? {
@@ -502,7 +503,7 @@ export const TalkRoomMessage = (props: Props) => {
       replyMessage={replyMessage}
       setReplyMessage={setReplyMessage}
       user={{
-        _id: me.id,
+        _id: myId,
       }}
       onSend={onSendPress}
       infiniteLoad={infiniteLoad}
@@ -513,4 +514,4 @@ export const TalkRoomMessage = (props: Props) => {
       }}
     />
   );
-};
+});

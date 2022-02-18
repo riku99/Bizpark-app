@@ -15,71 +15,74 @@ type Props = RootNavigationScreenProp<'NewsTalkRoomMembers'>;
 
 type Item = NewsTalkRoomMemberEdge;
 
-export const NewsTalkRoomMembersScreen = ({ navigation, route }: Props) => {
-  const { talkRoomId } = route.params;
+export const NewsTalkRoomMembersScreen = React.memo(
+  ({ navigation, route }: Props) => {
+    const { talkRoomId } = route.params;
 
-  const {
-    data: { me },
-  } = useMeQuery();
+    const {
+      data: { me },
+    } = useMeQuery();
 
-  useLayoutEffect(() => {
-    navigation.setOptions({
-      title: 'メンバー',
+    useLayoutEffect(() => {
+      navigation.setOptions({
+        title: 'メンバー',
+      });
+    }, [navigation]);
+
+    const { data: membersData, fetchMore } = useGetNewsTalkRoomMembersQuery({
+      variables: {
+        talkRoomId,
+      },
+      fetchPolicy: 'network-only',
+      nextFetchPolicy: 'cache-first',
     });
-  }, [navigation]);
 
-  const { data: membersData, fetchMore } = useGetNewsTalkRoomMembersQuery({
-    variables: {
-      talkRoomId,
-    },
-    fetchPolicy: 'network-only',
-    nextFetchPolicy: 'cache-first',
-  });
+    const renderItem = useCallback(
+      ({ item }: { item: Item }) => {
+        const { user } = item.node;
 
-  const renderItem = useCallback(({ item }: { item: Item }) => {
-    const { user } = item.node;
+        const swipeEnabled = user.id !== me.id;
 
-    const swipeEnabled = user.id !== me.id;
+        return (
+          <MemberListItem
+            user={{ id: user.id, name: user.name, imageUrl: user.imageUrl }}
+            talkRoomId={talkRoomId}
+            swipeEnabled={swipeEnabled}
+            memberId={item.node.id}
+          />
+        );
+      },
+      [me.id, talkRoomId]
+    );
+
+    const inifiniteLoad = async () => {
+      if (membersData) {
+        const { pageInfo } = membersData.newsTalkRoom.members;
+        if (pageInfo.hasNextPage) {
+          const { endCursor } = pageInfo;
+          await fetchMore({
+            variables: {
+              after: endCursor ? btoa(endCursor) : null,
+            },
+          });
+        }
+      }
+    };
+
+    if (!membersData) {
+      return <Indicator style={{ marginTop: 10 }} />;
+    }
 
     return (
-      <MemberListItem
-        user={{ id: user.id, name: user.name, imageUrl: user.imageUrl }}
-        talkRoomId={talkRoomId}
-        swipeEnabled={swipeEnabled}
-        memberId={item.node.id}
-      />
+      <SafeAreaView style={{ flex: 1 }}>
+        <InfiniteFlatList<Item>
+          data={membersData.newsTalkRoom.members.edges}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.node.id.toString()}
+          initialNumToRender={15}
+          infiniteLoad={inifiniteLoad}
+        />
+      </SafeAreaView>
     );
-  }, []);
-
-  const inifiniteLoad = async () => {
-    if (membersData) {
-      const { pageInfo } = membersData.newsTalkRoom.members;
-
-      if (pageInfo.hasNextPage) {
-        const { endCursor } = pageInfo;
-
-        await fetchMore({
-          variables: {
-            after: endCursor ? btoa(endCursor) : null,
-          },
-        });
-      }
-    }
-  };
-
-  if (!membersData) {
-    return <Indicator style={{ marginTop: 10 }} />;
   }
-
-  return (
-    <SafeAreaView style={{ flex: 1 }}>
-      <InfiniteFlatList<Item>
-        data={membersData.newsTalkRoom.members.edges}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.node.id.toString()}
-        initialNumToRender={15}
-        infiniteLoad={inifiniteLoad}
-      />
-    </SafeAreaView>
-  );
-};
+);

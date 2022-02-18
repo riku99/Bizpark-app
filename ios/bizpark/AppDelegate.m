@@ -1,4 +1,5 @@
 #import "AppDelegate.h"
+#import "RNFBMessagingModule.h"
 
 #import <React/RCTBridge.h>
 #import <React/RCTBundleURLProvider.h>
@@ -6,8 +7,16 @@
 #import <React/RCTLinkingManager.h>
 #import <React/RCTConvert.h>
 
+// react-native-bootsplash
+#import "RNBootSplash.h"
+
+// リリースビルドでログ出力
+// #import <React/RCTLog.h>
+
+#import <UserNotifications/UserNotifications.h>
+#import <RNCPushNotificationIOS.h>
+
 #import <Firebase.h>
-#import "RNSplashScreen.h"
 #if defined(FB_SONARKIT_ENABLED) && __has_include(<FlipperKit/FlipperClient.h>)
 #import <FlipperKit/FlipperClient.h>
 #import <FlipperKitLayoutPlugin/FlipperKitLayoutPlugin.h>
@@ -35,13 +44,15 @@ static void InitializeFlipper(UIApplication *application) {
 #if defined(FB_SONARKIT_ENABLED) && __has_include(<FlipperKit/FlipperClient.h>)
   InitializeFlipper(application);
 #endif
+
+NSDictionary *appProperties = [RNFBMessagingModule addCustomPropsToUserProps:nil withLaunchOptions:launchOptions];
   
   // RCTBridge *bridge = [self.reactDelegate createBridgeWithDelegate:self launchOptions:launchOptions];
   RCTBridge *bridge = [[RCTBridge alloc] initWithDelegate:self launchOptions:launchOptions];
   // RCTRootView *rootView = [self.reactDelegate createRootViewWithBridge:bridge moduleName:@"main" initialProperties:nil];
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:bridge
                                                    moduleName:@"main"
-                                            initialProperties:nil];
+                                            initialProperties:appProperties];
   rootView.backgroundColor = [UIColor whiteColor];
   self.window = [[UIWindow alloc] initWithFrame:[UIScreen mainScreen].bounds];
   // UIViewController *rootViewController = [self.reactDelegate createRootViewController];
@@ -52,7 +63,14 @@ static void InitializeFlipper(UIApplication *application) {
 
   [super application:application didFinishLaunchingWithOptions:launchOptions];
 
-  [RNSplashScreen show];
+  UNUserNotificationCenter *center = [UNUserNotificationCenter currentNotificationCenter];
+  center.delegate = self;
+
+  // リリースビルドでログ出力するために追加
+  // RCTSetLogThreshold(RCTLogLevelInfo);
+
+  // react-native-bootsplash
+  [RNBootSplash initWithStoryboard:@"BootSplash" rootView:rootView]; 
 
   return YES;
  }
@@ -81,6 +99,19 @@ static void InitializeFlipper(UIApplication *application) {
   return [RCTLinkingManager application:application
                    continueUserActivity:userActivity
                      restorationHandler:restorationHandler];
+}
+
+// Required for localNotification event
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+didReceiveNotificationResponse:(UNNotificationResponse *)response
+         withCompletionHandler:(void (^)(void))completionHandler
+{
+  [RNCPushNotificationIOS didReceiveNotificationResponse:response];
+}
+
+-(void)userNotificationCenter:(UNUserNotificationCenter *)center willPresentNotification:(UNNotification *)notification withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler
+{
+  completionHandler(UNNotificationPresentationOptionSound | UNNotificationPresentationOptionAlert | UNNotificationPresentationOptionBadge);
 }
 
 @end

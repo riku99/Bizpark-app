@@ -1,11 +1,11 @@
 query GetActiveData {
-  thoughtTalkRooms: thoughtTalkRooms {
+  thoughtTalkRooms {
     ...ThoughtTalkRoomParts
   }
-  newsTalkRooms: newsTalkRooms {
+  newsTalkRooms {
     ...NewsTalkRoomParts
   }
-  oneOnOneTalkRooms: oneOnOneTalkRooms {
+  oneOnOneTalkRooms {
     ...OneOnOneTalkRoomParts
   }
 }

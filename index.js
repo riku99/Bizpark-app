@@ -1,7 +1,19 @@
-import "react-native-gesture-handler";
-import { registerRootComponent } from "expo";
+import 'react-native-gesture-handler';
+import { registerRootComponent } from 'expo';
+import App from './App';
+import React from 'react';
+import { Facker } from './src/components/Facker';
 
-import App from "./App";
+// setBackgroundMessageHandler();
+
+function HeadlessCheck({ isHeadless }) {
+  if (isHeadless) {
+    // App has been launched in the background by iOS, ignore
+    return null;
+  }
+
+  return <App />;
+}
 
 // registerRootComponent calls AppRegistry.registerComponent('main', () => App);
 // It also ensures that whether you load the app in Expo Go or in a native build,
