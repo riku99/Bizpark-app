@@ -5,7 +5,6 @@ import {
   useGetThoughtTalkRoomMessagesQuery,
   useGetThoughtTalkRoomMembersQuery,
   useGetThoughtTalkRoomParentQuery,
-  useMeQuery,
   useCreateThoughtTalkRoomMessageMutation,
   useCreateUserThoughtTalkRoomMessageSeenMutation,
 } from 'src/generated/graphql';
