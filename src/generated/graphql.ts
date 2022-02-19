@@ -838,7 +838,14 @@ export type User = {
   instagram?: Maybe<Scalars['String']>;
   linkedin?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+  pickedNews: NewsPickConnection;
   twitter?: Maybe<Scalars['String']>;
+};
+
+
+export type UserPickedNewsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 export type UserConnection = {
@@ -1195,10 +1202,11 @@ export type GetOneOnOneTalkRoomsQuery = { __typename?: 'Query', oneOnOneTalkRoom
 
 export type GetPickedNewsQueryVariables = Exact<{
   cursor?: InputMaybe<Scalars['String']>;
+  userId: Scalars['ID'];
 }>;
 
 
-export type GetPickedNewsQuery = { __typename?: 'Query', pickedNews: { __typename?: 'NewsPickConnection', edges: Array<{ __typename?: 'NewsPickEdge', cursor: string, node: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type GetPickedNewsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, pickedNews: { __typename?: 'NewsPickConnection', edges: Array<{ __typename?: 'NewsPickEdge', cursor: string, node: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } } };
 
 export type GetThoughtQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -3213,20 +3221,23 @@ export type GetOneOnOneTalkRoomsQueryHookResult = ReturnType<typeof useGetOneOnO
 export type GetOneOnOneTalkRoomsLazyQueryHookResult = ReturnType<typeof useGetOneOnOneTalkRoomsLazyQuery>;
 export type GetOneOnOneTalkRoomsQueryResult = Apollo.QueryResult<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>;
 export const GetPickedNewsDocument = gql`
-    query GetPickedNews($cursor: String) {
-  pickedNews(first: 20, after: $cursor) {
-    edges {
-      node {
-        id
-        news {
-          ...NewsParts
-          picked
+    query GetPickedNews($cursor: String, $userId: ID!) {
+  user(id: $userId) {
+    id
+    pickedNews(first: 20, after: $cursor) {
+      edges {
+        node {
+          id
+          news {
+            ...NewsParts
+            picked
+          }
         }
+        cursor
       }
-      cursor
-    }
-    pageInfo {
-      ...PageInfoParts
+      pageInfo {
+        ...PageInfoParts
+      }
     }
   }
 }
@@ -3246,10 +3257,11 @@ ${PageInfoPartsFragmentDoc}`;
  * const { data, loading, error } = useGetPickedNewsQuery({
  *   variables: {
  *      cursor: // value for 'cursor'
+ *      userId: // value for 'userId'
  *   },
  * });
  */
-export function useGetPickedNewsQuery(baseOptions?: Apollo.QueryHookOptions<GetPickedNewsQuery, GetPickedNewsQueryVariables>) {
+export function useGetPickedNewsQuery(baseOptions: Apollo.QueryHookOptions<GetPickedNewsQuery, GetPickedNewsQueryVariables>) {
         const options = {...defaultOptions, ...baseOptions}
         return Apollo.useQuery<GetPickedNewsQuery, GetPickedNewsQueryVariables>(GetPickedNewsDocument, options);
       }

@@ -166,6 +166,11 @@ const cache = new InMemoryCache({
         messages: relayStylePagination(),
       },
     },
+    User: {
+      fields: {
+        pickedNews: relayStylePagination(),
+      },
+    },
   },
 });
 
