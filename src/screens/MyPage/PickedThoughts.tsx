@@ -6,7 +6,10 @@ import { List } from 'src/components/ThoughtList';
 import { btoa } from 'react-native-quick-base64';
 
 export const PickedThoughts = React.memo(() => {
-  const { data, refetch, fetchMore } = usePickedThoughtsQuery();
+  const { data, refetch, fetchMore } = usePickedThoughtsQuery({
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
+  });
 
   const refresh = async () => {
     await refetch();

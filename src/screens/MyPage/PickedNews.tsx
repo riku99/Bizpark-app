@@ -11,11 +11,20 @@ import { NewsCard } from 'src/components/NewsCard';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from 'src/types';
 import { RefreshControl } from 'src/components/RefreshControl';
+import { useMyId } from 'src/hooks/me';
 
-type Item = GetPickedNewsQuery['pickedNews']['edges'][number];
+type Item = GetPickedNewsQuery['user']['pickedNews']['edges'][number];
 
 export const PickedNews = () => {
-  const { data, refetch, fetchMore } = useGetPickedNewsQuery();
+  const myId = useMyId();
+
+  const { data, refetch, fetchMore } = useGetPickedNewsQuery({
+    variables: {
+      userId: myId,
+    },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
+  });
 
   const [refreshing, setRefreshing] = useState(false);
 
@@ -28,7 +37,7 @@ export const PickedNews = () => {
   };
 
   const infiniteLoad = async () => {
-    const { pageInfo } = data.pickedNews;
+    const { pageInfo } = data.user.pickedNews;
     if (pageInfo.hasNextPage) {
       const { endCursor } = pageInfo;
 
@@ -56,10 +65,11 @@ export const PickedNews = () => {
   return (
     <Box flex={1}>
       <InfiniteFlatList
-        data={data.pickedNews.edges}
+        data={data.user.pickedNews.edges}
         renderItem={renderItem}
         infiniteLoad={infiniteLoad}
         initialNumToRender={10}
+        keyExtractor={(item) => item.node.id.toString()}
         refreshControl={
           <RefreshControl refreshing={refreshing} onRefresh={onRefresh} />
         }

@@ -6,6 +6,8 @@ export const useNews = ({ genre }: { genre: NewsGenre }) => {
     variables: {
       genre,
     },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
   });
 
   const refresh = async () => {

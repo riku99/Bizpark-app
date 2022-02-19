@@ -10,7 +10,10 @@ import { Indicator } from 'src/components/Indicator';
 import { SerachBar } from 'src/components/SearchBar';
 
 export const Follows = React.memo(() => {
-  const { data, refetch, fetchMore, loading } = useFollowsQuery();
+  const { data, refetch, fetchMore, loading } = useFollowsQuery({
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
+  });
   const [refreshing, setRefreshing] = useState(false);
 
   const renderItem = useCallback(
