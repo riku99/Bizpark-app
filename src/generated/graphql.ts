@@ -838,7 +838,7 @@ export type User = {
   instagram?: Maybe<Scalars['String']>;
   linkedin?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  pickedNews: NewsPickConnection;
+  pickedNews?: Maybe<NewsPickConnection>;
   twitter?: Maybe<Scalars['String']>;
 };
 
@@ -1206,7 +1206,7 @@ export type GetPickedNewsQueryVariables = Exact<{
 }>;
 
 
-export type GetPickedNewsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, pickedNews: { __typename?: 'NewsPickConnection', edges: Array<{ __typename?: 'NewsPickEdge', cursor: string, node: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } } };
+export type GetPickedNewsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, pickedNews?: { __typename?: 'NewsPickConnection', edges: Array<{ __typename?: 'NewsPickEdge', cursor: string, node: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
 
 export type GetThoughtQueryVariables = Exact<{
   id: Scalars['ID'];

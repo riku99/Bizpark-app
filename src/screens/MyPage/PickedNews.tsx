@@ -22,6 +22,8 @@ export const PickedNews = () => {
     variables: {
       userId: myId,
     },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
   });
 
   const [refreshing, setRefreshing] = useState(false);
