@@ -14,6 +14,8 @@ export const Thouhgts = React.memo(() => {
     variables: {
       userId: myId,
     },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
   });
 
   const refresh = async () => {

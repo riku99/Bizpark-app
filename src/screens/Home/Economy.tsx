@@ -9,6 +9,8 @@ import { btoa } from 'react-native-quick-base64';
 export const Economy = React.memo(() => {
   const { data, refetch, fetchMore } = useThoughtsQuery({
     variables: { genre: Genre.Economy },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
   });
 
   const refresh = async () => {

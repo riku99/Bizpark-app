@@ -9,6 +9,8 @@ import { Bg } from 'src/components/Bg';
 export const Follow = React.memo(() => {
   const { data, refetch, fetchMore } = useThoughtsQuery({
     variables: { follow: true },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
   });
 
   const refresh = async () => {

@@ -9,6 +9,8 @@ import { btoa } from 'react-native-quick-base64';
 export const Politics = React.memo(() => {
   const { data, refetch, fetchMore } = useThoughtsQuery({
     variables: { genre: Genre.Politics },
+    fetchPolicy: 'network-only',
+    nextFetchPolicy: 'cache-first',
   });
 
   const refresh = async () => {
