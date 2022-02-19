@@ -225,6 +225,7 @@ export type Mutation = {
   signOut: Me;
   unblock: User;
   unfollow: User;
+  unlikeThought?: Maybe<Thought>;
   updateMe: Me;
   uploadImage: SubImage;
   uploadThoughtImages: UploadThoughtImagesResponse;
@@ -368,6 +369,11 @@ export type MutationUnblockArgs = {
 
 export type MutationUnfollowArgs = {
   followeeId: Scalars['ID'];
+};
+
+
+export type MutationUnlikeThoughtArgs = {
+  input: UnLikeThoughtInput;
 };
 
 
@@ -823,6 +829,10 @@ export type ThoughtsConnection = {
   pageInfo: PageInfo;
 };
 
+export type UnLikeThoughtInput = {
+  thoughtId: Scalars['String'];
+};
+
 export type UpdateMeInput = {
   bio?: InputMaybe<Scalars['String']>;
   facebook?: InputMaybe<Scalars['String']>;
@@ -1110,6 +1120,13 @@ export type UnfollowMutationVariables = Exact<{
 
 
 export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+
+export type UnlikeThoughtMutationVariables = Exact<{
+  input: UnLikeThoughtInput;
+}>;
+
+
+export type UnlikeThoughtMutation = { __typename?: 'Mutation', unlikeThought?: { __typename?: 'Thought', id: string, liked?: boolean | null | undefined } | null | undefined };
 
 export type UpdateMeMutationVariables = Exact<{
   input: UpdateMeInput;
@@ -2598,6 +2615,40 @@ export function useUnfollowMutation(baseOptions?: Apollo.MutationHookOptions<Unf
 export type UnfollowMutationHookResult = ReturnType<typeof useUnfollowMutation>;
 export type UnfollowMutationResult = Apollo.MutationResult<UnfollowMutation>;
 export type UnfollowMutationOptions = Apollo.BaseMutationOptions<UnfollowMutation, UnfollowMutationVariables>;
+export const UnlikeThoughtDocument = gql`
+    mutation UnlikeThought($input: UnLikeThoughtInput!) {
+  unlikeThought(input: $input) {
+    id
+    liked
+  }
+}
+    `;
+export type UnlikeThoughtMutationFn = Apollo.MutationFunction<UnlikeThoughtMutation, UnlikeThoughtMutationVariables>;
+
+/**
+ * __useUnlikeThoughtMutation__
+ *
+ * To run a mutation, you first call `useUnlikeThoughtMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUnlikeThoughtMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [unlikeThoughtMutation, { data, loading, error }] = useUnlikeThoughtMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUnlikeThoughtMutation(baseOptions?: Apollo.MutationHookOptions<UnlikeThoughtMutation, UnlikeThoughtMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UnlikeThoughtMutation, UnlikeThoughtMutationVariables>(UnlikeThoughtDocument, options);
+      }
+export type UnlikeThoughtMutationHookResult = ReturnType<typeof useUnlikeThoughtMutation>;
+export type UnlikeThoughtMutationResult = Apollo.MutationResult<UnlikeThoughtMutation>;
+export type UnlikeThoughtMutationOptions = Apollo.BaseMutationOptions<UnlikeThoughtMutation, UnlikeThoughtMutationVariables>;
 export const UpdateMeDocument = gql`
     mutation UpdateMe($input: UpdateMeInput!) {
   updateMe(input: $input) {

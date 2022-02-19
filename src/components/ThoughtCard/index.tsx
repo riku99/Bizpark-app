@@ -1,13 +1,7 @@
 import React, { ComponentProps, useState, useEffect, useRef } from 'react';
 import { Box, Text, Pressable, HStack } from 'native-base';
-import {
-  useThoughtCacheFragment,
-  useCreatePick,
-  useDeletePick,
-} from 'src/hooks/apollo';
 import { Image } from 'src/components/Image';
 import { UserImage } from 'src/components/UserImage';
-import { Pick } from 'src/components/Pick';
 import { ContentsCard } from 'src/components/ContentsCard';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from 'src/types';
@@ -15,7 +9,9 @@ import LottieView from 'lottie-react-native';
 import {
   useGetThoughtQuery,
   useLikeThoughtMutation,
+  useUnlikeThoughtMutation,
 } from 'src/generated/graphql';
+import { StyleSheet } from 'react-native';
 
 const Like = require('../../assets/lottie/like.json');
 
@@ -54,16 +50,29 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
         likeRef.current.play();
       } else {
         // 外すアニメーション
-        likeRef.current.play(77, 0);
+        likeRef.current.play(40, 0);
       }
     }
   }, [liked]);
 
   const [likeThought] = useLikeThoughtMutation();
+  const [unlikeThought] = useUnlikeThoughtMutation();
 
   const onLikePress = async () => {
     if (liked) {
       // アンライク
+      setLiked(false);
+      try {
+        await unlikeThought({
+          variables: {
+            input: {
+              thoughtId: id,
+            },
+          },
+        });
+      } catch (e) {
+        setLiked(true);
+      }
     } else {
       setLiked(true);
       try {
@@ -79,43 +88,8 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
       }
     }
   };
-  // const { readThoughtFragment } = useThoughtCacheFragment();
-  // const cacheData = readThoughtFragment(id);
-  // const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
-  const [createPickMutation] = useCreatePick();
-  const [deletePickMutation] = useDeletePick();
 
   const navigation = useNavigation<RootNavigationProp<any>>();
-
-  // useEffect(() => {
-  //   if (cacheData) {
-  //     setPicked(cacheData.picked);
-  //   }
-  // }, [cacheData]);
-
-  // const onCheckPress = async () => {
-  //   try {
-  //     if (!picked) {
-  //       setPicked(true);
-  //       await createPickMutation({
-  //         variables: {
-  //           input: {
-  //             thoughtId: id,
-  //           },
-  //         },
-  //       });
-  //     } else {
-  //       setPicked(false);
-  //       await deletePickMutation({
-  //         variables: {
-  //           thoughtId: id,
-  //         },
-  //       });
-  //     }
-  //   } catch (e) {
-  //     setPicked((c) => !c);
-  //   }
-  // };
 
   const onUserPress = () => {
     navigation.navigate('UserProfile', {
@@ -175,30 +149,18 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
             autoPlay={false}
             loop={false}
             speed={1.8}
-            style={{
-              width: 50,
-              height: 50,
-              marginLeft: -5,
-            }}
+            style={styles.like}
           />
         </Pressable>
-
-        {/* <Pick
-              mt={cacheData.images.length ? 4 : 2}
-              textProp={{
-                fontSize: 16,
-              }}
-              checkBoxProp={{
-                onPress: onCheckPress,
-                checked: picked,
-                style: {
-                  height: 26,
-                  width: 26,
-                  marginLeft: 6,
-                },
-              }}
-            /> */}
       </Pressable>
     </ContentsCard>
   );
 };
+
+const styles = StyleSheet.create({
+  like: {
+    width: 50,
+    height: 50,
+    marginLeft: -5,
+  },
+});
