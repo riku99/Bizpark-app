@@ -14,14 +14,15 @@ import { Alert } from 'react-native';
 import { useCustomToast } from './toast';
 import { spinnerVisibleVar } from 'src/stores/spinner';
 import { useApolloClient } from '@apollo/client';
-import { meVar, storageKeys } from 'src/stores/me';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useLoggedIn } from 'src/hooks/me';
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
 });
 
 export const useSignUpWithEmail = () => {
+  const { setLoggedIn } = useLoggedIn();
+
   const toast = useToast();
   const { someErrorToast } = useCustomToast();
   const [createUserMutation] = useCreateUserMutation();
@@ -51,8 +52,10 @@ export const useSignUpWithEmail = () => {
               },
             },
           });
-          meVar.loggedIn(true);
-          meVar.id(data.createUser.id);
+
+          if (data) {
+            setLoggedIn(true);
+          }
         } catch (e) {
           console.log(e);
         }
@@ -89,6 +92,8 @@ export const useSignUpWithEmail = () => {
 };
 
 export const useSignupWithApple = () => {
+  const { setLoggedIn } = useLoggedIn();
+
   const { someErrorToast } = useCustomToast();
   const [createUserMutation] = useCreateUserMutation();
 
@@ -122,6 +127,10 @@ export const useSignupWithApple = () => {
           },
         },
       });
+
+      if (data) {
+        setLoggedIn(true);
+      }
     } catch (e) {
       console.log(e);
     }
@@ -133,6 +142,8 @@ export const useSignupWithApple = () => {
 };
 
 export const useSignupWithGoogle = () => {
+  const { setLoggedIn } = useLoggedIn();
+
   const [createUserMutation] = useCreateUserMutation();
   const { someErrorToast } = useCustomToast();
 
@@ -149,8 +160,10 @@ export const useSignupWithGoogle = () => {
           },
         },
       });
-      meVar.loggedIn(true);
-      meVar.id(data.createUser.id);
+
+      if (data) {
+        setLoggedIn(true);
+      }
     } catch (e) {
       console.log(e);
     } finally {
@@ -164,6 +177,8 @@ export const useSignupWithGoogle = () => {
 };
 
 export const useSignInWithEmail = () => {
+  const { setLoggedIn } = useLoggedIn();
+
   const [getInitialData, { called }] = useInitialDataLazyQuery();
 
   const signInWithEmail = useCallback(
@@ -175,8 +190,7 @@ export const useSignInWithEmail = () => {
           if (!called) {
             const { data } = await getInitialData();
             if (data) {
-              meVar.loggedIn(true);
-              meVar.id(data.me.id);
+              setLoggedIn(true);
             }
           }
         } catch (e) {}
@@ -195,6 +209,8 @@ export const useSignInWithEmail = () => {
 };
 
 export const useSignInWithGoogle = () => {
+  const { setLoggedIn } = useLoggedIn();
+
   const [getInitialData, { called }] = useInitialDataLazyQuery();
 
   const signInWithGoogle = useCallback(async () => {
@@ -204,8 +220,7 @@ export const useSignInWithGoogle = () => {
       if (!called) {
         const { data } = await getInitialData();
         if (data) {
-          meVar.loggedIn(true);
-          meVar.id(data.me.id);
+          setLoggedIn(true);
         }
       }
     } catch (e) {
@@ -221,6 +236,8 @@ export const useSignInWithGoogle = () => {
 };
 
 export const useSignOut = () => {
+  const { setLoggedIn } = useLoggedIn();
+
   const client = useApolloClient();
   const [signOutMutation] = useSignOutMutation();
 
@@ -228,21 +245,17 @@ export const useSignOut = () => {
     spinnerVisibleVar(true);
     try {
       await signOutMutation();
-      await auth().signOut();
     } catch (e) {
     } finally {
-      // tryのプロセスでエラー出てもログアウトさせるのでfinallyに記述
-      meVar.loggedIn(false);
-      meVar.id(null);
-
-      await AsyncStorage.removeItem(storageKeys.id);
-      await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(false));
+      await auth().signOut();
 
       await client.clearStore();
 
-      console.log('👋 Sign out success!');
+      setLoggedIn(false);
 
       spinnerVisibleVar(false);
+
+      console.log('👋 Sign out success!');
     }
   }, [client]);
 

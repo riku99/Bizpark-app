@@ -8,13 +8,14 @@ import {
   useGetThoughtTalkRoomLazyQuery,
 } from 'src/generated/graphql';
 import { useEffect, useCallback, useMemo, useState } from 'react';
-import { useReactiveVar, useApolloClient } from '@apollo/client';
-import { meVar } from 'src/stores/me';
-import { logJson } from 'src/utils';
+import { useApolloClient } from '@apollo/client';
 import { AppState, AppStateStatus } from 'react-native';
+import { useMyId, useLoggedIn } from 'src/hooks/me';
 
 export const useToughtTalkRoomsWithSubsciption = () => {
-  const myId = useReactiveVar(meVar.id);
+  const { loggedIn } = useLoggedIn();
+
+  const myId = useMyId();
 
   const { cache } = useApolloClient();
 
@@ -30,7 +31,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
     }
 
     return talkRoomsData.thoughtTalkRooms.map((t) => t.id);
-  }, [talkRoomsData?.thoughtTalkRooms.length]);
+  }, [talkRoomsData?.thoughtTalkRooms.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // Active時、非アクティブ時の処理
   useEffect(() => {
@@ -161,7 +162,7 @@ export const useToughtTalkRoomsWithSubsciption = () => {
         }
       })();
     }
-  }, [newTalkRoomId, cache]);
+  }, [newTalkRoomId, cache, getThougtTalkRoomQuery]);
 };
 
 export const useFindThoughtTalkRoomsByThoughtId = ({
@@ -204,7 +205,7 @@ export const useDeleteThoughtTalkRoomsItemFromCache = () => {
         });
       }
     },
-    []
+    [cache]
   );
 
   return {

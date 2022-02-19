@@ -7,13 +7,13 @@ import {
   GetOneOnOneTalkRoomsQuery,
   GetOneOnOneTalkRoomsDocument,
 } from 'src/generated/graphql';
-import { meVar } from 'src/stores/me';
-import { useReactiveVar, useApolloClient } from '@apollo/client';
+import { useApolloClient } from '@apollo/client';
 import { useState, useEffect, useCallback } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
+import { useMyId } from 'src/hooks/me';
 
 export const useOneOnOneTalkRoomsWithSubscription = () => {
-  const myId = useReactiveVar(meVar.id);
+  const myId = useMyId();
 
   const { cache } = useApolloClient();
 
@@ -154,25 +154,28 @@ export const useOneOnOneTalkRoomsWithSubscription = () => {
         }
       })();
     }
-  }, [newTalkRoomId, cache]);
+  }, [newTalkRoomId, cache, getOneOnOneTalkRoomQuery]);
 };
 
 export const useFindOneOnOneTalkRoomFromUserId = () => {
   const { cache } = useApolloClient();
 
-  const findOneOnOneTalkRoom = useCallback(({ userId }: { userId: string }) => {
-    const queryResult = cache.readQuery<GetOneOnOneTalkRoomsQuery>({
-      query: GetOneOnOneTalkRoomsDocument,
-    });
+  const findOneOnOneTalkRoom = useCallback(
+    ({ userId }: { userId: string }) => {
+      const queryResult = cache.readQuery<GetOneOnOneTalkRoomsQuery>({
+        query: GetOneOnOneTalkRoomsDocument,
+      });
 
-    if (queryResult) {
-      const targetRoom = queryResult.oneOnOneTalkRooms.find(
-        (room) => room.sender.id === userId || room.recipient.id === userId
-      );
+      if (queryResult) {
+        const targetRoom = queryResult.oneOnOneTalkRooms.find(
+          (room) => room.sender.id === userId || room.recipient.id === userId
+        );
 
-      return targetRoom;
-    }
-  }, []);
+        return targetRoom;
+      }
+    },
+    [cache]
+  );
 
   return {
     findOneOnOneTalkRoom,

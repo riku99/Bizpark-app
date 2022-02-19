@@ -3,11 +3,12 @@ import { Box } from 'native-base';
 import { useUserThoughtsQuery } from 'src/generated/graphql';
 import { List } from 'src/components/ThoughtList';
 import { Indicator } from 'src/components/Indicator';
-import { meVar } from 'src/stores/me';
 import { btoa } from 'react-native-quick-base64';
+import { useMyId } from 'src/hooks/me';
+import { StyleSheet } from 'react-native';
 
 export const Thouhgts = React.memo(() => {
-  const myId = meVar.id();
+  const myId = useMyId();
 
   const { data, refetch, fetchMore } = useUserThoughtsQuery({
     variables: {
@@ -33,7 +34,7 @@ export const Thouhgts = React.memo(() => {
   };
 
   if (!data) {
-    return <Indicator style={{ marginTop: 10 }} />;
+    return <Indicator style={styles.Indicator} />;
   }
 
   return (
@@ -45,4 +46,10 @@ export const Thouhgts = React.memo(() => {
       />
     </Box>
   );
+});
+
+const styles = StyleSheet.create({
+  Indicator: {
+    marginTop: 10,
+  },
 });

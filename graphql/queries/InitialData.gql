@@ -8,6 +8,7 @@ query InitialData {
     twitter
     instagram
     linkedin
+    loggedIn
   }
   thoughtTalkRooms: thoughtTalkRooms {
     ...ThoughtTalkRoomParts

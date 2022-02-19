@@ -31,6 +31,7 @@ export const useActiveData = () => {
       }
     };
     AppState.addEventListener('change', onChange);
+
     return () => {
       AppState.removeEventListener('change', onChange);
     };
