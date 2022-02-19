@@ -245,17 +245,17 @@ export const useSignOut = () => {
     spinnerVisibleVar(true);
     try {
       await signOutMutation();
-
-      await auth().signOut();
     } catch (e) {
     } finally {
-      setLoggedIn(false);
+      await auth().signOut();
 
       await client.clearStore();
 
-      console.log('👋 Sign out success!');
+      setLoggedIn(false);
 
       spinnerVisibleVar(false);
+
+      console.log('👋 Sign out success!');
     }
   }, [client]);
 

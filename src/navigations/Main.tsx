@@ -24,6 +24,10 @@ import { useNewsTalkRoomsWithSusbscription } from 'src/hooks/newsTalkRoom';
 import { useOneOnOneTalkRoomsWithSubscription } from 'src/hooks/oneOnOneTalkRoom';
 import { useDeviceToken } from 'src/hooks/pushNotificatoins';
 import { requestUserPermission } from 'src/helpers/pushNotifications';
+import { useInitialDataLazyQuery } from 'src/generated/graphql';
+import FastImage from 'react-native-fast-image';
+import { useApolloClient } from '@apollo/client';
+import { useLoggedIn } from 'src/hooks/me';
 
 export type MainStackParamList = {
   Tab: undefined;
@@ -58,7 +62,42 @@ export type MainStackParamList = {
 const Stack = createNativeStackNavigator<MainStackParamList>();
 
 export const MainStack = React.memo(() => {
+  const { loggedIn, checkedStorage } = useLoggedIn();
+
   const { colors } = useTheme();
+
+  const client = useApolloClient();
+
+  const [initialDataQuery, { called }] = useInitialDataLazyQuery({
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'standby',
+  });
+
+  useEffect(() => {
+    (async function () {
+      if (!called) {
+        const { data } = await initialDataQuery();
+        if (data) {
+          if (data.me.imageUrl) {
+            FastImage.preload([
+              {
+                uri: data.me.imageUrl,
+              },
+            ]);
+          }
+        }
+      }
+    })();
+  }, [called, initialDataQuery]);
+
+  useEffect(() => {
+    (async function () {
+      if (!loggedIn && checkedStorage && called) {
+        await client.clearStore();
+        console.log('🧹 clear cache');
+      }
+    })();
+  }, [loggedIn, called, client]);
 
   useActiveData();
   useToughtTalkRoomsWithSubsciption();

@@ -1,10 +1,12 @@
 import { makeVar } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-export const loggedIn = makeVar<boolean>(false);
+const loggedIn = makeVar<boolean>(false);
+const checkedStorage = makeVar(false);
 
 export const meVar = {
   loggedIn,
+  checkedStorage,
 };
 
 export const storageKeys = {

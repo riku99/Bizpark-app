@@ -10,9 +10,11 @@ import {
 import { useEffect, useCallback, useMemo, useState } from 'react';
 import { useApolloClient } from '@apollo/client';
 import { AppState, AppStateStatus } from 'react-native';
-import { useMyId } from 'src/hooks/me';
+import { useMyId, useLoggedIn } from 'src/hooks/me';
 
 export const useToughtTalkRoomsWithSubsciption = () => {
+  const { loggedIn } = useLoggedIn();
+
   const myId = useMyId();
 
   const { cache } = useApolloClient();

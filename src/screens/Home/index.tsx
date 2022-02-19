@@ -18,7 +18,7 @@ type Props = RootNavigationScreenProp<'Tab'>;
 
 const TopTab = createMaterialTopTabNavigator();
 
-export const HomeScreen = ({ navigation }: Props) => {
+export const HomeScreen = React.memo(({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShadowVisible: false,
@@ -115,4 +115,4 @@ export const HomeScreen = ({ navigation }: Props) => {
       )}
     </>
   );
-};
+});

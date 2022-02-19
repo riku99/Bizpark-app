@@ -16,9 +16,11 @@ export const Stack = createNativeStackNavigator<RootStackParamList>();
 export const RootNavigation = React.memo(() => {
   const { loggedIn } = useLoggedIn();
 
+  const statusBarColor = useColorModeValue('dark', 'light');
+
   return (
     <>
-      <StatusBar style={useColorModeValue('dark', 'light')} />
+      <StatusBar style={statusBarColor} />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         {!loggedIn ? (
           <Stack.Screen name="Auth" component={AuthStack} />

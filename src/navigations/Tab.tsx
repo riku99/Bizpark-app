@@ -23,7 +23,7 @@ type TabParamList = {
 
 const Tab = createBottomTabNavigator<TabParamList>();
 
-export const BottomTab = () => {
+export const BottomTab = React.memo(() => {
   const { colors } = useTheme();
 
   const { data: thoughtTalkRoomData } = useGetThoughtTalkRoomsQuery({
@@ -141,7 +141,7 @@ export const BottomTab = () => {
       />
     </Tab.Navigator>
   );
-};
+});
 
 const ICON_SIZE = 24;
 

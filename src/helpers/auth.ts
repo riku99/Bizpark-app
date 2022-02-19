@@ -20,10 +20,10 @@ export const signOut = async () => {
   spinnerVisibleVar(true);
   await auth().signOut();
 
-  meVar.loggedIn(false);
-  meVar.id(null);
+  // meVar.loggedIn(false);
+  // meVar.id(null);
 
-  await AsyncStorage.removeItem(storageKeys.id);
+  // await AsyncStorage.removeItem(storageKeys.id);
   await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(false));
 
   spinnerVisibleVar(false);
