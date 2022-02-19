@@ -9,7 +9,7 @@ import RNBootSplash from 'react-native-bootsplash';
 import { useLoggedIn } from 'src/hooks/me';
 
 export const Root = () => {
-  const loggedIn = useLoggedIn();
+  const { loggedIn, checkedStorage } = useLoggedIn();
 
   const spinnerVisible = useReactiveVar(spinnerVisibleVar);
 
@@ -21,10 +21,12 @@ export const Root = () => {
   const client = useApolloClient();
 
   useEffect(() => {
-    setTimeout(async () => {
-      await RNBootSplash.hide({ fade: true });
-    }, 100);
-  }, []);
+    if (checkedStorage) {
+      setTimeout(async () => {
+        await RNBootSplash.hide({ fade: true });
+      }, 100);
+    }
+  }, [checkedStorage]);
 
   useEffect(() => {
     (async function () {
@@ -54,6 +56,10 @@ export const Root = () => {
       }
     })();
   }, [loggedIn, called, client]);
+
+  if (!checkedStorage) {
+    return null;
+  }
 
   return (
     <>

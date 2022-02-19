@@ -14,7 +14,7 @@ export type RootStackParamList = {
 export const Stack = createNativeStackNavigator<RootStackParamList>();
 
 export const RootNavigation = React.memo(() => {
-  const loggedIn = useLoggedIn();
+  const { loggedIn } = useLoggedIn();
 
   return (
     <>

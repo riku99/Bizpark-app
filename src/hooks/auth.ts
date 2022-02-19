@@ -14,7 +14,7 @@ import { Alert } from 'react-native';
 import { useCustomToast } from './toast';
 import { spinnerVisibleVar } from 'src/stores/spinner';
 import { useApolloClient } from '@apollo/client';
-import { meVar, storageKeys } from 'src/stores/me';
+// import { meVar, storageKeys } from 'src/stores/me';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 GoogleSignin.configure({
@@ -51,8 +51,10 @@ export const useSignUpWithEmail = () => {
               },
             },
           });
-          meVar.loggedIn(true);
-          meVar.id(data.createUser.id);
+
+          console.log(data.createUser.loggedIn);
+          // meVar.loggedIn(true);
+          // meVar.id(data.createUser.id);
         } catch (e) {
           console.log(e);
         }
@@ -149,8 +151,8 @@ export const useSignupWithGoogle = () => {
           },
         },
       });
-      meVar.loggedIn(true);
-      meVar.id(data.createUser.id);
+      // meVar.loggedIn(true);
+      // meVar.id(data.createUser.id);
     } catch (e) {
       console.log(e);
     } finally {
@@ -175,8 +177,8 @@ export const useSignInWithEmail = () => {
           if (!called) {
             const { data } = await getInitialData();
             if (data) {
-              meVar.loggedIn(true);
-              meVar.id(data.me.id);
+              // meVar.loggedIn(true);
+              // meVar.id(data.me.id);
             }
           }
         } catch (e) {}
@@ -204,8 +206,8 @@ export const useSignInWithGoogle = () => {
       if (!called) {
         const { data } = await getInitialData();
         if (data) {
-          meVar.loggedIn(true);
-          meVar.id(data.me.id);
+          // meVar.loggedIn(true);
+          // meVar.id(data.me.id);
         }
       }
     } catch (e) {
@@ -228,15 +230,16 @@ export const useSignOut = () => {
     spinnerVisibleVar(true);
     try {
       await signOutMutation();
+
       await auth().signOut();
     } catch (e) {
     } finally {
       // tryのプロセスでエラー出てもログアウトさせるのでfinallyに記述
-      meVar.loggedIn(false);
-      meVar.id(null);
+      // meVar.loggedIn(false);
+      // meVar.id(null);
 
-      await AsyncStorage.removeItem(storageKeys.id);
-      await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(false));
+      // await AsyncStorage.removeItem(storageKeys.id);
+      // await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(false));
 
       await client.clearStore();
 
