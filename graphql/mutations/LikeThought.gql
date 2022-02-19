@@ -1,0 +1,6 @@
+mutation LikeThought($input: LikeThoughtInput!) {
+  likeThought(input: $input) {
+    id
+    liked
+  }
+}

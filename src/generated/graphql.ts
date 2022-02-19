@@ -177,6 +177,10 @@ export type JoinTalkInput = {
   thoughtId: Scalars['String'];
 };
 
+export type LikeThoughtInput = {
+  thoughtId: Scalars['String'];
+};
+
 export type Me = {
   __typename?: 'Me';
   bio?: Maybe<Scalars['String']>;
@@ -215,6 +219,7 @@ export type Mutation = {
   getOutThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
   joinNewsTalkRoom: NewsTalkRoom;
   joinThoughtTalk: ThoughtTalkRoom;
+  likeThought?: Maybe<Thought>;
   requestNewsTalkRoomMemberDeletion?: Maybe<Scalars['Boolean']>;
   seenOneOnOneTalkRoomMessage: OneOnOneTalkRoom;
   signOut: Me;
@@ -338,6 +343,11 @@ export type MutationJoinNewsTalkRoomArgs = {
 
 export type MutationJoinThoughtTalkArgs = {
   input: JoinTalkInput;
+};
+
+
+export type MutationLikeThoughtArgs = {
+  input: LikeThoughtInput;
 };
 
 
@@ -721,6 +731,7 @@ export type Thought = {
   createdAt?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
   images: Array<Maybe<ThoughtImage>>;
+  liked?: Maybe<Scalars['Boolean']>;
   picked?: Maybe<Scalars['Boolean']>;
   text: Scalars['String'];
   title?: Maybe<Scalars['String']>;
@@ -839,11 +850,18 @@ export type User = {
   linkedin?: Maybe<Scalars['String']>;
   name: Scalars['String'];
   pickedNews?: Maybe<NewsPickConnection>;
+  pickedThoughts?: Maybe<ThoughtsConnection>;
   twitter?: Maybe<Scalars['String']>;
 };
 
 
 export type UserPickedNewsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+};
+
+
+export type UserPickedThoughtsArgs = {
   after?: InputMaybe<Scalars['String']>;
   first?: InputMaybe<Scalars['Int']>;
 };
@@ -878,7 +896,7 @@ export type OneOnOneTalkRoomPartsFragment = { __typename?: 'OneOnOneTalkRoom', i
 
 export type PageInfoPartsFragment = { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined };
 
-export type ThoughtPartsFragment = { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> };
+export type ThoughtPartsFragment = { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, liked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> };
 
 export type ThoughtTalkRoomMessagePartsFragment = { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined };
 
@@ -886,7 +904,7 @@ export type ThoughtTalkRoomParentPartsFragment = { __typename?: 'Thought', id: s
 
 export type ThoughtTalkRoomPartsFragment = { __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined };
 
-export type ThoughtsConnectionPartsFragment = { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } };
+export type ThoughtsConnectionPartsFragment = { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, liked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } };
 
 export type UserPartsFragment = { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined };
 
@@ -1053,6 +1071,13 @@ export type JoinThoughtTalkMutationVariables = Exact<{
 
 export type JoinThoughtTalkMutation = { __typename?: 'Mutation', joinThoughtTalk: { __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
 
+export type LikeThoughtMutationVariables = Exact<{
+  input: LikeThoughtInput;
+}>;
+
+
+export type LikeThoughtMutation = { __typename?: 'Mutation', likeThought?: { __typename?: 'Thought', id: string, liked?: boolean | null | undefined } | null | undefined };
+
 export type RequestNewsTalkRoomMemberDeletionMutationVariables = Exact<{
   input: RequestNewsTalkRoomMemberDeletionInput;
 }>;
@@ -1213,7 +1238,7 @@ export type GetThoughtQueryVariables = Exact<{
 }>;
 
 
-export type GetThoughtQuery = { __typename?: 'Query', thought: { __typename?: 'Thought', picked?: boolean | null | undefined, id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } };
+export type GetThoughtQuery = { __typename?: 'Query', thought: { __typename?: 'Thought', picked?: boolean | null | undefined, id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, liked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } };
 
 export type GetThoughtTalkRoomQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -1273,7 +1298,7 @@ export type PickedThoughtsQueryVariables = Exact<{
 }>;
 
 
-export type PickedThoughtsQuery = { __typename?: 'Query', pickedThoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type PickedThoughtsQuery = { __typename?: 'Query', pickedThoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, liked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 export type ThoughtsQueryVariables = Exact<{
   genre?: InputMaybe<Genre>;
@@ -1282,7 +1307,7 @@ export type ThoughtsQueryVariables = Exact<{
 }>;
 
 
-export type ThoughtsQuery = { __typename?: 'Query', thoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type ThoughtsQuery = { __typename?: 'Query', thoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, liked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 export type UserQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1297,7 +1322,7 @@ export type UserThoughtsQueryVariables = Exact<{
 }>;
 
 
-export type UserThoughtsQuery = { __typename?: 'Query', userThoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type UserThoughtsQuery = { __typename?: 'Query', userThoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, picked?: boolean | null | undefined, liked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 export type OnNewsTalkRoomMessageCreatedSubscriptionVariables = Exact<{
   roomIds: Array<InputMaybe<Scalars['Int']>> | InputMaybe<Scalars['Int']>;
@@ -1575,6 +1600,7 @@ export const ThoughtPartsFragmentDoc = gql`
     ...UserParts
   }
   picked
+  liked
   images {
     id
     url
@@ -2372,6 +2398,40 @@ export function useJoinThoughtTalkMutation(baseOptions?: Apollo.MutationHookOpti
 export type JoinThoughtTalkMutationHookResult = ReturnType<typeof useJoinThoughtTalkMutation>;
 export type JoinThoughtTalkMutationResult = Apollo.MutationResult<JoinThoughtTalkMutation>;
 export type JoinThoughtTalkMutationOptions = Apollo.BaseMutationOptions<JoinThoughtTalkMutation, JoinThoughtTalkMutationVariables>;
+export const LikeThoughtDocument = gql`
+    mutation LikeThought($input: LikeThoughtInput!) {
+  likeThought(input: $input) {
+    id
+    liked
+  }
+}
+    `;
+export type LikeThoughtMutationFn = Apollo.MutationFunction<LikeThoughtMutation, LikeThoughtMutationVariables>;
+
+/**
+ * __useLikeThoughtMutation__
+ *
+ * To run a mutation, you first call `useLikeThoughtMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useLikeThoughtMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [likeThoughtMutation, { data, loading, error }] = useLikeThoughtMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useLikeThoughtMutation(baseOptions?: Apollo.MutationHookOptions<LikeThoughtMutation, LikeThoughtMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<LikeThoughtMutation, LikeThoughtMutationVariables>(LikeThoughtDocument, options);
+      }
+export type LikeThoughtMutationHookResult = ReturnType<typeof useLikeThoughtMutation>;
+export type LikeThoughtMutationResult = Apollo.MutationResult<LikeThoughtMutation>;
+export type LikeThoughtMutationOptions = Apollo.BaseMutationOptions<LikeThoughtMutation, LikeThoughtMutationVariables>;
 export const RequestNewsTalkRoomMemberDeletionDocument = gql`
     mutation RequestNewsTalkRoomMemberDeletion($input: RequestNewsTalkRoomMemberDeletionInput!) {
   requestNewsTalkRoomMemberDeletion(input: $input)
