@@ -5,30 +5,31 @@ import {
 } from 'src/generated/graphql';
 import { useCallback, useEffect } from 'react';
 import { useReactiveVar } from '@apollo/client';
-import { meVar, storageKeys } from 'src/stores/me';
+// import { meVar, storageKeys } from 'src/stores/me';
+import { loggedInVar, STORAGE_KEY } from 'src/stores/loggedIn';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const useLoggedIn = () => {
-  const loggedIn = useReactiveVar(meVar.loggedIn);
-  const checkedStorage = useReactiveVar(meVar.checkedStorage);
+  const loggedIn = useReactiveVar(loggedInVar.loggedIn);
+  const checkedStorage = useReactiveVar(loggedInVar.checkedStorage);
 
   useEffect(() => {
     (async () => {
       if (!checkedStorage) {
-        const l = await AsyncStorage.getItem(storageKeys.loggedIn);
+        const l = await AsyncStorage.getItem(STORAGE_KEY);
 
         if (l) {
-          meVar.loggedIn(JSON.parse(l));
+          loggedInVar.loggedIn(JSON.parse(l));
         }
 
-        meVar.checkedStorage(true);
+        loggedInVar.checkedStorage(true);
       }
     })();
   }, [checkedStorage]);
 
   const setLoggedIn = useCallback(async (v: boolean) => {
-    meVar.loggedIn(v);
-    await AsyncStorage.setItem(storageKeys.loggedIn, JSON.stringify(v));
+    loggedInVar.loggedIn(v);
+    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(v));
   }, []);
 
   return {

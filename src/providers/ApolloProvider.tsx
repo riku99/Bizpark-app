@@ -13,7 +13,6 @@ import { useToast } from 'react-native-toast-notifications';
 import { CustomErrorResponseCode } from 'src/generated/graphql';
 import auth from '@react-native-firebase/auth';
 import { Alert } from 'react-native';
-import { signOut } from 'src/helpers/auth';
 import { relayStylePagination } from '@apollo/client/utilities';
 import { createUploadLink } from 'apollo-upload-client';
 import { useCustomToast } from 'src/hooks/toast';
@@ -21,6 +20,7 @@ import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistCache, AsyncStorageWrapper } from 'apollo3-cache-persist';
+import { useLoggedIn } from 'src/hooks/me';
 
 type Props = {
   children: JSX.Element;
@@ -173,6 +173,8 @@ export const ApolloProvider = ({ children }: Props) => {
   const toast = useToast();
   const { someErrorToast } = useCustomToast();
 
+  const { setLoggedIn } = useLoggedIn();
+
   const errorLink = onError((error) => {
     try {
       const firstError = error.graphQLErrors[0];
@@ -201,7 +203,8 @@ export const ApolloProvider = ({ children }: Props) => {
         Alert.alert('エラーが発生しました', 'ログインし直してください', [
           {
             onPress: async () => {
-              await signOut();
+              setLoggedIn(false);
+              await auth().signOut();
             },
           },
         ]);
