@@ -11,6 +11,9 @@ import { Pick } from 'src/components/Pick';
 import { ContentsCard } from 'src/components/ContentsCard';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from 'src/types';
+import LottieView from 'lottie-react-native';
+
+const Like = require('../../assets/lottie/like.json');
 
 type Props = {
   id: string;
@@ -88,20 +91,35 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
               {cacheData.text}
             </Text>
 
-            <HStack space={2} mt={4}>
-              {cacheData.images.map((img) => (
-                <Image
-                  key={img.id}
-                  source={{
-                    uri: img.url,
-                  }}
-                  size={70}
-                  borderRadius="md"
-                />
-              ))}
-            </HStack>
+            {!!cacheData.images.length && (
+              <HStack space={2} mt={4}>
+                {cacheData.images.map((img) => (
+                  <Image
+                    key={img.id}
+                    source={{
+                      uri: img.url,
+                    }}
+                    size={70}
+                    borderRadius="md"
+                  />
+                ))}
+              </HStack>
+            )}
 
-            <Pick
+            <Pressable mt={cacheData.images.length ? 2 : 0}>
+              <LottieView
+                source={Like}
+                autoPlay
+                loop
+                style={{
+                  width: 50,
+                  height: 50,
+                  marginLeft: -5,
+                }}
+              />
+            </Pressable>
+
+            {/* <Pick
               mt={cacheData.images.length ? 4 : 2}
               textProp={{
                 fontSize: 16,
@@ -115,7 +133,7 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
                   marginLeft: 6,
                 },
               }}
-            />
+            /> */}
           </Pressable>
         </ContentsCard>
       ) : null}
