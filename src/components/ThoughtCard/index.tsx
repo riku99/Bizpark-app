@@ -1,19 +1,17 @@
-import React, { ComponentProps, useState, useEffect, useRef } from 'react';
-import { Box, Text, Pressable, HStack, View } from 'native-base';
+import React, { ComponentProps, useState, useEffect } from 'react';
+import { Box, Text, Pressable, HStack } from 'native-base';
 import { Image } from 'src/components/Image';
 import { UserImage } from 'src/components/UserImage';
 import { ContentsCard } from 'src/components/ContentsCard';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from 'src/types';
-import LottieView from 'lottie-react-native';
 import {
   useGetThoughtQuery,
   useLikeThoughtMutation,
   useUnlikeThoughtMutation,
 } from 'src/generated/graphql';
 import { StyleSheet, Dimensions } from 'react-native';
-
-const Like = require('../../assets/lottie/like.json');
+import { Like } from '../Like';
 
 type Props = {
   id: string;
@@ -21,9 +19,6 @@ type Props = {
 } & ComponentProps<typeof Box>;
 
 export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
-  const likeRef = useRef<LottieView>(null);
-  const isInitialRender = useRef(true);
-
   const { data: thoughtData } = useGetThoughtQuery({
     variables: {
       id,
@@ -35,25 +30,6 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
   useEffect(() => {
     setLiked(thoughtData?.thought.liked);
   }, [thoughtData?.thought.liked]);
-
-  useEffect(() => {
-    if (isInitialRender.current) {
-      if (liked) {
-        likeRef.current?.play(77, 77);
-      } else {
-        likeRef.current?.play(0, 0);
-      }
-      isInitialRender.current = false;
-    } else {
-      if (liked) {
-        // いいねアニメーション
-        likeRef.current?.play();
-      } else {
-        // 外すアニメーション
-        likeRef.current?.play(40, 0);
-      }
-    }
-  }, [liked]);
 
   const [likeThought] = useLikeThoughtMutation();
   const [unlikeThought] = useUnlikeThoughtMutation();
@@ -142,17 +118,13 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
           </HStack>
         )}
 
-        <Pressable mt={images.length ? 2 : 0} onPress={onLikePress} w="5">
-          <LottieView
-            ref={likeRef}
-            source={Like}
-            autoPlay={false}
-            loop={false}
-            speed={1.8}
-            style={styles.like}
-            resizeMode="cover"
-          />
-        </Pressable>
+        <Like
+          lottieStyle={styles.like}
+          liked={liked}
+          mt={images.length ? 2 : 0}
+          onPress={onLikePress}
+          w="5"
+        />
       </Pressable>
     </ContentsCard>
   );
