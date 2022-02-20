@@ -1,0 +1,19 @@
+query GetLikedThoughts($after: String, $userId: ID!) {
+  user(id: $userId) {
+    id
+    likedThoughts(after: $after) {
+      edges {
+        node {
+          id
+          thought {
+            ...ThoughtParts
+          }
+        }
+        cursor
+      }
+      pageInfo {
+        ...PageInfoParts
+      }
+    }
+  }
+}

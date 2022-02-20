@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { RefreshControl } from 'react-native';
-import { ThoughtEdge } from 'src/generated/graphql';
+import { ThoughtEdge, Thought } from 'src/generated/graphql';
 import { ThoughtCard } from 'src/components/ThoughtCard';
 import { useColorModeValue, useTheme } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
@@ -8,7 +8,7 @@ import { RootNavigationProp } from 'src/types';
 import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
 
 type Props = {
-  data: ThoughtEdge[];
+  data: Thought[];
   refresh: () => Promise<void>;
   infiniteLoad: () => Promise<void>;
 };
@@ -19,8 +19,8 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
   const [refreshing, setRefreshing] = useState(false);
 
   const renderItem = useCallback(
-    ({ item, index }: { item: ThoughtEdge; index: number }) => {
-      const { id } = item.node;
+    ({ item, index }: { item: Thought; index: number }) => {
+      const { id } = item;
 
       return (
         <ThoughtCard
@@ -44,12 +44,12 @@ export const List = ({ data, refresh, infiniteLoad }: Props) => {
   };
 
   return (
-    <InfiniteFlatList<ThoughtEdge>
+    <InfiniteFlatList<Thought>
       data={data}
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
       contentContainerStyle={{ paddingBottom: 8, minHeight: '100%' }}
-      keyExtractor={(i: ThoughtEdge) => i.node.id}
+      keyExtractor={(i: Thought) => i.id}
       refreshControl={
         <RefreshControl
           tintColor={useColorModeValue(undefined, colors.lightGray)}

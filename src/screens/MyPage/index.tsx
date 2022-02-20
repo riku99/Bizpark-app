@@ -47,9 +47,9 @@ export const MyPage = ({ navigation }: Props) => {
         sceneContainerStyle={sceneContainerStyle}
       >
         <TopTab.Screen name="プロフィール" component={MyProfile} />
-        <TopTab.Screen name="マイピックス" component={Picks} />
+        <TopTab.Screen name="ピックス" component={Picks} />
         <TopTab.Screen name="フォロー" component={Follows} />
-        <TopTab.Screen name="シェア" component={Thouhgts} />
+        <TopTab.Screen name="投稿" component={Thouhgts} />
       </TopTab.Navigator>
 
       {creatingThought && (
