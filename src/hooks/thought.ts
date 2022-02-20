@@ -1,12 +1,13 @@
 import { useCallback, useMemo } from 'react';
-import { useThoughtsQuery, Genre } from 'src/generated/graphql';
+import {
+  useThoughtsQuery,
+  ThoughtsQueryVariables,
+} from 'src/generated/graphql';
 import { btoa } from 'react-native-quick-base64';
 
-export const useThoughtFeed = ({ genre }: { genre: Genre }) => {
+export const useThoughtFeed = (variables: ThoughtsQueryVariables) => {
   const { data, refetch, fetchMore } = useThoughtsQuery({
-    variables: {
-      genre,
-    },
+    variables,
     fetchPolicy: 'network-only',
     nextFetchPolicy: 'cache-first',
   });
@@ -20,7 +21,7 @@ export const useThoughtFeed = ({ genre }: { genre: Genre }) => {
       const cursor = data.thoughts.pageInfo.endCursor;
       await fetchMore({
         variables: {
-          genre,
+          ...variables,
           cursor: cursor ? btoa(cursor) : undefined,
         },
       });
@@ -29,7 +30,7 @@ export const useThoughtFeed = ({ genre }: { genre: Genre }) => {
     data?.thoughts.pageInfo.endCursor,
     data?.thoughts.pageInfo.hasNextPage,
     fetchMore,
-    genre,
+    variables,
   ]);
 
   const listData = useMemo(() => {
