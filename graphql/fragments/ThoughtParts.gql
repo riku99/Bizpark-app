@@ -3,10 +3,10 @@ fragment ThoughtParts on Thought {
   title
   text
   createdAt
+  liked
   contributor {
     ...UserParts
   }
-  picked
   images {
     id
     url

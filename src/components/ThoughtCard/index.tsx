@@ -1,16 +1,17 @@
 import React, { ComponentProps, useState, useEffect } from 'react';
 import { Box, Text, Pressable, HStack } from 'native-base';
-import {
-  useThoughtCacheFragment,
-  useCreatePick,
-  useDeletePick,
-} from 'src/hooks/apollo';
 import { Image } from 'src/components/Image';
 import { UserImage } from 'src/components/UserImage';
-import { Pick } from 'src/components/Pick';
 import { ContentsCard } from 'src/components/ContentsCard';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from 'src/types';
+import {
+  useGetThoughtQuery,
+  useLikeThoughtMutation,
+  useUnlikeThoughtMutation,
+} from 'src/generated/graphql';
+import { StyleSheet, Dimensions } from 'react-native';
+import { Like } from '../Like';
 
 type Props = {
   id: string;
@@ -18,107 +19,122 @@ type Props = {
 } & ComponentProps<typeof Box>;
 
 export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
-  const { readThoughtFragment } = useThoughtCacheFragment();
-  const cacheData = readThoughtFragment(id);
-  const [picked, setPicked] = useState(cacheData ? cacheData.picked : false);
-  const [createPickMutation] = useCreatePick();
-  const [deletePickMutation] = useDeletePick();
+  const { data: thoughtData } = useGetThoughtQuery({
+    variables: {
+      id,
+    },
+  });
 
-  const navigation = useNavigation<RootNavigationProp<any>>();
+  const [liked, setLiked] = useState(thoughtData?.thought.liked);
 
   useEffect(() => {
-    if (cacheData) {
-      setPicked(cacheData.picked);
-    }
-  }, [cacheData]);
+    setLiked(thoughtData?.thought.liked);
+  }, [thoughtData?.thought.liked]);
 
-  const onCheckPress = async () => {
-    try {
-      if (!picked) {
-        setPicked(true);
-        await createPickMutation({
+  const [likeThought] = useLikeThoughtMutation();
+  const [unlikeThought] = useUnlikeThoughtMutation();
+
+  const onLikePress = async () => {
+    if (liked) {
+      // アンライク
+      setLiked(false);
+      try {
+        await unlikeThought({
           variables: {
             input: {
               thoughtId: id,
             },
           },
         });
-      } else {
-        setPicked(false);
-        await deletePickMutation({
+      } catch (e) {
+        setLiked(true);
+      }
+    } else {
+      setLiked(true);
+      try {
+        await likeThought({
           variables: {
-            thoughtId: id,
+            input: {
+              thoughtId: id,
+            },
           },
         });
+      } catch (e) {
+        setLiked(false);
       }
-    } catch (e) {
-      setPicked((c) => !c);
     }
   };
 
+  const navigation = useNavigation<RootNavigationProp<any>>();
+
   const onUserPress = () => {
     navigation.navigate('UserProfile', {
-      id: cacheData.contributor.id,
+      id: thoughtData.thought.contributor.id,
     });
   };
 
+  if (!thoughtData) {
+    return null;
+  }
+
+  const { contributor, title, images, text } = thoughtData.thought;
+
   return (
-    <>
-      {cacheData ? (
-        <ContentsCard borderRadius="lg" py={14} px={4} {...props}>
-          <Pressable onPress={onPress}>
-            <Pressable
-              flexDirection="row"
-              alignItems="center"
-              onPress={onUserPress}
-            >
-              <UserImage uri={cacheData.contributor.imageUrl} size={34} />
-              <Text fontWeight="bold" ml={2}>
-                {cacheData.contributor.name}
-              </Text>
-            </Pressable>
+    <ContentsCard borderRadius="lg" py={14} px={4} {...props}>
+      <Pressable onPress={onPress}>
+        <Pressable
+          flexDirection="row"
+          alignItems="center"
+          onPress={onUserPress}
+        >
+          <UserImage uri={contributor.imageUrl} size={34} />
+          <Text fontWeight="bold" ml={2}>
+            {contributor.name}
+          </Text>
+        </Pressable>
 
-            {!!cacheData.title && (
-              <Text fontSize={16} fontWeight="bold" mt={2}>
-                {cacheData.title}
-              </Text>
-            )}
+        {!!title && (
+          <Text fontSize={16} fontWeight="bold" mt={2}>
+            {title}
+          </Text>
+        )}
 
-            <Text maxH={40} mt={!cacheData.title ? 2 : 1} fontSize={15}>
-              {cacheData.text}
-            </Text>
+        <Text maxH={40} mt={!title ? 2 : 1} fontSize={15}>
+          {text}
+        </Text>
 
-            <HStack space={2} mt={4}>
-              {cacheData.images.map((img) => (
-                <Image
-                  key={img.id}
-                  source={{
-                    uri: img.url,
-                  }}
-                  size={70}
-                  borderRadius="md"
-                />
-              ))}
-            </HStack>
+        {!!images.length && (
+          <HStack space={2} mt={4}>
+            {images.map((img) => (
+              <Image
+                key={img.id}
+                source={{
+                  uri: img.url,
+                }}
+                size={70}
+                borderRadius="md"
+              />
+            ))}
+          </HStack>
+        )}
 
-            <Pick
-              mt={cacheData.images.length ? 4 : 2}
-              textProp={{
-                fontSize: 16,
-              }}
-              checkBoxProp={{
-                onPress: onCheckPress,
-                checked: picked,
-                style: {
-                  height: 26,
-                  width: 26,
-                  marginLeft: 6,
-                },
-              }}
-            />
-          </Pressable>
-        </ContentsCard>
-      ) : null}
-    </>
+        <Like
+          lottieStyle={styles.like}
+          liked={liked}
+          mt={images.length ? 2 : 0}
+          onPress={onLikePress}
+          w="5"
+        />
+      </Pressable>
+    </ContentsCard>
   );
 };
+
+const { width, height } = Dimensions.get('screen');
+
+const styles = StyleSheet.create({
+  like: {
+    width: 22,
+    aspectRatio: width / height,
+  },
+});

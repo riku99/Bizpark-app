@@ -8,9 +8,7 @@ import {
   Pressable,
 } from 'native-base';
 import { RootNavigationScreenProp } from 'src/types';
-import { Alert, StyleSheet } from 'react-native';
-import { CheckBox } from 'src/components/CheckBox';
-import { useCreatePick, useDeletePick } from 'src/hooks/apollo';
+import { Alert, StyleSheet, Dimensions } from 'react-native';
 import { MotiView } from 'moti';
 import { Image } from 'src/components/Image';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
@@ -22,6 +20,8 @@ import {
   useDeleteThoughtMutation,
   CustomErrorResponseCode,
   useGetThoughtQuery,
+  useLikeThoughtMutation,
+  useUnlikeThoughtMutation,
 } from 'src/generated/graphql';
 import { spinnerVisibleVar } from 'src/stores/spinner';
 import { useToast } from 'react-native-toast-notifications';
@@ -30,6 +30,7 @@ import { Indicator } from 'src/components/Indicator';
 import { getGraphQLError } from 'src/utils';
 import { useMyId } from 'src/hooks/me';
 import { useTextColor } from 'src/hooks/theme';
+import { Like } from 'src/components/Like';
 
 type Props = {} & RootNavigationScreenProp<'Thought'>;
 
@@ -58,13 +59,43 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
     }
   }, [error, navigation]);
 
-  const [createPickMutation] = useCreatePick();
-  const [deletePickMutation] = useDeletePick();
+  const [liked, setLiked] = useState(!!thoughtData?.thought.liked);
+
+  const [likeMutation] = useLikeThoughtMutation();
+  const [unlikeMutatoin] = useUnlikeThoughtMutation();
+
+  const onLikePress = async () => {
+    if (liked) {
+      setLiked(false);
+      try {
+        await unlikeMutatoin({
+          variables: {
+            input: {
+              thoughtId: id,
+            },
+          },
+        });
+      } catch (e) {
+        setLiked(true);
+      }
+    } else {
+      setLiked(true);
+      try {
+        await likeMutation({
+          variables: {
+            input: {
+              thoughtId: id,
+            },
+          },
+        });
+      } catch (e) {
+        setLiked(false);
+      }
+    }
+  };
+
   const [deleteThoughtMutation] = useDeleteThoughtMutation();
 
-  const [picked, setPicked] = useState(
-    thoughtData ? thoughtData.thought.picked : false
-  );
   const [imageViewing, setImageViewing] = useState<number | null>(null);
 
   const myId = useMyId();
@@ -75,30 +106,6 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
       title: thoughtData?.thought.title ?? '',
     });
   }, [navigation, thoughtData]);
-
-  const onCheckPress = async () => {
-    try {
-      if (!picked) {
-        setPicked(true);
-        await createPickMutation({
-          variables: {
-            input: {
-              thoughtId: id,
-            },
-          },
-        });
-      } else {
-        setPicked(false);
-        await deletePickMutation({
-          variables: {
-            thoughtId: id,
-          },
-        });
-      }
-    } catch (e) {
-      setPicked((c) => !c);
-    }
-  };
 
   const { bottom } = useSafeAreaInsets();
 
@@ -207,20 +214,11 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
           )}
         </Box>
 
-        <Box flexDirection="row" mt={4}>
-          <Text color="pink" fontWeight="bold" fontSize={18}>
-            Pick
-          </Text>
-          <CheckBox
-            style={styles.checkBox}
-            checked={picked}
-            onPress={onCheckPress}
-          />
-        </Box>
+        <HStack>
+          <Like liked={liked} lottieStyle={styles.like} onPress={onLikePress} />
+        </HStack>
 
-        <Text fontSize={16} mt={4}>
-          {text}
-        </Text>
+        <Text fontSize={16}>{text}</Text>
 
         <HStack flexWrap="wrap" justifyContent="space-between" mt={4}>
           {images.map((img, idx) => {
@@ -284,6 +282,8 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
 const USER_IMAGE_SIZE = 42;
 const BOTTOM_CONTENTS_HEIGHT = 20;
 
+const { width, height } = Dimensions.get('screen');
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -300,5 +300,9 @@ const styles = StyleSheet.create({
     height: 28,
     width: 28,
     marginLeft: 6,
+  },
+  like: {
+    width: 30,
+    aspectRatio: width / height,
   },
 });
