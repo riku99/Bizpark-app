@@ -1,5 +1,4 @@
 import React, { useLayoutEffect } from 'react';
-import { AddButton } from 'src/components/AddButton';
 import { CreatingToast } from 'src/components/CreatingToast';
 import { useReactiveVar } from '@apollo/client';
 import { creatingThoughtVar } from 'src/stores/thought';
@@ -47,7 +46,7 @@ export const MyPage = ({ navigation }: Props) => {
         sceneContainerStyle={sceneContainerStyle}
       >
         <TopTab.Screen name="プロフィール" component={MyProfile} />
-        <TopTab.Screen name="ピックス" component={Picks} />
+        <TopTab.Screen name="コレクション" component={Picks} />
         <TopTab.Screen name="フォロー" component={Follows} />
         <TopTab.Screen name="投稿" component={Thouhgts} />
       </TopTab.Navigator>
