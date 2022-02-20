@@ -1,5 +1,5 @@
 import React, { ComponentProps, useState, useEffect, useRef } from 'react';
-import { Box, Text, Pressable, HStack } from 'native-base';
+import { Box, Text, Pressable, HStack, View } from 'native-base';
 import { Image } from 'src/components/Image';
 import { UserImage } from 'src/components/UserImage';
 import { ContentsCard } from 'src/components/ContentsCard';
@@ -11,7 +11,7 @@ import {
   useLikeThoughtMutation,
   useUnlikeThoughtMutation,
 } from 'src/generated/graphql';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, Dimensions } from 'react-native';
 
 const Like = require('../../assets/lottie/like.json');
 
@@ -142,7 +142,7 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
           </HStack>
         )}
 
-        <Pressable mt={images.length ? 2 : 0} onPress={onLikePress}>
+        <Pressable mt={images.length ? 2 : 0} onPress={onLikePress} w="5">
           <LottieView
             ref={likeRef}
             source={Like}
@@ -150,6 +150,7 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
             loop={false}
             speed={1.8}
             style={styles.like}
+            resizeMode="cover"
           />
         </Pressable>
       </Pressable>
@@ -157,10 +158,11 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
   );
 };
 
+const { width, height } = Dimensions.get('screen');
+
 const styles = StyleSheet.create({
   like: {
-    width: 50,
-    height: 50,
-    marginLeft: -5,
+    width: 22,
+    aspectRatio: width / height,
   },
 });

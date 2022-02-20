@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import { Box } from 'native-base';
 import { useUserThoughtsQuery } from 'src/generated/graphql';
 import { List } from 'src/components/ThoughtList';
@@ -35,17 +35,21 @@ export const Thouhgts = React.memo(() => {
     }
   };
 
-  if (!data) {
+  const listData = useMemo(() => {
+    if (!data) {
+      return;
+    }
+
+    return data.userThoughts.edges.map((edge) => edge.node);
+  }, [data]);
+
+  if (!listData) {
     return <Indicator style={styles.Indicator} />;
   }
 
   return (
     <Box flex={1} px="4" pt="4">
-      <List
-        data={data.userThoughts.edges}
-        refresh={refresh}
-        infiniteLoad={infiniteLoad}
-      />
+      <List data={listData} refresh={refresh} infiniteLoad={infiniteLoad} />
     </Box>
   );
 });
