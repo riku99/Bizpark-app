@@ -21,13 +21,14 @@ import { getMainDefinition } from '@apollo/client/utilities';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { persistCache, AsyncStorageWrapper } from 'apollo3-cache-persist';
 import { useLoggedIn } from 'src/hooks/me';
+import Config from 'react-native-config';
 
 type Props = {
   children: JSX.Element;
 };
 
 const uploadLink = createUploadLink({
-  uri: 'http://localhost:4000/graphql',
+  uri: Config.APP_ENDPOINT,
 });
 
 const wsLink = new WebSocketLink({

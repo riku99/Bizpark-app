@@ -19,7 +19,6 @@
 		324906C9277C58F800F54197 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
 		324906D6277C591200F54197 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB01A68108700A75B9A /* AppDelegate.m */; };
 		324906D7277C591200F54197 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
-		324906D8277C591200F54197 /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		324906DC277C591200F54197 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		324906DE277C591200F54197 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		324906DF277C591200F54197 /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = AA286B85B6C04FC6940260E9 /* SplashScreen.storyboard */; };
@@ -32,7 +31,7 @@
 		525EB374797BC95931C97A65 /* libPods-bizpark-stg.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 20FD77AA2708644869EE9414 /* libPods-bizpark-stg.a */; };
 		5CB74F6504AA20252D01F74D /* libPods-bizpark.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 51D473753CB87980FA54A35A /* libPods-bizpark.a */; };
 		8447DAFDA4AA7125B362DC7B /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 20E0EEA279F531C22361D7B6 /* ExpoModulesProvider.swift */; };
-		96905EF65AED1B983A6B3ABC /* BuildFile in Frameworks */ = {isa = PBXBuildFile; };
+		96905EF65AED1B983A6B3ABC /* (null) in Frameworks */ = {isa = PBXBuildFile; };
 		B18059E884C0ABDD17F3DC3D /* ExpoModulesProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAC715A2D49A985799AEE119 /* ExpoModulesProvider.swift */; };
 		BB2F792D24A3F905000567C9 /* Expo.plist in Resources */ = {isa = PBXBuildFile; fileRef = BB2F792C24A3F905000567C9 /* Expo.plist */; };
 		C3564EB8B64C90DECA1D89DF /* libPods-bizpark-dev.a in Frameworks */ = {isa = PBXBuildFile; fileRef = EC12899EE9AFE62FDD0D7A9C /* libPods-bizpark-dev.a */; };
@@ -77,7 +76,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				96905EF65AED1B983A6B3ABC /* BuildFile in Frameworks */,
+				96905EF65AED1B983A6B3ABC /* (null) in Frameworks */,
 				5CB74F6504AA20252D01F74D /* libPods-bizpark.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -714,7 +713,6 @@
 			files = (
 				324906D6277C591200F54197 /* AppDelegate.m in Sources */,
 				324906D7277C591200F54197 /* main.m in Sources */,
-				324906D8277C591200F54197 /* ExpoModulesProvider.swift in Sources */,
 				8447DAFDA4AA7125B362DC7B /* ExpoModulesProvider.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

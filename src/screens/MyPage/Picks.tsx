@@ -18,7 +18,7 @@ export const Picks = React.memo(() => {
     },
     {
       id: 'thought',
-      title: 'シェア',
+      title: '投稿',
       image: 'note.text',
       state: displayedCategory === 'thought' ? 'on' : undefined,
     },

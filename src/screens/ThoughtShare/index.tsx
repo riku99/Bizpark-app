@@ -85,7 +85,7 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
         },
       });
 
-      toast.show('シェアしました', { type: 'success' });
+      toast.show('投稿しました', { type: 'success' });
     } catch (e) {
     } finally {
       creatingThoughtVar(false);
@@ -104,7 +104,7 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
             fontSize={16}
             onPress={onSharePress}
           >
-            シェア
+            投稿
           </Text>
         </Pressable>
       ),

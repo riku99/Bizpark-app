@@ -67,10 +67,9 @@ export const NewsCard = ({ id, divider, ...props }: Props) => {
   }
 
   const { title, provider, articleCreatedAt, image } = newsData.oneNews;
-  const formatedDate = format(
-    new Date(Number(articleCreatedAt)),
-    'yyyy/MM/dd HH:mm'
-  );
+  const formatedDate = articleCreatedAt
+    ? format(new Date(Number(articleCreatedAt)), 'yyyy/MM/dd HH:mm')
+    : null;
 
   return (
     <>

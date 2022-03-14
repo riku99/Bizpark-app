@@ -96,7 +96,7 @@ export const TalkListScreen = ({ navigation }: Props) => {
           name="ThoughtTalkRoomList"
           component={ThoughtTalkRoomList}
           options={{
-            tabBarLabel: 'シェア',
+            tabBarLabel: '投稿',
             tabBarBadge: shareBadgeVisible ? renderBadge : undefined,
           }}
         />
