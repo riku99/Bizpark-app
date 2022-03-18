@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { ScrollView } from 'native-base';
-import {
-  useUserQuery,
-  UserProfileFragment,
-  UserProfileFragmentDoc,
-} from 'src/generated/graphql';
+import { useUserQuery } from 'src/generated/graphql';
 import { SocialIconProps } from 'react-native-elements';
 import { Profile } from 'src/components/Profile';
 import { RefreshControl } from 'src/components/RefreshControl';
-import { useApolloClient } from '@apollo/client';
 import { Indicator } from 'src/components/Indicator';
 import { useMyId } from 'src/hooks/me';
 import { StyleSheet } from 'react-native';
@@ -16,21 +11,11 @@ import { StyleSheet } from 'react-native';
 type Props = { id: string };
 
 export const UserProfile = ({ id }: Props) => {
-  const { cache } = useApolloClient();
-
-  const cacheData = cache.readFragment<UserProfileFragment>({
-    id: cache.identify({
-      __typename: 'User',
-      id,
-    }),
-    fragment: UserProfileFragmentDoc,
-  });
-
   const { refetch, data, loading } = useUserQuery({
     variables: {
       id,
     },
-    fetchPolicy: 'cache-only',
+    fetchPolicy: 'cache-first',
   });
 
   const [refreshing, setRefreshing] = useState(false);
@@ -44,7 +29,7 @@ export const UserProfile = ({ id }: Props) => {
     setRefreshing(false);
   };
 
-  if (!data && !cacheData) {
+  if (!data || data.userResult.__typename === 'Deleted') {
     if (loading) {
       return <Indicator style={styles.indicator} />;
     } else {
@@ -52,7 +37,7 @@ export const UserProfile = ({ id }: Props) => {
     }
   }
 
-  const userProfile = data ? data.user : cacheData;
+  const userProfile = data.userResult;
 
   const { name, imageUrl, bio, instagram, facebook, twitter, linkedin } =
     userProfile;
@@ -80,7 +65,7 @@ export const UserProfile = ({ id }: Props) => {
           socials={socials}
           isMe={isMe}
           loading={loading}
-          follow={data?.user.follow}
+          follow={data.userResult.follow}
         />
       </ScrollView>
     </>

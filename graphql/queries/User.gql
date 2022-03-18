@@ -1,7 +1,12 @@
 query User($id: ID!) {
-  user(id: $id) {
-    ...UserParts
-    blocking
-    follow
+  userResult(id: $id) {
+    ... on User {
+      ...UserParts
+      blocking
+      follow
+    }
+    ... on Deleted {
+      message
+    }
   }
 }

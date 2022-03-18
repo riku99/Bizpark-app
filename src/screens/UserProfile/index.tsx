@@ -1,21 +1,22 @@
-import React, { useLayoutEffect, useState, useCallback } from 'react';
+import React, {
+  useLayoutEffect,
+  useState,
+  useCallback,
+  useEffect,
+} from 'react';
 import { useColorModeValue, useTheme } from 'native-base';
 import { RootNavigationScreenProp } from 'src/types';
-import {
-  useUserQuery,
-  UserProfileFragment,
-  UserProfileFragmentDoc,
-} from 'src/generated/graphql';
+import { useUserQuery } from 'src/generated/graphql';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useToast } from 'react-native-toast-notifications';
 import { useUnblock, useBlock } from 'src/hooks/users';
-import { useApolloClient } from '@apollo/client';
 import { Menu } from './Menu';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { useTopTabBarStyle } from 'src/hooks/theme';
 import { UserProfile } from './Profile';
 import { Thoughts } from './Thoughts';
 import { useMyId } from 'src/hooks/me';
+import { Alert } from 'react-native';
 
 type Props = RootNavigationScreenProp<'UserProfile'>;
 
@@ -25,23 +26,13 @@ const TopTab = createMaterialTopTabNavigator();
 export const UserProfileScreen = ({ navigation, route }: Props) => {
   const { id } = route.params;
 
-  const { cache } = useApolloClient();
-
   const toast = useToast();
-
-  const cacheData = cache.readFragment<UserProfileFragment>({
-    id: cache.identify({
-      __typename: 'User',
-      id,
-    }),
-    fragment: UserProfileFragmentDoc,
-  });
 
   const { data, loading } = useUserQuery({
     variables: {
       id,
     },
-    fetchPolicy: 'network-only',
+    fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first',
   });
 
@@ -56,14 +47,24 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     setModalVisible(false);
   };
 
+  useEffect(() => {
+    if (data?.userResult.__typename === 'Deleted' && !loading) {
+      Alert.alert(data.userResult.message, '', [
+        {
+          text: 'OK',
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+      ]);
+    }
+  }, [navigation, data, loading]);
+
   useLayoutEffect(() => {
     navigation.setOptions({
-      title:
-        !data && !loading
-          ? 'ユーザーが存在しません'
-          : data?.user.name ?? cacheData.name,
+      title: data?.userResult.__typename === 'User' ? data.userResult.name : '',
       headerRight:
-        (cacheData || data) && !isMe
+        data?.userResult.__typename === 'User' && !isMe
           ? () => (
               <MaterialCommunityIcons
                 name="dots-horizontal"
@@ -76,7 +77,7 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
             )
           : undefined,
     });
-  }, [iconColor, isMe, loading, cacheData, data, navigation]);
+  }, [iconColor, isMe, loading, data, navigation]);
 
   const { defaultScreenStyle, style, sceneContainerStyle } =
     useTopTabBarStyle();
@@ -132,14 +133,16 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
         <TopTab.Screen name="投稿" component={renderThoughts} />
       </TopTab.Navigator>
 
-      <Menu
-        isVisible={modalVisible}
-        closeMenu={closeModal}
-        userId={id}
-        blocking={data?.user.blocking}
-        onBlockPress={onBlockPress}
-        onUnBlockPress={onUnBlockPress}
-      />
+      {data?.userResult.__typename === 'User' && (
+        <Menu
+          isVisible={modalVisible}
+          closeMenu={closeModal}
+          userId={id}
+          blocking={data.userResult.blocking}
+          onBlockPress={onBlockPress}
+          onUnBlockPress={onUnBlockPress}
+        />
+      )}
     </>
   );
 };

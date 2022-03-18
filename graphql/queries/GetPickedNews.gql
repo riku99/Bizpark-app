@@ -1,20 +1,25 @@
 query GetPickedNews($cursor: String, $userId: ID!) {
-  user(id: $userId) {
-    id
-    pickedNews(first: 20, after: $cursor) {
-      edges {
-        node {
-          id
-          news {
-            ...NewsParts
-            picked
+  userResult(id: $userId) {
+    ... on User {
+      id
+      pickedNews(first: 20, after: $cursor) {
+        edges {
+          node {
+            id
+            news {
+              ...NewsParts
+              picked
+            }
           }
+          cursor
         }
-        cursor
+        pageInfo {
+          ...PageInfoParts
+        }
       }
-      pageInfo {
-        ...PageInfoParts
-      }
+    }
+    ... on Deleted {
+      message
     }
   }
 }

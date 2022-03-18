@@ -19,7 +19,7 @@ import { useCustomToast } from 'src/hooks/toast';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { persistCache, AsyncStorageWrapper } from 'apollo3-cache-persist';
+// import { persistCache, AsyncStorageWrapper } from 'apollo3-cache-persist';
 import { useLoggedIn } from 'src/hooks/me';
 import Config from 'react-native-config';
 
@@ -227,10 +227,10 @@ export const ApolloProvider = ({ children }: Props) => {
 
   useEffect(() => {
     (async () => {
-      await persistCache({
-        cache,
-        storage: new AsyncStorageWrapper(AsyncStorage),
-      });
+      // await persistCache({
+      //   cache,
+      //   storage: new AsyncStorageWrapper(AsyncStorage),
+      // });
 
       setClient(
         new ApolloClient({
