@@ -62,7 +62,8 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      title: data?.userResult.__typename === 'User' ? data.userResult.name : '',
+      title:
+        data?.userResult.__typename !== 'Deleted' ? data.userResult.name : '',
       headerRight:
         data?.userResult.__typename === 'User' && !isMe
           ? () => (

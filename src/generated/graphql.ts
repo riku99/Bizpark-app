@@ -23,6 +23,13 @@ export type AddDeviceTokenInput = {
   oldToken?: InputMaybe<Scalars['String']>;
 };
 
+export type BlockedByUser = {
+  __typename?: 'BlockedByUser';
+  id: Scalars['ID'];
+  imageUrl?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
 export type CreateNewsPickInput = {
   newsId: Scalars['Int'];
 };
@@ -121,7 +128,7 @@ export type DeleteThoughtTalkRoomMemberInput = {
 
 export type Deleted = {
   __typename?: 'Deleted';
-  message: Scalars['String'];
+  message?: Maybe<Scalars['String']>;
 };
 
 export type DeviceToken = {
@@ -177,6 +184,7 @@ export type InitialResponse = {
 
 export type IsBlocked = {
   __typename?: 'IsBlocked';
+  blockedByUser?: Maybe<BlockedByUser>;
   message?: Maybe<Scalars['String']>;
 };
 
@@ -930,7 +938,9 @@ export type UserEdge = {
   node: User;
 };
 
-export type UserResult = Deleted | User;
+export type UserResult = Deleted | IsBlocked | User;
+
+export type BlockedByUserPartsFragment = { __typename?: 'BlockedByUser', id: string, name: string, imageUrl?: string | null | undefined };
 
 export type NewsFieldsFragment = { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
 
@@ -1100,7 +1110,7 @@ export type FollowMutationVariables = Exact<{
 }>;
 
 
-export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'Deleted', message: string } | { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type GetOutNewsTalkRoomMutationVariables = Exact<{
   input: GetOutNewsTalkRoomInput;
@@ -1168,7 +1178,7 @@ export type UnfollowMutationVariables = Exact<{
 }>;
 
 
-export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'Deleted', message: string } | { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type UnlikeThoughtMutationVariables = Exact<{
   input: UnLikeThoughtInput;
@@ -1222,7 +1232,7 @@ export type GetLikedThoughtsQueryVariables = Exact<{
 }>;
 
 
-export type GetLikedThoughtsQuery = { __typename?: 'Query', userResult: { __typename?: 'Deleted', message: string } | { __typename?: 'User', id: string, likedThoughts?: { __typename?: 'ThoughtLikeConnection', edges: Array<{ __typename?: 'ThoughtLikeEdge', cursor: string, node?: { __typename?: 'ThoughtLike', id: number, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, liked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } | null | undefined } | null | undefined }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetLikedThoughtsQuery = { __typename?: 'Query', userResult: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'IsBlocked' } | { __typename?: 'User', id: string, likedThoughts?: { __typename?: 'ThoughtLikeConnection', edges: Array<{ __typename?: 'ThoughtLikeEdge', cursor: string, node?: { __typename?: 'ThoughtLike', id: number, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, liked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } | null | undefined } | null | undefined }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
 
 export type GetLoggedInQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1305,7 +1315,7 @@ export type GetPickedNewsQueryVariables = Exact<{
 }>;
 
 
-export type GetPickedNewsQuery = { __typename?: 'Query', userResult: { __typename?: 'Deleted', message: string } | { __typename?: 'User', id: string, pickedNews?: { __typename?: 'NewsPickConnection', edges: Array<{ __typename?: 'NewsPickEdge', cursor: string, node: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetPickedNewsQuery = { __typename?: 'Query', userResult: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'IsBlocked' } | { __typename?: 'User', id: string, pickedNews?: { __typename?: 'NewsPickConnection', edges: Array<{ __typename?: 'NewsPickEdge', cursor: string, node: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
 
 export type GetThoughtQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1388,7 +1398,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', userResult: { __typename?: 'Deleted', message: string } | { __typename?: 'User', blocking?: boolean | null | undefined, follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type UserQuery = { __typename?: 'Query', userResult: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'IsBlocked', message?: string | null | undefined, blockedByUser?: { __typename?: 'BlockedByUser', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | { __typename?: 'User', blocking?: boolean | null | undefined, follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type UserThoughtsQueryVariables = Exact<{
   userId: Scalars['ID'];
@@ -1421,6 +1431,13 @@ export type OnThoughtTalkRoomMessageCreatedSubscriptionVariables = Exact<{
 
 export type OnThoughtTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', thoughtTalkRoomMessageCreated?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, talkRoom?: { __typename?: 'ThoughtTalkRoom', id: number, updatedAt?: string | null | undefined, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } | null | undefined };
 
+export const BlockedByUserPartsFragmentDoc = gql`
+    fragment BlockedByUserParts on BlockedByUser {
+  id
+  name
+  imageUrl
+}
+    `;
 export const NewsFieldsFragmentDoc = gql`
     fragment NewsFields on News {
   id
@@ -3996,9 +4013,16 @@ export const UserDocument = gql`
     ... on Deleted {
       message
     }
+    ... on IsBlocked {
+      message
+      blockedByUser {
+        ...BlockedByUserParts
+      }
+    }
   }
 }
-    ${UserPartsFragmentDoc}`;
+    ${UserPartsFragmentDoc}
+${BlockedByUserPartsFragmentDoc}`;
 
 /**
  * __useUserQuery__

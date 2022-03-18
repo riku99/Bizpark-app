@@ -8,5 +8,11 @@ query User($id: ID!) {
     ... on Deleted {
       message
     }
+    ... on IsBlocked {
+      message
+      blockedByUser {
+        ...BlockedByUserParts
+      }
+    }
   }
 }
