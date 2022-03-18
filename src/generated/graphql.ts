@@ -237,7 +237,7 @@ export type Mutation = {
   seenOneOnOneTalkRoomMessage: OneOnOneTalkRoom;
   signOut: Me;
   unblock: User;
-  unfollow: User;
+  unfollow: UnFollowResult;
   unlikeThought?: Maybe<Thought>;
   updateMe: Me;
   uploadImage: SubImage;
@@ -862,6 +862,8 @@ export type ThoughtsConnection = {
   pageInfo: PageInfo;
 };
 
+export type UnFollowResult = Deleted | User;
+
 export type UnLikeThoughtInput = {
   thoughtId: Scalars['String'];
 };
@@ -1166,7 +1168,7 @@ export type UnfollowMutationVariables = Exact<{
 }>;
 
 
-export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'Deleted', message: string } | { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type UnlikeThoughtMutationVariables = Exact<{
   input: UnLikeThoughtInput;
@@ -2673,8 +2675,13 @@ export type UnBlockMutationOptions = Apollo.BaseMutationOptions<UnBlockMutation,
 export const UnfollowDocument = gql`
     mutation Unfollow($followeeId: ID!) {
   unfollow(followeeId: $followeeId) {
-    follow
-    ...UserParts
+    ... on User {
+      follow
+      ...UserParts
+    }
+    ... on Deleted {
+      message
+    }
   }
 }
     ${UserPartsFragmentDoc}`;
