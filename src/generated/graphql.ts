@@ -139,6 +139,8 @@ export type Follow = {
   id: Scalars['ID'];
 };
 
+export type FollowResult = Deleted | User;
+
 export enum Genre {
   Business = 'BUSINESS',
   Economy = 'ECONOMY',
@@ -171,6 +173,11 @@ export type ImageInput = {
 export type InitialResponse = {
   __typename?: 'InitialResponse';
   me: User;
+};
+
+export type IsBlocked = {
+  __typename?: 'IsBlocked';
+  message?: Maybe<Scalars['String']>;
 };
 
 export type JoinNewsTalkRoomInput = {
@@ -220,7 +227,7 @@ export type Mutation = {
   deleteThought: DeleteThoughtResponse;
   deleteThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
   deleteThoughtTalkRoomMember: ThoughtTalkRoom;
-  follow: User;
+  follow: FollowResult;
   getOutNewsTalkRoom?: Maybe<Scalars['Boolean']>;
   getOutThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
   joinNewsTalkRoom: NewsTalkRoom;
@@ -1091,7 +1098,7 @@ export type FollowMutationVariables = Exact<{
 }>;
 
 
-export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'Deleted', message: string } | { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type GetOutNewsTalkRoomMutationVariables = Exact<{
   input: GetOutNewsTalkRoomInput;
@@ -2333,8 +2340,13 @@ export type DeleteThoughtTalkRoomMemberMutationOptions = Apollo.BaseMutationOpti
 export const FollowDocument = gql`
     mutation Follow($followeeId: ID!) {
   follow(followeeId: $followeeId) {
-    follow
-    ...UserParts
+    ... on User {
+      follow
+      ...UserParts
+    }
+    ... on Deleted {
+      message
+    }
   }
 }
     ${UserPartsFragmentDoc}`;
