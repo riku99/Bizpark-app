@@ -63,9 +63,13 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       title:
-        data?.userResult.__typename !== 'Deleted' ? data.userResult.name : '',
+        data?.userResult.__typename === 'User'
+          ? data.userResult.name
+          : data?.userResult.__typename === 'IsBlocked'
+          ? data?.userResult.blockedByUser.name
+          : '',
       headerRight:
-        data?.userResult.__typename === 'User' && !isMe
+        data && !isMe
           ? () => (
               <MaterialCommunityIcons
                 name="dots-horizontal"
@@ -134,12 +138,16 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
         <TopTab.Screen name="投稿" component={renderThoughts} />
       </TopTab.Navigator>
 
-      {data?.userResult.__typename === 'User' && (
+      {data && data?.userResult.__typename !== 'Deleted' && (
         <Menu
           isVisible={modalVisible}
           closeMenu={closeModal}
           userId={id}
-          blocking={data.userResult.blocking}
+          blocking={
+            data.userResult.__typename === 'User'
+              ? data.userResult.blocking
+              : data.userResult.blockedByUser.blocking
+          }
           onBlockPress={onBlockPress}
           onUnBlockPress={onUnBlockPress}
         />

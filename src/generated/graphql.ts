@@ -184,7 +184,7 @@ export type InitialResponse = {
 
 export type IsBlocked = {
   __typename?: 'IsBlocked';
-  blockedByUser?: Maybe<BlockedByUser>;
+  blockedByUser?: Maybe<User>;
   message?: Maybe<Scalars['String']>;
 };
 
@@ -1398,7 +1398,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', userResult: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'IsBlocked', message?: string | null | undefined, blockedByUser?: { __typename?: 'BlockedByUser', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | { __typename?: 'User', blocking?: boolean | null | undefined, follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type UserQuery = { __typename?: 'Query', userResult: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'IsBlocked', message?: string | null | undefined, blockedByUser?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined, blocking?: boolean | null | undefined } | null | undefined } | { __typename?: 'User', blocking?: boolean | null | undefined, follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type UserThoughtsQueryVariables = Exact<{
   userId: Scalars['ID'];
@@ -4016,13 +4016,15 @@ export const UserDocument = gql`
     ... on IsBlocked {
       message
       blockedByUser {
-        ...BlockedByUserParts
+        id
+        name
+        imageUrl
+        blocking
       }
     }
   }
 }
-    ${UserPartsFragmentDoc}
-${BlockedByUserPartsFragmentDoc}`;
+    ${UserPartsFragmentDoc}`;
 
 /**
  * __useUserQuery__

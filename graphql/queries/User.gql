@@ -11,7 +11,10 @@ query User($id: ID!) {
     ... on IsBlocked {
       message
       blockedByUser {
-        ...BlockedByUserParts
+        id
+        name
+        imageUrl
+        blocking
       }
     }
   }

@@ -15,7 +15,6 @@ export const UserProfile = ({ id }: Props) => {
     variables: {
       id,
     },
-    fetchPolicy: 'cache-first',
   });
 
   const [refreshing, setRefreshing] = useState(false);
@@ -37,15 +36,31 @@ export const UserProfile = ({ id }: Props) => {
     }
   }
 
-  const userProfile = data.userResult;
+  const result = data.userResult;
 
-  const { name, imageUrl, bio, instagram, facebook, twitter, linkedin } =
-    userProfile;
+  const userData =
+    result.__typename === 'User'
+      ? {
+          name: result.name,
+          imageUrl: result.imageUrl,
+          bio: result.bio,
+          instagram: result.instagram,
+          facebook: result.facebook,
+          twitter: result.twitter,
+          linkedIn: result.linkedin,
+          follow: result.follow,
+          blocking: result.blocking,
+        }
+      : {
+          name: result.blockedByUser.name,
+          imageUrl: result.blockedByUser.imageUrl,
+        };
+
   const socials: { type: SocialIconProps['type']; value: string | null }[] = [
-    { type: 'facebook', value: facebook },
-    { type: 'twitter', value: twitter },
-    { type: 'linkedin', value: linkedin },
-    { type: 'instagram', value: instagram },
+    { type: 'facebook', value: userData.facebook },
+    { type: 'twitter', value: userData.twitter },
+    { type: 'linkedin', value: userData.linkedIn },
+    { type: 'instagram', value: userData.instagram },
   ];
 
   return (
@@ -59,13 +74,16 @@ export const UserProfile = ({ id }: Props) => {
       >
         <Profile
           id={id}
-          name={name}
-          bio={bio}
-          imageUrl={imageUrl}
+          name={userData.name}
+          bio={userData.bio}
+          imageUrl={userData.imageUrl}
           socials={socials}
           isMe={isMe}
           loading={loading}
-          follow={data.userResult.follow}
+          follow={userData.follow}
+          blockingOrBlocked={
+            result.__typename === 'User' ? userData.blocking : true
+          }
         />
       </ScrollView>
     </>
