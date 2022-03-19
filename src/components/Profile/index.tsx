@@ -15,11 +15,15 @@ type Props = {
   id: string;
   name: string;
   imageUrl: string | null;
-  bio: string | null;
-  socials: { type: SocialIconProps['type']; value: string | null }[];
+  bio?: string | null;
+  socials: {
+    type: SocialIconProps['type'];
+    value: string | null | undefined;
+  }[];
   follow?: boolean;
   isMe: boolean;
   loading?: boolean;
+  blockingOrBlocked?: boolean;
 };
 
 export const Profile = ({
@@ -31,6 +35,7 @@ export const Profile = ({
   follow,
   isMe,
   loading,
+  blockingOrBlocked,
 }: Props) => {
   const navigation = useNavigation<RootNavigationProp<any>>();
 
@@ -84,7 +89,7 @@ export const Profile = ({
               {name}
             </Text>
 
-            {!isMe && (
+            {!isMe && !blockingOrBlocked && (
               <HStack alignSelf="center" mt="6" space="6">
                 <SendMessageButton
                   user={{

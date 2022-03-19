@@ -1,6 +1,11 @@
 mutation Follow($followeeId: ID!) {
   follow(followeeId: $followeeId) {
-    follow
-    ...UserParts
+    ... on User {
+      follow
+      ...UserParts
+    }
+    ... on Deleted {
+      message
+    }
   }
 }

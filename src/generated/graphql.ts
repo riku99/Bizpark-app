@@ -23,6 +23,13 @@ export type AddDeviceTokenInput = {
   oldToken?: InputMaybe<Scalars['String']>;
 };
 
+export type BlockedByUser = {
+  __typename?: 'BlockedByUser';
+  id: Scalars['ID'];
+  imageUrl?: Maybe<Scalars['String']>;
+  name: Scalars['String'];
+};
+
 export type CreateNewsPickInput = {
   newsId: Scalars['Int'];
 };
@@ -119,6 +126,11 @@ export type DeleteThoughtTalkRoomMemberInput = {
   userId: Scalars['ID'];
 };
 
+export type Deleted = {
+  __typename?: 'Deleted';
+  message?: Maybe<Scalars['String']>;
+};
+
 export type DeviceToken = {
   __typename?: 'DeviceToken';
   createdAt: Scalars['String'];
@@ -133,6 +145,8 @@ export type Follow = {
   followerId: Scalars['ID'];
   id: Scalars['ID'];
 };
+
+export type FollowResult = Deleted | User;
 
 export enum Genre {
   Business = 'BUSINESS',
@@ -166,6 +180,12 @@ export type ImageInput = {
 export type InitialResponse = {
   __typename?: 'InitialResponse';
   me: User;
+};
+
+export type IsBlocked = {
+  __typename?: 'IsBlocked';
+  blockedByUser?: Maybe<User>;
+  message?: Maybe<Scalars['String']>;
 };
 
 export type JoinNewsTalkRoomInput = {
@@ -208,13 +228,14 @@ export type Mutation = {
   createUser: Me;
   createUserNewsTalkRoomMessageSeen: NewsTalkRoom;
   createUserThoughtTalkRoomMessageSeen: ThoughtTalkRoom;
+  deleteAccount?: Maybe<Scalars['Boolean']>;
   deleteNewsPick: News;
   deleteOneOnOneTalkRoom?: Maybe<Scalars['Boolean']>;
   deletePick: Pick;
   deleteThought: DeleteThoughtResponse;
   deleteThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
   deleteThoughtTalkRoomMember: ThoughtTalkRoom;
-  follow: User;
+  follow: FollowResult;
   getOutNewsTalkRoom?: Maybe<Scalars['Boolean']>;
   getOutThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
   joinNewsTalkRoom: NewsTalkRoom;
@@ -224,7 +245,7 @@ export type Mutation = {
   seenOneOnOneTalkRoomMessage: OneOnOneTalkRoom;
   signOut: Me;
   unblock: User;
-  unfollow: User;
+  unfollow: UnFollowResult;
   unlikeThought?: Maybe<Thought>;
   updateMe: Me;
   uploadImage: SubImage;
@@ -593,7 +614,7 @@ export type Query = {
   thoughtTalkRoom: ThoughtTalkRoom;
   thoughtTalkRooms: Array<Maybe<ThoughtTalkRoom>>;
   thoughts: ThoughtsConnection;
-  user: User;
+  userResult: UserResult;
   userThoughts: ThoughtsConnection;
 };
 
@@ -657,7 +678,7 @@ export type QueryThoughtsArgs = {
 };
 
 
-export type QueryUserArgs = {
+export type QueryUserResultArgs = {
   id: Scalars['ID'];
 };
 
@@ -849,6 +870,8 @@ export type ThoughtsConnection = {
   pageInfo: PageInfo;
 };
 
+export type UnFollowResult = Deleted | User;
+
 export type UnLikeThoughtInput = {
   thoughtId: Scalars['String'];
 };
@@ -914,6 +937,10 @@ export type UserEdge = {
   cursor: Scalars['String'];
   node: User;
 };
+
+export type UserResult = Deleted | IsBlocked | User;
+
+export type BlockedByUserPartsFragment = { __typename?: 'BlockedByUser', id: string, name: string, imageUrl?: string | null | undefined };
 
 export type NewsFieldsFragment = { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
 
@@ -1031,6 +1058,11 @@ export type CreateUserThoughtTalkRoomMessageSeenMutationVariables = Exact<{
 
 export type CreateUserThoughtTalkRoomMessageSeenMutation = { __typename?: 'Mutation', createUserThoughtTalkRoomMessageSeen: { __typename?: 'ThoughtTalkRoom', id: number, allMessageSeen?: boolean | null | undefined } };
 
+export type DeleteAccountMutationVariables = Exact<{ [key: string]: never; }>;
+
+
+export type DeleteAccountMutation = { __typename?: 'Mutation', deleteAccount?: boolean | null | undefined };
+
 export type DeleteNewsPickMutationVariables = Exact<{
   input: DeleteNewsPickInput;
 }>;
@@ -1078,7 +1110,7 @@ export type FollowMutationVariables = Exact<{
 }>;
 
 
-export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type GetOutNewsTalkRoomMutationVariables = Exact<{
   input: GetOutNewsTalkRoomInput;
@@ -1146,7 +1178,7 @@ export type UnfollowMutationVariables = Exact<{
 }>;
 
 
-export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type UnlikeThoughtMutationVariables = Exact<{
   input: UnLikeThoughtInput;
@@ -1200,7 +1232,7 @@ export type GetLikedThoughtsQueryVariables = Exact<{
 }>;
 
 
-export type GetLikedThoughtsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, likedThoughts?: { __typename?: 'ThoughtLikeConnection', edges: Array<{ __typename?: 'ThoughtLikeEdge', cursor: string, node?: { __typename?: 'ThoughtLike', id: number, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, liked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } | null | undefined } | null | undefined }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetLikedThoughtsQuery = { __typename?: 'Query', userResult: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'IsBlocked' } | { __typename?: 'User', id: string, likedThoughts?: { __typename?: 'ThoughtLikeConnection', edges: Array<{ __typename?: 'ThoughtLikeEdge', cursor: string, node?: { __typename?: 'ThoughtLike', id: number, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, liked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } | null | undefined } | null | undefined }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
 
 export type GetLoggedInQueryVariables = Exact<{ [key: string]: never; }>;
 
@@ -1283,7 +1315,7 @@ export type GetPickedNewsQueryVariables = Exact<{
 }>;
 
 
-export type GetPickedNewsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, pickedNews?: { __typename?: 'NewsPickConnection', edges: Array<{ __typename?: 'NewsPickEdge', cursor: string, node: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+export type GetPickedNewsQuery = { __typename?: 'Query', userResult: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'IsBlocked' } | { __typename?: 'User', id: string, pickedNews?: { __typename?: 'NewsPickConnection', edges: Array<{ __typename?: 'NewsPickEdge', cursor: string, node: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
 
 export type GetThoughtQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1366,7 +1398,7 @@ export type UserQueryVariables = Exact<{
 }>;
 
 
-export type UserQuery = { __typename?: 'Query', user: { __typename?: 'User', blocking?: boolean | null | undefined, follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
+export type UserQuery = { __typename?: 'Query', userResult: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'IsBlocked', message?: string | null | undefined, blockedByUser?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined, blocking?: boolean | null | undefined } | null | undefined } | { __typename?: 'User', blocking?: boolean | null | undefined, follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } };
 
 export type UserThoughtsQueryVariables = Exact<{
   userId: Scalars['ID'];
@@ -1399,6 +1431,13 @@ export type OnThoughtTalkRoomMessageCreatedSubscriptionVariables = Exact<{
 
 export type OnThoughtTalkRoomMessageCreatedSubscription = { __typename?: 'Subscription', thoughtTalkRoomMessageCreated?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, talkRoom?: { __typename?: 'ThoughtTalkRoom', id: number, updatedAt?: string | null | undefined, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } | null | undefined };
 
+export const BlockedByUserPartsFragmentDoc = gql`
+    fragment BlockedByUserParts on BlockedByUser {
+  id
+  name
+  imageUrl
+}
+    `;
 export const NewsFieldsFragmentDoc = gql`
     fragment NewsFields on News {
   id
@@ -2091,6 +2130,36 @@ export function useCreateUserThoughtTalkRoomMessageSeenMutation(baseOptions?: Ap
 export type CreateUserThoughtTalkRoomMessageSeenMutationHookResult = ReturnType<typeof useCreateUserThoughtTalkRoomMessageSeenMutation>;
 export type CreateUserThoughtTalkRoomMessageSeenMutationResult = Apollo.MutationResult<CreateUserThoughtTalkRoomMessageSeenMutation>;
 export type CreateUserThoughtTalkRoomMessageSeenMutationOptions = Apollo.BaseMutationOptions<CreateUserThoughtTalkRoomMessageSeenMutation, CreateUserThoughtTalkRoomMessageSeenMutationVariables>;
+export const DeleteAccountDocument = gql`
+    mutation DeleteAccount {
+  deleteAccount
+}
+    `;
+export type DeleteAccountMutationFn = Apollo.MutationFunction<DeleteAccountMutation, DeleteAccountMutationVariables>;
+
+/**
+ * __useDeleteAccountMutation__
+ *
+ * To run a mutation, you first call `useDeleteAccountMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useDeleteAccountMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [deleteAccountMutation, { data, loading, error }] = useDeleteAccountMutation({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useDeleteAccountMutation(baseOptions?: Apollo.MutationHookOptions<DeleteAccountMutation, DeleteAccountMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<DeleteAccountMutation, DeleteAccountMutationVariables>(DeleteAccountDocument, options);
+      }
+export type DeleteAccountMutationHookResult = ReturnType<typeof useDeleteAccountMutation>;
+export type DeleteAccountMutationResult = Apollo.MutationResult<DeleteAccountMutation>;
+export type DeleteAccountMutationOptions = Apollo.BaseMutationOptions<DeleteAccountMutation, DeleteAccountMutationVariables>;
 export const DeleteNewsPickDocument = gql`
     mutation DeleteNewsPick($input: DeleteNewsPickInput!) {
   deleteNewsPick(input: $input) {
@@ -2290,8 +2359,13 @@ export type DeleteThoughtTalkRoomMemberMutationOptions = Apollo.BaseMutationOpti
 export const FollowDocument = gql`
     mutation Follow($followeeId: ID!) {
   follow(followeeId: $followeeId) {
-    follow
-    ...UserParts
+    ... on User {
+      follow
+      ...UserParts
+    }
+    ... on Deleted {
+      message
+    }
   }
 }
     ${UserPartsFragmentDoc}`;
@@ -2618,8 +2692,13 @@ export type UnBlockMutationOptions = Apollo.BaseMutationOptions<UnBlockMutation,
 export const UnfollowDocument = gql`
     mutation Unfollow($followeeId: ID!) {
   unfollow(followeeId: $followeeId) {
-    follow
-    ...UserParts
+    ... on User {
+      follow
+      ...UserParts
+    }
+    ... on Deleted {
+      message
+    }
   }
 }
     ${UserPartsFragmentDoc}`;
@@ -2910,21 +2989,26 @@ export type GetActiveDataLazyQueryHookResult = ReturnType<typeof useGetActiveDat
 export type GetActiveDataQueryResult = Apollo.QueryResult<GetActiveDataQuery, GetActiveDataQueryVariables>;
 export const GetLikedThoughtsDocument = gql`
     query GetLikedThoughts($after: String, $userId: ID!) {
-  user(id: $userId) {
-    id
-    likedThoughts(after: $after) {
-      edges {
-        node {
-          id
-          thought {
-            ...ThoughtParts
+  userResult(id: $userId) {
+    ... on User {
+      id
+      likedThoughts(after: $after) {
+        edges {
+          node {
+            id
+            thought {
+              ...ThoughtParts
+            }
           }
+          cursor
         }
-        cursor
+        pageInfo {
+          ...PageInfoParts
+        }
       }
-      pageInfo {
-        ...PageInfoParts
-      }
+    }
+    ... on Deleted {
+      message
     }
   }
 }
@@ -3418,22 +3502,27 @@ export type GetOneOnOneTalkRoomsLazyQueryHookResult = ReturnType<typeof useGetOn
 export type GetOneOnOneTalkRoomsQueryResult = Apollo.QueryResult<GetOneOnOneTalkRoomsQuery, GetOneOnOneTalkRoomsQueryVariables>;
 export const GetPickedNewsDocument = gql`
     query GetPickedNews($cursor: String, $userId: ID!) {
-  user(id: $userId) {
-    id
-    pickedNews(first: 20, after: $cursor) {
-      edges {
-        node {
-          id
-          news {
-            ...NewsParts
-            picked
+  userResult(id: $userId) {
+    ... on User {
+      id
+      pickedNews(first: 20, after: $cursor) {
+        edges {
+          node {
+            id
+            news {
+              ...NewsParts
+              picked
+            }
           }
+          cursor
         }
-        cursor
+        pageInfo {
+          ...PageInfoParts
+        }
       }
-      pageInfo {
-        ...PageInfoParts
-      }
+    }
+    ... on Deleted {
+      message
     }
   }
 }
@@ -3915,10 +4004,24 @@ export type ThoughtsLazyQueryHookResult = ReturnType<typeof useThoughtsLazyQuery
 export type ThoughtsQueryResult = Apollo.QueryResult<ThoughtsQuery, ThoughtsQueryVariables>;
 export const UserDocument = gql`
     query User($id: ID!) {
-  user(id: $id) {
-    ...UserParts
-    blocking
-    follow
+  userResult(id: $id) {
+    ... on User {
+      ...UserParts
+      blocking
+      follow
+    }
+    ... on Deleted {
+      message
+    }
+    ... on IsBlocked {
+      message
+      blockedByUser {
+        id
+        name
+        imageUrl
+        blocking
+      }
+    }
   }
 }
     ${UserPartsFragmentDoc}`;

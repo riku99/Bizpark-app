@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
 import { ScrollView } from 'native-base';
-import {
-  useUserQuery,
-  UserProfileFragment,
-  UserProfileFragmentDoc,
-} from 'src/generated/graphql';
+import { useUserQuery } from 'src/generated/graphql';
 import { SocialIconProps } from 'react-native-elements';
 import { Profile } from 'src/components/Profile';
 import { RefreshControl } from 'src/components/RefreshControl';
-import { useApolloClient } from '@apollo/client';
 import { Indicator } from 'src/components/Indicator';
 import { useMyId } from 'src/hooks/me';
 import { StyleSheet } from 'react-native';
@@ -16,21 +11,10 @@ import { StyleSheet } from 'react-native';
 type Props = { id: string };
 
 export const UserProfile = ({ id }: Props) => {
-  const { cache } = useApolloClient();
-
-  const cacheData = cache.readFragment<UserProfileFragment>({
-    id: cache.identify({
-      __typename: 'User',
-      id,
-    }),
-    fragment: UserProfileFragmentDoc,
-  });
-
   const { refetch, data, loading } = useUserQuery({
     variables: {
       id,
     },
-    fetchPolicy: 'cache-only',
   });
 
   const [refreshing, setRefreshing] = useState(false);
@@ -44,7 +28,7 @@ export const UserProfile = ({ id }: Props) => {
     setRefreshing(false);
   };
 
-  if (!data && !cacheData) {
+  if (!data || data.userResult.__typename === 'Deleted') {
     if (loading) {
       return <Indicator style={styles.indicator} />;
     } else {
@@ -52,15 +36,31 @@ export const UserProfile = ({ id }: Props) => {
     }
   }
 
-  const userProfile = data ? data.user : cacheData;
+  const result = data.userResult;
 
-  const { name, imageUrl, bio, instagram, facebook, twitter, linkedin } =
-    userProfile;
+  const userData =
+    result.__typename === 'User'
+      ? {
+          name: result.name,
+          imageUrl: result.imageUrl,
+          bio: result.bio,
+          instagram: result.instagram,
+          facebook: result.facebook,
+          twitter: result.twitter,
+          linkedIn: result.linkedin,
+          follow: result.follow,
+          blocking: result.blocking,
+        }
+      : {
+          name: result.blockedByUser.name,
+          imageUrl: result.blockedByUser.imageUrl,
+        };
+
   const socials: { type: SocialIconProps['type']; value: string | null }[] = [
-    { type: 'facebook', value: facebook },
-    { type: 'twitter', value: twitter },
-    { type: 'linkedin', value: linkedin },
-    { type: 'instagram', value: instagram },
+    { type: 'facebook', value: userData.facebook },
+    { type: 'twitter', value: userData.twitter },
+    { type: 'linkedin', value: userData.linkedIn },
+    { type: 'instagram', value: userData.instagram },
   ];
 
   return (
@@ -74,13 +74,16 @@ export const UserProfile = ({ id }: Props) => {
       >
         <Profile
           id={id}
-          name={name}
-          bio={bio}
-          imageUrl={imageUrl}
+          name={userData.name}
+          bio={userData.bio}
+          imageUrl={userData.imageUrl}
           socials={socials}
           isMe={isMe}
           loading={loading}
-          follow={data?.user.follow}
+          follow={userData.follow}
+          blockingOrBlocked={
+            result.__typename === 'User' ? userData.blocking : true
+          }
         />
       </ScrollView>
     </>

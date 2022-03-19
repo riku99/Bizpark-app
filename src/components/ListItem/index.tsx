@@ -1,6 +1,14 @@
 import React, { ComponentProps } from 'react';
 import { HStack, Text, Pressable, useColorModeValue } from 'native-base';
 
+export type ListItem = {
+  Icon?: JSX.Element;
+  title: string;
+  titleStyle?: ComponentProps<typeof Text>;
+  ItemLeft?: JSX.Element;
+  ItemRight?: JSX.Element;
+}
+
 type Props = {
   Icon?: JSX.Element;
   title: string;

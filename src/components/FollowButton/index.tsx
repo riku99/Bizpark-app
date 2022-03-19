@@ -33,18 +33,28 @@ export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
     try {
       if (!isFollowing) {
         setIsFollowing(true);
-        await followMutation({
+        const { data: followData } = await followMutation({
           variables: {
             followeeId: userId,
           },
         });
+
+        if (followData.follow.__typename === 'Deleted') {
+          toast.show(followData.follow.message, { type: 'danger' });
+          setIsFollowing(false);
+        }
       } else {
         setIsFollowing(false);
-        await unfollowMutation({
+        const { data: unfollowData } = await unfollowMutation({
           variables: {
             followeeId: userId,
           },
         });
+
+        if (unfollowData?.unfollow.__typename === 'Deleted') {
+          toast.show(unfollowData.unfollow.message, { type: 'danger' });
+          setIsFollowing(true);
+        }
       }
     } catch (error) {
       setIsFollowing((c) => !c);
