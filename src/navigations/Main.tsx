@@ -28,6 +28,7 @@ import { useInitialDataLazyQuery } from 'src/generated/graphql';
 import FastImage from 'react-native-fast-image';
 import { useApolloClient } from '@apollo/client';
 import { useLoggedIn } from 'src/hooks/me';
+import { NotificationsScreen } from 'src/screens/Notifications';
 
 export type MainStackParamList = {
   Tab: undefined;
@@ -54,6 +55,7 @@ export type MainStackParamList = {
     id: string;
   };
   Settings: undefined;
+  Notifications: undefined;
   ThoughtTalkRoom: NavigatorScreenParams<ThoughtTalkRoomStackParamList>;
   NewsTalkRoom: NavigatorScreenParams<NewsTalkRoomStackParamList>;
   OneOnOneTalkRoom: NavigatorScreenParams<OneOnOneTalkRoomStackParamList>;
@@ -166,6 +168,7 @@ export const MainStack = React.memo(() => {
             component={Settings}
             options={{ headerShown: false }}
           />
+          <Stack.Screen name="Notifications" component={NotificationsScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </>

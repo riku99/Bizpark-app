@@ -9,7 +9,15 @@ export const HeaderRight = () => {
   const navigation = useNavigation<RootNavigationProp<'Tab'>>();
 
   return (
-    <HStack>
+    <HStack space="5">
+      <Ionicons
+        name="notifications-outline"
+        size={20}
+        color={useColorModeValue(colors.textBlack, colors.textWhite)}
+        onPress={() => {
+          navigation.navigate('Notifications');
+        }}
+      />
       <Ionicons
         name="settings-outline"
         size={20}
