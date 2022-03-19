@@ -101,24 +101,26 @@ export const Profile = ({
               </HStack>
             )}
 
-            <HStack alignSelf="center" mt="6" space="2">
-              {socials.map((l, idx) => (
-                <React.Fragment key={idx}>
-                  {!!l.value && (
-                    <SocialIcon
-                      type={l.type}
-                      iconType={'font-awesome'}
-                      raised={false}
-                      iconSize={20}
-                      style={styles.social}
-                      onPress={() => {
-                        onSnsIconPress({ type: l.type, value: l.value });
-                      }}
-                    />
-                  )}
-                </React.Fragment>
-              ))}
-            </HStack>
+            {!blockingOrBlocked && (
+              <HStack alignSelf="center" mt="6" space="2">
+                {socials.map((l, idx) => (
+                  <React.Fragment key={idx}>
+                    {!!l.value && (
+                      <SocialIcon
+                        type={l.type}
+                        iconType={'font-awesome'}
+                        raised={false}
+                        iconSize={20}
+                        style={styles.social}
+                        onPress={() => {
+                          onSnsIconPress({ type: l.type, value: l.value });
+                        }}
+                      />
+                    )}
+                  </React.Fragment>
+                ))}
+              </HStack>
+            )}
 
             <Box mt="4">
               <Text lineHeight="lg">{bio}</Text>

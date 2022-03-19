@@ -137,17 +137,17 @@ export const TalkRoomMessage = React.memo((props: Props) => {
       text: message.text,
       createdAt: new Date(Number(message.createdAt)),
       user: {
-        _id: message.sender.id,
-        name: message.sender.name,
-        avatar: message.sender.imageUrl ?? NO_USER_IMAGE_URL,
+        _id: message.sender?.id,
+        name: message.sender?.name,
+        avatar: message.sender?.imageUrl ?? NO_USER_IMAGE_URL,
       },
       replyMessage: replyMessage
         ? {
             id: Number(_replyMessage.id),
             text: _replyMessage.text,
             user: {
-              id: _replyMessage.sender.id,
-              name: _replyMessage.sender.name,
+              id: _replyMessage.sender?.id,
+              name: _replyMessage.sender?.name,
             },
           }
         : null,
@@ -206,7 +206,7 @@ export const TalkRoomMessage = React.memo((props: Props) => {
         const firstMessage = messageEdges[0].node;
 
         // 自分で送信したメッセージのサブスクライブは無視する
-        if (firstMessage.sender.id === myId) {
+        if (firstMessage.sender?.id === myId) {
           return;
         }
 
@@ -508,9 +508,11 @@ export const TalkRoomMessage = React.memo((props: Props) => {
       onSend={onSendPress}
       infiniteLoad={infiniteLoad}
       onPressAvatar={(user) => {
-        navigation.navigate('UserProfile', {
-          id: user._id.toString(),
-        });
+        if (user._id) {
+          navigation.navigate('UserProfile', {
+            id: user._id.toString(),
+          });
+        }
       }}
     />
   );
