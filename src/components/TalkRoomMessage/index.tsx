@@ -112,7 +112,6 @@ export const TalkRoomMessage = React.memo((props: Props) => {
   // チャットに表示されるメッセージ
   const [messages, setMessages] = useState<IMessage[]>([]);
   const [latestMessage, setLatestMessage] = useState<IMessage | null>(null);
-
   const [replyMessage, setReplyMessage] = useState<IMessage | null>(null);
 
   useEffect(() => {
@@ -141,7 +140,7 @@ export const TalkRoomMessage = React.memo((props: Props) => {
         name: message.sender?.name,
         avatar: message.sender?.imageUrl ?? NO_USER_IMAGE_URL,
       },
-      replyMessage: replyMessage
+      replyMessage: _replyMessage
         ? {
             id: Number(_replyMessage.id),
             text: _replyMessage.text,
