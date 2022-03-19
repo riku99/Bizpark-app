@@ -1,9 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { Box } from 'native-base';
-import {
-  useGetPickedNewsQuery,
-  GetPickedNewsQuery,
-} from 'src/generated/graphql';
+import { useGetPickedNewsQuery, User } from 'src/generated/graphql';
 import { btoa } from 'react-native-quick-base64';
 import { Indicator } from 'src/components/Indicator';
 import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
@@ -12,8 +9,9 @@ import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from 'src/types';
 import { RefreshControl } from 'src/components/RefreshControl';
 import { useMyId } from 'src/hooks/me';
+import { StyleSheet } from 'react-native';
 
-type Item = GetPickedNewsQuery['user']['pickedNews']['edges'][number];
+type Item = User['pickedNews']['edges'][number];
 
 export const PickedNews = () => {
   const myId = useMyId();
@@ -37,35 +35,45 @@ export const PickedNews = () => {
   };
 
   const infiniteLoad = async () => {
-    const { pageInfo } = data.user.pickedNews;
-    if (pageInfo.hasNextPage) {
-      const { endCursor } = pageInfo;
+    if (data?.userResult.__typename === 'User') {
+      const { pageInfo } = data.userResult.pickedNews;
+      if (pageInfo.hasNextPage) {
+        const { endCursor } = pageInfo;
 
-      await fetchMore({
-        variables: {
-          cursor: endCursor ? btoa(endCursor) : undefined,
-        },
-      });
+        await fetchMore({
+          variables: {
+            cursor: endCursor ? btoa(endCursor) : undefined,
+          },
+        });
+      }
     }
   };
 
-  const renderItem = useCallback(({ item }: { item: Item }) => {
-    const { id } = item.node.news;
+  const renderItem = useCallback(
+    ({ item }: { item: Item }) => {
+      const { id } = item.node.news;
 
-    const onPress = () => {
-      navigation.navigate('NewsWebView', { id });
-    };
-    return <NewsCard id={id} onPress={onPress} divider />;
-  }, []);
+      const onPress = () => {
+        navigation.navigate('NewsWebView', { id });
+      };
 
-  if (!data) {
-    return <Indicator style={{ marginTop: 10 }} />;
+      return <NewsCard id={id} onPress={onPress} divider />;
+    },
+    [navigation]
+  );
+
+  if (!data || data.userResult.__typename === 'Deleted') {
+    return <Indicator style={styles.indicator} />;
+  }
+
+  if (data.userResult.__typename === 'IsBlocked') {
+    return null;
   }
 
   return (
     <Box flex={1}>
       <InfiniteFlatList
-        data={data.user.pickedNews.edges}
+        data={data.userResult.pickedNews.edges}
         renderItem={renderItem}
         infiniteLoad={infiniteLoad}
         initialNumToRender={10}
@@ -77,3 +85,9 @@ export const PickedNews = () => {
     </Box>
   );
 };
+
+const styles = StyleSheet.create({
+  indicator: {
+    marginTop: 10,
+  },
+});
