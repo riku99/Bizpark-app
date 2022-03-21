@@ -153,6 +153,7 @@ export const MainStack = React.memo(() => {
           component={OneOnOneTalkRoomStack}
           options={{ headerShown: false }}
         />
+        <Stack.Screen name="Notifications" component={NotificationsScreen} />
         <Stack.Group
           screenOptions={{
             presentation: 'modal',
@@ -168,7 +169,6 @@ export const MainStack = React.memo(() => {
             component={Settings}
             options={{ headerShown: false }}
           />
-          <Stack.Screen name="Notifications" component={NotificationsScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </>

@@ -1,0 +1,22 @@
+query GetNotifications($after: String, $first: Int) {
+  notifications(after: $after, first: $first) {
+    edges {
+      node {
+        id
+        createdAt
+        type
+        talkRoomType
+        talkRoomId
+        performer {
+          id
+          name
+          imageUrl
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
+}
