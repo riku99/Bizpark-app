@@ -1,29 +1,26 @@
 import React, { useLayoutEffect, useCallback } from 'react';
-import {
-  Box,
-  HStack,
-  Text,
-  useColorModeValue,
-  Pressable,
-  FlatList,
-} from 'native-base';
+import { Box, HStack, Text, useColorModeValue, Pressable } from 'native-base';
 import { RootNavigationScreenProp } from 'src/types';
 import { UserImage } from 'src/components/UserImage';
 import {
   useGetNotificationsQuery,
-  NotificationEdge,
   NotificationType,
   TalkRoomType,
+  GetNotificationsQuery,
 } from 'src/generated/graphql';
 import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import { useFindThoughtTalkRoom } from 'src/hooks/thoughtTalkRoom';
 import { useFindNewsTalkRoom } from 'src/hooks/newsTalkRoom';
 import { useFindOneOnOneTalkRoom } from 'src/hooks/oneOnOneTalkRoom';
+import { Indicator } from 'src/components/Indicator';
+import { StyleSheet } from 'react-native';
+import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
+import { btoa } from 'react-native-quick-base64';
 
 type Props = RootNavigationScreenProp<'Notifications'>;
 
-type Item = NotificationEdge;
+type Item = GetNotificationsQuery['notifications']['edges'][number];
 
 const replyMessage = (name: string) => `${name}から返信が届きました。`;
 const likeMessage = (name: string) => `${name}がいいねしました。`;
@@ -39,7 +36,7 @@ export const NotificationsScreen = ({ navigation }: Props) => {
   const textGray = useColorModeValue('lt.textGray', 'dt.textGray');
   const pressed = useColorModeValue('lt.pressed', 'dt.pressed');
 
-  const { data: notificationData } = useGetNotificationsQuery({
+  const { data: notificationData, fetchMore } = useGetNotificationsQuery({
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-only',
   });
@@ -151,7 +148,7 @@ export const NotificationsScreen = ({ navigation }: Props) => {
 
     return (
       <Pressable
-        px="6"
+        px="4"
         py="4"
         _pressed={{
           bg: pressed,
@@ -162,7 +159,7 @@ export const NotificationsScreen = ({ navigation }: Props) => {
           <Pressable onPress={onAvatarPress}>
             <UserImage size="10" uri={performer.imageUrl} />
           </Pressable>
-          <Box ml="4">
+          <Box ml="4" flexShrink="1">
             <Text fontWeight="bold">{message}</Text>
             <Text color={textGray}>{`${diff} ・ ${type}`}</Text>
           </Box>
@@ -171,16 +168,33 @@ export const NotificationsScreen = ({ navigation }: Props) => {
     );
   }, []);
 
+  const infiniteLoad = async () => {
+    if (notificationData?.notifications.pageInfo.hasNextPage) {
+      const cursor = notificationData.notifications.pageInfo.endCursor;
+      await fetchMore({
+        variables: {
+          after: cursor ? btoa(cursor) : undefined,
+        },
+      });
+    }
+  };
+
   if (!notificationData?.notifications) {
-    // インジケータ出す
-    return null;
+    return <Indicator style={styles.indicator} />;
   }
 
   return (
-    <FlatList
+    <InfiniteFlatList<Item>
       data={notificationData.notifications.edges}
       renderItem={renderItem}
-      keyExtractor={(item) => item.node.id}
+      keyExtractor={(item) => item.node.id.toString()}
+      infiniteLoad={infiniteLoad}
     />
   );
 };
+
+const styles = StyleSheet.create({
+  indicator: {
+    marginTop: 10,
+  },
+});

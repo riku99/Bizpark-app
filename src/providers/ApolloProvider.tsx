@@ -85,6 +85,7 @@ const cache = new InMemoryCache({
         thoughts: relayStylePagination(['genre']), // genreが異なっていたら異なるキャッシュとして管理
         news: relayStylePagination(['genre']),
         follows: relayStylePagination(['q']),
+        notifications: relayStylePagination(),
         blockingUsers: {
           merge: (existing = [], incoming) => {
             return incoming;
