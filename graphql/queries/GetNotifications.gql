@@ -12,6 +12,9 @@ query GetNotifications($after: String, $first: Int) {
           name
           imageUrl
         }
+        thought {
+          id
+        }
       }
       cursor
     }

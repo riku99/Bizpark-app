@@ -536,6 +536,7 @@ export type Notification = {
   performer?: Maybe<User>;
   talkRoomId?: Maybe<Scalars['Int']>;
   talkRoomType?: Maybe<TalkRoomType>;
+  thought?: Maybe<Thought>;
   type: NotificationType;
   user?: Maybe<User>;
 };
@@ -1330,7 +1331,7 @@ export type GetNotificationsQueryVariables = Exact<{
 }>;
 
 
-export type GetNotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'NotificationConnection', edges: Array<{ __typename?: 'NotificationEdge', cursor: string, node: { __typename?: 'Notification', id: number, createdAt: string, type: NotificationType, talkRoomType?: TalkRoomType | null | undefined, talkRoomId?: number | null | undefined, performer?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type GetNotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'NotificationConnection', edges: Array<{ __typename?: 'NotificationEdge', cursor: string, node: { __typename?: 'Notification', id: number, createdAt: string, type: NotificationType, talkRoomType?: TalkRoomType | null | undefined, talkRoomId?: number | null | undefined, performer?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, thought?: { __typename?: 'Thought', id: string } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 export type GetOneNewsQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -3411,6 +3412,9 @@ export const GetNotificationsDocument = gql`
           id
           name
           imageUrl
+        }
+        thought {
+          id
         }
       }
       cursor

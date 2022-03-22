@@ -26,6 +26,8 @@ type Props = RootNavigationScreenProp<'Notifications'>;
 type Item = NotificationEdge;
 
 const replyMessage = (name: string) => `${name}から返信が届きました。`;
+const likeMessage = (name: string) => `${name}がいいねしました。`;
+const followMessage = (name: string) => `${name}があなたをフォローしました。`;
 
 export const NotificationsScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
@@ -53,6 +55,7 @@ export const NotificationsScreen = ({ navigation }: Props) => {
       type: _type,
       talkRoomType,
       talkRoomId,
+      thought,
     } = item.node;
 
     const diff = formatDistanceToNow(new Date(Number(createdAt)), {
@@ -61,15 +64,19 @@ export const NotificationsScreen = ({ navigation }: Props) => {
     });
 
     let type: string = '';
+    let message: string = '';
     switch (_type) {
       case NotificationType.Reply:
         type = '返信';
+        message = replyMessage(performer.name);
         break;
       case NotificationType.Like:
         type = 'いいね';
+        message = likeMessage(performer.name);
         break;
       case NotificationType.Follow:
         type = 'フォロー';
+        message = followMessage(performer.name);
         break;
     }
 
@@ -89,6 +96,7 @@ export const NotificationsScreen = ({ navigation }: Props) => {
               },
             });
           }
+          return;
         }
 
         if (talkRoomType === TalkRoomType.News) {
@@ -101,6 +109,7 @@ export const NotificationsScreen = ({ navigation }: Props) => {
               },
             });
           }
+          return;
         }
 
         if (talkRoomType === TalkRoomType.Oneonone) {
@@ -113,14 +122,28 @@ export const NotificationsScreen = ({ navigation }: Props) => {
               },
             });
           }
+          return;
         }
+      }
+
+      if (_type === NotificationType.Like) {
+        if (thought) {
+          navigation.navigate('Thought', {
+            id: thought.id,
+          });
+        }
+        return;
+      }
+
+      if (_type === NotificationType.Follow) {
+        return;
       }
     };
 
     return (
       <Pressable
         px="6"
-        py="2"
+        py="4"
         _pressed={{
           bg: pressed,
         }}
@@ -129,7 +152,7 @@ export const NotificationsScreen = ({ navigation }: Props) => {
         <HStack>
           <UserImage size="10" uri={performer.imageUrl} />
           <Box ml="4">
-            <Text fontWeight="bold">{replyMessage(performer.name)}</Text>
+            <Text fontWeight="bold">{message}</Text>
             <Text color={textGray}>{`${diff} ・ ${type}`}</Text>
           </Box>
         </HStack>
