@@ -136,8 +136,17 @@ export const NotificationsScreen = ({ navigation }: Props) => {
       }
 
       if (_type === NotificationType.Follow) {
+        navigation.navigate('UserProfile', {
+          id: performer.id,
+        });
         return;
       }
+    };
+
+    const onAvatarPress = () => {
+      navigation.navigate('UserProfile', {
+        id: performer.id,
+      });
     };
 
     return (
@@ -150,7 +159,9 @@ export const NotificationsScreen = ({ navigation }: Props) => {
         onPress={onPress}
       >
         <HStack>
-          <UserImage size="10" uri={performer.imageUrl} />
+          <Pressable onPress={onAvatarPress}>
+            <UserImage size="10" uri={performer.imageUrl} />
+          </Pressable>
           <Box ml="4">
             <Text fontWeight="bold">{message}</Text>
             <Text color={textGray}>{`${diff} ・ ${type}`}</Text>
