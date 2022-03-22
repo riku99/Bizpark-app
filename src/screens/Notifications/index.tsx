@@ -18,6 +18,8 @@ import {
 import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
 import { useFindThoughtTalkRoom } from 'src/hooks/thoughtTalkRoom';
+import { useFindNewsTalkRoom } from 'src/hooks/newsTalkRoom';
+import { useFindOneOnOneTalkRoom } from 'src/hooks/oneOnOneTalkRoom';
 
 type Props = RootNavigationScreenProp<'Notifications'>;
 
@@ -35,9 +37,14 @@ export const NotificationsScreen = ({ navigation }: Props) => {
   const textGray = useColorModeValue('lt.textGray', 'dt.textGray');
   const pressed = useColorModeValue('lt.pressed', 'dt.pressed');
 
-  const { data: notificationData } = useGetNotificationsQuery();
+  const { data: notificationData } = useGetNotificationsQuery({
+    fetchPolicy: 'cache-and-network',
+    nextFetchPolicy: 'cache-only',
+  });
 
   const { findThoughtTalkRoom } = useFindThoughtTalkRoom();
+  const { findNewsTalkRoom } = useFindNewsTalkRoom();
+  const { findOneOnOneTalkRoom } = useFindOneOnOneTalkRoom();
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
     const {
@@ -85,9 +92,27 @@ export const NotificationsScreen = ({ navigation }: Props) => {
         }
 
         if (talkRoomType === TalkRoomType.News) {
+          const room = findNewsTalkRoom({ id: talkRoomId });
+          if (room) {
+            navigation.navigate('NewsTalkRoom', {
+              screen: 'NewsTalkRoomMain',
+              params: {
+                id: room.id,
+              },
+            });
+          }
         }
 
         if (talkRoomType === TalkRoomType.Oneonone) {
+          const room = findOneOnOneTalkRoom({ talkRoomId });
+          if (room) {
+            navigation.navigate('OneOnOneTalkRoom', {
+              screen: 'OneOnOneTalkRoomMain',
+              params: {
+                id: room.id,
+              },
+            });
+          }
         }
       }
     };
