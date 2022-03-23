@@ -242,6 +242,7 @@ export type Mutation = {
   joinThoughtTalk: ThoughtTalkRoom;
   likeThought?: Maybe<Thought>;
   requestNewsTalkRoomMemberDeletion?: Maybe<Scalars['Boolean']>;
+  seeNotification: Notification;
   seenOneOnOneTalkRoomMessage: OneOnOneTalkRoom;
   signOut: Me;
   unblock: User;
@@ -375,6 +376,11 @@ export type MutationLikeThoughtArgs = {
 
 export type MutationRequestNewsTalkRoomMemberDeletionArgs = {
   input: RequestNewsTalkRoomMemberDeletionInput;
+};
+
+
+export type MutationSeeNotificationArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -534,6 +540,7 @@ export type Notification = {
   createdAt: Scalars['String'];
   id: Scalars['Int'];
   performer?: Maybe<User>;
+  seen?: Maybe<Scalars['Boolean']>;
   talkRoomId?: Maybe<Scalars['Int']>;
   talkRoomType?: Maybe<TalkRoomType>;
   thought?: Maybe<Thought>;
@@ -1251,6 +1258,13 @@ export type UploadThoughtImagesMutationVariables = Exact<{
 
 export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoughtImages: { __typename?: 'UploadThoughtImagesResponse', images: Array<{ __typename?: 'SubImage', url: string, width?: number | null | undefined, height?: number | null | undefined }> } };
 
+export type SeeNotificationMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type SeeNotificationMutation = { __typename?: 'Mutation', seeNotification: { __typename?: 'Notification', id: number, seen?: boolean | null | undefined } };
+
 export type BlockingUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1331,7 +1345,7 @@ export type GetNotificationsQueryVariables = Exact<{
 }>;
 
 
-export type GetNotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'NotificationConnection', edges: Array<{ __typename?: 'NotificationEdge', cursor: string, node: { __typename?: 'Notification', id: number, createdAt: string, type: NotificationType, talkRoomType?: TalkRoomType | null | undefined, talkRoomId?: number | null | undefined, performer?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, thought?: { __typename?: 'Thought', id: string } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
+export type GetNotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'NotificationConnection', edges: Array<{ __typename?: 'NotificationEdge', cursor: string, node: { __typename?: 'Notification', id: number, createdAt: string, type: NotificationType, talkRoomType?: TalkRoomType | null | undefined, talkRoomId?: number | null | undefined, seen?: boolean | null | undefined, performer?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, thought?: { __typename?: 'Thought', id: string } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 export type GetOneNewsQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2916,6 +2930,40 @@ export function useUploadThoughtImagesMutation(baseOptions?: Apollo.MutationHook
 export type UploadThoughtImagesMutationHookResult = ReturnType<typeof useUploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationResult = Apollo.MutationResult<UploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
+export const SeeNotificationDocument = gql`
+    mutation SeeNotification($id: Int!) {
+  seeNotification(id: $id) {
+    id
+    seen
+  }
+}
+    `;
+export type SeeNotificationMutationFn = Apollo.MutationFunction<SeeNotificationMutation, SeeNotificationMutationVariables>;
+
+/**
+ * __useSeeNotificationMutation__
+ *
+ * To run a mutation, you first call `useSeeNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSeeNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [seeNotificationMutation, { data, loading, error }] = useSeeNotificationMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSeeNotificationMutation(baseOptions?: Apollo.MutationHookOptions<SeeNotificationMutation, SeeNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SeeNotificationMutation, SeeNotificationMutationVariables>(SeeNotificationDocument, options);
+      }
+export type SeeNotificationMutationHookResult = ReturnType<typeof useSeeNotificationMutation>;
+export type SeeNotificationMutationResult = Apollo.MutationResult<SeeNotificationMutation>;
+export type SeeNotificationMutationOptions = Apollo.BaseMutationOptions<SeeNotificationMutation, SeeNotificationMutationVariables>;
 export const BlockingUsersDocument = gql`
     query BlockingUsers {
   blockingUsers {
@@ -3408,6 +3456,7 @@ export const GetNotificationsDocument = gql`
         type
         talkRoomType
         talkRoomId
+        seen
         performer {
           id
           name

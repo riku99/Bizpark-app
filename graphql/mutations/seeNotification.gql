@@ -1,0 +1,6 @@
+mutation SeeNotification($id: Int!) {
+  seeNotification(id: $id) {
+    id
+    seen
+  }
+}

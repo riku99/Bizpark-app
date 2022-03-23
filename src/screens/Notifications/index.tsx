@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useCallback } from 'react';
+import React, { useLayoutEffect, useCallback, useEffect } from 'react';
 import { Box, HStack, Text, useColorModeValue, Pressable } from 'native-base';
 import { RootNavigationScreenProp } from 'src/types';
 import { UserImage } from 'src/components/UserImage';
@@ -7,6 +7,7 @@ import {
   NotificationType,
   TalkRoomType,
   GetNotificationsQuery,
+  useSeeNotificationMutation,
 } from 'src/generated/graphql';
 import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
@@ -36,14 +37,27 @@ export const NotificationsScreen = ({ navigation }: Props) => {
   const textGray = useColorModeValue('lt.textGray', 'dt.textGray');
   const pressed = useColorModeValue('lt.pressed', 'dt.pressed');
 
-  const { data: notificationData, fetchMore } = useGetNotificationsQuery({
-    fetchPolicy: 'cache-and-network',
-    nextFetchPolicy: 'cache-only',
-  });
+  const { data: notificationData, fetchMore } = useGetNotificationsQuery();
 
   const { findThoughtTalkRoom } = useFindThoughtTalkRoom();
   const { findNewsTalkRoom } = useFindNewsTalkRoom();
   const { findOneOnOneTalkRoom } = useFindOneOnOneTalkRoom();
+  const [seeNotificationMutation] = useSeeNotificationMutation();
+
+  useEffect(() => {
+    (async () => {
+      if (notificationData?.notifications) {
+        const firstNode = notificationData.notifications.edges[0]?.node;
+        if (firstNode && !firstNode.seen) {
+          await seeNotificationMutation({
+            variables: {
+              id: firstNode.id,
+            },
+          });
+        }
+      }
+    })();
+  }, [notificationData]);
 
   const renderItem = useCallback(({ item }: { item: Item }) => {
     const {
