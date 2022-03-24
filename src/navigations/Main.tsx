@@ -29,6 +29,7 @@ import FastImage from 'react-native-fast-image';
 import { useApolloClient } from '@apollo/client';
 import { useLoggedIn } from 'src/hooks/me';
 import { NotificationsScreen } from 'src/screens/Notifications';
+import { TabOrderChangeScreen } from 'src/screens/TabOrderChange';
 
 export type MainStackParamList = {
   Tab: undefined;
@@ -56,6 +57,7 @@ export type MainStackParamList = {
   };
   Settings: undefined;
   Notifications: undefined;
+  TabOrderChange: undefined;
   ThoughtTalkRoom: NavigatorScreenParams<ThoughtTalkRoomStackParamList>;
   NewsTalkRoom: NavigatorScreenParams<NewsTalkRoomStackParamList>;
   OneOnOneTalkRoom: NavigatorScreenParams<OneOnOneTalkRoomStackParamList>;
@@ -168,6 +170,10 @@ export const MainStack = React.memo(() => {
             name="Settings"
             component={Settings}
             options={{ headerShown: false }}
+          />
+          <Stack.Screen
+            name="TabOrderChange"
+            component={TabOrderChangeScreen}
           />
         </Stack.Group>
       </Stack.Navigator>

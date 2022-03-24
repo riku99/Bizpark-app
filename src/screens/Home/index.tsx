@@ -13,6 +13,7 @@ import { useReactiveVar } from '@apollo/client';
 import { creatingThoughtVar } from 'src/stores/thought';
 import { Follow } from './Follow';
 import { useFcmHandler } from 'src/hooks/pushNotificatoins';
+import { HeaderRight } from './HeaderRight';
 
 type Props = RootNavigationScreenProp<'Tab'>;
 
@@ -23,6 +24,7 @@ export const HomeScreen = React.memo(({ navigation }: Props) => {
     navigation.setOptions({
       headerShadowVisible: false,
       headerTitle: '',
+      headerRight: () => <HeaderRight />,
       // headerLeft: () => <Text>Logo</Text>,
     });
   }, [navigation]);

@@ -10,6 +10,8 @@ import { PushNotificationMessage } from 'src/generated/graphql';
 import { RootStackParamList } from 'src/navigations';
 import { MainStackParamList } from 'src/navigations/Main';
 import { AuthSrackParamList } from 'src/navigations/Auth';
+import { HomeStackParamList } from 'src/navigations/Home';
+import {} from 'src/navigations/MyPage';
 
 export type PushNotificationData = PushNotificationMessage;
 
@@ -43,7 +45,8 @@ export type AllStackParamList = RootStackParamList &
   SettingsParamList &
   ThoughtTalkRoomStackParamList &
   NewsTalkRoomStackParamList &
-  OneOnOneTalkRoomStackParamList;
+  OneOnOneTalkRoomStackParamList &
+  HomeStackParamList;
 
 export type RootNavigationScreenProp<T extends keyof AllStackParamList> =
   NativeStackScreenProps<AllStackParamList, T>;

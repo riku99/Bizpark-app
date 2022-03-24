@@ -5,7 +5,7 @@ import { UserProfileScreen } from 'src/screens/UserProfile';
 import { useColorModeValue, useTheme } from 'native-base';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
-type HomeStackParamList = {
+export type HomeStackParamList = {
   Home: undefined;
   UserProfile: {
     id: string;

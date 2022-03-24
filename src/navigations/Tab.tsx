@@ -14,7 +14,7 @@ import {
 import { Badge } from 'src/components/Badge';
 import { StyleSheet } from 'react-native';
 
-type TabParamList = {
+export type TabParamList = {
   Home: undefined;
   News: undefined;
   Talk: undefined;
