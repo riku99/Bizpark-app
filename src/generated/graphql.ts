@@ -242,6 +242,7 @@ export type Mutation = {
   joinThoughtTalk: ThoughtTalkRoom;
   likeThought?: Maybe<Thought>;
   requestNewsTalkRoomMemberDeletion?: Maybe<Scalars['Boolean']>;
+  seeNotification: Notification;
   seenOneOnOneTalkRoomMessage: OneOnOneTalkRoom;
   signOut: Me;
   unblock: User;
@@ -375,6 +376,11 @@ export type MutationLikeThoughtArgs = {
 
 export type MutationRequestNewsTalkRoomMemberDeletionArgs = {
   input: RequestNewsTalkRoomMemberDeletionInput;
+};
+
+
+export type MutationSeeNotificationArgs = {
+  id: Scalars['Int'];
 };
 
 
@@ -529,6 +535,37 @@ export type NewsTalkRoomMessageEdge = {
   node: NewsTalkRoomMessage;
 };
 
+export type Notification = {
+  __typename?: 'Notification';
+  createdAt: Scalars['String'];
+  id: Scalars['Int'];
+  performer?: Maybe<User>;
+  seen?: Maybe<Scalars['Boolean']>;
+  talkRoomId?: Maybe<Scalars['Int']>;
+  talkRoomType?: Maybe<TalkRoomType>;
+  thought?: Maybe<Thought>;
+  type: NotificationType;
+  user?: Maybe<User>;
+};
+
+export type NotificationConnection = {
+  __typename?: 'NotificationConnection';
+  edges: Array<NotificationEdge>;
+  pageInfo: PageInfo;
+};
+
+export type NotificationEdge = {
+  __typename?: 'NotificationEdge';
+  cursor: Scalars['String'];
+  node: Notification;
+};
+
+export enum NotificationType {
+  Follow = 'FOLLOW',
+  Like = 'LIKE',
+  Reply = 'REPLY'
+}
+
 export type OneOnOneTalkRoom = TalkRoom & {
   __typename?: 'OneOnOneTalkRoom';
   allMessageSeen?: Maybe<Scalars['Boolean']>;
@@ -605,6 +642,7 @@ export type Query = {
   news?: Maybe<NewsConnection>;
   newsTalkRoom: NewsTalkRoom;
   newsTalkRooms: Array<NewsTalkRoom>;
+  notifications: NotificationConnection;
   oneNews: News;
   oneOnOneTalkRoom: OneOnOneTalkRoom;
   oneOnOneTalkRooms: Array<Maybe<OneOnOneTalkRoom>>;
@@ -635,6 +673,12 @@ export type QueryNewsArgs = {
 
 export type QueryNewsTalkRoomArgs = {
   id: Scalars['Int'];
+};
+
+
+export type QueryNotificationsArgs = {
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
 };
 
 
@@ -751,6 +795,12 @@ export type TalkRoomMessage = {
   sender?: Maybe<User>;
   text: Scalars['String'];
 };
+
+export enum TalkRoomType {
+  News = 'NEWS',
+  Oneonone = 'ONEONONE',
+  Thought = 'THOUGHT'
+}
 
 export type Thought = {
   __typename?: 'Thought';
@@ -1208,6 +1258,13 @@ export type UploadThoughtImagesMutationVariables = Exact<{
 
 export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoughtImages: { __typename?: 'UploadThoughtImagesResponse', images: Array<{ __typename?: 'SubImage', url: string, width?: number | null | undefined, height?: number | null | undefined }> } };
 
+export type SeeNotificationMutationVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type SeeNotificationMutation = { __typename?: 'Mutation', seeNotification: { __typename?: 'Notification', id: number, seen?: boolean | null | undefined } };
+
 export type BlockingUsersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1281,6 +1338,14 @@ export type GetNewsTalkRoomsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetNewsTalkRoomsQuery = { __typename?: 'Query', newsTalkRooms: Array<{ __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, instagram?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined }> };
+
+export type GetNotificationsQueryVariables = Exact<{
+  after?: InputMaybe<Scalars['String']>;
+  first?: InputMaybe<Scalars['Int']>;
+}>;
+
+
+export type GetNotificationsQuery = { __typename?: 'Query', notifications: { __typename?: 'NotificationConnection', edges: Array<{ __typename?: 'NotificationEdge', cursor: string, node: { __typename?: 'Notification', id: number, createdAt: string, type: NotificationType, talkRoomType?: TalkRoomType | null | undefined, talkRoomId?: number | null | undefined, seen?: boolean | null | undefined, performer?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, thought?: { __typename?: 'Thought', id: string } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
 export type GetOneNewsQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -2865,6 +2930,40 @@ export function useUploadThoughtImagesMutation(baseOptions?: Apollo.MutationHook
 export type UploadThoughtImagesMutationHookResult = ReturnType<typeof useUploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationResult = Apollo.MutationResult<UploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
+export const SeeNotificationDocument = gql`
+    mutation SeeNotification($id: Int!) {
+  seeNotification(id: $id) {
+    id
+    seen
+  }
+}
+    `;
+export type SeeNotificationMutationFn = Apollo.MutationFunction<SeeNotificationMutation, SeeNotificationMutationVariables>;
+
+/**
+ * __useSeeNotificationMutation__
+ *
+ * To run a mutation, you first call `useSeeNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSeeNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [seeNotificationMutation, { data, loading, error }] = useSeeNotificationMutation({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useSeeNotificationMutation(baseOptions?: Apollo.MutationHookOptions<SeeNotificationMutation, SeeNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SeeNotificationMutation, SeeNotificationMutationVariables>(SeeNotificationDocument, options);
+      }
+export type SeeNotificationMutationHookResult = ReturnType<typeof useSeeNotificationMutation>;
+export type SeeNotificationMutationResult = Apollo.MutationResult<SeeNotificationMutation>;
+export type SeeNotificationMutationOptions = Apollo.BaseMutationOptions<SeeNotificationMutation, SeeNotificationMutationVariables>;
 export const BlockingUsersDocument = gql`
     query BlockingUsers {
   blockingUsers {
@@ -3347,6 +3446,63 @@ export function useGetNewsTalkRoomsLazyQuery(baseOptions?: Apollo.LazyQueryHookO
 export type GetNewsTalkRoomsQueryHookResult = ReturnType<typeof useGetNewsTalkRoomsQuery>;
 export type GetNewsTalkRoomsLazyQueryHookResult = ReturnType<typeof useGetNewsTalkRoomsLazyQuery>;
 export type GetNewsTalkRoomsQueryResult = Apollo.QueryResult<GetNewsTalkRoomsQuery, GetNewsTalkRoomsQueryVariables>;
+export const GetNotificationsDocument = gql`
+    query GetNotifications($after: String, $first: Int) {
+  notifications(after: $after, first: $first) {
+    edges {
+      node {
+        id
+        createdAt
+        type
+        talkRoomType
+        talkRoomId
+        seen
+        performer {
+          id
+          name
+          imageUrl
+        }
+        thought {
+          id
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
+}
+    ${PageInfoPartsFragmentDoc}`;
+
+/**
+ * __useGetNotificationsQuery__
+ *
+ * To run a query within a React component, call `useGetNotificationsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNotificationsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNotificationsQuery({
+ *   variables: {
+ *      after: // value for 'after'
+ *      first: // value for 'first'
+ *   },
+ * });
+ */
+export function useGetNotificationsQuery(baseOptions?: Apollo.QueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNotificationsQuery, GetNotificationsQueryVariables>(GetNotificationsDocument, options);
+      }
+export function useGetNotificationsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNotificationsQuery, GetNotificationsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNotificationsQuery, GetNotificationsQueryVariables>(GetNotificationsDocument, options);
+        }
+export type GetNotificationsQueryHookResult = ReturnType<typeof useGetNotificationsQuery>;
+export type GetNotificationsLazyQueryHookResult = ReturnType<typeof useGetNotificationsLazyQuery>;
+export type GetNotificationsQueryResult = Apollo.QueryResult<GetNotificationsQuery, GetNotificationsQueryVariables>;
 export const GetOneNewsDocument = gql`
     query GetOneNews($id: Int!) {
   oneNews(id: $id) {

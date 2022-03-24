@@ -3,6 +3,7 @@ import {
   useGetThoughtTalkRoomsLazyQuery,
   useGetNewsTalkRoomsLazyQuery,
   useGetOneOnOneTalkRoomsLazyQuery,
+  useGetNotificationsLazyQuery,
 } from 'src/generated/graphql';
 import { AppState, AppStateStatus } from 'react-native';
 
@@ -20,6 +21,10 @@ export const useActiveData = () => {
     fetchPolicy: 'network-only',
   });
 
+  const [notificationsQuery] = useGetNotificationsLazyQuery({
+    fetchPolicy: 'network-only',
+  });
+
   useEffect(() => {
     const onChange = async (nextAppState: AppStateStatus) => {
       if (nextAppState === 'active') {
@@ -27,6 +32,7 @@ export const useActiveData = () => {
           thoughtTalkRoomQuery(),
           newsTalkRoomQuery(),
           oneOnOneTalkRoomQuery(),
+          notificationsQuery(),
         ]);
       }
     };

@@ -172,3 +172,24 @@ export const useFindNewsTalkRoomFromNewsId = () => {
     findNewsTalkRoom,
   };
 };
+
+export const useFindNewsTalkRoom = () => {
+  const { data } = useGetNewsTalkRoomsQuery({
+    fetchPolicy: 'cache-only',
+  });
+
+  const findNewsTalkRoom = useCallback(
+    ({ id }: { id: number }) => {
+      if (!data.newsTalkRooms) {
+        return null;
+      }
+
+      return data.newsTalkRooms.find((room) => room.id === id);
+    },
+    [data]
+  );
+
+  return {
+    findNewsTalkRoom,
+  };
+};

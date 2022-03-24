@@ -165,6 +165,27 @@ export const useToughtTalkRoomsWithSubsciption = () => {
   }, [newTalkRoomId, cache, getThougtTalkRoomQuery]);
 };
 
+export const useFindThoughtTalkRoom = () => {
+  const { data } = useGetThoughtTalkRoomsQuery({
+    fetchPolicy: 'cache-only',
+  });
+
+  const findThoughtTalkRoom = useCallback(
+    ({ id }: { id: number }) => {
+      if (!data.thoughtTalkRooms) {
+        return null;
+      }
+
+      return data.thoughtTalkRooms.find((room) => room.id === id);
+    },
+    [data]
+  );
+
+  return {
+    findThoughtTalkRoom,
+  };
+};
+
 export const useFindThoughtTalkRoomsByThoughtId = ({
   thoughtId,
 }: {

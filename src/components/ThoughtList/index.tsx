@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { RefreshControl } from 'react-native';
-import { ThoughtEdge, Thought } from 'src/generated/graphql';
+import { Thought } from 'src/generated/graphql';
 import { ThoughtCard } from 'src/components/ThoughtCard';
 import { useColorModeValue, useTheme } from 'native-base';
 import { useNavigation } from '@react-navigation/native';
