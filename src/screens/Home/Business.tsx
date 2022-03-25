@@ -6,12 +6,9 @@ import { List } from '../../components/ThoughtList';
 import { Indicator } from 'src/components/Indicator';
 import { StyleSheet } from 'react-native';
 import { useThoughtFeed } from 'src/hooks/thought';
-import { TopTabScreenProp } from './types';
 import { useNavigateToFirstTabScreen } from './useNavigateToFirstScreen';
 
-type Props = TopTabScreenProp<'Business'>;
-
-export const Business = React.memo(({ navigation }: Props) => {
+export const Business = React.memo(() => {
   const { listData, refresh, infiniteLoad } = useThoughtFeed({
     genre: Genre.Business,
   });

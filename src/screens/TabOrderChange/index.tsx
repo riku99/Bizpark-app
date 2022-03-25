@@ -45,13 +45,16 @@ export const TabOrderChangeScreen = ({ navigation }: Props) => {
 
   return (
     <Box flex="1">
+      <Text alignSelf="center" mt="4">
+        長押しで並べ替え
+      </Text>
       <DraggableFlatList
         data={data}
         keyExtractor={(item) => item.key}
         renderItem={renderItem}
-        onDragEnd={({ data }) => {
-          setData(data);
-          tabOrderVar(data);
+        onDragEnd={({ data: _data }) => {
+          setData(_data);
+          tabOrderVar(_data);
           changedTabOrderVar(true);
         }}
       />

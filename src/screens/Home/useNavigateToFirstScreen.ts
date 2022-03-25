@@ -15,7 +15,7 @@ export const useNavigateToFirstTabScreen = () => {
       navigation.jumpTo(tabOrder[0].key as keyof TopTabParamList);
       changedTabOrderVar(false);
     }
-  }, [tabOrder, changedTabOrder]);
+  }, [tabOrder, changedTabOrder, navigation]);
 
   useFocusEffect(navigate);
 };
