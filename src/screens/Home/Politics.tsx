@@ -6,11 +6,14 @@ import { List } from '../../components/ThoughtList';
 import { Indicator } from 'src/components/Indicator';
 import { useThoughtFeed } from 'src/hooks/thought';
 import { StyleSheet } from 'react-native';
+import { useNavigateToFirstTabScreen } from './useNavigateToFirstScreen';
 
 export const Politics = React.memo(() => {
   const { listData, refresh, infiniteLoad } = useThoughtFeed({
     genre: Genre.Politics,
   });
+
+  useNavigateToFirstTabScreen();
 
   if (!listData) {
     return <Indicator style={styles.indicator} />;

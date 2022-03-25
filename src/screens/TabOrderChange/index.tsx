@@ -5,29 +5,8 @@ import DraggableFlatList, {
   ScaleDecorator,
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
-
-const initialData = [
-  {
-    id: 1,
-    name: 'ビジネス',
-  },
-  {
-    id: 2,
-    name: '政治',
-  },
-  {
-    id: 3,
-    name: '金融経済',
-  },
-  {
-    id: 4,
-    name: '社会',
-  },
-  {
-    id: 5,
-    name: 'フォロー',
-  },
-];
+import { useReactiveVar } from '@apollo/client';
+import { tabOrderVar, changedTabOrderVar } from 'src/stores/tabOrder';
 
 type Props = RootNavigationScreenProp<'TabOrderChange'>;
 
@@ -38,6 +17,14 @@ export const TabOrderChangeScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
+  const tabOrder = useReactiveVar(tabOrderVar);
+  const initialData = tabOrder.map(({ key, label }) => {
+    return {
+      key,
+      label,
+    };
+  });
+
   const [data, setData] = useState(initialData);
 
   const renderItem = useCallback(
@@ -46,7 +33,7 @@ export const TabOrderChangeScreen = ({ navigation }: Props) => {
         <>
           <ScaleDecorator>
             <Pressable onLongPress={drag} disabled={isActive} py="4" px="6">
-              <Text fontWeight="bold">{item.name}</Text>
+              <Text fontWeight="bold">{item.label}</Text>
             </Pressable>
           </ScaleDecorator>
           <Divider ml="5" />
@@ -60,9 +47,13 @@ export const TabOrderChangeScreen = ({ navigation }: Props) => {
     <Box flex="1">
       <DraggableFlatList
         data={data}
-        keyExtractor={(item) => item.id.toString()}
+        keyExtractor={(item) => item.key}
         renderItem={renderItem}
-        onDragEnd={({ data }) => setData(data)}
+        onDragEnd={({ data }) => {
+          setData(data);
+          tabOrderVar(data);
+          changedTabOrderVar(true);
+        }}
       />
     </Box>
   );

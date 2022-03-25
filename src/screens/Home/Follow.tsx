@@ -5,11 +5,14 @@ import { List } from '../../components/ThoughtList';
 import { Bg } from 'src/components/Bg';
 import { useThoughtFeed } from 'src/hooks/thought';
 import { StyleSheet } from 'react-native';
+import { useNavigateToFirstTabScreen } from './useNavigateToFirstScreen';
 
 export const Follow = React.memo(() => {
   const { listData, refresh, infiniteLoad } = useThoughtFeed({
     follow: true,
   });
+
+  useNavigateToFirstTabScreen();
 
   if (!listData) {
     return <Indicator style={styles.indicator} />;

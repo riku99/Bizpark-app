@@ -1,5 +1,5 @@
 import React, { useLayoutEffect } from 'react';
-import { useColorMode, Button, Box } from 'native-base';
+import { useColorMode, Button } from 'native-base';
 import { RootNavigationScreenProp } from 'src/types';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import { Society } from './Society';
@@ -14,10 +14,12 @@ import { creatingThoughtVar } from 'src/stores/thought';
 import { Follow } from './Follow';
 import { useFcmHandler } from 'src/hooks/pushNotificatoins';
 import { HeaderRight } from './HeaderRight';
+import { tabOrderVar } from 'src/stores/tabOrder';
+import { TopTabParamList } from './types';
 
 type Props = RootNavigationScreenProp<'Tab'>;
 
-const TopTab = createMaterialTopTabNavigator();
+const TopTab = createMaterialTopTabNavigator<TopTabParamList>();
 
 export const HomeScreen = React.memo(({ navigation }: Props) => {
   useLayoutEffect(() => {
@@ -38,6 +40,7 @@ export const HomeScreen = React.memo(({ navigation }: Props) => {
   };
 
   const creatingThought = useReactiveVar(creatingThoughtVar);
+  const tabOrder = useReactiveVar(tabOrderVar);
 
   useFcmHandler();
 
@@ -59,39 +62,63 @@ export const HomeScreen = React.memo(({ navigation }: Props) => {
         style={style}
         sceneContainerStyle={sceneContainerStyle}
       >
-        <TopTab.Screen
-          name="Business"
-          component={Business}
-          options={{
-            tabBarLabel: 'ビジネス',
-          }}
-        />
-        <TopTab.Screen
-          name="Politics"
-          component={Politics}
-          options={{ tabBarLabel: '政治' }}
-        />
-        <TopTab.Screen
-          name="Economy"
-          component={Economy}
-          options={{
-            tabBarLabel: '金融・経済',
-          }}
-        />
-        <TopTab.Screen
-          name="Society"
-          component={Society}
-          options={{
-            tabBarLabel: '社会',
-          }}
-        />
-        <TopTab.Screen
-          name="Follow"
-          component={Follow}
-          options={{
-            tabBarLabel: 'フォロー',
-          }}
-        />
+        {tabOrder.map(({ key, label }) => {
+          switch (key) {
+            case 'Business':
+              return (
+                <TopTab.Screen
+                  name="Business"
+                  component={Business}
+                  options={{
+                    tabBarLabel: label,
+                  }}
+                  key={key}
+                />
+              );
+            case 'Politics':
+              return (
+                <TopTab.Screen
+                  name="Politics"
+                  component={Politics}
+                  options={{ tabBarLabel: label }}
+                  key={key}
+                />
+              );
+            case 'Economy':
+              return (
+                <TopTab.Screen
+                  name="Economy"
+                  component={Economy}
+                  options={{
+                    tabBarLabel: label,
+                  }}
+                  key={key}
+                />
+              );
+            case 'Society':
+              return (
+                <TopTab.Screen
+                  name="Society"
+                  component={Society}
+                  options={{
+                    tabBarLabel: label,
+                  }}
+                  key={key}
+                />
+              );
+            case 'Follow':
+              return (
+                <TopTab.Screen
+                  name="Follow"
+                  component={Follow}
+                  options={{
+                    tabBarLabel: label,
+                  }}
+                  key={key}
+                />
+              );
+          }
+        })}
       </TopTab.Navigator>
       <Button
         position="absolute"

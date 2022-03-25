@@ -11,7 +11,6 @@ import { RootStackParamList } from 'src/navigations';
 import { MainStackParamList } from 'src/navigations/Main';
 import { AuthSrackParamList } from 'src/navigations/Auth';
 import { HomeStackParamList } from 'src/navigations/Home';
-import {} from 'src/navigations/MyPage';
 
 export type PushNotificationData = PushNotificationMessage;
 
