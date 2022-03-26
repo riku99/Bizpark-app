@@ -9,6 +9,8 @@ import { useToast } from 'react-native-toast-notifications';
 import { getGraphQLErrorCode } from 'src/utils';
 import * as Haptics from 'expo-haptics';
 import { useIsPlusPlan } from 'src/hooks/me';
+import { useNavigation } from '@react-navigation/native';
+import { RootNavigationProp } from 'src/types';
 
 type Props = {
   userId: string;
@@ -18,13 +20,12 @@ type Props = {
 
 export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
   const toast = useToast();
-
+  const navigation = useNavigation<RootNavigationProp<'UserProfile'>>();
   const [followMutation] = useFollowMutation();
   const [unfollowMutation] = useUnfollowMutation();
-
   const isPlusPlan = useIsPlusPlan();
-
   const [isFollowing, setIsFollowing] = useState<boolean>(follow);
+
   useEffect(() => {
     setIsFollowing(follow);
   }, [follow]);
@@ -35,6 +36,11 @@ export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
     Haptics.selectionAsync();
     try {
       if (!isFollowing) {
+        if (!isPlusPlan) {
+          navigation.navigate('IAP');
+          return;
+        }
+
         setIsFollowing(true);
         const { data: followData } = await followMutation({
           variables: {
