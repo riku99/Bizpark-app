@@ -6,9 +6,7 @@ import { Business } from './Business';
 import { Politics } from './Politics';
 import { Economy } from './Economy';
 import { Technology } from './Technology';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { HeaderRight } from './HeaderRight';
-import { Text } from 'native-base';
 
 type Props = {} & RootNavigationScreenProp<'Tab'>;
 
@@ -25,8 +23,6 @@ export const NewsScreen = ({ navigation }: Props) => {
 
   const { defaultScreenStyle, style, sceneContainerStyle } =
     useTopTabBarStyle();
-
-  const { top } = useSafeAreaInsets();
 
   return (
     <>
