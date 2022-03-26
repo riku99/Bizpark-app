@@ -8,10 +8,11 @@ import { Economy } from './Economy';
 import { Technology } from './Technology';
 import { HeaderRight } from './HeaderRight';
 import { useNewsTabOrder } from 'src/hooks/newsTabOrder';
+import { TopTabParamList } from './types';
 
 type Props = {} & RootNavigationScreenProp<'Tab'>;
 
-const TopTab = createMaterialTopTabNavigator();
+const TopTab = createMaterialTopTabNavigator<TopTabParamList>();
 
 export const NewsScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
