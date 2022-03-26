@@ -120,6 +120,9 @@ PODS:
   - lottie-react-native (4.0.3):
     - lottie-ios (~> 3.2.3)
     - React-Core
+  - MMKV (1.2.12):
+    - MMKVCore (~> 1.2.12)
+  - MMKVCore (1.2.12)
   - nanopb (2.30908.0):
     - nanopb/decode (= 2.30908.0)
     - nanopb/encode (= 2.30908.0)
@@ -327,6 +330,9 @@ PODS:
     - React-Core
   - react-native-menu (0.5.2):
     - React
+  - react-native-mmkv (2.2.0):
+    - MMKV
+    - React-Core
   - react-native-pager-view (5.4.9):
     - React-Core
   - react-native-quick-base64 (0.1.4):
@@ -521,6 +527,7 @@ DEPENDENCIES:
   - "react-native-cameraroll (from `../node_modules/@react-native-community/cameraroll`)"
   - react-native-config (from `../node_modules/react-native-config`)
   - "react-native-menu (from `../node_modules/@react-native-menu/menu`)"
+  - react-native-mmkv (from `../node_modules/react-native-mmkv`)
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-quick-base64 (from `../node_modules/react-native-quick-base64`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
@@ -572,6 +579,8 @@ SPEC REPOS:
     - GTMAppAuth
     - GTMSessionFetcher
     - libwebp
+    - MMKV
+    - MMKVCore
     - nanopb
     - PromisesObjC
     - SDWebImage
@@ -645,6 +654,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-config"
   react-native-menu:
     :path: "../node_modules/@react-native-menu/menu"
+  react-native-mmkv:
+    :path: "../node_modules/react-native-mmkv"
   react-native-pager-view:
     :path: "../node_modules/react-native-pager-view"
   react-native-quick-base64:
@@ -748,6 +759,8 @@ SPEC CHECKSUMS:
   libwebp: 98a37e597e40bfdb4c911fc98f2c53d0b12d05fc
   lottie-ios: c058aeafa76daa4cf64d773554bccc8385d0150e
   lottie-react-native: 96361a9891cf651534ea35c4f85f33d4cf14ed13
+  MMKV: f281020c9d9be5eb7a03ae746dc4deb570e46c23
+  MMKVCore: df0565f6b58463604731a68ba6cd89bc0b2d1d55
   nanopb: a0ba3315591a9ae0a16a309ee504766e90db0c96
   PromisesObjC: 68159ce6952d93e17b2dfe273b8c40907db5ba58
   RCT-Folly: ec7a233ccc97cc556cf7237f0db1ff65b986f27c
@@ -764,6 +777,7 @@ SPEC CHECKSUMS:
   react-native-cameraroll: 2957f2bce63ae896a848fbe0d5352c1bd4d20866
   react-native-config: 6502b1879f97ed5ac570a029961fc35ea606cd14
   react-native-menu: 52089949cbe30b035c51e54f92a7d99136c2fed4
+  react-native-mmkv: 2a15aadabf649c364cab7975eef52848611eea25
   react-native-pager-view: 3ee7d4c7697fb3ef788346e834a60cca97ed8540
   react-native-quick-base64: 4b97fd2c01032b0d9305c4a0cd91c3fe69e7e4d8
   react-native-safe-area-context: 584dc04881deb49474363f3be89e4ca0e854c057

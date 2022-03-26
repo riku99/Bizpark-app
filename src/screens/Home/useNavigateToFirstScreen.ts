@@ -1,14 +1,13 @@
 import { useCallback } from 'react';
 import { useFocusEffect } from '@react-navigation/native';
-import { tabOrderVar, changedTabOrderVar } from 'src/stores/tabOrder';
+import { changedTabOrderVar } from 'src/stores/tabOrder';
 import { TopTabNavigationProp, TopTabParamList } from './types';
 import { useNavigation } from '@react-navigation/native';
-import { useReactiveVar } from '@apollo/client';
+import { useTabOrder } from 'src/hooks/tabOrder';
 
 export const useNavigateToFirstTabScreen = () => {
   const navigation = useNavigation<TopTabNavigationProp<any>>();
-  const tabOrder = useReactiveVar(tabOrderVar);
-  const changedTabOrder = useReactiveVar(changedTabOrderVar);
+  const { tabOrder, changedTabOrder } = useTabOrder();
 
   const navigate = useCallback(() => {
     if (changedTabOrder) {

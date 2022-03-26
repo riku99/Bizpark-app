@@ -1,6 +1,12 @@
 import { makeVar } from '@apollo/client';
+import { storage } from '../storage/mmkv';
 
-const tabOrder = [
+export type TabOrder = {
+  key: string;
+  label: string;
+}[];
+
+const initialTabOrder: TabOrder = [
   {
     key: 'Business',
     label: 'ビジネス',
@@ -23,5 +29,9 @@ const tabOrder = [
   },
 ];
 
-export const tabOrderVar = makeVar(tabOrder);
+export const tabOrderStorageId = 'tabOrder';
+
+const storageData = storage.getString(tabOrderStorageId);
+
+export const tabOrderVar = makeVar(JSON.parse(storageData) ?? initialTabOrder);
 export const changedTabOrderVar = makeVar(false);
