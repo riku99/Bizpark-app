@@ -5,7 +5,6 @@ import {
 } from 'src/generated/graphql';
 import { useCallback, useEffect } from 'react';
 import { useReactiveVar } from '@apollo/client';
-// import { meVar, storageKeys } from 'src/stores/me';
 import { loggedInVar, STORAGE_KEY } from 'src/stores/loggedIn';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
