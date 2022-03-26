@@ -30,6 +30,7 @@ import { useApolloClient } from '@apollo/client';
 import { useLoggedIn } from 'src/hooks/me';
 import { NotificationsScreen } from 'src/screens/Notifications';
 import { TabOrderChangeScreen } from 'src/screens/TabOrderChange';
+import { NewsTabOrderChangeScreen } from 'src/screens/NewsTabOrderChange';
 
 export type MainStackParamList = {
   Tab: undefined;
@@ -58,6 +59,7 @@ export type MainStackParamList = {
   Settings: undefined;
   Notifications: undefined;
   TabOrderChange: undefined;
+  NewsTabOrderChange: undefined;
   ThoughtTalkRoom: NavigatorScreenParams<ThoughtTalkRoomStackParamList>;
   NewsTalkRoom: NavigatorScreenParams<NewsTalkRoomStackParamList>;
   OneOnOneTalkRoom: NavigatorScreenParams<OneOnOneTalkRoomStackParamList>;
@@ -174,6 +176,10 @@ export const MainStack = React.memo(() => {
           <Stack.Screen
             name="TabOrderChange"
             component={TabOrderChangeScreen}
+          />
+          <Stack.Screen
+            name="NewsTabOrderChange"
+            component={NewsTabOrderChangeScreen}
           />
         </Stack.Group>
       </Stack.Navigator>

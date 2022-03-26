@@ -6,6 +6,7 @@ import DraggableFlatList, {
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
 import { useTabOrder } from 'src/hooks/tabOrder';
+import { CloseButton } from 'src/components/BackButon';
 
 type Props = RootNavigationScreenProp<'TabOrderChange'>;
 
@@ -13,19 +14,13 @@ export const TabOrderChangeScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: '順番の並び替え',
+      headerRight: () => <CloseButton />,
     });
   }, [navigation]);
 
   const { tabOrder, setTabOrder, setChangedTabOrder } = useTabOrder();
 
-  const initialData = tabOrder.map(({ key, label }) => {
-    return {
-      key,
-      label,
-    };
-  });
-
-  const [data, setData] = useState(initialData);
+  const [data, setData] = useState(tabOrder);
 
   const renderItem = useCallback(
     ({ item, drag, isActive }: RenderItemParams<typeof data[number]>) => {

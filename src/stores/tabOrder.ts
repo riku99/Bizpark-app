@@ -33,5 +33,7 @@ export const tabOrderStorageId = 'tabOrder';
 
 const storageData = storage.getString(tabOrderStorageId);
 
-export const tabOrderVar = makeVar(JSON.parse(storageData) ?? initialTabOrder);
+export const tabOrderVar = makeVar(
+  (JSON.parse(storageData) as TabOrder) ?? initialTabOrder
+);
 export const changedTabOrderVar = makeVar(false);

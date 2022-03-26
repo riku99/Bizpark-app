@@ -16,6 +16,7 @@ import { useFcmHandler } from 'src/hooks/pushNotificatoins';
 import { HeaderRight } from './HeaderRight';
 import { tabOrderVar } from 'src/stores/tabOrder';
 import { TopTabParamList } from './types';
+import { useTabOrder } from 'src/hooks/tabOrder';
 
 type Props = RootNavigationScreenProp<'Tab'>;
 
@@ -40,7 +41,7 @@ export const HomeScreen = React.memo(({ navigation }: Props) => {
   };
 
   const creatingThought = useReactiveVar(creatingThoughtVar);
-  const tabOrder = useReactiveVar(tabOrderVar);
+  const { tabOrder } = useTabOrder();
 
   useFcmHandler();
 

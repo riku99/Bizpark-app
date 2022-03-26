@@ -7,6 +7,8 @@ import { Politics } from './Politics';
 import { Economy } from './Economy';
 import { Technology } from './Technology';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { HeaderRight } from './HeaderRight';
+import { Text } from 'native-base';
 
 type Props = {} & RootNavigationScreenProp<'Tab'>;
 
@@ -15,9 +17,11 @@ const TopTab = createMaterialTopTabNavigator();
 export const NewsScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
-      headerShown: false,
+      headerShadowVisible: false,
+      headerTitle: '',
+      headerRight: () => <HeaderRight />,
     });
-  }, []);
+  }, [navigation]);
 
   const { defaultScreenStyle, style, sceneContainerStyle } =
     useTopTabBarStyle();
@@ -35,10 +39,7 @@ export const NewsScreen = ({ navigation }: Props) => {
           },
           lazy: true,
         }}
-        style={{
-          marginTop: top,
-          ...style,
-        }}
+        style={style}
         sceneContainerStyle={sceneContainerStyle}
       >
         <TopTab.Screen name="ビジネス" component={Business} />
