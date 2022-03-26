@@ -20,7 +20,7 @@ const initialNewsTabOrder: NewsTabOrder = [
     label: '金融・経済',
   },
   {
-    key: ' Technology',
+    key: 'Technology',
     label: 'テクノロジー',
   },
 ];
@@ -30,7 +30,8 @@ export const newsTabOrderStorageId = 'newsTabOrder';
 const storageData = storage.getString(newsTabOrderStorageId);
 
 export const newsTabOrderVar = makeVar(
-  (JSON.parse(storageData) as NewsTabOrder) ?? initialNewsTabOrder
+  (storageData && (JSON.parse(storageData) as NewsTabOrder)) ||
+    initialNewsTabOrder
 );
 
 export const changedNewsTabOrderVar = makeVar(false);
