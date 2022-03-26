@@ -22,6 +22,8 @@ PODS:
     - ExpoModulesCore
   - EXHaptics (11.0.3):
     - ExpoModulesCore
+  - EXInAppPurchases (12.1.1):
+    - ExpoModulesCore
   - EXKeepAwake (10.0.1):
     - ExpoModulesCore
   - EXLinearGradient (10.0.3):
@@ -501,6 +503,7 @@ DEPENDENCIES:
   - EXFileSystem (from `../node_modules/expo-file-system/ios`)
   - EXFont (from `../node_modules/expo-font/ios`)
   - EXHaptics (from `../node_modules/expo-haptics/ios`)
+  - EXInAppPurchases (from `../node_modules/expo-in-app-purchases/ios`)
   - EXKeepAwake (from `../node_modules/expo-keep-awake/ios`)
   - EXLinearGradient (from `../node_modules/expo-linear-gradient/ios`)
   - Expo (from `../node_modules/expo/ios`)
@@ -606,6 +609,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/expo-font/ios"
   EXHaptics:
     :path: "../node_modules/expo-haptics/ios"
+  EXInAppPurchases:
+    :path: "../node_modules/expo-in-app-purchases/ios"
   EXKeepAwake:
     :path: "../node_modules/expo-keep-awake/ios"
   EXLinearGradient:
@@ -737,6 +742,7 @@ SPEC CHECKSUMS:
   EXFileSystem: 99aac7962c11c680681819dd9cbca24e20e5b1e7
   EXFont: 1fb13af43dc517c01c0ff21a6e32f9f9bf2ea602
   EXHaptics: f52df335f17192e440d9639c971ebcbb3fb91dec
+  EXInAppPurchases: 313fcaadb87dc03797667a7185401271597e4186
   EXKeepAwake: b571c2ad8323b2fced6e907766e2549f75119471
   EXLinearGradient: 4d727eacb53d19ef25b02dd810e0199b453489ce
   Expo: f3357f1f9796d0b4d396d0be84c49933671db4ad

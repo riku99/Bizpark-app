@@ -5675,6 +5675,11 @@ expo-haptics@~11.0.3:
   dependencies:
     expo-modules-core "~0.4.4"
 
+expo-in-app-purchases@^12.1.1:
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/expo-in-app-purchases/-/expo-in-app-purchases-12.1.1.tgz#33c0ae44cd91710b0126f33b58cc0f30012adef1"
+  integrity sha512-3uFtZ3gPKlKbBKOE2zpufwY5P3w5HRpmvelxz88wZPUxYpeEprU8vxxVEsu6vYmBvk16XtMFC6A3h+OLTNT2tQ==
+
 expo-keep-awake@~10.0.0:
   version "10.0.1"
   resolved "https://registry.yarnpkg.com/expo-keep-awake/-/expo-keep-awake-10.0.1.tgz#9f1176216c41eee20843c8232acfdca2bc32d334"

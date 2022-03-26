@@ -8,6 +8,7 @@ import {
 import { useToast } from 'react-native-toast-notifications';
 import { getGraphQLErrorCode } from 'src/utils';
 import * as Haptics from 'expo-haptics';
+import { useIsPlusPlan } from 'src/hooks/me';
 
 type Props = {
   userId: string;
@@ -20,6 +21,8 @@ export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
 
   const [followMutation] = useFollowMutation();
   const [unfollowMutation] = useUnfollowMutation();
+
+  const isPlusPlan = useIsPlusPlan();
 
   const [isFollowing, setIsFollowing] = useState<boolean>(follow);
   useEffect(() => {

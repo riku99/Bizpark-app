@@ -211,6 +211,7 @@ export type Me = {
   linkedin?: Maybe<Scalars['String']>;
   loggedIn: Scalars['Boolean'];
   name: Scalars['String'];
+  plan: Plan;
   twitter?: Maybe<Scalars['String']>;
 };
 
@@ -619,6 +620,11 @@ export type Pick = {
   id: Scalars['ID'];
   thoughtId: Scalars['ID'];
 };
+
+export enum Plan {
+  Normal = 'Normal',
+  Plus = 'Plus'
+}
 
 export enum PushNotificationDataKind {
   NewsTalkRoomMessage = 'NEWS_TALK_ROOM_MESSAGE',
@@ -1311,6 +1317,11 @@ export type GetMyNameQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type GetMyNameQuery = { __typename?: 'Query', me: { __typename?: 'Me', name: string } };
 
+export type GetMyPlanQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetMyPlanQuery = { __typename?: 'Query', me: { __typename?: 'Me', plan: Plan } };
+
 export type GetNewsTalkRoomQueryVariables = Exact<{
   id: Scalars['Int'];
 }>;
@@ -1432,7 +1443,7 @@ export type InitialDataQuery = { __typename?: 'Query', me: { __typename?: 'Me', 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined, loggedIn: boolean } };
+export type MeQuery = { __typename?: 'Query', me: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined, loggedIn: boolean, plan: Plan } };
 
 export type NewsQueryVariables = Exact<{
   genre: NewsGenre;
@@ -3278,6 +3289,40 @@ export function useGetMyNameLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<
 export type GetMyNameQueryHookResult = ReturnType<typeof useGetMyNameQuery>;
 export type GetMyNameLazyQueryHookResult = ReturnType<typeof useGetMyNameLazyQuery>;
 export type GetMyNameQueryResult = Apollo.QueryResult<GetMyNameQuery, GetMyNameQueryVariables>;
+export const GetMyPlanDocument = gql`
+    query GetMyPlan {
+  me {
+    plan
+  }
+}
+    `;
+
+/**
+ * __useGetMyPlanQuery__
+ *
+ * To run a query within a React component, call `useGetMyPlanQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMyPlanQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMyPlanQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMyPlanQuery(baseOptions?: Apollo.QueryHookOptions<GetMyPlanQuery, GetMyPlanQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetMyPlanQuery, GetMyPlanQueryVariables>(GetMyPlanDocument, options);
+      }
+export function useGetMyPlanLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetMyPlanQuery, GetMyPlanQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetMyPlanQuery, GetMyPlanQueryVariables>(GetMyPlanDocument, options);
+        }
+export type GetMyPlanQueryHookResult = ReturnType<typeof useGetMyPlanQuery>;
+export type GetMyPlanLazyQueryHookResult = ReturnType<typeof useGetMyPlanLazyQuery>;
+export type GetMyPlanQueryResult = Apollo.QueryResult<GetMyPlanQuery, GetMyPlanQueryVariables>;
 export const GetNewsTalkRoomDocument = gql`
     query GetNewsTalkRoom($id: Int!) {
   newsTalkRoom(id: $id) {
@@ -4020,6 +4065,7 @@ export const MeDocument = gql`
     instagram
     linkedin
     loggedIn
+    plan
   }
 }
     `;

@@ -2,6 +2,8 @@ import {
   useGetMyIdQuery,
   useGetMyNameQuery,
   useGetMyImageUrlQuery,
+  useGetMyPlanQuery,
+  Plan,
 } from 'src/generated/graphql';
 import { useCallback, useEffect } from 'react';
 import { useReactiveVar } from '@apollo/client';
@@ -87,4 +89,12 @@ export const useIsMe = () => {
   return {
     isMe,
   };
+};
+
+export const useIsPlusPlan = () => {
+  const { data } = useGetMyPlanQuery({
+    fetchPolicy: 'cache-only',
+  });
+
+  return data?.me && data.me.plan === Plan.Plus;
 };
