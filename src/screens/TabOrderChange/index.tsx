@@ -5,8 +5,7 @@ import DraggableFlatList, {
   ScaleDecorator,
   RenderItemParams,
 } from 'react-native-draggable-flatlist';
-import { useReactiveVar } from '@apollo/client';
-import { tabOrderVar, changedTabOrderVar } from 'src/stores/tabOrder';
+import { useTabOrder } from 'src/hooks/tabOrder';
 
 type Props = RootNavigationScreenProp<'TabOrderChange'>;
 
@@ -17,7 +16,8 @@ export const TabOrderChangeScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
-  const tabOrder = useReactiveVar(tabOrderVar);
+  const { tabOrder, setTabOrder, setChangedTabOrder } = useTabOrder();
+
   const initialData = tabOrder.map(({ key, label }) => {
     return {
       key,
@@ -54,8 +54,8 @@ export const TabOrderChangeScreen = ({ navigation }: Props) => {
         renderItem={renderItem}
         onDragEnd={({ data: _data }) => {
           setData(_data);
-          tabOrderVar(_data);
-          changedTabOrderVar(true);
+          setTabOrder(_data);
+          setChangedTabOrder(true);
         }}
       />
     </Box>
