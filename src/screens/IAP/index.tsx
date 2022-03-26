@@ -23,6 +23,13 @@ const possibleList = [
   '参加できるトークの数が無制限',
 ];
 
+const alertText = [
+  'アップグレード日から1ヶ月後に自動更新されます。',
+  '課金の継続はお客様自身で管理することができます。',
+  '定期購入のキャンセルはお使いの端末の設定から行ってください。',
+  '内容は変更される可能性がございます。',
+];
+
 export const IAPScreen = ({ navigation }: Props) => {
   const { colors } = useTheme();
 
@@ -49,6 +56,7 @@ export const IAPScreen = ({ navigation }: Props) => {
         contentContainerStyle={{
           alignItems: 'center',
           paddingHorizontal: 16,
+          paddingBottom: 100,
         }}
       >
         <LottieView
@@ -100,6 +108,25 @@ export const IAPScreen = ({ navigation }: Props) => {
                     fontWeight="bold"
                   >
                     {l}
+                  </Text>
+                </HStack>
+              );
+            })}
+          </VStack>
+        </Box>
+
+        <Box w="100%" mt="8">
+          <Text color="textBlack" fontWeight="bold">
+            注意事項
+          </Text>
+
+          <VStack px="2" space="2" mt="2">
+            {alertText.map((text, idx) => {
+              return (
+                <HStack key={idx}>
+                  <Text color="textBlack">・</Text>
+                  <Text color="textBlack" fontSize="12">
+                    {text}
                   </Text>
                 </HStack>
               );
