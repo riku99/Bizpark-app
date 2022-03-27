@@ -13,7 +13,7 @@ import LottieView from 'lottie-react-native';
 import { Entypo } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
-import * as InAppPurchases from 'expo-in-app-purchases';
+import { useIap } from 'src/hooks/iap';
 
 const Rocket = require('../../assets/lottie/rocket.json');
 
@@ -49,6 +49,14 @@ export const IAPScreen = ({ navigation }: Props) => {
       headerTintColor: 'black',
     });
   }, [navigation]);
+
+  const { getProducts } = useIap();
+
+  useEffect(() => {
+    (async () => {
+      const products = await getProducts();
+    })();
+  }, [getProducts]);
 
   return (
     <>
