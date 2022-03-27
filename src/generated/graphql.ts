@@ -131,6 +131,11 @@ export type Deleted = {
   message?: Maybe<Scalars['String']>;
 };
 
+export enum DevicePlatform {
+  Android = 'android',
+  Ios = 'ios'
+}
+
 export type DeviceToken = {
   __typename?: 'DeviceToken';
   createdAt: Scalars['String'];
@@ -252,6 +257,7 @@ export type Mutation = {
   updateMe: Me;
   uploadImage: SubImage;
   uploadThoughtImages: UploadThoughtImagesResponse;
+  verifyIapReceipt: Me;
 };
 
 
@@ -417,6 +423,11 @@ export type MutationUploadImageArgs = {
 
 export type MutationUploadThoughtImagesArgs = {
   files: Array<Scalars['Upload']>;
+};
+
+
+export type MutationVerifyIapReceiptArgs = {
+  input: VerifyIapReceiptInput;
 };
 
 export type News = {
@@ -996,6 +1007,12 @@ export type UserEdge = {
 
 export type UserResult = Deleted | IsBlocked | User;
 
+export type VerifyIapReceiptInput = {
+  platform: Scalars['String'];
+  productId: Scalars['String'];
+  receipt: Scalars['String'];
+};
+
 export type BlockedByUserPartsFragment = { __typename?: 'BlockedByUser', id: string, name: string, imageUrl?: string | null | undefined };
 
 export type NewsFieldsFragment = { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined, picked: boolean };
@@ -1263,6 +1280,13 @@ export type UploadThoughtImagesMutationVariables = Exact<{
 
 
 export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoughtImages: { __typename?: 'UploadThoughtImagesResponse', images: Array<{ __typename?: 'SubImage', url: string, width?: number | null | undefined, height?: number | null | undefined }> } };
+
+export type VerifyIapReceiptMutationVariables = Exact<{
+  input: VerifyIapReceiptInput;
+}>;
+
+
+export type VerifyIapReceiptMutation = { __typename?: 'Mutation', verifyIapReceipt: { __typename?: 'Me', plan: Plan } };
 
 export type SeeNotificationMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2941,6 +2965,39 @@ export function useUploadThoughtImagesMutation(baseOptions?: Apollo.MutationHook
 export type UploadThoughtImagesMutationHookResult = ReturnType<typeof useUploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationResult = Apollo.MutationResult<UploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
+export const VerifyIapReceiptDocument = gql`
+    mutation VerifyIapReceipt($input: VerifyIapReceiptInput!) {
+  verifyIapReceipt(input: $input) {
+    plan
+  }
+}
+    `;
+export type VerifyIapReceiptMutationFn = Apollo.MutationFunction<VerifyIapReceiptMutation, VerifyIapReceiptMutationVariables>;
+
+/**
+ * __useVerifyIapReceiptMutation__
+ *
+ * To run a mutation, you first call `useVerifyIapReceiptMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyIapReceiptMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyIapReceiptMutation, { data, loading, error }] = useVerifyIapReceiptMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useVerifyIapReceiptMutation(baseOptions?: Apollo.MutationHookOptions<VerifyIapReceiptMutation, VerifyIapReceiptMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VerifyIapReceiptMutation, VerifyIapReceiptMutationVariables>(VerifyIapReceiptDocument, options);
+      }
+export type VerifyIapReceiptMutationHookResult = ReturnType<typeof useVerifyIapReceiptMutation>;
+export type VerifyIapReceiptMutationResult = Apollo.MutationResult<VerifyIapReceiptMutation>;
+export type VerifyIapReceiptMutationOptions = Apollo.BaseMutationOptions<VerifyIapReceiptMutation, VerifyIapReceiptMutationVariables>;
 export const SeeNotificationDocument = gql`
     mutation SeeNotification($id: Int!) {
   seeNotification(id: $id) {

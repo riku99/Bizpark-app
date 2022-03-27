@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useEffect } from 'react';
+import React, { useLayoutEffect, useEffect, useState } from 'react';
 import {
   Box,
   ScrollView,
@@ -14,6 +14,9 @@ import { Entypo } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
 import { useIap } from 'src/hooks/iap';
+import * as InAppPurchases from 'expo-in-app-purchases';
+import Config from 'react-native-config';
+import { MotiView } from 'moti';
 
 const Rocket = require('../../assets/lottie/rocket.json');
 
@@ -34,7 +37,6 @@ const alertText = [
 
 export const IAPScreen = ({ navigation }: Props) => {
   const { colors } = useTheme();
-
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
   useLayoutEffect(() => {
@@ -52,11 +54,22 @@ export const IAPScreen = ({ navigation }: Props) => {
 
   const { getProducts } = useIap();
 
+  const [products, setProducts] = useState<InAppPurchases.IAPItemDetails[]>();
+
+  const month =
+    products && products[0].priceCurrencyCode === 'USD' ? 'Month' : '月';
+
   useEffect(() => {
     (async () => {
-      const products = await getProducts();
+      const _products = await getProducts();
+      setProducts(_products);
+      console.log(_products);
     })();
   }, [getProducts]);
+
+  const onPurchaceButtonPress = async () => {
+    await InAppPurchases.purchaseItemAsync(Config.IAP_PLUS_PLAN);
+  };
 
   return (
     <>
@@ -134,29 +147,43 @@ export const IAPScreen = ({ navigation }: Props) => {
         </Box>
       </ScrollView>
 
-      <Box
-        bg="white"
-        h="16"
-        position="absolute"
-        bottom="0"
-        w="100%"
-        alignItems="center"
-        justifyContent="center"
-        style={{
-          bottom: safeAreaBottom,
-        }}
-      >
-        <Button
-          w="95%"
-          _text={{
-            fontSize: 18,
+      {products?.length && (
+        <MotiView
+          from={{
+            translateY: 180,
           }}
-          borderRadius="lg"
-          h="12"
+          animate={{ translateY: 0 }}
+          transition={{
+            type: 'timing',
+            duration: 500,
+          }}
         >
-          ￥400/月でアップグレード
-        </Button>
-      </Box>
+          <Box
+            bg="white"
+            h="16"
+            position="absolute"
+            bottom="0"
+            w="100%"
+            alignItems="center"
+            justifyContent="center"
+            style={{
+              bottom: safeAreaBottom,
+            }}
+          >
+            <Button
+              w="95%"
+              _text={{
+                fontSize: 18,
+              }}
+              borderRadius="lg"
+              h="12"
+              onPress={onPurchaceButtonPress}
+            >
+              {`${products[0].price} / ${month}でアップグレード`}
+            </Button>
+          </Box>
+        </MotiView>
+      )}
     </>
   );
 };
