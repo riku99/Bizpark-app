@@ -1,4 +1,4 @@
-import React, { useLayoutEffect } from 'react';
+import React, { useLayoutEffect, useEffect } from 'react';
 import {
   Box,
   ScrollView,
@@ -13,6 +13,7 @@ import LottieView from 'lottie-react-native';
 import { Entypo } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
+import * as InAppPurchases from 'expo-in-app-purchases';
 
 const Rocket = require('../../assets/lottie/rocket.json');
 

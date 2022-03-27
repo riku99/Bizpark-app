@@ -6,6 +6,7 @@ import Config from 'react-native-config';
 import { ApolloProvider } from 'src/providers/ApolloProvider';
 import { Root } from 'src/Root';
 import 'react-native-reanimated';
+import { IAPProvider } from 'src/providers/IAPProvider';
 
 export default function App() {
   console.log('🌟 ENV is ' + Config.ENV);
@@ -14,7 +15,9 @@ export default function App() {
       <NavigationProvider>
         <ToastProvider>
           <ApolloProvider>
-            <Root />
+            <IAPProvider>
+              <Root />
+            </IAPProvider>
           </ApolloProvider>
         </ToastProvider>
       </NavigationProvider>
