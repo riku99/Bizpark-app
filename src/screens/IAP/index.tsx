@@ -12,6 +12,7 @@ import { RootNavigationScreenProp } from 'src/types';
 import LottieView from 'lottie-react-native';
 import { Entypo } from '@expo/vector-icons';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { StyleSheet } from 'react-native';
 
 const Rocket = require('../../assets/lottie/rocket.json');
 
@@ -53,20 +54,9 @@ export const IAPScreen = ({ navigation }: Props) => {
       <ScrollView
         flex="1"
         bg="white"
-        contentContainerStyle={{
-          alignItems: 'center',
-          paddingHorizontal: 16,
-          paddingBottom: 100,
-        }}
+        contentContainerStyle={styles.contentContainer}
       >
-        <LottieView
-          source={Rocket}
-          autoPlay
-          loop
-          style={{
-            width: 120,
-          }}
-        />
+        <LottieView source={Rocket} autoPlay loop style={styles.rocket} />
         <Text color="textBlack" fontWeight="bold" mt="4" fontSize="21">
           {'プラスプランにアップグレードして\nより充実させよう'}
         </Text>
@@ -134,22 +124,41 @@ export const IAPScreen = ({ navigation }: Props) => {
           </VStack>
         </Box>
       </ScrollView>
-      <Button
-        w="95%"
-        _text={{
-          fontSize: 18,
-        }}
+
+      <Box
+        bg="white"
+        h="16"
         position="absolute"
         bottom="0"
-        borderRadius="lg"
-        alignSelf="center"
+        w="100%"
+        alignItems="center"
+        justifyContent="center"
         style={{
-          bottom: safeAreaBottom + 10,
+          bottom: safeAreaBottom,
         }}
-        h="12"
       >
-        ￥400/月でアップグレード
-      </Button>
+        <Button
+          w="95%"
+          _text={{
+            fontSize: 18,
+          }}
+          borderRadius="lg"
+          h="12"
+        >
+          ￥400/月でアップグレード
+        </Button>
+      </Box>
     </>
   );
 };
+
+const styles = StyleSheet.create({
+  contentContainer: {
+    alignItems: 'center',
+    paddingHorizontal: 16,
+    paddingBottom: 100,
+  },
+  rocket: {
+    width: 120,
+  },
+});
