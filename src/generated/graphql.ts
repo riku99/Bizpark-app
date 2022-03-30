@@ -1286,7 +1286,7 @@ export type VerifyIapReceiptMutationVariables = Exact<{
 }>;
 
 
-export type VerifyIapReceiptMutation = { __typename?: 'Mutation', verifyIapReceipt: { __typename?: 'Me', plan: Plan } };
+export type VerifyIapReceiptMutation = { __typename?: 'Mutation', verifyIapReceipt: { __typename?: 'Me', id: string, plan: Plan } };
 
 export type SeeNotificationMutationVariables = Exact<{
   id: Scalars['Int'];
@@ -2968,6 +2968,7 @@ export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<Uplo
 export const VerifyIapReceiptDocument = gql`
     mutation VerifyIapReceipt($input: VerifyIapReceiptInput!) {
   verifyIapReceipt(input: $input) {
+    id
     plan
   }
 }

@@ -17,6 +17,7 @@ import { useIap } from 'src/hooks/iap';
 import * as InAppPurchases from 'expo-in-app-purchases';
 import Config from 'react-native-config';
 import { MotiView } from 'moti';
+import { useSpinner } from 'src/hooks/spinner';
 
 const Rocket = require('../../assets/lottie/rocket.json');
 
@@ -67,7 +68,10 @@ export const IAPScreen = ({ navigation }: Props) => {
     })();
   }, [getProducts]);
 
+  const { setSpinnerVisible } = useSpinner();
+
   const onPurchaceButtonPress = async () => {
+    setSpinnerVisible(true);
     await InAppPurchases.purchaseItemAsync(Config.IAP_PLUS_PLAN);
   };
 

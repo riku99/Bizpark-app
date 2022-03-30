@@ -26,6 +26,8 @@ export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
   const isPlusPlan = useIsPlusPlan();
   const [isFollowing, setIsFollowing] = useState<boolean>(follow);
 
+  console.log('isPlusPLan is ' + isPlusPlan);
+
   useEffect(() => {
     setIsFollowing(follow);
   }, [follow]);

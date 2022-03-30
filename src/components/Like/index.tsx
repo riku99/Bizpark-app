@@ -16,18 +16,20 @@ export const Like = ({ liked, lottieStyle, ...props }: Props) => {
   useEffect(() => {
     if (isInitialRender.current) {
       if (liked) {
-        likeRef.current?.play(77, 77);
+        likeRef.current?.play(1000, 1000);
       } else {
         likeRef.current?.play(0, 0);
       }
-      isInitialRender.current = false;
+      if (liked != undefined) {
+        isInitialRender.current = false;
+      }
     } else {
       if (liked) {
         // いいねアニメーション
         likeRef.current?.play();
       } else {
         // 外すアニメーション
-        likeRef.current?.play(40, 0);
+        likeRef.current?.play(0, 0);
       }
     }
   }, [liked]);

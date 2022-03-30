@@ -96,5 +96,7 @@ export const useIsPlusPlan = () => {
     fetchPolicy: 'cache-only',
   });
 
+  console.log(data.me);
+
   return data?.me && data.me.plan === Plan.Plus;
 };
