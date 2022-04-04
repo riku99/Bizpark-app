@@ -127,13 +127,6 @@ export const IAPProvider = ({ children }: Props) => {
               }
             })
           );
-
-          // results.forEach(async (purhace) => {
-          //   const verificationResult = await processNewPurchace(purhace);
-          //   if (verificationResult) {
-          //     await InAppPurchases.finishTransactionAsync(purhace, false);
-          //   }
-          // });
         } else if (
           responseCode === InAppPurchases.IAPResponseCode.USER_CANCELED
         ) {

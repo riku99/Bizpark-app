@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useEffect, useState } from 'react';
+import React, { useLayoutEffect, useEffect, useState, useRef } from 'react';
 import {
   Box,
   ScrollView,
@@ -18,6 +18,8 @@ import * as InAppPurchases from 'expo-in-app-purchases';
 import Config from 'react-native-config';
 import { MotiView } from 'moti';
 import { useSpinner } from 'src/hooks/spinner';
+import { useIsPlusPlan } from 'src/hooks/me';
+import { Alert } from 'react-native';
 
 const Rocket = require('../../assets/lottie/rocket.json');
 
@@ -39,6 +41,8 @@ const alertText = [
 export const IAPScreen = ({ navigation }: Props) => {
   const { colors } = useTheme();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
+  const isInitialRender = useRef(true);
+  const isPlusPlan = useIsPlusPlan();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -53,6 +57,34 @@ export const IAPScreen = ({ navigation }: Props) => {
     });
   }, [navigation]);
 
+  useEffect(() => {
+    isInitialRender.current = false;
+  }, []);
+
+  useEffect(() => {
+    if (isPlusPlan) {
+      if (isInitialRender.current) {
+        Alert.alert('既にプラスプランです', '', [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.goBack();
+            },
+          },
+        ]);
+      } else {
+        Alert.alert('プラスプランに切り替わりました', '', [
+          {
+            text: 'OK',
+            onPress: () => {
+              navigation.goBack();
+            },
+          },
+        ]);
+      }
+    }
+  }, [isPlusPlan]);
+
   const { getProducts } = useIap();
 
   const [products, setProducts] = useState<InAppPurchases.IAPItemDetails[]>();
@@ -64,7 +96,6 @@ export const IAPScreen = ({ navigation }: Props) => {
     (async () => {
       const _products = await getProducts();
       setProducts(_products);
-      console.log(_products);
     })();
   }, [getProducts]);
 

@@ -92,11 +92,7 @@ export const useIsMe = () => {
 };
 
 export const useIsPlusPlan = () => {
-  const { data } = useGetMyPlanQuery({
-    fetchPolicy: 'cache-only',
-  });
-
-  console.log(data.me);
+  const { data } = useGetMyPlanQuery();
 
   return data?.me && data.me.plan === Plan.Plus;
 };
