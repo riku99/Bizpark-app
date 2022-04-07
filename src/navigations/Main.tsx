@@ -32,6 +32,7 @@ import { NotificationsScreen } from 'src/screens/Notifications';
 import { TabOrderChangeScreen } from 'src/screens/TabOrderChange';
 import { NewsTabOrderChangeScreen } from 'src/screens/NewsTabOrderChange';
 import { IAPScreen } from 'src/screens/IAP';
+import { useReVerifyIapReceipt } from 'src/hooks/iap';
 
 export type MainStackParamList = {
   Tab: undefined;
@@ -112,6 +113,7 @@ export const MainStack = React.memo(() => {
   useNewsTalkRoomsWithSusbscription();
   useOneOnOneTalkRoomsWithSubscription();
   useDeviceToken();
+  useReVerifyIapReceipt();
 
   // 通知許可はワークスルーで表示するようにする
   useEffect(() => {

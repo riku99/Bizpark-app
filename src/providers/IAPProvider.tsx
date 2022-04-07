@@ -1,8 +1,8 @@
 import React, { useCallback, useEffect, createContext, useState } from 'react';
-import { Platform } from 'react-native';
+import { Platform, Alert } from 'react-native';
 import * as InAppPurchases from 'expo-in-app-purchases';
 import Config from 'react-native-config';
-import { storage, iapReceiptStorageId } from 'src/storage/mmkv';
+import { storage, iapReceiptStorageKey } from 'src/storage/mmkv';
 import { useVerifyIapReceiptMutation } from 'src/generated/graphql';
 import { useSpinner } from 'src/hooks/spinner';
 
@@ -29,7 +29,6 @@ export const IAPProvider = ({ children }: Props) => {
 
   const processNewPurchace = useCallback(
     async (purchace: InAppPurchases.InAppPurchase) => {
-      console.log('processNewPurchace👀');
       const { productId } = purchace;
 
       let body: {
@@ -46,7 +45,7 @@ export const IAPProvider = ({ children }: Props) => {
         body.receipt = purchace.transactionReceipt;
 
         // サーバーでの検証処理中にエラーやユーザーがアプリキルして正常に終わらなかった場合、次回起動時に再検証行えるようにストレージに保存
-        storage.set(iapReceiptStorageId, purchace.transactionReceipt);
+        storage.set(iapReceiptStorageKey, JSON.stringify(body));
       }
 
       if (Platform.OS === 'android') {
@@ -54,12 +53,12 @@ export const IAPProvider = ({ children }: Props) => {
 
       if (!body.receipt) {
         console.log('レシートが存在しません');
+        Alert.alert('決済検証時にエラーが発生しました');
         return;
       }
 
       try {
         // 検証リクエスト
-        console.log('レシート検証');
         await verifyIapReceiptMutation({
           variables: {
             input: {
@@ -68,16 +67,15 @@ export const IAPProvider = ({ children }: Props) => {
               productId: body.productId,
             },
           },
-          onCompleted: (data) => {
-            console.log(data.verifyIapReceipt);
-            console.log('レシート検証完了 in onCompleted');
+          onCompleted: () => {
+            console.log('レシート検証完了');
+            storage.delete(iapReceiptStorageKey);
           },
           onError: () => {
             console.log('レシート検証失敗');
           },
         });
 
-        console.log('完了💓');
         return true;
       } catch (e) {
         console.log(e);
@@ -112,7 +110,6 @@ export const IAPProvider = ({ children }: Props) => {
       // 購入処理終了後のコールバック。IAPResponseCode.OKの場合は「購入手続きが完了しました」ダイアログを確認してから実行される
       InAppPurchases.setPurchaseListener(async ({ responseCode, results }) => {
         if (responseCode === InAppPurchases.IAPResponseCode.OK) {
-          console.log('購入処理完了フロー');
           if (!results) {
             setSpinnerVisible(false);
             return;
@@ -137,7 +134,6 @@ export const IAPProvider = ({ children }: Props) => {
           console.log('購入中に何らかのエラーが発生しました');
         }
 
-        console.log('setSpinnerVisible🌙');
         setSpinnerVisible(false);
         setProcessing(false);
       });
