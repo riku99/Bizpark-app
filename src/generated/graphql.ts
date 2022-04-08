@@ -750,6 +750,14 @@ export type QueryUserThoughtsArgs = {
   userId: Scalars['ID'];
 };
 
+export enum ReceiptVerificationError {
+  Expiration = 'Expiration',
+  InValidRequestToAppleEndpoint = 'InValidRequestToAppleEndpoint',
+  InValidStatus = 'InValidStatus',
+  LatestReceiptNotFound = 'LatestReceiptNotFound',
+  ReceiptNotFound = 'ReceiptNotFound'
+}
+
 export type RequestNewsTalkRoomMemberDeletionInput = {
   memberId: Scalars['Int'];
   talkRoomId: Scalars['Int'];

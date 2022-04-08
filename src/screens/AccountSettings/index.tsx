@@ -54,7 +54,8 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
           onCompleted: () => {
             console.log('検証完了');
           },
-          onError: () => {
+          onError: (e) => {
+            console.log(e);
             console.log('検証失敗');
           },
         });

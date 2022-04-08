@@ -4,22 +4,18 @@ import {
   ApolloProvider as ApolloProviderBase,
   from,
   split,
-  NormalizedCacheObject,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useToast } from 'react-native-toast-notifications';
 import { CustomErrorResponseCode } from 'src/generated/graphql';
 import auth from '@react-native-firebase/auth';
 import { Alert } from 'react-native';
 import { relayStylePagination } from '@apollo/client/utilities';
 import { createUploadLink } from 'apollo-upload-client';
-import { useCustomToast } from 'src/hooks/toast';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { persistCache, AsyncStorageWrapper } from 'apollo3-cache-persist';
 import { useLoggedIn } from 'src/hooks/me';
 import Config from 'react-native-config';
 
