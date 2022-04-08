@@ -13,6 +13,8 @@ export const useReVerifyIapReceipt = () => {
     (async () => {
       const hasIapData = storage.contains(iapReceiptStorageKey);
 
+      console.log(hasIapData);
+
       if (hasIapData) {
         const iapData = JSON.parse(storage.getString(iapReceiptStorageKey));
 

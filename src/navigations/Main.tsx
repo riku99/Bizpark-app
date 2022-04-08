@@ -113,7 +113,7 @@ export const MainStack = React.memo(() => {
   useNewsTalkRoomsWithSusbscription();
   useOneOnOneTalkRoomsWithSubscription();
   useDeviceToken();
-  useReVerifyIapReceipt();
+  // useReVerifyIapReceipt();
 
   // 通知許可はワークスルーで表示するようにする
   useEffect(() => {

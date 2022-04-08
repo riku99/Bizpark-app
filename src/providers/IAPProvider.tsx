@@ -72,6 +72,7 @@ export const IAPProvider = ({ children }: Props) => {
             storage.delete(iapReceiptStorageKey);
           },
           onError: () => {
+            console.log('here');
             console.log('レシート検証失敗');
           },
         });
@@ -118,10 +119,8 @@ export const IAPProvider = ({ children }: Props) => {
           // 購入成功時の処理。サーバー側での検証など。resultsはiOSの場合購入した1つのみが含まれる
           await Promise.all(
             results.map(async (purhace) => {
-              const verificationResult = await processNewPurchace(purhace);
-              if (verificationResult) {
-                await InAppPurchases.finishTransactionAsync(purhace, false);
-              }
+              await processNewPurchace(purhace);
+              await InAppPurchases.finishTransactionAsync(purhace, false);
             })
           );
         } else if (

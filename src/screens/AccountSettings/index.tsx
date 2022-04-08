@@ -6,15 +6,21 @@ import { RightIcon } from 'src/components/RightIcon';
 import { Alert } from 'react-native';
 import { useSignOut } from 'src/hooks/auth';
 import { useLoggedIn } from 'src/hooks/me';
-import { useDeleteAccountMutation } from 'src/generated/graphql';
+import {
+  useDeleteAccountMutation,
+  useVerifyIapReceiptMutation,
+} from 'src/generated/graphql';
 import { useApolloClient } from '@apollo/client';
 import Spinner from 'react-native-loading-spinner-overlay';
+import * as InAppPurchases from 'expo-in-app-purchases';
+import { Platform } from 'react-native';
 
 type Props = RootNavigationScreenProp<'AccountSettings'>;
 
 export const AccountSettingsScreen = ({ navigation }: Props) => {
   const { setLoggedIn } = useLoggedIn();
   const [deleteAccountMutation] = useDeleteAccountMutation();
+  const [verifyReceiptMutation] = useVerifyIapReceiptMutation();
   const client = useApolloClient();
   const { signOut } = useSignOut();
 
@@ -27,6 +33,36 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
   const [spinnerVisible, setSpinnerVisible] = useState(false);
 
   const list = [
+    {
+      title: '購入内容の復元',
+      onPress: async () => {
+        setSpinnerVisible(true);
+        const { results } = await InAppPurchases.getPurchaseHistoryAsync();
+        if (!results.length) {
+          Alert.alert('', '購入内容が存在しません');
+          return;
+        }
+        const latestResult = results[0];
+        await verifyReceiptMutation({
+          variables: {
+            input: {
+              receipt: latestResult.transactionReceipt,
+              platform: Platform.OS,
+              productId: latestResult.productId,
+            },
+          },
+          onCompleted: () => {
+            console.log('検証完了');
+          },
+          onError: () => {
+            console.log('検証失敗');
+          },
+        });
+        await InAppPurchases.finishTransactionAsync(latestResult, false);
+        setSpinnerVisible(false);
+        Alert.alert('', '購入内容を復元しました');
+      },
+    },
     {
       title: 'ログアウト',
       onPress: () => {
@@ -48,7 +84,7 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
     },
     {
       title: 'アカウント削除',
-      titleStyle: { 
+      titleStyle: {
         color: 'red',
       },
       onPress: () => {

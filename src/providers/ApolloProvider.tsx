@@ -178,8 +178,6 @@ const cache = new InMemoryCache({
 
 export const ApolloProvider = ({ children }: Props) => {
   const toast = useToast();
-  const { someErrorToast } = useCustomToast();
-
   const { setLoggedIn } = useLoggedIn();
 
   const errorLink = onError((error) => {
@@ -188,7 +186,6 @@ export const ApolloProvider = ({ children }: Props) => {
       const code = firstError.extensions.code;
 
       console.log('This log is output from errorLink');
-      console.error(code);
       console.log(firstError.message);
 
       if (error.networkError) {
@@ -197,7 +194,8 @@ export const ApolloProvider = ({ children }: Props) => {
       }
 
       if (code === 'INTERNAL_SERVER_ERROR') {
-        someErrorToast();
+        console.log('some error');
+        toast.show('何らかのエラーが発生しました', { type: 'danger' });
         return;
       }
 
@@ -224,23 +222,10 @@ export const ApolloProvider = ({ children }: Props) => {
     }
   });
 
-  const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>();
-
-  useEffect(() => {
-    (async () => {
-      // await persistCache({
-      //   cache,
-      //   storage: new AsyncStorageWrapper(AsyncStorage),
-      // });
-
-      setClient(
-        new ApolloClient({
-          link: from([errorLink, authLink, splitLink]),
-          cache,
-        })
-      );
-    })();
-  }, []);
+  const client = new ApolloClient({
+    link: from([errorLink, authLink, splitLink]),
+    cache,
+  });
 
   if (!client) {
     return null;
