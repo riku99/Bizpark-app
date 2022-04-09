@@ -3,8 +3,10 @@ fragment UserParts on User {
   name
   bio
   imageUrl
-  facebook
-  twitter
-  linkedin
-  instagram
+  snsAccounts {
+    instagram
+    twitter
+    linkedin
+    facebook
+  }
 }
