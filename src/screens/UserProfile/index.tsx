@@ -36,8 +36,6 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     nextFetchPolicy: 'cache-first',
   });
 
-  console.log(data?.userResult);
-
   const myId = useMyId();
   const isMe = id === myId;
 

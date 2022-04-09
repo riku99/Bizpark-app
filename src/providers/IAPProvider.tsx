@@ -68,7 +68,6 @@ export const IAPProvider = ({ children }: Props) => {
             },
           },
           onCompleted: (data) => {
-            console.log(data.verifyIapReceipt);
             console.log('レシート検証完了');
             storage.delete(iapReceiptStorageKey);
           },
