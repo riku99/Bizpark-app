@@ -1,4 +1,4 @@
-import React, { useLayoutEffect, useEffect, useState, useRef } from 'react';
+import React, { useLayoutEffect, useEffect, useState } from 'react';
 import {
   Box,
   ScrollView,
@@ -41,8 +41,8 @@ const alertText = [
 export const IAPScreen = ({ navigation }: Props) => {
   const { colors } = useTheme();
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-  const isInitialRender = useRef(true);
   const isPlusPlan = useIsPlusPlan();
+  const [isPurcahceProcessing, setIsPurcahceProcessing] = useState(false);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -58,22 +58,19 @@ export const IAPScreen = ({ navigation }: Props) => {
   }, [navigation]);
 
   useEffect(() => {
-    isInitialRender.current = false;
-  }, []);
-
-  useEffect(() => {
     if (isPlusPlan) {
-      if (isInitialRender.current) {
-        Alert.alert('既にプラスプランです', '', [
+      if (isPurcahceProcessing) {
+        Alert.alert('プラスプランに切り替わりました', '', [
           {
             text: 'OK',
             onPress: () => {
               navigation.goBack();
+              setIsPurcahceProcessing(false);
             },
           },
         ]);
       } else {
-        Alert.alert('プラスプランに切り替わりました', '', [
+        Alert.alert('既にプラスプランです', '', [
           {
             text: 'OK',
             onPress: () => {
@@ -83,7 +80,7 @@ export const IAPScreen = ({ navigation }: Props) => {
         ]);
       }
     }
-  }, [isPlusPlan]);
+  }, [isPlusPlan, isPurcahceProcessing, navigation]);
 
   const { getProducts } = useIap();
 
@@ -103,6 +100,7 @@ export const IAPScreen = ({ navigation }: Props) => {
 
   const onPurchaceButtonPress = async () => {
     setSpinnerVisible(true);
+    setIsPurcahceProcessing(true);
     await InAppPurchases.purchaseItemAsync(Config.IAP_PLUS_PLAN);
   };
 

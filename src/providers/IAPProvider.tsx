@@ -67,12 +67,12 @@ export const IAPProvider = ({ children }: Props) => {
               productId: body.productId,
             },
           },
-          onCompleted: () => {
+          onCompleted: (data) => {
+            console.log(data.verifyIapReceipt);
             console.log('レシート検証完了');
             storage.delete(iapReceiptStorageKey);
           },
           onError: () => {
-            console.log('here');
             console.log('レシート検証失敗');
           },
         });
