@@ -11,7 +11,6 @@ import {
 import { RootNavigationScreenProp } from 'src/types';
 import LottieView from 'lottie-react-native';
 import { Entypo } from '@expo/vector-icons';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { StyleSheet } from 'react-native';
 import { useIap } from 'src/hooks/iap';
 import * as InAppPurchases from 'expo-in-app-purchases';
@@ -19,7 +18,7 @@ import Config from 'react-native-config';
 import { MotiView } from 'moti';
 import { useSpinner } from 'src/hooks/spinner';
 import { useIsPlusPlan } from 'src/hooks/me';
-import { Alert } from 'react-native';
+import { Alert, SafeAreaView, ActivityIndicator } from 'react-native';
 
 const Rocket = require('../../assets/lottie/rocket.json');
 
@@ -41,7 +40,6 @@ const alertText = [
 
 export const IAPScreen = ({ navigation }: Props) => {
   const { colors } = useTheme();
-  const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const isPlusPlan = useIsPlusPlan();
   const [isPurcahceProcessing, setIsPurcahceProcessing] = useState(false);
 
@@ -106,12 +104,8 @@ export const IAPScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <>
-      <ScrollView
-        flex="1"
-        bg="white"
-        contentContainerStyle={styles.contentContainer}
-      >
+    <SafeAreaView style={[styles.container, { backgroundColor: colors.lt.bg }]}>
+      <ScrollView bg="white" contentContainerStyle={styles.contentContainer}>
         <LottieView source={Rocket} autoPlay loop style={styles.rocket} />
         <Text color="textBlack" fontWeight="bold" mt="4" fontSize="21">
           {'プラスプランにアップグレードして\nより充実させよう'}
@@ -181,7 +175,7 @@ export const IAPScreen = ({ navigation }: Props) => {
         </Box>
       </ScrollView>
 
-      {products?.length && (
+      {products?.length ? (
         <MotiView
           from={{
             translateY: 180,
@@ -194,15 +188,10 @@ export const IAPScreen = ({ navigation }: Props) => {
         >
           <Box
             bg="white"
-            h="16"
-            position="absolute"
-            bottom="0"
             w="100%"
+            h="16"
             alignItems="center"
             justifyContent="center"
-            style={{
-              bottom: safeAreaBottom,
-            }}
           >
             <Button
               w="95%"
@@ -212,21 +201,29 @@ export const IAPScreen = ({ navigation }: Props) => {
               borderRadius="lg"
               h="12"
               onPress={onPurchaceButtonPress}
+              alignSelf="center"
             >
               {`${products[0].price} / ${month}でアップグレード`}
             </Button>
           </Box>
         </MotiView>
+      ) : (
+        <Box h="16" alignItems="center" justifyContent="center">
+          <ActivityIndicator />
+        </Box>
       )}
-    </>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   contentContainer: {
     alignItems: 'center',
     paddingHorizontal: 16,
-    paddingBottom: 100,
+    paddingBottom: 20,
   },
   rocket: {
     width: 120,
