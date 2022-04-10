@@ -1,5 +1,5 @@
 import React, { useLayoutEffect, useState, useEffect } from 'react';
-import { Box, ScrollView, VStack, Pressable, HStack, Text } from 'native-base';
+import { ScrollView, VStack, Pressable, HStack, Text } from 'native-base';
 import { RootNavigationScreenProp, Socials } from 'src/types';
 import {
   useMeQuery,
@@ -16,6 +16,7 @@ import { ReactNativeFile } from 'apollo-upload-client';
 import { spinnerVisibleVar } from 'src/stores/spinner';
 import { useToast } from 'react-native-toast-notifications';
 import FastImage from 'react-native-fast-image';
+import { useIsPlusPlan } from 'src/hooks/me';
 
 type Props = RootNavigationScreenProp<'UserEdit'>;
 
@@ -38,6 +39,8 @@ export const UserEditScreen = ({ navigation }: Props) => {
 
   const [updateMeMutation] = useUpdateMeMutation();
   const [uploadImageMutation] = useUploadImageMutation();
+
+  const isPlusPlan = useIsPlusPlan();
 
   useEffect(() => {
     if (imageDeleted) {
@@ -168,6 +171,18 @@ export const UserEditScreen = ({ navigation }: Props) => {
     }
   };
 
+  const onSocialsPress = (s: typeof socialsStateData[number]) => {
+    if (isPlusPlan) {
+      navigation.navigate('UserItemEdit', {
+        type: s.type as Socials,
+        value: s.value,
+        setValue: s.setValue,
+      });
+    } else {
+      navigation.navigate('IAP');
+    }
+  };
+
   if (!data) {
     return null;
   }
@@ -217,11 +232,7 @@ export const UserEditScreen = ({ navigation }: Props) => {
                 height: 40,
               }}
               onPress={() => {
-                navigation.navigate('UserItemEdit', {
-                  type: s.type as Socials,
-                  value: s.value,
-                  setValue: s.setValue,
-                });
+                onSocialsPress(s);
               }}
             />
           );

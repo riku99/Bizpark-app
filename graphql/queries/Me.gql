@@ -9,5 +9,6 @@ query Me {
     instagram
     linkedin
     loggedIn
+    plan
   }
 }

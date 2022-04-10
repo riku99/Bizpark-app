@@ -31,6 +31,8 @@ import { useLoggedIn } from 'src/hooks/me';
 import { NotificationsScreen } from 'src/screens/Notifications';
 import { TabOrderChangeScreen } from 'src/screens/TabOrderChange';
 import { NewsTabOrderChangeScreen } from 'src/screens/NewsTabOrderChange';
+import { IAPScreen } from 'src/screens/IAP';
+import { useReVerifyIapReceipt } from 'src/hooks/iap';
 
 export type MainStackParamList = {
   Tab: undefined;
@@ -60,6 +62,7 @@ export type MainStackParamList = {
   Notifications: undefined;
   TabOrderChange: undefined;
   NewsTabOrderChange: undefined;
+  IAP: undefined;
   ThoughtTalkRoom: NavigatorScreenParams<ThoughtTalkRoomStackParamList>;
   NewsTalkRoom: NavigatorScreenParams<NewsTalkRoomStackParamList>;
   OneOnOneTalkRoom: NavigatorScreenParams<OneOnOneTalkRoomStackParamList>;
@@ -110,6 +113,7 @@ export const MainStack = React.memo(() => {
   useNewsTalkRoomsWithSusbscription();
   useOneOnOneTalkRoomsWithSubscription();
   useDeviceToken();
+  // useReVerifyIapReceipt();
 
   // 通知許可はワークスルーで表示するようにする
   useEffect(() => {
@@ -158,6 +162,7 @@ export const MainStack = React.memo(() => {
           options={{ headerShown: false }}
         />
         <Stack.Screen name="Notifications" component={NotificationsScreen} />
+        <Stack.Screen name="IAP" component={IAPScreen} />
         <Stack.Group
           screenOptions={{
             presentation: 'modal',

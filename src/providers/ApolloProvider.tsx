@@ -4,22 +4,18 @@ import {
   ApolloProvider as ApolloProviderBase,
   from,
   split,
-  NormalizedCacheObject,
 } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useToast } from 'react-native-toast-notifications';
 import { CustomErrorResponseCode } from 'src/generated/graphql';
 import auth from '@react-native-firebase/auth';
 import { Alert } from 'react-native';
 import { relayStylePagination } from '@apollo/client/utilities';
 import { createUploadLink } from 'apollo-upload-client';
-import { useCustomToast } from 'src/hooks/toast';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import { getMainDefinition } from '@apollo/client/utilities';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-// import { persistCache, AsyncStorageWrapper } from 'apollo3-cache-persist';
 import { useLoggedIn } from 'src/hooks/me';
 import Config from 'react-native-config';
 
@@ -32,7 +28,7 @@ const uploadLink = createUploadLink({
 });
 
 const wsLink = new WebSocketLink({
-  uri: 'ws://localhost:4000/graphql',
+  uri: Config.APP_WS_ENDPOINT,
   options: {
     reconnect: true,
     lazy: true,
@@ -178,8 +174,6 @@ const cache = new InMemoryCache({
 
 export const ApolloProvider = ({ children }: Props) => {
   const toast = useToast();
-  const { someErrorToast } = useCustomToast();
-
   const { setLoggedIn } = useLoggedIn();
 
   const errorLink = onError((error) => {
@@ -188,7 +182,6 @@ export const ApolloProvider = ({ children }: Props) => {
       const code = firstError.extensions.code;
 
       console.log('This log is output from errorLink');
-      console.error(code);
       console.log(firstError.message);
 
       if (error.networkError) {
@@ -197,7 +190,8 @@ export const ApolloProvider = ({ children }: Props) => {
       }
 
       if (code === 'INTERNAL_SERVER_ERROR') {
-        someErrorToast();
+        console.log('some error');
+        toast.show('何らかのエラーが発生しました', { type: 'danger' });
         return;
       }
 
@@ -224,23 +218,10 @@ export const ApolloProvider = ({ children }: Props) => {
     }
   });
 
-  const [client, setClient] = useState<ApolloClient<NormalizedCacheObject>>();
-
-  useEffect(() => {
-    (async () => {
-      // await persistCache({
-      //   cache,
-      //   storage: new AsyncStorageWrapper(AsyncStorage),
-      // });
-
-      setClient(
-        new ApolloClient({
-          link: from([errorLink, authLink, splitLink]),
-          cache,
-        })
-      );
-    })();
-  }, []);
+  const client = new ApolloClient({
+    link: from([errorLink, authLink, splitLink]),
+    cache,
+  });
 
   if (!client) {
     return null;

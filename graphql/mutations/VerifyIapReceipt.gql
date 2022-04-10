@@ -1,0 +1,6 @@
+mutation VerifyIapReceipt($input: VerifyIapReceiptInput!) {
+  verifyIapReceipt(input: $input) {
+    id
+    plan
+  }
+}

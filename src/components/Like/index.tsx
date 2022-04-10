@@ -6,31 +6,41 @@ const Source = require('../../assets/lottie/like.json');
 
 type Props = {
   liked: boolean;
+  likeAnimation?: boolean;
+  setLikeAnimation?: (value: boolean) => void;
   lottieStyle: ComponentProps<typeof LottieView>['style'];
 } & ComponentProps<typeof Pressable>;
 
-export const Like = ({ liked, lottieStyle, ...props }: Props) => {
+export const Like = ({
+  liked,
+  lottieStyle,
+  likeAnimation,
+  setLikeAnimation,
+  ...props
+}: Props) => {
   const likeRef = useRef<LottieView>(null);
-  const isInitialRender = useRef(true);
 
   useEffect(() => {
-    if (isInitialRender.current) {
+    if (!likeAnimation) {
       if (liked) {
-        likeRef.current?.play(77, 77);
+        likeRef.current?.play(1000, 1000);
       } else {
         likeRef.current?.play(0, 0);
       }
-      isInitialRender.current = false;
     } else {
       if (liked) {
         // いいねアニメーション
         likeRef.current?.play();
+        setTimeout(() => {
+          if (setLikeAnimation) {
+            setLikeAnimation(false);
+          }
+        }, 1000);
       } else {
-        // 外すアニメーション
-        likeRef.current?.play(40, 0);
+        likeRef.current?.play(0, 0);
       }
     }
-  }, [liked]);
+  }, [liked, likeAnimation, setLikeAnimation]);
 
   return (
     <Pressable {...props}>

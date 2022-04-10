@@ -26,6 +26,7 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
   });
 
   const [liked, setLiked] = useState(thoughtData?.thought.liked);
+  const [likeAnimation, setLikeAnimation] = useState(false);
 
   useEffect(() => {
     setLiked(thoughtData?.thought.liked);
@@ -50,6 +51,7 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
         setLiked(true);
       }
     } else {
+      setLikeAnimation(true);
       setLiked(true);
       try {
         await likeThought({
@@ -124,6 +126,8 @@ export const ThoughtCard = ({ id, onPress, ...props }: Props) => {
           mt={images.length ? 2 : 0}
           onPress={onLikePress}
           w="5"
+          likeAnimation={likeAnimation}
+          setLikeAnimation={setLikeAnimation}
         />
       </Pressable>
     </ContentsCard>

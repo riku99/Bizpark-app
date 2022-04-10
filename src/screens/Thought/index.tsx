@@ -60,6 +60,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   }, [error, navigation]);
 
   const [liked, setLiked] = useState(!!thoughtData?.thought.liked);
+  const [likeAnimation, setLikeAnimation] = useState(false);
 
   const [likeMutation] = useLikeThoughtMutation();
   const [unlikeMutatoin] = useUnlikeThoughtMutation();
@@ -79,6 +80,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
         setLiked(true);
       }
     } else {
+      setLikeAnimation(true);
       setLiked(true);
       try {
         await likeMutation({
@@ -215,7 +217,13 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
         </Box>
 
         <HStack>
-          <Like liked={liked} lottieStyle={styles.like} onPress={onLikePress} />
+          <Like
+            liked={liked}
+            lottieStyle={styles.like}
+            onPress={onLikePress}
+            setLikeAnimation={setLikeAnimation}
+            likeAnimation={likeAnimation}
+          />
         </HStack>
 
         <Text fontSize={16}>{text}</Text>
