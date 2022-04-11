@@ -8,4 +8,28 @@ query GetActiveData {
   oneOnOneTalkRooms {
     ...OneOnOneTalkRoomParts
   }
+  notifications {
+    edges {
+      node {
+        id
+        createdAt
+        type
+        talkRoomType
+        talkRoomId
+        seen
+        performer {
+          id
+          name
+          imageUrl
+        }
+        thought {
+          id
+        }
+      }
+      cursor
+    }
+    pageInfo {
+      ...PageInfoParts
+    }
+  }
 }

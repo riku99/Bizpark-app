@@ -1,39 +1,25 @@
-import { useEffect } from 'react';
-import {
-  useGetThoughtTalkRoomsLazyQuery,
-  useGetNewsTalkRoomsLazyQuery,
-  useGetOneOnOneTalkRoomsLazyQuery,
-  useGetNotificationsLazyQuery,
-} from 'src/generated/graphql';
+import { useEffect, useState } from 'react';
+import { useGetActiveDataQuery } from 'src/generated/graphql';
 import { AppState, AppStateStatus } from 'react-native';
 
 // Active時に取得したいデータ。useGetActiveDataというクエリを作成したが、まとめてフェッチするとなぜかキャッシュの更新がうまくできないので一旦別々でフェッチ
 export const useActiveData = () => {
-  const [thoughtTalkRoomQuery] = useGetThoughtTalkRoomsLazyQuery({
-    fetchPolicy: 'network-only',
-  });
+  const [onActive, setOnActive] = useState(false);
 
-  const [newsTalkRoomQuery] = useGetNewsTalkRoomsLazyQuery({
+  useGetActiveDataQuery({
     fetchPolicy: 'network-only',
-  });
-
-  const [oneOnOneTalkRoomQuery] = useGetOneOnOneTalkRoomsLazyQuery({
-    fetchPolicy: 'network-only',
-  });
-
-  const [notificationsQuery] = useGetNotificationsLazyQuery({
-    fetchPolicy: 'network-only',
+    skip: !onActive,
+    onCompleted: () => {
+      setOnActive(false);
+    },
   });
 
   useEffect(() => {
     const onChange = async (nextAppState: AppStateStatus) => {
       if (nextAppState === 'active') {
-        await Promise.all([
-          thoughtTalkRoomQuery(),
-          newsTalkRoomQuery(),
-          oneOnOneTalkRoomQuery(),
-          notificationsQuery(),
-        ]);
+        setOnActive(true);
+      } else {
+        setOnActive(false);
       }
     };
     AppState.addEventListener('change', onChange);
@@ -41,5 +27,5 @@ export const useActiveData = () => {
     return () => {
       AppState.removeEventListener('change', onChange);
     };
-  }, [thoughtTalkRoomQuery, newsTalkRoomQuery, oneOnOneTalkRoomQuery]);
+  }, [setOnActive]);
 };
