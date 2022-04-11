@@ -15,15 +15,13 @@ export const HeaderRight = () => {
     nextFetchPolicy: 'cache-only',
   });
 
-  const allNotificationsSeen =
-    notificationData?.notifications.edges[0]?.node.seen;
-
   return (
     <HStack space="6">
       <Box>
-        {!allNotificationsSeen && (
-          <Badge position="absolute" top="-4" right="-4" />
-        )}
+        {!!notificationData?.notifications.edges.length &&
+          !notificationData.notifications.edges[0].node.seen && (
+            <Badge position="absolute" top="-4" right="-4" />
+          )}
         <Ionicons
           name="notifications-outline"
           size={20}
