@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { useGetActiveDataQuery } from 'src/generated/graphql';
 import { AppState, AppStateStatus } from 'react-native';
 
-// Active時に取得したいデータ。useGetActiveDataというクエリを作成したが、まとめてフェッチするとなぜかキャッシュの更新がうまくできないので一旦別々でフェッチ
 export const useActiveData = () => {
   const [onActive, setOnActive] = useState(false);
 

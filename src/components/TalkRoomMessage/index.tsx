@@ -131,10 +131,15 @@ export const TalkRoomMessage = React.memo((props: Props) => {
   ): IMessage => {
     const { replyMessage: _replyMessage } = message;
 
+    const dateMs = Number(message.createdAt);
+
     return {
       _id: message.id,
       text: message.text,
-      createdAt: new Date(Number(message.createdAt)),
+      // バックエンド側で開発用のpubsubを使うとms仕様で返ってくるが、本番用のポスぐれpusbsub使うとISOで返ってくるので分ける
+      createdAt: !!dateMs
+        ? new Date(Number(message.createdAt))
+        : new Date(message.createdAt),
       user: {
         _id: message.sender?.id,
         name: message.sender?.name,
