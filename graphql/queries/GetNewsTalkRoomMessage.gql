@@ -1,0 +1,5 @@
+query GetNewsTalkRoomMessage($id: Int!) {
+  newsTalkRoomMessage(id: $id) {
+    ...NewsTalkRoomMessageParts
+  }
+}

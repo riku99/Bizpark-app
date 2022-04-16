@@ -659,6 +659,7 @@ export type Query = {
   me: Me;
   news?: Maybe<NewsConnection>;
   newsTalkRoom: NewsTalkRoom;
+  newsTalkRoomMessage?: Maybe<NewsTalkRoomMessage>;
   newsTalkRooms: Array<NewsTalkRoom>;
   notifications: NotificationConnection;
   oneNews: News;
@@ -690,6 +691,11 @@ export type QueryNewsArgs = {
 
 
 export type QueryNewsTalkRoomArgs = {
+  id: Scalars['Int'];
+};
+
+
+export type QueryNewsTalkRoomMessageArgs = {
   id: Scalars['Int'];
 };
 
@@ -1376,6 +1382,13 @@ export type GetNewsTalkRoomMembersQueryVariables = Exact<{
 
 
 export type GetNewsTalkRoomMembersQuery = { __typename?: 'Query', newsTalkRoom: { __typename?: 'NewsTalkRoom', id: number, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
+
+export type GetNewsTalkRoomMessageQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetNewsTalkRoomMessageQuery = { __typename?: 'Query', newsTalkRoomMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } | null | undefined };
 
 export type GetNewsTalkRoomMessagesQueryVariables = Exact<{
   talkRoomId: Scalars['Int'];
@@ -3498,6 +3511,41 @@ export function useGetNewsTalkRoomMembersLazyQuery(baseOptions?: Apollo.LazyQuer
 export type GetNewsTalkRoomMembersQueryHookResult = ReturnType<typeof useGetNewsTalkRoomMembersQuery>;
 export type GetNewsTalkRoomMembersLazyQueryHookResult = ReturnType<typeof useGetNewsTalkRoomMembersLazyQuery>;
 export type GetNewsTalkRoomMembersQueryResult = Apollo.QueryResult<GetNewsTalkRoomMembersQuery, GetNewsTalkRoomMembersQueryVariables>;
+export const GetNewsTalkRoomMessageDocument = gql`
+    query GetNewsTalkRoomMessage($id: Int!) {
+  newsTalkRoomMessage(id: $id) {
+    ...NewsTalkRoomMessageParts
+  }
+}
+    ${NewsTalkRoomMessagePartsFragmentDoc}`;
+
+/**
+ * __useGetNewsTalkRoomMessageQuery__
+ *
+ * To run a query within a React component, call `useGetNewsTalkRoomMessageQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNewsTalkRoomMessageQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNewsTalkRoomMessageQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetNewsTalkRoomMessageQuery(baseOptions: Apollo.QueryHookOptions<GetNewsTalkRoomMessageQuery, GetNewsTalkRoomMessageQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNewsTalkRoomMessageQuery, GetNewsTalkRoomMessageQueryVariables>(GetNewsTalkRoomMessageDocument, options);
+      }
+export function useGetNewsTalkRoomMessageLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNewsTalkRoomMessageQuery, GetNewsTalkRoomMessageQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNewsTalkRoomMessageQuery, GetNewsTalkRoomMessageQueryVariables>(GetNewsTalkRoomMessageDocument, options);
+        }
+export type GetNewsTalkRoomMessageQueryHookResult = ReturnType<typeof useGetNewsTalkRoomMessageQuery>;
+export type GetNewsTalkRoomMessageLazyQueryHookResult = ReturnType<typeof useGetNewsTalkRoomMessageLazyQuery>;
+export type GetNewsTalkRoomMessageQueryResult = Apollo.QueryResult<GetNewsTalkRoomMessageQuery, GetNewsTalkRoomMessageQueryVariables>;
 export const GetNewsTalkRoomMessagesDocument = gql`
     query GetNewsTalkRoomMessages($talkRoomId: Int!, $messageCursor: String) {
   newsTalkRoom(id: $talkRoomId) {

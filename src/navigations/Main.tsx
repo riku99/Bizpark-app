@@ -32,7 +32,7 @@ import { NotificationsScreen } from 'src/screens/Notifications';
 import { TabOrderChangeScreen } from 'src/screens/TabOrderChange';
 import { NewsTabOrderChangeScreen } from 'src/screens/NewsTabOrderChange';
 import { IAPScreen } from 'src/screens/IAP';
-import { useReVerifyIapReceipt } from 'src/hooks/iap';
+import { useMyId } from 'src/hooks/me';
 
 export type MainStackParamList = {
   Tab: undefined;
@@ -76,6 +76,8 @@ export const MainStack = React.memo(() => {
   const { colors } = useTheme();
 
   const client = useApolloClient();
+
+  const myId = useMyId();
 
   const [initialDataQuery, { called }] = useInitialDataLazyQuery({
     fetchPolicy: 'cache-and-network',

@@ -5,11 +5,13 @@ import {
   OnNewsTalkRoomMessageCreatedSubscriptionVariables,
   GetNewsTalkRoomsQuery,
   GetNewsTalkRoomsDocument,
+  useGetNewsTalkRoomMessageQuery,
 } from 'src/generated/graphql';
 import { useApolloClient } from '@apollo/client';
 import { useState, useMemo, useEffect, useCallback } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import { useMyId } from 'src/hooks/me';
+import firestore from '@react-native-firebase/firestore';
 
 export const useNewsTalkRoomsWithSusbscription = () => {
   const myId = useMyId();
@@ -19,14 +21,29 @@ export const useNewsTalkRoomsWithSusbscription = () => {
   });
 
   const [isActive, setIsActive] = useState(true);
+  const [subscribeMessageId, setSubscribeMessageId] = useState<number | null>(
+    null
+  );
 
-  const talkRoomIds = useMemo(() => {
-    if (!talkRoomsData) {
-      return [];
-    }
+  useGetNewsTalkRoomMessageQuery({
+    skip: !subscribeMessageId,
+    variables: {
+      id: subscribeMessageId,
+    },
+    onCompleted: (data) => {
+      setSubscribeMessageId(null);
+      console.log('Completed');
+      console.log(data.newsTalkRoomMessage);
+    },
+  });
 
-    return talkRoomsData.newsTalkRooms.map((room) => room.id);
-  }, [talkRoomsData?.newsTalkRooms.length]); // eslint-disable-line react-hooks/exhaustive-deps
+  // const talkRoomIds = useMemo(() => {
+  //   if (!talkRoomsData) {
+  //     return [];
+  //   }
+
+  //   return talkRoomsData.newsTalkRooms.map((room) => room.id);
+  // }, [talkRoomsData?.newsTalkRooms.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // アクティブ、非アクティブの処理
   useEffect(() => {
@@ -50,65 +67,78 @@ export const useNewsTalkRoomsWithSusbscription = () => {
     if (isActive && myId) {
       console.log('🌙 subsucribe for NewsTalkRooms');
 
-      const unsubscribe = subscribeToMore<
-        OnNewsTalkRoomMessageCreatedSubscription,
-        OnNewsTalkRoomMessageCreatedSubscriptionVariables
-      >({
-        document: OnNewsTalkRoomMessageCreatedDocument,
-        variables: { roomIds: talkRoomIds, userId: myId },
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData) {
-            return prev;
+      const unsubscribe = firestore()
+        .collection('newsTalkRoomMessages')
+        .where('members', 'array-contains', myId)
+        .orderBy('createdAt', 'desc')
+        .limit(1)
+        .onSnapshot((querySnapshot) => {
+          console.log('On snapshot ✋');
+          if (querySnapshot) {
+            console.log(querySnapshot.docs[0].id);
+            setSubscribeMessageId(Number(querySnapshot.docs[0].id));
           }
+        });
 
-          const currentRooms = prev.newsTalkRooms;
+      // const unsubscribe = subscribeToMore<
+      //   OnNewsTalkRoomMessageCreatedSubscription,
+      //   OnNewsTalkRoomMessageCreatedSubscriptionVariables
+      // >({
+      //   document: OnNewsTalkRoomMessageCreatedDocument,
+      //   variables: { roomIds: talkRoomIds, userId: myId },
+      //   updateQuery: (prev, { subscriptionData }) => {
+      //     if (!subscriptionData) {
+      //       return prev;
+      //     }
 
-          const targetTalkRoomId =
-            subscriptionData.data.newsTalkRoomMessageCreated.roomId;
+      //     const currentRooms = prev.newsTalkRooms;
 
-          const targetRoom = currentRooms.find(
-            (r) => r.id === targetTalkRoomId
-          );
+      //     const targetTalkRoomId =
+      //       subscriptionData.data.newsTalkRoomMessageCreated.roomId;
 
-          if (!targetRoom) {
-            return prev;
-          }
+      //     const targetRoom = currentRooms.find(
+      //       (r) => r.id === targetTalkRoomId
+      //     );
 
-          const newMessageEdge = {
-            node: subscriptionData.data.newsTalkRoomMessageCreated,
-            cursor:
-              subscriptionData.data.newsTalkRoomMessageCreated.id.toString(),
-          };
+      //     if (!targetRoom) {
+      //       return prev;
+      //     }
 
-          const newMessageConnection = {
-            ...targetRoom.messages,
-            edges: [newMessageEdge, ...targetRoom.messages.edges],
-            pageInfo: {
-              ...targetRoom.messages.pageInfo,
-              startCursor: newMessageEdge.node.id.toString(),
-            },
-          };
+      //     const newMessageEdge = {
+      //       node: subscriptionData.data.newsTalkRoomMessageCreated,
+      //       cursor:
+      //         subscriptionData.data.newsTalkRoomMessageCreated.id.toString(),
+      //     };
 
-          const isMySentData =
-            subscriptionData.data.newsTalkRoomMessageCreated.sender.id === myId;
+      //     const newMessageConnection = {
+      //       ...targetRoom.messages,
+      //       edges: [newMessageEdge, ...targetRoom.messages.edges],
+      //       pageInfo: {
+      //         ...targetRoom.messages.pageInfo,
+      //         startCursor: newMessageEdge.node.id.toString(),
+      //       },
+      //     };
 
-          const newRoomData = {
-            ...targetRoom,
-            allMessageSeen: isMySentData,
-            messages: newMessageConnection,
-          };
+      //     const isMySentData =
+      //       subscriptionData.data.newsTalkRoomMessageCreated.sender.id === myId;
 
-          const filteredRooms = currentRooms.filter(
-            (r) => r.id !== targetTalkRoomId
-          );
+      //     const newRoomData = {
+      //       ...targetRoom,
+      //       allMessageSeen: isMySentData,
+      //       messages: newMessageConnection,
+      //     };
 
-          const newTalkRoomList = [newRoomData, ...filteredRooms];
+      //     const filteredRooms = currentRooms.filter(
+      //       (r) => r.id !== targetTalkRoomId
+      //     );
 
-          return {
-            newsTalkRooms: newTalkRoomList,
-          };
-        },
-      });
+      //     const newTalkRoomList = [newRoomData, ...filteredRooms];
+
+      //     return {
+      //       newsTalkRooms: newTalkRoomList,
+      //     };
+      //   },
+      // });
 
       return () => {
         if (unsubscribe) {
@@ -117,7 +147,7 @@ export const useNewsTalkRoomsWithSusbscription = () => {
         }
       };
     }
-  }, [isActive, myId, talkRoomIds, subscribeToMore]);
+  }, [isActive, myId]);
 };
 
 export const useDeleteNewsTalkRoomFromCache = () => {
