@@ -1,22 +1,21 @@
 import {
   useGetNewsTalkRoomsQuery,
-  OnNewsTalkRoomMessageCreatedDocument,
-  OnNewsTalkRoomMessageCreatedSubscription,
-  OnNewsTalkRoomMessageCreatedSubscriptionVariables,
   GetNewsTalkRoomsQuery,
   GetNewsTalkRoomsDocument,
   useGetNewsTalkRoomMessageQuery,
 } from 'src/generated/graphql';
 import { useApolloClient } from '@apollo/client';
-import { useState, useMemo, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import { useMyId } from 'src/hooks/me';
 import firestore from '@react-native-firebase/firestore';
 
 export const useNewsTalkRoomsWithSusbscription = () => {
+  const cache = useApolloClient();
   const myId = useMyId();
+  const isOnActive = useRef(true);
 
-  const { data: talkRoomsData, subscribeToMore } = useGetNewsTalkRoomsQuery({
+  const { data: talkRoomsData } = useGetNewsTalkRoomsQuery({
     fetchPolicy: 'cache-only',
   });
 
@@ -30,25 +29,67 @@ export const useNewsTalkRoomsWithSusbscription = () => {
     variables: {
       id: subscribeMessageId,
     },
-    onCompleted: (data) => {
+    onCompleted: (queryData) => {
       setSubscribeMessageId(null);
-      console.log('Completed');
-      console.log(data.newsTalkRoomMessage);
+      console.log('Completed💓');
+      console.log(queryData.newsTalkRoomMessage);
+
+      const currentRooms = talkRoomsData.newsTalkRooms;
+
+      const targetTalkRoomId = queryData.newsTalkRoomMessage.roomId;
+
+      const targetRoom = currentRooms.find((r) => r.id === targetTalkRoomId);
+
+      if (
+        !targetRoom ||
+        targetRoom.messages.edges[0].node.id ===
+          queryData.newsTalkRoomMessage.id
+      ) {
+        return;
+      }
+
+      const newMessageEdge = {
+        node: queryData.newsTalkRoomMessage,
+        cursor: queryData.newsTalkRoomMessage.id.toString(),
+      };
+
+      const newMessageConnection = {
+        ...targetRoom.messages,
+        edges: [newMessageEdge, ...targetRoom.messages.edges],
+        pageInfo: {
+          ...targetRoom.messages.pageInfo,
+          startCursor: newMessageEdge.node.id.toString(),
+        },
+      };
+
+      const isMySentData = queryData.newsTalkRoomMessage.sender.id === myId;
+
+      const newRoomData = {
+        ...targetRoom,
+        allMessageSeen: isMySentData,
+        messages: newMessageConnection,
+      };
+
+      const filteredRooms = currentRooms.filter(
+        (r) => r.id !== targetTalkRoomId
+      );
+
+      const newTalkRoomList = [newRoomData, ...filteredRooms];
+
+      cache.writeQuery({
+        query: GetNewsTalkRoomsDocument,
+        data: {
+          newsTalkRooms: newTalkRoomList,
+        },
+      });
     },
   });
-
-  // const talkRoomIds = useMemo(() => {
-  //   if (!talkRoomsData) {
-  //     return [];
-  //   }
-
-  //   return talkRoomsData.newsTalkRooms.map((room) => room.id);
-  // }, [talkRoomsData?.newsTalkRooms.length]); // eslint-disable-line react-hooks/exhaustive-deps
 
   // アクティブ、非アクティブの処理
   useEffect(() => {
     const onChange = (nextState: AppStateStatus) => {
       if (nextState === 'active') {
+        isOnActive.current = true;
         setIsActive(true);
       } else {
         setIsActive(false);
@@ -73,72 +114,14 @@ export const useNewsTalkRoomsWithSusbscription = () => {
         .orderBy('createdAt', 'desc')
         .limit(1)
         .onSnapshot((querySnapshot) => {
-          console.log('On snapshot ✋');
-          if (querySnapshot) {
-            console.log(querySnapshot.docs[0].id);
-            setSubscribeMessageId(Number(querySnapshot.docs[0].id));
+          if (isOnActive.current) {
+            isOnActive.current = false;
+          } else {
+            if (querySnapshot && querySnapshot.docs.length) {
+              setSubscribeMessageId(Number(querySnapshot.docs[0].id));
+            }
           }
         });
-
-      // const unsubscribe = subscribeToMore<
-      //   OnNewsTalkRoomMessageCreatedSubscription,
-      //   OnNewsTalkRoomMessageCreatedSubscriptionVariables
-      // >({
-      //   document: OnNewsTalkRoomMessageCreatedDocument,
-      //   variables: { roomIds: talkRoomIds, userId: myId },
-      //   updateQuery: (prev, { subscriptionData }) => {
-      //     if (!subscriptionData) {
-      //       return prev;
-      //     }
-
-      //     const currentRooms = prev.newsTalkRooms;
-
-      //     const targetTalkRoomId =
-      //       subscriptionData.data.newsTalkRoomMessageCreated.roomId;
-
-      //     const targetRoom = currentRooms.find(
-      //       (r) => r.id === targetTalkRoomId
-      //     );
-
-      //     if (!targetRoom) {
-      //       return prev;
-      //     }
-
-      //     const newMessageEdge = {
-      //       node: subscriptionData.data.newsTalkRoomMessageCreated,
-      //       cursor:
-      //         subscriptionData.data.newsTalkRoomMessageCreated.id.toString(),
-      //     };
-
-      //     const newMessageConnection = {
-      //       ...targetRoom.messages,
-      //       edges: [newMessageEdge, ...targetRoom.messages.edges],
-      //       pageInfo: {
-      //         ...targetRoom.messages.pageInfo,
-      //         startCursor: newMessageEdge.node.id.toString(),
-      //       },
-      //     };
-
-      //     const isMySentData =
-      //       subscriptionData.data.newsTalkRoomMessageCreated.sender.id === myId;
-
-      //     const newRoomData = {
-      //       ...targetRoom,
-      //       allMessageSeen: isMySentData,
-      //       messages: newMessageConnection,
-      //     };
-
-      //     const filteredRooms = currentRooms.filter(
-      //       (r) => r.id !== targetTalkRoomId
-      //     );
-
-      //     const newTalkRoomList = [newRoomData, ...filteredRooms];
-
-      //     return {
-      //       newsTalkRooms: newTalkRoomList,
-      //     };
-      //   },
-      // });
 
       return () => {
         if (unsubscribe) {
