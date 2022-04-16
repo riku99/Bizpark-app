@@ -11,7 +11,7 @@ import { useMyId } from 'src/hooks/me';
 import firestore from '@react-native-firebase/firestore';
 
 export const useNewsTalkRoomsWithSusbscription = () => {
-  const cache = useApolloClient();
+  const { cache } = useApolloClient();
   const myId = useMyId();
   const isOnActive = useRef(true);
 
@@ -31,8 +31,10 @@ export const useNewsTalkRoomsWithSusbscription = () => {
     },
     onCompleted: (queryData) => {
       setSubscribeMessageId(null);
-      console.log('Completed💓');
-      console.log(queryData.newsTalkRoomMessage);
+
+      if (!queryData?.newsTalkRoomMessage) {
+        return;
+      }
 
       const currentRooms = talkRoomsData.newsTalkRooms;
 
@@ -106,8 +108,6 @@ export const useNewsTalkRoomsWithSusbscription = () => {
   // サブスクライブ
   useEffect(() => {
     if (isActive && myId) {
-      console.log('🌙 subsucribe for NewsTalkRooms');
-
       const unsubscribe = firestore()
         .collection('newsTalkRoomMessages')
         .where('members', 'array-contains', myId)
@@ -125,7 +125,6 @@ export const useNewsTalkRoomsWithSusbscription = () => {
 
       return () => {
         if (unsubscribe) {
-          console.log('案サブスク NewsTalkRoom');
           unsubscribe();
         }
       };

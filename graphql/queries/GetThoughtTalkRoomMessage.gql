@@ -1,0 +1,21 @@
+query GetThoughtTalkRoomMessage($id: Int!) {
+  thoughtTalkRoomMessage(id: $id) {
+    talkRoom {
+      id
+      updatedAt
+      createdAt
+      allMessageSeen
+      thought {
+        id
+        title
+        text
+        contributor {
+          id
+          name
+          imageUrl
+        }
+      }
+    }
+    ...ThoughtTalkRoomMessageParts
+  }
+}

@@ -1,40 +1,105 @@
 import {
-  OnThoughtTalkRoomMessageCreatedDocument,
-  OnThoughtTalkRoomMessageCreatedSubscription,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,
-  OnThoughtTalkRoomMessageCreatedSubscriptionVariables,
   useGetThoughtTalkRoomsQuery,
   useGetThoughtTalkRoomLazyQuery,
+  useGetThoughtTalkRoomMessageQuery,
 } from 'src/generated/graphql';
-import { useEffect, useCallback, useMemo, useState } from 'react';
+import { useEffect, useCallback, useState, useRef } from 'react';
 import { useApolloClient } from '@apollo/client';
 import { AppState, AppStateStatus } from 'react-native';
 import { useMyId } from 'src/hooks/me';
+import firestore from '@react-native-firebase/firestore';
 
 export const useToughtTalkRoomsWithSubsciption = () => {
   const myId = useMyId();
-
   const { cache } = useApolloClient();
+  const isOnActive = useRef(true);
 
-  const { data: talkRoomsData, subscribeToMore } = useGetThoughtTalkRoomsQuery({
+  const { data: talkRoomsData } = useGetThoughtTalkRoomsQuery({
     fetchPolicy: 'cache-only',
   });
 
   const [isActive, setIsActive] = useState(true);
+  const [subsucribeMessageId, setSubscribeMessageId] = useState<number | null>(
+    null
+  );
 
-  const subscriptionVariables = useMemo(() => {
-    if (!talkRoomsData?.thoughtTalkRooms.length) {
-      return [];
-    }
+  useGetThoughtTalkRoomMessageQuery({
+    skip: !subsucribeMessageId,
+    variables: {
+      id: subsucribeMessageId,
+    },
+    onCompleted: (queryData) => {
+      setSubscribeMessageId(null);
 
-    return talkRoomsData.thoughtTalkRooms.map((t) => t.id);
-  }, [talkRoomsData?.thoughtTalkRooms.length]); // eslint-disable-line react-hooks/exhaustive-deps
+      if (!queryData?.thoughtTalkRoomMessage) {
+        return;
+      }
+
+      const currentRooms = talkRoomsData.thoughtTalkRooms;
+
+      const targetRoomId = queryData.thoughtTalkRoomMessage.roomId;
+
+      const targetRoom = currentRooms.find((r) => r.id === targetRoomId);
+
+      const contributor =
+        queryData.thoughtTalkRoomMessage.talkRoom?.thought?.contributor;
+
+      if (!targetRoom) {
+        if (contributor && contributor.id === myId) {
+          setNewTalkRoomId(queryData.thoughtTalkRoomMessage.roomId);
+        }
+        return;
+      }
+
+      if (
+        targetRoom.messages.edges[0]?.node.id ===
+        queryData.thoughtTalkRoomMessage.id
+      ) {
+        return;
+      }
+
+      const newMessageEdge = {
+        node: queryData.thoughtTalkRoomMessage,
+        cursor: queryData.thoughtTalkRoomMessage.id.toString(),
+      };
+
+      const newMessageConnection = {
+        ...targetRoom.messages,
+        edges: [newMessageEdge, ...targetRoom.messages.edges],
+        pageInfo: {
+          ...targetRoom.messages.pageInfo,
+          startCursor: newMessageEdge.node.id.toString(),
+        },
+      };
+
+      const isMySentData = queryData.thoughtTalkRoomMessage.sender.id === myId;
+
+      const newRoomData = {
+        ...targetRoom,
+        allMessageSeen: isMySentData,
+        messages: newMessageConnection,
+      };
+
+      const filteredRooms = currentRooms.filter((r) => r.id !== targetRoomId);
+
+      const newTalkRoomList = [newRoomData, ...filteredRooms];
+
+      cache.writeQuery({
+        query: GetThoughtTalkRoomsDocument,
+        data: {
+          thoughtTalkRooms: newTalkRoomList,
+        },
+      });
+    },
+  });
 
   // Active時、非アクティブ時の処理
   useEffect(() => {
     const onChange = (nextState: AppStateStatus) => {
       if (nextState === 'active') {
+        isOnActive.current = true;
         setIsActive(true);
       } else {
         setIsActive(false);
@@ -54,81 +119,28 @@ export const useToughtTalkRoomsWithSubsciption = () => {
 
   useEffect(() => {
     if (isActive && myId) {
-      console.log('⚡️ subscribe for ThoughtTalkRooms');
-
-      const _unsubscribe = subscribeToMore<
-        OnThoughtTalkRoomMessageCreatedSubscription,
-        OnThoughtTalkRoomMessageCreatedSubscriptionVariables
-      >({
-        document: OnThoughtTalkRoomMessageCreatedDocument,
-        variables: { roomIds: subscriptionVariables, userId: myId },
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData) {
-            return prev;
-          }
-
-          const roomId =
-            subscriptionData.data.thoughtTalkRoomMessageCreated.roomId;
-          const rooms = prev.thoughtTalkRooms;
-          const targetRoom = rooms.find((r) => r.id === roomId);
-          const { contributor } =
-            subscriptionData.data.thoughtTalkRoomMessageCreated.talkRoom
-              .thought;
-
-          if (!targetRoom) {
-            if (contributor.id === myId) {
-              setNewTalkRoomId(
-                subscriptionData.data.thoughtTalkRoomMessageCreated.roomId
-              );
-              return;
-            } else {
-              return prev;
+      const unsubscribe = firestore()
+        .collection('thoughtTalkRoomMessages')
+        .where('members', 'array-contains', myId)
+        .orderBy('createdAt', 'desc')
+        .limit(1)
+        .onSnapshot((querySnapshot) => {
+          if (isOnActive.current) {
+            isOnActive.current = false;
+          } else {
+            if (querySnapshot && querySnapshot.docs.length) {
+              setSubscribeMessageId(Number(querySnapshot.docs[0].id));
             }
           }
+        });
 
-          const newEdge = {
-            node: subscriptionData.data.thoughtTalkRoomMessageCreated,
-            cursor:
-              subscriptionData.data.thoughtTalkRoomMessageCreated.id.toString(),
-          };
-
-          const newConnection = {
-            ...targetRoom.messages,
-            edges: [newEdge, ...targetRoom.messages.edges],
-            pageInfo: {
-              ...targetRoom.messages.pageInfo,
-              startCursor: newEdge.node.id.toString(),
-            },
-          };
-
-          const isMySentData =
-            subscriptionData.data.thoughtTalkRoomMessageCreated.sender.id ===
-            myId;
-
-          const newRoomData = {
-            ...targetRoom,
-            allMessageSeen: isMySentData,
-            messages: newConnection,
-          };
-
-          const filtered = rooms.filter((r) => r.id !== roomId);
-          const newTalkListData = [newRoomData, ...filtered];
-
-          return {
-            thoughtTalkRooms: newTalkListData,
-          };
-        },
-      });
-
-      // isActiveの変更によってここも実行される
       return () => {
-        if (_unsubscribe) {
-          console.log('案サブスク');
-          _unsubscribe();
+        if (unsubscribe) {
+          unsubscribe();
         }
       };
     }
-  }, [isActive, myId, subscriptionVariables, subscribeToMore]);
+  }, [isActive, myId]);
 
   useEffect(() => {
     if (newTalkRoomId) {
