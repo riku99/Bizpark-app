@@ -1,23 +1,22 @@
 import {
   useGetOneOnOneTalkRoomsQuery,
-  OnOneOnOneTalkRoomMessageCreatedSubscription,
-  OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables,
-  OnOneOnOneTalkRoomMessageCreatedDocument,
   useGetOneOnOneTalkRoomLazyQuery,
   GetOneOnOneTalkRoomsQuery,
   GetOneOnOneTalkRoomsDocument,
+  useGetOneOnOneTalkRoomMessageQuery,
 } from 'src/generated/graphql';
 import { useApolloClient } from '@apollo/client';
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { AppState, AppStateStatus } from 'react-native';
 import { useMyId } from 'src/hooks/me';
+import firestore from '@react-native-firebase/firestore';
 
 export const useOneOnOneTalkRoomsWithSubscription = () => {
   const myId = useMyId();
-
   const { cache } = useApolloClient();
+  const isOnActive = useRef(true);
 
-  const { subscribeToMore } = useGetOneOnOneTalkRoomsQuery({
+  const { data: talkRoomData } = useGetOneOnOneTalkRoomsQuery({
     fetchPolicy: 'cache-only',
   });
 
@@ -26,12 +25,82 @@ export const useOneOnOneTalkRoomsWithSubscription = () => {
   });
 
   const [isActive, setIsActive] = useState(true);
-
   const [newTalkRoomId, setNewTalkRoomId] = useState<null | number>(null);
+  const [subscribeMessageId, setSubscribeMessageId] = useState<number | null>(
+    null
+  );
+
+  useGetOneOnOneTalkRoomMessageQuery({
+    skip: subscribeMessageId == null,
+    variables: {
+      id: subscribeMessageId,
+    },
+    onCompleted: (queryData) => {
+      setSubscribeMessageId(null);
+
+      if (!queryData?.oneOnOneTalkRoomMessage) {
+        return;
+      }
+
+      const currntRooms = talkRoomData.oneOnOneTalkRooms;
+
+      const targetRoomId = queryData.oneOnOneTalkRoomMessage.roomId;
+
+      const targetRoom = currntRooms.find((r) => r.id === targetRoomId);
+
+      if (!targetRoom) {
+        setNewTalkRoomId(targetRoomId);
+        return;
+      }
+
+      if (
+        targetRoom.messages.edges[0]?.node.id ===
+        queryData.oneOnOneTalkRoomMessage.id
+      ) {
+        return;
+      }
+
+      const newMessageEdge = {
+        node: queryData.oneOnOneTalkRoomMessage,
+        cursor: queryData.oneOnOneTalkRoomMessage.id.toString(),
+      };
+
+      const newMessageConnection = {
+        ...targetRoom.messages,
+        edges: [newMessageEdge, ...targetRoom.messages.edges],
+        pageInfo: {
+          ...targetRoom.messages.pageInfo,
+          startCursor: newMessageEdge.node.id.toString(),
+        },
+      };
+
+      const isMySentData = queryData.oneOnOneTalkRoomMessage.sender.id === myId;
+
+      const newRoomData = {
+        ...targetRoom,
+        allMessageSeen: isMySentData,
+        messages: newMessageConnection,
+      };
+
+      const filteredRooms = currntRooms.filter(
+        (room) => room.id !== targetRoom.id
+      );
+
+      const newTalkRoomList = [newRoomData, ...filteredRooms];
+
+      cache.writeQuery({
+        query: GetOneOnOneTalkRoomsDocument,
+        data: {
+          oneOnOneTalkRooms: newTalkRoomList,
+        },
+      });
+    },
+  });
 
   useEffect(() => {
     const onChange = (nextState: AppStateStatus) => {
       if (nextState === 'active') {
+        isOnActive.current = true;
         setIsActive(true);
       } else {
         setIsActive(false);
@@ -45,83 +114,30 @@ export const useOneOnOneTalkRoomsWithSubscription = () => {
     };
   }, [setIsActive]);
 
-  // サブスクライブ
   useEffect(() => {
     if (isActive && myId) {
-      console.log('😆　subsucribe for OneOnOneTalkRooms');
-
-      const unsubscribe = subscribeToMore<
-        OnOneOnOneTalkRoomMessageCreatedSubscription,
-        OnOneOnOneTalkRoomMessageCreatedSubscriptionVariables
-      >({
-        document: OnOneOnOneTalkRoomMessageCreatedDocument,
-        variables: { userId: myId },
-        updateQuery: (prev, { subscriptionData }) => {
-          if (!subscriptionData) {
-            return prev;
+      const unsubscribe = firestore()
+        .collection('oneOnOneTalkRoomMessages')
+        .where('members', 'array-contains', myId)
+        .orderBy('createdAt', 'desc')
+        .limit(1)
+        .onSnapshot((querySnapshot) => {
+          if (isOnActive.current) {
+            isOnActive.current = false;
+          } else {
+            if (querySnapshot && querySnapshot.docs.length) {
+              setSubscribeMessageId(Number(querySnapshot.docs[0].id));
+            }
           }
-
-          const currentRooms = prev.oneOnOneTalkRooms;
-
-          const targetTalkRoomId =
-            subscriptionData.data.oneOnOneTalkRoomMessageCreated.roomId;
-
-          const targetRoom = currentRooms.find(
-            (room) => room.id === targetTalkRoomId
-          );
-
-          if (!targetRoom) {
-            setNewTalkRoomId(
-              subscriptionData.data.oneOnOneTalkRoomMessageCreated.roomId
-            );
-            return prev;
-          }
-
-          const newMessageEdge = {
-            node: subscriptionData.data.oneOnOneTalkRoomMessageCreated,
-            cursor:
-              subscriptionData.data.oneOnOneTalkRoomMessageCreated.id.toString(),
-          };
-
-          const newMessagesConnection = {
-            ...targetRoom.messages,
-            edges: [newMessageEdge, ...targetRoom.messages.edges],
-            pageInfo: {
-              ...targetRoom.messages.pageInfo,
-              startCursor: newMessageEdge.node.id.toString(),
-            },
-          };
-
-          const isMySentData =
-            subscriptionData.data.oneOnOneTalkRoomMessageCreated.sender.id ===
-            myId;
-
-          const newRoomData = {
-            ...targetRoom,
-            allMessageSeen: isMySentData,
-            messages: newMessagesConnection,
-          };
-
-          const filteredRooms = currentRooms.filter(
-            (room) => room.id !== targetRoom.id
-          );
-
-          const newTalkRoomList = [newRoomData, ...filteredRooms];
-
-          return {
-            oneOnOneTalkRooms: newTalkRoomList,
-          };
-        },
-      });
+        });
 
       return () => {
         if (unsubscribe) {
-          console.log('案サブスク OneOnOneTalkRooms');
           unsubscribe();
         }
       };
     }
-  }, [isActive, myId, subscribeToMore, setNewTalkRoomId]);
+  }, [isActive, myId, setNewTalkRoomId]);
 
   //最初のメッセージ(まだトークルームを持っていない)メッセージが送られて来た場合はそのトークルームをフェッチ。cacheに手動で追加
   useEffect(() => {
