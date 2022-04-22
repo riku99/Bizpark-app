@@ -131,15 +131,14 @@ export const TalkRoomMessage = React.memo((props: Props) => {
   ): IMessage => {
     const { replyMessage: _replyMessage } = message;
 
-    const dateMs = Number(message.createdAt);
+    // ここがUTCなので日本時間に直したい
+    const creaetdAtJst = new Date(Number(message.createdAt));
+    creaetdAtJst.setHours(creaetdAtJst.getHours() + 9);
 
     return {
       _id: message.id,
       text: message.text,
-      // バックエンド側で開発用のpubsubを使うとms仕様で返ってくるが、本番用のポスぐれpusbsub使うとISOで返ってくるので分ける
-      createdAt: !!dateMs
-        ? new Date(Number(message.createdAt))
-        : new Date(message.createdAt),
+      createdAt: creaetdAtJst,
       user: {
         _id: message.sender?.id,
         name: message.sender?.name,

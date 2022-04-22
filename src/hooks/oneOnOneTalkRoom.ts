@@ -137,7 +137,7 @@ export const useOneOnOneTalkRoomsWithSubscription = () => {
         }
       };
     }
-  }, [isActive, myId, setNewTalkRoomId]);
+  }, [isActive, myId, setSubscribeMessageId]);
 
   //最初のメッセージ(まだトークルームを持っていない)メッセージが送られて来た場合はそのトークルームをフェッチ。cacheに手動で追加
   useEffect(() => {

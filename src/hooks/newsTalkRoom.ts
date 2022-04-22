@@ -105,7 +105,6 @@ export const useNewsTalkRoomsWithSusbscription = () => {
     };
   }, [setIsActive]);
 
-  // サブスクライブ
   useEffect(() => {
     if (isActive && myId) {
       const unsubscribe = firestore()

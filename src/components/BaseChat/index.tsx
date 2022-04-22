@@ -12,6 +12,7 @@ import {
   Composer,
   Send,
   InputToolbar,
+  Day,
 } from 'react-native-gifted-chat';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { useColorModeValue, Text, Box, HStack } from 'native-base';
@@ -55,7 +56,7 @@ export const BaseChat = React.memo(
         }
       );
 
-      const willHideListener = Keyboard.addListener('keyboardWillHide', (e) => {
+      const willHideListener = Keyboard.addListener('keyboardWillHide', () => {
         setKeyboardHeight(0);
       });
 
@@ -153,7 +154,7 @@ export const BaseChat = React.memo(
           </Box>
         );
       },
-      [replyMessage, inputContainerBg]
+      [replyMessage, inputContainerBg, setReplyMessage]
     );
 
     const renderComposer = useCallback(
@@ -169,7 +170,7 @@ export const BaseChat = React.memo(
           />
         );
       },
-      [inputTextColor, inputContainerBg]
+      [inputTextColor, keyboard]
     );
 
     const renderSend = useCallback((props) => {
@@ -222,8 +223,12 @@ export const BaseChat = React.memo(
           </HStack>
         );
       },
-      [rightReplyMessageTextColor, leftReplyMesageTextColor]
+      [rightReplyMessageTextColor, leftReplyMesageTextColor, isMe]
     );
+
+    const renderDay = useCallback((props) => {
+      return <Day {...props} dateFormat="YYYY/MM/DD" />;
+    }, []);
 
     const closeToTop = useCallback((nativeEvent: NativeScrollEvent) => {
       return (
@@ -271,6 +276,7 @@ export const BaseChat = React.memo(
           renderSend={renderSend}
           renderLoadEarlier={renderLoadEarlier}
           renderCustomView={renderCustomView}
+          renderDay={renderDay}
           listViewProps={{
             scrollEventThrottle: 400,
             onScroll: ({ nativeEvent }: { nativeEvent: NativeScrollEvent }) => {
