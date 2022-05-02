@@ -24,6 +24,7 @@ import { StyleSheet } from 'react-native';
 import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
 import { btoa } from 'react-native-quick-base64';
 import { RefreshControl } from 'src/components/RefreshControl';
+import { SafeAreaView } from 'react-native';
 
 type Props = RootNavigationScreenProp<'Notifications'>;
 
@@ -231,15 +232,17 @@ export const NotificationsScreen = ({ navigation }: Props) => {
   }
 
   return (
-    <InfiniteFlatList<Item>
-      data={notificationData.notifications.edges}
-      renderItem={renderItem}
-      keyExtractor={(item) => item.node.id.toString()}
-      infiniteLoad={infiniteLoad}
-      refreshControl={
-        <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
-      }
-    />
+    <SafeAreaView>
+      <InfiniteFlatList<Item>
+        data={notificationData.notifications.edges}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.node.id.toString()}
+        infiniteLoad={infiniteLoad}
+        refreshControl={
+          <RefreshControl refreshing={isRefreshing} onRefresh={onRefresh} />
+        }
+      />
+    </SafeAreaView>
   );
 };
 
