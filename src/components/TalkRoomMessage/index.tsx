@@ -131,14 +131,12 @@ export const TalkRoomMessage = React.memo((props: Props) => {
   ): IMessage => {
     const { replyMessage: _replyMessage } = message;
 
-    // ここがUTCなので日本時間に直したい
-    const creaetdAtJst = new Date(Number(message.createdAt));
-    creaetdAtJst.setHours(creaetdAtJst.getHours() + 9);
+    const creaetdAt = new Date(Number(message.createdAt));
 
     return {
       _id: message.id,
       text: message.text,
-      createdAt: creaetdAtJst,
+      createdAt: creaetdAt,
       user: {
         _id: message.sender?.id,
         name: message.sender?.name,
