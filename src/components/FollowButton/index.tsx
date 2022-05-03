@@ -33,7 +33,7 @@ export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
   const borderColor = useColorModeValue('textBlack', 'textWhite');
 
   const onPress = async () => {
-    Haptics.selectionAsync();
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
     try {
       if (!isFollowing) {
         if (!isPlusPlan) {

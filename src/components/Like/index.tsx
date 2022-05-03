@@ -1,6 +1,8 @@
 import React, { ComponentProps, useRef, useEffect } from 'react';
 import { Pressable } from 'native-base';
 import LottieView from 'lottie-react-native';
+import * as Haptics from 'expo-haptics';
+import { GestureResponderEvent } from 'react-native';
 
 const Source = require('../../assets/lottie/like.json');
 
@@ -42,8 +44,13 @@ export const Like = ({
     }
   }, [liked, likeAnimation, setLikeAnimation]);
 
+  const onPress = (e: GestureResponderEvent) => {
+    Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+    props.onPress(e);
+  };
+
   return (
-    <Pressable {...props}>
+    <Pressable {...props} onPress={onPress}>
       <LottieView
         ref={likeRef}
         source={Source}

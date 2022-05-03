@@ -132,7 +132,7 @@ export const OneOnOneTalkRoomList = React.memo(() => {
       };
 
       const onLongPress = () => {
-        Haptics.selectionAsync();
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         setMenuData({ roomId: item.id });
       };
 

@@ -105,7 +105,7 @@ export const NewsTalkRoomList = React.memo(() => {
     };
 
     const onLongPress = () => {
-      Haptics.selectionAsync();
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
       setModalData({ roomId: item.id });
     };
 

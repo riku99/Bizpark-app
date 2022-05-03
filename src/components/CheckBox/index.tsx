@@ -24,7 +24,7 @@ export const CheckBox = ({ checked, onPress, style, ...props }: Props) => {
   return (
     <Pressable
       onPress={() => {
-        Haptics.selectionAsync();
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
         onPress();
       }}
       style={style}
