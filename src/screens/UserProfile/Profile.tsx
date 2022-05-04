@@ -28,39 +28,17 @@ export const UserProfile = ({ id }: Props) => {
     setRefreshing(false);
   };
 
-  if (!data || data.userResult.__typename === 'Deleted') {
-    if (loading) {
-      return <Indicator style={styles.indicator} />;
-    } else {
-      return null;
-    }
+  if (!data) {
+    return <Indicator style={styles.indicator} />;
   }
 
-  const result = data.userResult;
-
-  const userData =
-    result.__typename === 'User'
-      ? {
-          name: result.name,
-          imageUrl: result.imageUrl,
-          bio: result.bio,
-          instagram: result.snsAccounts?.instagram,
-          facebook: result.snsAccounts?.facebook,
-          twitter: result.snsAccounts?.twitter,
-          linkedIn: result.snsAccounts?.linkedin,
-          follow: result.follow,
-          blocking: result.blocking,
-        }
-      : {
-          name: result.blockedByUser.name,
-          imageUrl: result.blockedByUser.imageUrl,
-        };
+  const { user } = data;
 
   const socials: { type: SocialIconProps['type']; value: string | null }[] = [
-    { type: 'facebook', value: userData.facebook },
-    { type: 'twitter', value: userData.twitter },
-    { type: 'linkedin', value: userData.linkedIn },
-    { type: 'instagram', value: userData.instagram },
+    { type: 'facebook', value: user.snsAccounts.facebook },
+    { type: 'twitter', value: user.snsAccounts.twitter },
+    { type: 'linkedin', value: user.snsAccounts.linkedin },
+    { type: 'instagram', value: user.snsAccounts.instagram },
   ];
 
   return (
@@ -74,16 +52,14 @@ export const UserProfile = ({ id }: Props) => {
       >
         <Profile
           id={id}
-          name={userData.name}
-          bio={userData.bio}
-          imageUrl={userData.imageUrl}
+          name={user.name}
+          bio={user.bio}
+          imageUrl={user.imageUrl}
           socials={socials}
           isMe={isMe}
           loading={loading}
-          follow={userData.follow}
-          blockingOrBlocked={
-            result.__typename === 'User' ? userData.blocking : true
-          }
+          follow={user.follow}
+          blockingOrBlocked={user.blocking || user.blocked}
         />
       </ScrollView>
     </>

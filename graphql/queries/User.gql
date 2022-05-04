@@ -1,21 +1,8 @@
 query User($id: ID!) {
-  userResult(id: $id) {
-    ... on User {
-      ...UserParts
-      blocking
-      follow
-    }
-    ... on Deleted {
-      message
-    }
-    ... on IsBlocked {
-      message
-      blockedByUser {
-        id
-        name
-        imageUrl
-        blocking
-      }
-    }
+  user(id: $id) {
+    ...UserParts
+    blocking
+    blocked
+    follow
   }
 }
