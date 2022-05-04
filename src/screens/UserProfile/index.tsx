@@ -1,12 +1,7 @@
-import React, {
-  useLayoutEffect,
-  useState,
-  useCallback,
-  useEffect,
-} from 'react';
+import React, { useLayoutEffect, useState, useCallback } from 'react';
 import { useColorModeValue, useTheme } from 'native-base';
 import { RootNavigationScreenProp } from 'src/types';
-import { useUserQuery } from 'src/generated/graphql';
+import { useUserQuery, UserGetError } from 'src/generated/graphql';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
 import { useToast } from 'react-native-toast-notifications';
 import { useUnblock, useBlock } from 'src/hooks/users';
@@ -17,6 +12,7 @@ import { UserProfile } from './Profile';
 import { Thoughts } from './Thoughts';
 import { useMyId } from 'src/hooks/me';
 import { Alert } from 'react-native';
+import { getGraphQLError } from 'src/utils';
 
 type Props = RootNavigationScreenProp<'UserProfile'>;
 
@@ -34,6 +30,22 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     },
     fetchPolicy: 'cache-and-network',
     nextFetchPolicy: 'cache-first',
+    onError: (errors) => {
+      const error = getGraphQLError(errors, 0);
+
+      if (error) {
+        if (error.code === UserGetError.NotFound) {
+          Alert.alert('ユーザーが見つかりません', '', [
+            {
+              text: 'OK',
+              onPress: () => {
+                navigation.goBack();
+              },
+            },
+          ]);
+        }
+      }
+    },
   });
 
   const myId = useMyId();
@@ -47,27 +59,9 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
     setModalVisible(false);
   };
 
-  useEffect(() => {
-    if (data?.userResult.__typename === 'Deleted' && !loading) {
-      Alert.alert(data.userResult.message, '', [
-        {
-          text: 'OK',
-          onPress: () => {
-            navigation.goBack();
-          },
-        },
-      ]);
-    }
-  }, [navigation, data, loading]);
-
   useLayoutEffect(() => {
     navigation.setOptions({
-      title:
-        data?.userResult.__typename === 'User'
-          ? data.userResult.name
-          : data?.userResult.__typename === 'IsBlocked'
-          ? data?.userResult.blockedByUser.name
-          : '',
+      title: data?.user.name || '',
       headerRight:
         data && !isMe
           ? () => (
@@ -138,16 +132,12 @@ export const UserProfileScreen = ({ navigation, route }: Props) => {
         <TopTab.Screen name="投稿" component={renderThoughts} />
       </TopTab.Navigator>
 
-      {data && data?.userResult.__typename !== 'Deleted' && (
+      {data && (
         <Menu
           isVisible={modalVisible}
           closeMenu={closeModal}
           userId={id}
-          blocking={
-            data.userResult.__typename === 'User'
-              ? data.userResult.blocking
-              : data.userResult.blockedByUser.blocking
-          }
+          blocking={data.user.blocking}
           onBlockPress={onBlockPress}
           onUnBlockPress={onUnBlockPress}
         />
