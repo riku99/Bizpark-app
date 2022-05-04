@@ -23,8 +23,8 @@ export const PickedThoughts = React.memo(() => {
   };
 
   const infiniteLoad = async () => {
-    if (data?.userResult.__typename === 'User') {
-      const { pageInfo } = data.userResult.likedThoughts;
+    if (data) {
+      const { pageInfo } = data.user.likedThoughts;
       if (pageInfo.hasNextPage) {
         const { endCursor } = pageInfo;
 
@@ -38,11 +38,11 @@ export const PickedThoughts = React.memo(() => {
   };
 
   const listData = useMemo(() => {
-    if (!data || data.userResult.__typename !== 'User') {
+    if (!data) {
       return;
     }
 
-    return data.userResult.likedThoughts.edges.map((edge) => edge.node.thought);
+    return data.user.likedThoughts.edges.map((edge) => edge.node.thought);
   }, [data]);
 
   if (!listData) {

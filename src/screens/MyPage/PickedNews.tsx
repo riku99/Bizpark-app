@@ -35,8 +35,8 @@ export const PickedNews = () => {
   };
 
   const infiniteLoad = async () => {
-    if (data?.userResult.__typename === 'User') {
-      const { pageInfo } = data.userResult.pickedNews;
+    if (data) {
+      const { pageInfo } = data.user.pickedNews;
       if (pageInfo.hasNextPage) {
         const { endCursor } = pageInfo;
 
@@ -62,18 +62,18 @@ export const PickedNews = () => {
     [navigation]
   );
 
-  if (!data || data.userResult.__typename === 'Deleted') {
+  if (!data) {
     return <Indicator style={styles.indicator} />;
   }
 
-  if (data.userResult.__typename === 'IsBlocked') {
+  if (data.user.blocked) {
     return null;
   }
 
   return (
     <Box flex={1}>
       <InfiniteFlatList
-        data={data.userResult.pickedNews.edges}
+        data={data.user.pickedNews.edges}
         renderItem={renderItem}
         infiniteLoad={infiniteLoad}
         initialNumToRender={10}

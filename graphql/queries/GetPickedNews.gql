@@ -1,6 +1,7 @@
 query GetPickedNews($cursor: String, $userId: ID!) {
   user(id: $userId) {
     id
+    blocked
     pickedNews(first: 20, after: $cursor) {
       edges {
         node {

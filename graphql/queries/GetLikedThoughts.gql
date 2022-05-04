@@ -1,6 +1,7 @@
 query GetLikedThoughts($after: String, $userId: ID!) {
   user(id: $userId) {
     id
+    blocked
     likedThoughts(after: $after) {
       edges {
         node {
