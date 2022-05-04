@@ -1,16 +1,18 @@
 import React, { useState, ComponentProps, useEffect } from 'react';
 import { Pressable, Text, useColorModeValue } from 'native-base';
 import {
-  CustomErrorResponseCode,
   useFollowMutation,
   useUnfollowMutation,
+  FollowError,
+  UnFollowError,
 } from 'src/generated/graphql';
 import { useToast } from 'react-native-toast-notifications';
-import { getGraphQLErrorCode } from 'src/utils';
+import { getGraphQLError } from 'src/utils';
 import * as Haptics from 'expo-haptics';
 import { useIsPlusPlan } from 'src/hooks/me';
 import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from 'src/types';
+import { Alert } from 'react-native';
 
 type Props = {
   userId: string;
@@ -42,37 +44,62 @@ export const FollowButton = ({ userId, follow, loading, ...props }: Props) => {
         }
 
         setIsFollowing(true);
-        const { data: followData } = await followMutation({
+        await followMutation({
           variables: {
             followeeId: userId,
           },
-        });
+          onError: (errors) => {
+            setIsFollowing(false);
+            const error = getGraphQLError(errors, 0);
+            if (error) {
+              if (error.code === FollowError.NotFound) {
+                Alert.alert('ユーザーが見つかりません', '', [
+                  {
+                    text: 'OK',
+                    onPress: () => {
+                      navigation.goBack();
+                    },
+                  },
+                ]);
+              }
 
-        if (followData.follow.__typename === 'Deleted') {
-          toast.show(followData.follow.message, { type: 'danger' });
-          setIsFollowing(false);
-        }
+              if (error.code === FollowError.Blocking) {
+                Alert.alert('ブロックを解除してください');
+              }
+
+              if (error.code === FollowError.Blokced) {
+                Alert.alert('フォローすることができません');
+              }
+            }
+          },
+        });
       } else {
         setIsFollowing(false);
-        const { data: unfollowData } = await unfollowMutation({
+        await unfollowMutation({
           variables: {
             followeeId: userId,
           },
-        });
+          onError: (errors) => {
+            setIsFollowing(true);
+            const error = getGraphQLError(errors, 0);
 
-        if (unfollowData?.unfollow.__typename === 'Deleted') {
-          toast.show(unfollowData.unfollow.message, { type: 'danger' });
-          setIsFollowing(true);
-        }
+            if (error) {
+              if (error.code === UnFollowError.NotFound) {
+                Alert.alert('ユーザーが見つかりません', '', [
+                  {
+                    text: 'OK',
+                    onPress: () => {
+                      navigation.goBack();
+                    },
+                  },
+                ]);
+              }
+            }
+          },
+        });
       }
     } catch (error) {
-      setIsFollowing((c) => !c);
-      const code = getGraphQLErrorCode(error);
-      if (code === CustomErrorResponseCode.InvalidRequest) {
-        toast.show('ブロックを解除してください', {
-          type: 'danger',
-        });
-      }
+      console.log(error);
     }
   };
 

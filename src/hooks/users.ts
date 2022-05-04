@@ -3,8 +3,6 @@ import { useCallback } from 'react';
 import {
   UserPartsFragmentDoc,
   UserPartsFragment,
-  useFollowMutation,
-  useUnfollowMutation,
   useUnBlockMutation,
   BlockingUsersDocument,
   BlockingUsersQueryResult,

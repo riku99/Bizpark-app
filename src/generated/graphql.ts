@@ -151,7 +151,11 @@ export type Follow = {
   id: Scalars['ID'];
 };
 
-export type FollowResult = Deleted | User;
+export enum FollowError {
+  Blocking = 'BLOCKING',
+  Blokced = 'BLOKCED',
+  NotFound = 'NOT_FOUND'
+}
 
 export enum Genre {
   Business = 'BUSINESS',
@@ -242,7 +246,7 @@ export type Mutation = {
   deleteThought: DeleteThoughtResponse;
   deleteThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
   deleteThoughtTalkRoomMember: ThoughtTalkRoom;
-  follow: FollowResult;
+  follow: User;
   getOutNewsTalkRoom?: Maybe<Scalars['Boolean']>;
   getOutThoughtTalkRoom?: Maybe<Scalars['Boolean']>;
   joinNewsTalkRoom: NewsTalkRoom;
@@ -253,7 +257,7 @@ export type Mutation = {
   seenOneOnOneTalkRoomMessage: OneOnOneTalkRoom;
   signOut: Me;
   unblock: User;
-  unfollow: UnFollowResult;
+  unfollow: User;
   unlikeThought?: Maybe<Thought>;
   updateMe: Me;
   uploadImage: SubImage;
@@ -948,7 +952,9 @@ export type ThoughtsConnection = {
   pageInfo: PageInfo;
 };
 
-export type UnFollowResult = Deleted | User;
+export enum UnFollowError {
+  NotFound = 'NOT_FOUND'
+}
 
 export type UnLikeThoughtInput = {
   thoughtId: Scalars['String'];
@@ -1196,7 +1202,7 @@ export type FollowMutationVariables = Exact<{
 }>;
 
 
-export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } };
+export type FollowMutation = { __typename?: 'Mutation', follow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } };
 
 export type GetOutNewsTalkRoomMutationVariables = Exact<{
   input: GetOutNewsTalkRoomInput;
@@ -1264,7 +1270,7 @@ export type UnfollowMutationVariables = Exact<{
 }>;
 
 
-export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'Deleted', message?: string | null | undefined } | { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } };
+export type UnfollowMutation = { __typename?: 'Mutation', unfollow: { __typename?: 'User', follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } };
 
 export type UnlikeThoughtMutationVariables = Exact<{
   input: UnLikeThoughtInput;
@@ -2460,13 +2466,8 @@ export type DeleteThoughtTalkRoomMemberMutationOptions = Apollo.BaseMutationOpti
 export const FollowDocument = gql`
     mutation Follow($followeeId: ID!) {
   follow(followeeId: $followeeId) {
-    ... on User {
-      follow
-      ...UserParts
-    }
-    ... on Deleted {
-      message
-    }
+    follow
+    ...UserParts
   }
 }
     ${UserPartsFragmentDoc}`;
@@ -2793,13 +2794,8 @@ export type UnBlockMutationOptions = Apollo.BaseMutationOptions<UnBlockMutation,
 export const UnfollowDocument = gql`
     mutation Unfollow($followeeId: ID!) {
   unfollow(followeeId: $followeeId) {
-    ... on User {
-      follow
-      ...UserParts
-    }
-    ... on Deleted {
-      message
-    }
+    follow
+    ...UserParts
   }
 }
     ${UserPartsFragmentDoc}`;
