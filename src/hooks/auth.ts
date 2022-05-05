@@ -1,20 +1,20 @@
+import { useApolloClient } from '@apollo/client';
+import { appleAuth } from '@invertase/react-native-apple-authentication';
 import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useCallback } from 'react';
+import { Alert } from 'react-native';
+import Config from 'react-native-config';
 import { useToast } from 'react-native-toast-notifications';
 import {
   useCreateUserMutation,
   useInitialDataLazyQuery,
   useSignOutMutation,
 } from 'src/generated/graphql';
-import { appleAuth } from '@invertase/react-native-apple-authentication';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
-import Config from 'react-native-config';
 import { googleSignIn } from 'src/helpers/auth';
-import { Alert } from 'react-native';
-import { useCustomToast } from './toast';
-import { spinnerVisibleVar } from 'src/stores/spinner';
-import { useApolloClient } from '@apollo/client';
 import { useLoggedIn } from 'src/hooks/me';
+import { spinnerVisibleVar } from 'src/stores/spinner';
+import { useCustomToast } from './toast';
 
 GoogleSignin.configure({
   webClientId: Config.GOOGLE_WEB_CLIENT_ID,
@@ -242,18 +242,16 @@ export const useSignOut = () => {
   const [signOutMutation] = useSignOutMutation();
 
   const signOut = useCallback(async () => {
-    spinnerVisibleVar(true);
     try {
       await signOutMutation();
     } catch (e) {
+      console.log(e);
     } finally {
       await auth().signOut();
 
       await client.clearStore();
 
       setLoggedIn(false);
-
-      spinnerVisibleVar(false);
 
       console.log('👋 Sign out success!');
     }
