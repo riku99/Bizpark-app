@@ -1,5 +1,6 @@
 import { useApolloClient } from '@apollo/client';
 import { appleAuth } from '@invertase/react-native-apple-authentication';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useCallback } from 'react';
@@ -13,6 +14,7 @@ import {
 } from 'src/generated/graphql';
 import { googleSignIn } from 'src/helpers/auth';
 import { useLoggedIn } from 'src/hooks/me';
+import { storage } from 'src/storage/mmkv';
 import { spinnerVisibleVar } from 'src/stores/spinner';
 import { useCustomToast } from './toast';
 
@@ -247,9 +249,13 @@ export const useSignOut = () => {
     } catch (e) {
       console.log(e);
     } finally {
-      await auth().signOut();
+      await Promise.all([
+        auth().signOut(),
+        client.clearStore(),
+        AsyncStorage.clear(),
+      ]);
 
-      await client.clearStore();
+      storage.clearAll();
 
       setLoggedIn(false);
 

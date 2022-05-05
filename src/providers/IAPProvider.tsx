@@ -1,10 +1,10 @@
-import React, { useCallback, useEffect, createContext, useState } from 'react';
-import { Platform, Alert } from 'react-native';
 import * as InAppPurchases from 'expo-in-app-purchases';
+import React, { createContext, useCallback, useEffect, useState } from 'react';
+import { Alert, Platform } from 'react-native';
 import Config from 'react-native-config';
-import { storage, iapReceiptStorageKey } from 'src/storage/mmkv';
 import { useVerifyIapReceiptMutation } from 'src/generated/graphql';
 import { useSpinner } from 'src/hooks/spinner';
+import { iapReceiptStorageKey, storage } from 'src/storage/mmkv';
 
 type Props = {
   children: JSX.Element;
@@ -58,6 +58,7 @@ export const IAPProvider = ({ children }: Props) => {
       }
 
       try {
+        console.log('Request verifyIapReceipt ✋')
         // 検証リクエスト
         await verifyIapReceiptMutation({
           variables: {
@@ -71,7 +72,8 @@ export const IAPProvider = ({ children }: Props) => {
             console.log('レシート検証完了');
             storage.delete(iapReceiptStorageKey);
           },
-          onError: () => {
+          onError: (error) => {
+            console.log(error);
             console.log('レシート検証失敗');
           },
         });

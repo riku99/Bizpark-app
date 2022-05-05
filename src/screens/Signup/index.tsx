@@ -1,12 +1,12 @@
-import React, { useLayoutEffect, useEffect } from 'react';
-import { Box, VStack, Text, Pressable } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
+import { Box, Pressable, Text, VStack } from 'native-base';
+import React, { useLayoutEffect } from 'react';
 import { SafeAreaView } from 'react-native';
+import { Apple, Google, Mail } from 'src/components/AuthButton';
 import { Bg } from 'src/components/Bg';
-import { SwipeContent } from './SwipeContent';
-import { Mail, Apple, Google } from 'src/components/AuthButton';
 import { HIGHER_8_DEVICE } from 'src/constants';
 import { useSignupWithApple, useSignupWithGoogle } from 'src/hooks/auth';
+import { RootNavigationScreenProp } from 'src/types';
+import { SwipeContent } from './SwipeContent';
 
 type Props = RootNavigationScreenProp<'Signup'>;
 
