@@ -1,22 +1,21 @@
-import React, { useLayoutEffect } from 'react';
-import { useColorMode, Button } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
+import { useReactiveVar } from '@apollo/client';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { Society } from './Society';
-import { Business } from './Business';
-import { Economy } from './Economy';
-import { Politics } from './Politics';
-import { useTopTabBarStyle } from 'src/hooks/theme';
+import { Button, useColorMode } from 'native-base';
+import React, { useLayoutEffect } from 'react';
 import { AddButton } from 'src/components/AddButton';
 import { CreatingToast } from 'src/components/CreatingToast';
-import { useReactiveVar } from '@apollo/client';
-import { creatingThoughtVar } from 'src/stores/thought';
-import { Follow } from './Follow';
 import { useFcmHandler } from 'src/hooks/pushNotificatoins';
-import { HeaderRight } from './HeaderRight';
-import { tabOrderVar } from 'src/stores/tabOrder';
-import { TopTabParamList } from './types';
 import { useTabOrder } from 'src/hooks/tabOrder';
+import { useTopTabBarStyle } from 'src/hooks/theme';
+import { creatingThoughtVar } from 'src/stores/thought';
+import { RootNavigationScreenProp } from 'src/types';
+import { Business } from './Business';
+import { Economy } from './Economy';
+import { Follow } from './Follow';
+import { HeaderRight } from './HeaderRight';
+import { Politics } from './Politics';
+import { Society } from './Society';
+import { TopTabParamList } from './types';
 
 type Props = RootNavigationScreenProp<'Tab'>;
 
