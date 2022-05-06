@@ -1,5 +1,4 @@
 import { useApolloClient } from '@apollo/client';
-import { appleAuth } from '@invertase/react-native-apple-authentication';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
@@ -12,8 +11,9 @@ import {
   useInitialDataLazyQuery,
   useSignOutMutation,
 } from 'src/generated/graphql';
-import { googleSignIn } from 'src/helpers/auth';
+import { appleSignIn, googleSignIn } from 'src/helpers/auth';
 import { useLoggedIn } from 'src/hooks/me';
+import { useSpinner } from 'src/hooks/spinner';
 import { storage } from 'src/storage/mmkv';
 import { spinnerVisibleVar } from 'src/stores/spinner';
 import { useCustomToast } from './toast';
@@ -85,7 +85,7 @@ export const useSignUpWithEmail = () => {
         spinnerVisibleVar(false);
       }
     },
-    [someErrorToast]
+    [someErrorToast, createUserMutation, setLoggedIn, toast]
   );
 
   return {
@@ -95,37 +95,20 @@ export const useSignUpWithEmail = () => {
 
 export const useSignupWithApple = () => {
   const { setLoggedIn } = useLoggedIn();
-
-  const { someErrorToast } = useCustomToast();
+  const { setSpinnerVisible } = useSpinner();
   const [createUserMutation] = useCreateUserMutation();
 
   const signupWithApple = useCallback(async () => {
+    setSpinnerVisible(true);
     try {
-      const appleAuthResponse = await appleAuth.performRequest({
-        requestedOperation: appleAuth.Operation.LOGOUT,
-        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-      });
-
-      if (!appleAuthResponse.identityToken) {
-        someErrorToast();
-        return;
-      }
-
-      const { identityToken, nonce } = appleAuthResponse;
-      const appleCredential = auth.AppleAuthProvider.credential(
-        identityToken,
-        nonce
-      );
-
-      const result = await auth().signInWithCredential(appleCredential);
-      const userIdToken = await result.user.getIdToken();
+      const { appleData, idToken, name } = await appleSignIn();
 
       const { data } = await createUserMutation({
         variables: {
           input: {
-            email: result.user.email,
-            idToken: userIdToken,
-            name: result.user.displayName,
+            email: appleData.user.email,
+            name: name ?? '仮名',
+            idToken,
           },
         },
       });
@@ -135,8 +118,10 @@ export const useSignupWithApple = () => {
       }
     } catch (e) {
       console.log(e);
+    } finally {
+      setSpinnerVisible(false);
     }
-  }, [someErrorToast]);
+  }, [createUserMutation, setLoggedIn, setSpinnerVisible]);
 
   return {
     signupWithApple,
@@ -147,7 +132,6 @@ export const useSignupWithGoogle = () => {
   const { setLoggedIn } = useLoggedIn();
 
   const [createUserMutation] = useCreateUserMutation();
-  const { someErrorToast } = useCustomToast();
 
   const signupWithGoogle = useCallback(async () => {
     spinnerVisibleVar(true);
@@ -171,7 +155,7 @@ export const useSignupWithGoogle = () => {
     } finally {
       spinnerVisibleVar(false);
     }
-  }, [someErrorToast]);
+  }, [createUserMutation, setLoggedIn]);
 
   return {
     signupWithGoogle,
@@ -202,7 +186,7 @@ export const useSignInWithEmail = () => {
         spinnerVisibleVar(false);
       }
     },
-    []
+    [called, getInitialData, setLoggedIn]
   );
 
   return {
@@ -212,7 +196,6 @@ export const useSignInWithEmail = () => {
 
 export const useSignInWithGoogle = () => {
   const { setLoggedIn } = useLoggedIn();
-
   const [getInitialData, { called }] = useInitialDataLazyQuery();
 
   const signInWithGoogle = useCallback(async () => {
@@ -230,10 +213,37 @@ export const useSignInWithGoogle = () => {
     } finally {
       spinnerVisibleVar(false);
     }
-  }, []);
+  }, [called, getInitialData, setLoggedIn]);
 
   return {
     signInWithGoogle,
+  };
+};
+
+export const useSignInWithApple = () => {
+  const { setLoggedIn } = useLoggedIn();
+  const { setSpinnerVisible } = useSpinner();
+  const [getInitialData, { called }] = useInitialDataLazyQuery();
+
+  const signInWithApple = useCallback(async () => {
+    setSpinnerVisible(true);
+    try {
+      await appleSignIn();
+      if (!called) {
+        const { data } = await getInitialData();
+        if (data) {
+          setLoggedIn(true);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setSpinnerVisible(false);
+    }
+  }, [setLoggedIn, setSpinnerVisible, called, getInitialData]);
+
+  return {
+    signInWithApple,
   };
 };
 
@@ -261,7 +271,7 @@ export const useSignOut = () => {
 
       console.log('👋 Sign out success!');
     }
-  }, [client]);
+  }, [client, setLoggedIn, signOutMutation]);
 
   return {
     signOut,
