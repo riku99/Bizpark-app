@@ -38,5 +38,6 @@ export const appleSignIn = async () => {
   return {
     idToken,
     appleData,
+    name: appleAuthResponse.fullName.givenName,
   };
 };

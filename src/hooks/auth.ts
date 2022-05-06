@@ -95,19 +95,19 @@ export const useSignUpWithEmail = () => {
 
 export const useSignupWithApple = () => {
   const { setLoggedIn } = useLoggedIn();
-
-  const { someErrorToast } = useCustomToast();
+  const { setSpinnerVisible } = useSpinner();
   const [createUserMutation] = useCreateUserMutation();
 
   const signupWithApple = useCallback(async () => {
+    setSpinnerVisible(true);
     try {
-      const { appleData, idToken } = await appleSignIn();
+      const { appleData, idToken, name } = await appleSignIn();
 
       const { data } = await createUserMutation({
         variables: {
           input: {
             email: appleData.user.email,
-            name: appleData.user.displayName,
+            name: name ?? '仮名',
             idToken,
           },
         },
@@ -118,8 +118,10 @@ export const useSignupWithApple = () => {
       }
     } catch (e) {
       console.log(e);
+    } finally {
+      setSpinnerVisible(false);
     }
-  }, [someErrorToast]);
+  }, []);
 
   return {
     signupWithApple,
