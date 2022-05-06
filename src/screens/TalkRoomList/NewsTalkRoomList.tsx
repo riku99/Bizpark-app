@@ -1,18 +1,18 @@
-import React, { useCallback, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
 import { Box, FlatList } from 'native-base';
+import React, { useCallback, useState } from 'react';
+import { Alert } from 'react-native';
+import { useToast } from 'react-native-toast-notifications';
+import { InstaLikeModal, ListItem } from 'src/components/InstaLikeModal';
+import { TalkRoomListItem } from 'src/components/TalkRoomListItem';
 import {
-  useGetNewsTalkRoomsQuery,
   GetNewsTalkRoomsQueryResult,
+  useGetNewsTalkRoomsQuery,
   useGetOutNewsTalkRoomMutation,
 } from 'src/generated/graphql';
-import { TalkRoomListItem } from 'src/components/TalkRoomListItem';
-import { useNavigation } from '@react-navigation/native';
-import { RootNavigationProp } from 'src/types';
-import { InstaLikeModal, ListItem } from 'src/components/InstaLikeModal';
-import { Alert } from 'react-native';
-import * as Haptics from 'expo-haptics';
-import { useToast } from 'react-native-toast-notifications';
 import { useDeleteNewsTalkRoomFromCache } from 'src/hooks/newsTalkRoom';
+import { RootNavigationProp } from 'src/types';
 
 type Item = GetNewsTalkRoomsQueryResult['data']['newsTalkRooms'][number];
 
@@ -120,6 +120,10 @@ export const NewsTalkRoomList = React.memo(() => {
       />
     );
   }, []);
+
+  if (!talkRoomData) {
+    return null;
+  }
 
   return (
     <Box flex={1}>

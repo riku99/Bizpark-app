@@ -1,22 +1,22 @@
-import React, { useLayoutEffect, useState, useEffect } from 'react';
-import { ScrollView, VStack, Pressable, HStack, Text } from 'native-base';
-import { RootNavigationScreenProp, Socials } from 'src/types';
+import { ReactNativeFile } from 'apollo-upload-client';
+import { HStack, Pressable, ScrollView, Text, VStack } from 'native-base';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { SocialIcon, SocialIconProps } from 'react-native-elements';
+import FastImage from 'react-native-fast-image';
+import ImagePicker from 'react-native-image-crop-picker';
+import { useToast } from 'react-native-toast-notifications';
+import { UserImage } from 'src/components/UserImage';
+import { socialIcons } from 'src/constants';
 import {
   useMeQuery,
-  useUploadImageMutation,
   useUpdateMeMutation,
+  useUploadImageMutation
 } from 'src/generated/graphql';
-import { UserImage } from 'src/components/UserImage';
-import { SocialIcon, SocialIconProps } from 'react-native-elements';
-import { socialIcons } from 'src/constants';
-import ImagePicker from 'react-native-image-crop-picker';
-import { Item } from './EditItem';
-import { AvatarMenu } from './AvatarMenu';
-import { ReactNativeFile } from 'apollo-upload-client';
-import { spinnerVisibleVar } from 'src/stores/spinner';
-import { useToast } from 'react-native-toast-notifications';
-import FastImage from 'react-native-fast-image';
 import { useIsPlusPlan } from 'src/hooks/me';
+import { spinnerVisibleVar } from 'src/stores/spinner';
+import { RootNavigationScreenProp, Socials } from 'src/types';
+import { AvatarMenu } from './AvatarMenu';
+import { Item } from './EditItem';
 
 type Props = RootNavigationScreenProp<'UserEdit'>;
 

@@ -1,15 +1,15 @@
+import { useReactiveVar } from '@apollo/client';
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import React, { useLayoutEffect } from 'react';
 import { CreatingToast } from 'src/components/CreatingToast';
-import { useReactiveVar } from '@apollo/client';
+import { useTopTabBarStyle } from 'src/hooks/theme';
 import { creatingThoughtVar } from 'src/stores/thought';
 import { RootNavigationScreenProp } from 'src/types';
-import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { useTopTabBarStyle } from 'src/hooks/theme';
-import { Picks } from './Picks';
-import { Thouhgts } from './Thoughts';
 import { Follows } from './Follows';
-import { MyProfile } from './Profile';
 import { HeaderRight } from './HeaderRight';
+import { Picks } from './Picks';
+import { MyProfile } from './Profile';
+import { Thouhgts } from './Thoughts';
 
 type Props = RootNavigationScreenProp<'Tab'>;
 
@@ -34,11 +34,15 @@ export const MyPage = ({ navigation }: Props) => {
       <TopTab.Navigator
         screenOptions={{
           ...defaultScreenStyle,
+          tabBarScrollEnabled: true,
           tabBarLabelStyle: {
             fontSize: 11,
             fontWeight: 'bold',
           },
           lazy: true,
+          tabBarItemStyle: {
+            width: 105,
+          },
         }}
         style={{
           ...style,

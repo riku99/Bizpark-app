@@ -1,13 +1,12 @@
+import { useNavigation } from '@react-navigation/native';
+import { Box, HStack, Pressable, Text, useColorModeValue } from 'native-base';
 import React from 'react';
-import { Box, useColorModeValue, Text, HStack, Pressable } from 'native-base';
+import { Alert, Linking, StyleSheet } from 'react-native';
+import { SocialIcon, SocialIconProps } from 'react-native-elements';
 import { ContentsCard } from 'src/components/ContentsCard';
 import { UserImage } from 'src/components/UserImage';
-import { SocialIcon, SocialIconProps } from 'react-native-elements';
-import { StyleSheet } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
-import { RootNavigationProp } from 'src/types';
-import { Linking, Alert } from 'react-native';
 import { INSTAGRAM_BASE_URL, TWITTER_BASE_URL } from 'src/constants';
+import { RootNavigationProp } from 'src/types';
 import { FollowButton } from '../FollowButton';
 import { SendMessageButton } from './SendMessageButton';
 

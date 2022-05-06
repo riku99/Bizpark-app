@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { useGetActiveDataQuery } from 'src/generated/graphql';
 import { AppState, AppStateStatus } from 'react-native';
+import { useGetActiveDataQuery } from 'src/generated/graphql';
 
 export const useActiveData = () => {
   const [onActive, setOnActive] = useState(false);
