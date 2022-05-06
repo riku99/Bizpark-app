@@ -85,7 +85,7 @@ export const useSignUpWithEmail = () => {
         spinnerVisibleVar(false);
       }
     },
-    [someErrorToast]
+    [someErrorToast, createUserMutation, setLoggedIn, toast]
   );
 
   return {
@@ -121,7 +121,7 @@ export const useSignupWithApple = () => {
     } finally {
       setSpinnerVisible(false);
     }
-  }, []);
+  }, [createUserMutation, setLoggedIn, setSpinnerVisible]);
 
   return {
     signupWithApple,
@@ -132,7 +132,6 @@ export const useSignupWithGoogle = () => {
   const { setLoggedIn } = useLoggedIn();
 
   const [createUserMutation] = useCreateUserMutation();
-  const { someErrorToast } = useCustomToast();
 
   const signupWithGoogle = useCallback(async () => {
     spinnerVisibleVar(true);
@@ -156,7 +155,7 @@ export const useSignupWithGoogle = () => {
     } finally {
       spinnerVisibleVar(false);
     }
-  }, [someErrorToast]);
+  }, [createUserMutation, setLoggedIn]);
 
   return {
     signupWithGoogle,
@@ -187,7 +186,7 @@ export const useSignInWithEmail = () => {
         spinnerVisibleVar(false);
       }
     },
-    []
+    [called, getInitialData, setLoggedIn]
   );
 
   return {
@@ -214,7 +213,7 @@ export const useSignInWithGoogle = () => {
     } finally {
       spinnerVisibleVar(false);
     }
-  }, []);
+  }, [called, getInitialData, setLoggedIn]);
 
   return {
     signInWithGoogle,
@@ -241,7 +240,7 @@ export const useSignInWithApple = () => {
     } finally {
       setSpinnerVisible(false);
     }
-  }, [setLoggedIn, setSpinnerVisible]);
+  }, [setLoggedIn, setSpinnerVisible, called, getInitialData]);
 
   return {
     signInWithApple,
@@ -272,7 +271,7 @@ export const useSignOut = () => {
 
       console.log('👋 Sign out success!');
     }
-  }, [client]);
+  }, [client, setLoggedIn, signOutMutation]);
 
   return {
     signOut,
