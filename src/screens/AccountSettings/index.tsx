@@ -1,19 +1,18 @@
+import { useApolloClient } from '@apollo/client';
+import * as InAppPurchases from 'expo-in-app-purchases';
+import { Box, ScrollView, Text, useColorModeValue, VStack } from 'native-base';
 import React, { useLayoutEffect, useState } from 'react';
-import { Box } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
+import { Alert, Platform, StyleSheet } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import { ListItem } from 'src/components/ListItem';
 import { RightIcon } from 'src/components/RightIcon';
-import { Alert } from 'react-native';
-import { useSignOut } from 'src/hooks/auth';
-import { useLoggedIn } from 'src/hooks/me';
 import {
   useDeleteAccountMutation,
   useVerifyIapReceiptMutation,
 } from 'src/generated/graphql';
-import { useApolloClient } from '@apollo/client';
-import Spinner from 'react-native-loading-spinner-overlay';
-import * as InAppPurchases from 'expo-in-app-purchases';
-import { Platform } from 'react-native';
+import { useSignOut } from 'src/hooks/auth';
+import { useLoggedIn } from 'src/hooks/me';
+import { RootNavigationScreenProp } from 'src/types';
 
 type Props = RootNavigationScreenProp<'AccountSettings'>;
 
@@ -119,21 +118,51 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
     },
   ];
 
+  const textGray = useColorModeValue('lt.textGray', 'dt.textGray');
+
   return (
-    <Box flex={1}>
-      {list.map((l, idx) => (
-        <ListItem
-          key={idx}
-          title={l.title}
-          onPress={l.onPress}
-          ItemRight={l.rightIcon ? <RightIcon /> : undefined}
-          titleStyle={{
-            fontSize: 16,
-            ...l.titleStyle,
-          }}
-        />
-      ))}
+    <ScrollView flex={1}>
+      {/* 基本情報 */}
+      <Box mt="1">
+        <Text fontWeight="bold" color={textGray} fontSize="13" pl="4">
+          基本情報
+        </Text>
+
+        <VStack mt="2">
+          <ListItem
+            title="メールアドレス"
+            titleStyle={styles.itemTitleStyle}
+            ItemRight={<Text>rrr@rrr.com</Text>}
+          />
+          <ListItem
+            title="パスワード"
+            ItemRight={<Text>okokokok</Text>}
+            titleStyle={styles.itemTitleStyle}
+          />
+        </VStack>
+      </Box>
+
+      <Box mt="4">
+        {list.map((l, idx) => (
+          <ListItem
+            key={idx}
+            title={l.title}
+            onPress={l.onPress}
+            ItemRight={l.rightIcon ? <RightIcon /> : undefined}
+            titleStyle={{
+              ...styles.itemTitleStyle,
+              ...l.titleStyle,
+            }}
+          />
+        ))}
+      </Box>
       <Spinner visible={spinnerVisible} overlayColor="rgba(0,0,0,0.5)" />
-    </Box>
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  itemTitleStyle: {
+    fontSize: 16,
+  },
+});
