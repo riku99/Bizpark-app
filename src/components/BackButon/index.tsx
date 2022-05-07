@@ -1,7 +1,7 @@
-import React from 'react';
-import { useNavigation } from '@react-navigation/native';
 import { AntDesign } from '@expo/vector-icons';
-import { useColorModeValue, Button, Pressable, useTheme } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { Pressable, useColorModeValue, useTheme } from 'native-base';
+import React from 'react';
 
 export const CloseButton = () => {
   const { colors } = useTheme();
