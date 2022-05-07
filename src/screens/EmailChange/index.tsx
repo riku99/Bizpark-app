@@ -1,6 +1,7 @@
 import auth from '@react-native-firebase/auth';
+import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { Box, Button, Input, Text } from 'native-base';
-import React, { useEffect, useLayoutEffect } from 'react';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Alert, Keyboard, SafeAreaView, StyleSheet } from 'react-native';
 import Animated, {
   useAnimatedStyle,
@@ -24,6 +25,8 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
 
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
 
+  const [newEmail, setNewEmail] = useState('');
+
   const buttonBottom = useSharedValue(0);
   const buttonContainerStyle = useAnimatedStyle(() => {
     return {
@@ -33,7 +36,6 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
 
   useEffect(() => {
     const subscription = Keyboard.addListener('keyboardWillShow', (e) => {
-      console.log(e);
       buttonBottom.value = withTiming(
         e.endCoordinates.height - safeAreaBottom + BUTTON_BOTTOM,
         {
@@ -63,6 +65,18 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
     return null;
   }
 
+  const onSubmit = async () => {
+    try {
+      const { idToken } = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      await firebaseUser.reauthenticateWithCredential(googleCredential);
+      await firebaseUser.updateEmail(newEmail);
+      Alert.alert('更新しました');
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
   const email = firebaseUser.email;
 
   return (
@@ -90,6 +104,9 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
             _focus={{
               borderBottomColor: 'pink',
             }}
+            onChangeText={(text) => {
+              setNewEmail(text);
+            }}
           />
 
           <Text mt="2">メールアドレスを入力してください</Text>
@@ -104,6 +121,7 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
           _text={{
             fontSize: 18,
           }}
+          onPress={onSubmit}
         >
           変更する
         </AnimatedButton>
