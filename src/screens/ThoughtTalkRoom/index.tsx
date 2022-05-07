@@ -1,18 +1,20 @@
-import React, { useMemo, useState, useLayoutEffect, useCallback } from 'react';
+import { HeaderBackButton } from '@react-navigation/elements';
+import { Box } from 'native-base';
+import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
+import { DotsHorizontal } from 'src/components/DotsHorizontal';
+import { PopUpModal } from 'src/components/PopUpModal';
 import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
-import { RootNavigationScreenProp } from 'src/types';
+import { TalkRoomUserImagesHeader } from 'src/components/TalkRoomUserImagseHeader';
 import {
-  useGetThoughtTalkRoomMessagesQuery,
-  useGetThoughtTalkRoomMembersQuery,
-  useGetThoughtTalkRoomParentQuery,
   useCreateThoughtTalkRoomMessageMutation,
   useCreateUserThoughtTalkRoomMessageSeenMutation,
+  useGetThoughtTalkRoomMembersQuery,
+  useGetThoughtTalkRoomMessagesQuery,
+  useGetThoughtTalkRoomParentQuery,
 } from 'src/generated/graphql';
-import { Menu } from './Menu';
-import { DotsHorizontal } from 'src/components/DotsHorizontal';
-import { HeaderBackButton } from '@react-navigation/elements';
-import { TalkRoomUserImagesHeader } from 'src/components/TalkRoomUserImagseHeader';
 import { useDeleteThoughtTalkRoomsItemFromCache } from 'src/hooks/thoughtTalkRoom';
+import { RootNavigationScreenProp } from 'src/types';
+import { Menu } from './Menu';
 
 type Props = RootNavigationScreenProp<'ThoughtTalkRoomMain'>;
 
@@ -76,6 +78,8 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation, renderHeaderTitle]);
 
+  const [popUpVisible, setPopUpVisible] = useState(true);
+
   const { data: thoughtData } = useGetThoughtTalkRoomParentQuery({
     variables: {
       id,
@@ -102,6 +106,15 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
         talkRoomId={id}
         thoughtId={thoughtData.thoughtTalkRoom.thought.id}
       />
+
+      <PopUpModal
+        isVisible={popUpVisible}
+        hideModal={() => {
+          setPopUpVisible(false);
+        }}
+      >
+        <Box></Box>
+      </PopUpModal>
     </>
   );
 };
