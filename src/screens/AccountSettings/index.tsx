@@ -1,4 +1,5 @@
 import { useApolloClient } from '@apollo/client';
+import auth from '@react-native-firebase/auth';
 import * as InAppPurchases from 'expo-in-app-purchases';
 import { Box, ScrollView, Text, useColorModeValue, VStack } from 'native-base';
 import React, { useLayoutEffect, useState } from 'react';
@@ -12,6 +13,7 @@ import {
 } from 'src/generated/graphql';
 import { useSignOut } from 'src/hooks/auth';
 import { useLoggedIn } from 'src/hooks/me';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 import { RootNavigationScreenProp } from 'src/types';
 
 type Props = RootNavigationScreenProp<'AccountSettings'>;
@@ -38,10 +40,12 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
         setSpinnerVisible(true);
         const { results } = await InAppPurchases.getPurchaseHistoryAsync();
         if (!results.length) {
+          setSpinnerVisible(false);
           Alert.alert('', '購入内容が存在しません');
           return;
         }
         const latestResult = results[0];
+        console.log(latestResult);
         await verifyReceiptMutation({
           variables: {
             input: {
@@ -120,6 +124,10 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
 
   const textGray = useColorModeValue('lt.textGray', 'dt.textGray');
 
+  const user = auth().currentUser;
+  const email = user ? user.email : '';
+  const provider = storage.getString(mmkvStorageKeys.loginProvider) ?? '不明';
+
   return (
     <ScrollView flex={1}>
       {/* 基本情報 */}
@@ -131,13 +139,18 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
         <VStack mt="2">
           <ListItem
             title="メールアドレス"
-            titleStyle={styles.itemTitleStyle}
-            ItemRight={<Text>rrr@rrr.com</Text>}
+            titleStyle={styles.basicStatusItemTitle}
+            ItemRight={<Text>{email}</Text>}
           />
           <ListItem
-            title="パスワード"
-            ItemRight={<Text>okokokok</Text>}
-            titleStyle={styles.itemTitleStyle}
+            title="ログイン方法"
+            titleStyle={styles.basicStatusItemTitle}
+            ItemRight={<Text>{provider}</Text>}
+            disablePress
+          />
+          <ListItem
+            title="パスワード変更"
+            titleStyle={styles.basicStatusItemTitle}
           />
         </VStack>
       </Box>
@@ -162,6 +175,9 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
+  basicStatusItemTitle: {
+    fontSize: 14,
+  },
   itemTitleStyle: {
     fontSize: 16,
   },

@@ -1,5 +1,5 @@
+import { HStack, Pressable, Text, useColorModeValue } from 'native-base';
 import React, { ComponentProps } from 'react';
-import { HStack, Text, Pressable, useColorModeValue } from 'native-base';
 
 export type ListItem = {
   Icon?: JSX.Element;
@@ -7,7 +7,7 @@ export type ListItem = {
   titleStyle?: ComponentProps<typeof Text>;
   ItemLeft?: JSX.Element;
   ItemRight?: JSX.Element;
-}
+};
 
 type Props = {
   Icon?: JSX.Element;
@@ -15,6 +15,7 @@ type Props = {
   titleStyle?: ComponentProps<typeof Text>;
   ItemLeft?: JSX.Element;
   ItemRight?: JSX.Element;
+  disablePress?: boolean;
 } & ComponentProps<typeof Pressable>;
 
 export const ListItem = ({
@@ -22,13 +23,16 @@ export const ListItem = ({
   titleStyle,
   ItemLeft,
   ItemRight,
+  disablePress = false,
   ...props
 }: Props) => {
   return (
     <Pressable
       bg={useColorModeValue('lt.bg', 'dt.bg')}
       _pressed={{
-        bg: useColorModeValue('lt.pressed', 'dt.pressed'),
+        bg: disablePress
+          ? undefined
+          : useColorModeValue('lt.pressed', 'dt.pressed'),
       }}
       px="4"
       py="4"
