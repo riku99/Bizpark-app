@@ -1,8 +1,6 @@
 import { HeaderBackButton } from '@react-navigation/elements';
-import { Box } from 'native-base';
 import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import { DotsHorizontal } from 'src/components/DotsHorizontal';
-import { PopUpModal } from 'src/components/PopUpModal';
 import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
 import { TalkRoomUserImagesHeader } from 'src/components/TalkRoomUserImagseHeader';
 import {
@@ -78,8 +76,6 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation, renderHeaderTitle]);
 
-  const [popUpVisible, setPopUpVisible] = useState(true);
-
   const { data: thoughtData } = useGetThoughtTalkRoomParentQuery({
     variables: {
       id,
@@ -106,15 +102,6 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
         talkRoomId={id}
         thoughtId={thoughtData.thoughtTalkRoom.thought.id}
       />
-
-      <PopUpModal
-        isVisible={popUpVisible}
-        hideModal={() => {
-          setPopUpVisible(false);
-        }}
-      >
-        <Box></Box>
-      </PopUpModal>
     </>
   );
 };

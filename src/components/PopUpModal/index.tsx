@@ -12,7 +12,7 @@ type Props = {
 export const PopUpModal = ({ isVisible, hideModal, children }: Props) => {
   return (
     <Modal isVisible={isVisible}>
-      <Box bg="white" h="12" w="92%" alignSelf="center">
+      <Box bg="white" w="92%" alignSelf="center" borderRadius="md">
         {children}
         <Pressable
           bg="#807d7d"

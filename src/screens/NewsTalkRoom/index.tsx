@@ -1,19 +1,20 @@
-import React, { useLayoutEffect, useMemo, useCallback, useState } from 'react';
+import { gql, useApolloClient } from '@apollo/client';
 import { HeaderBackButton } from '@react-navigation/elements';
-import { RootNavigationScreenProp } from 'src/types';
+import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
+import { DotsHorizontal } from 'src/components/DotsHorizontal';
+import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
+import { TalkRoomUserImagesHeader } from 'src/components/TalkRoomUserImagseHeader';
 import {
-  useGetNewsTalkRoomMessagesQuery,
+  NewsTalkRoom,
   useCreateNewsTalkRoomMessageMutation,
   useCreateUserNewsTalkRoomMessageSeenMutation,
   useGetNewsTalkRoomMembersQuery,
-  NewsTalkRoom,
+  useGetNewsTalkRoomMessagesQuery,
 } from 'src/generated/graphql';
-import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
 import { useDeleteNewsTalkRoomFromCache } from 'src/hooks/newsTalkRoom';
-import { TalkRoomUserImagesHeader } from 'src/components/TalkRoomUserImagseHeader';
-import { DotsHorizontal } from 'src/components/DotsHorizontal';
+import { RootNavigationScreenProp } from 'src/types';
+import { FirstMemberPopUp } from './FirstMemberPopUp';
 import { Menu } from './Menu';
-import { useApolloClient, gql } from '@apollo/client';
 
 type Props = RootNavigationScreenProp<'NewsTalkRoomMain'>;
 
@@ -94,6 +95,8 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
 
   const { deleteNewsTalkRoom } = useDeleteNewsTalkRoomFromCache();
 
+  const [popUpVisible, setPopUpVisible] = useState(true);
+
   return (
     <>
       <TalkRoomMessage
@@ -110,6 +113,13 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
         isVisible={menuVisible}
         closeMenu={closeMenu}
         newsId={newsData.news.id}
+      />
+
+      <FirstMemberPopUp
+        isVisible={popUpVisible}
+        hidePopUp={() => {
+          setPopUpVisible(false);
+        }}
       />
     </>
   );
