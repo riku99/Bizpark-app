@@ -69,11 +69,11 @@ export const UserEditScreen = ({ navigation }: Props) => {
 
         if (ext === 'HEIC') {
           try {
-            const converResult = await RNHeicConverter.convert({
+            const convertedResult = await RNHeicConverter.convert({
               path: newImage.url,
             });
 
-            uri = converResult.path;
+            uri = convertedResult.path;
 
             type = 'image/jpeg';
           } catch (e) {
