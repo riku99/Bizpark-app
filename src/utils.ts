@@ -1,5 +1,5 @@
-import { ErrorResponse } from '@apollo/client/link/error';
 import { ApolloError } from '@apollo/client';
+import { ErrorResponse } from '@apollo/client/link/error';
 
 export const getGraphQLErrorCode = (error: any) => {
   return error.graphQLErrors[0].extensions.code;
@@ -28,4 +28,15 @@ export const createRandomStr = () =>
 
 export const logJson = (data: any) => {
   console.log(JSON.stringify(data, null, 2));
+};
+
+export const getExtention = (uri?: string) => {
+  if (!uri) {
+    return;
+  }
+
+  const length = uri.lastIndexOf('.'); // 拡張子の有無。なければ-1が返される
+  const ext = length !== -1 ? uri.slice(length + 1) : null; // あれば拡張子('.'以降)を取得
+
+  return ext;
 };

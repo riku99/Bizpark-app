@@ -3,6 +3,7 @@ import { HStack, Pressable, ScrollView, Text, VStack } from 'native-base';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { SocialIcon, SocialIconProps } from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
+import RNHeicConverter from 'react-native-heic-converter';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useToast } from 'react-native-toast-notifications';
 import { UserImage } from 'src/components/UserImage';
@@ -10,11 +11,12 @@ import { socialIcons } from 'src/constants';
 import {
   useMeQuery,
   useUpdateMeMutation,
-  useUploadImageMutation
+  useUploadImageMutation,
 } from 'src/generated/graphql';
 import { useIsPlusPlan } from 'src/hooks/me';
 import { spinnerVisibleVar } from 'src/stores/spinner';
 import { RootNavigationScreenProp, Socials } from 'src/types';
+import { getExtention } from 'src/utils';
 import { AvatarMenu } from './AvatarMenu';
 import { Item } from './EditItem';
 
@@ -60,9 +62,28 @@ export const UserEditScreen = ({ navigation }: Props) => {
       let newImageUrl: null | string = null;
 
       if (newImage && !imageDeleted) {
+        let uri = newImage.url;
+        let type = newImage.mime;
+
+        const ext = getExtention(newImage.url);
+
+        if (ext === 'HEIC') {
+          try {
+            const converResult = await RNHeicConverter.convert({
+              path: newImage.url,
+            });
+
+            uri = converResult.path;
+
+            type = 'image/jpeg';
+          } catch (e) {
+            console.log(e);
+          }
+        }
+
         const file = new ReactNativeFile({
-          uri: newImage.url,
-          type: newImage.mime,
+          uri,
+          type,
           name: `image-${Date.now()}`,
         });
         const { data } = await uploadImageMutation({

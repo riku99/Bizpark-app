@@ -63,6 +63,7 @@
     "react-native-fs": "^2.18.0",
     "react-native-gesture-handler": "^2.1.0",
     "react-native-gifted-chat": "git+https://github.com/riku99/react-native-gifted-chat.git#released",
+    "react-native-heic-converter": "^1.3.0",
     "react-native-image-crop-picker": "^0.37.2",
     "react-native-image-viewing": "git+https://github.com/riku99/react-native-image-viewing.git",
     "react-native-loading-spinner-overlay": "^2.0.0",
