@@ -3,7 +3,6 @@ import { HStack, Pressable, ScrollView, Text, VStack } from 'native-base';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { SocialIcon, SocialIconProps } from 'react-native-elements';
 import FastImage from 'react-native-fast-image';
-import RNHeicConverter from 'react-native-heic-converter';
 import ImagePicker from 'react-native-image-crop-picker';
 import { useToast } from 'react-native-toast-notifications';
 import { UserImage } from 'src/components/UserImage';
@@ -13,6 +12,7 @@ import {
   useUpdateMeMutation,
   useUploadImageMutation,
 } from 'src/generated/graphql';
+import { convertHeicToJpeg } from 'src/helpers/convertHeicToJpeg';
 import { useIsPlusPlan } from 'src/hooks/me';
 import { spinnerVisibleVar } from 'src/stores/spinner';
 import { RootNavigationScreenProp, Socials } from 'src/types';
@@ -69,13 +69,12 @@ export const UserEditScreen = ({ navigation }: Props) => {
 
         if (ext === 'HEIC') {
           try {
-            const convertedResult = await RNHeicConverter.convert({
-              path: newImage.url,
-            });
+            const { path: jpegPath, type: jpegType } = await convertHeicToJpeg(
+              newImage.url
+            );
 
-            uri = convertedResult.path;
-
-            type = 'image/jpeg';
+            uri = jpegPath;
+            type = jpegType;
           } catch (e) {
             console.log(e);
           }

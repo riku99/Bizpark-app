@@ -1,26 +1,28 @@
-import React, { useLayoutEffect, useState } from 'react';
+import { ReactNativeFile } from 'apollo-upload-client';
 import {
   Box,
-  Pressable,
-  Text,
   Button,
-  ScrollView,
-  Image,
   HStack,
+  Image,
+  Pressable,
+  ScrollView,
+  Text,
 } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
+import { Alert } from 'react-native';
+import { useToast } from 'react-native-toast-notifications';
 import { CloseButton } from 'src/components/BackButon';
 import {
-  useUploadThoughtImagesMutation,
-  useCreateThoughtMutation,
-  ImageInput,
   Genre,
+  ImageInput,
+  useCreateThoughtMutation,
+  useUploadThoughtImagesMutation,
 } from 'src/generated/graphql';
-import { ReactNativeFile } from 'apollo-upload-client';
-import { Alert } from 'react-native';
-import { GenreMenu } from './GenreMenu';
+import { convertHeicToJpeg } from 'src/helpers/convertHeicToJpeg';
 import { creatingThoughtVar } from 'src/stores/thought';
-import { useToast } from 'react-native-toast-notifications';
+import { RootNavigationScreenProp } from 'src/types';
+import { getExtention } from 'src/utils';
+import { GenreMenu } from './GenreMenu';
 
 type Props = RootNavigationScreenProp<'ThoughtShare'>;
 
@@ -32,7 +34,7 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
 
   const [genre, setGenre] = useState<Genre>();
 
-  const onSharePress = async () => {
+  const onSharePress = useCallback(async () => {
     if (!text) {
       Alert.alert(
         'テキストがありません',
@@ -52,14 +54,34 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
       creatingThoughtVar(true);
       navigation.navigate('Tab');
       if (images.length) {
-        const files = images.map(
-          (image) =>
-            new ReactNativeFile({
-              uri: image.url,
-              type: image.mime,
-              name: `image-${Date.now()}`,
-            })
-        );
+        const promises: Promise<ReactNativeFile>[] = [];
+
+        images.forEach((image) => {
+          promises.push(
+            (async () => {
+              let uri = image.url;
+              let type = image.mime;
+
+              const ext = getExtention(image.url);
+
+              if (ext === 'HEIC') {
+                const { path: jpegPath, type: jpegType } =
+                  await convertHeicToJpeg(image.url);
+
+                uri = jpegPath;
+                type = jpegType;
+              }
+
+              return new ReactNativeFile({
+                uri,
+                type,
+                name: `image-${Date.now()}`,
+              });
+            })()
+          );
+        });
+
+        const files = await Promise.all(promises);
 
         const { data: imageData } = await uploadMutation({
           variables: {
@@ -74,7 +96,7 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
         }));
       }
 
-      const { data } = await createThoughtMutation({
+      await createThoughtMutation({
         variables: {
           input: {
             title,
@@ -90,7 +112,16 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
     } finally {
       creatingThoughtVar(false);
     }
-  };
+  }, [
+    createThoughtMutation,
+    images,
+    text,
+    title,
+    toast,
+    uploadMutation,
+    genre,
+    navigation,
+  ]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -109,7 +140,7 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
         </Pressable>
       ),
     });
-  }, [genre, onSharePress]);
+  }, [genre, onSharePress, navigation]);
 
   const onMenuAction = (id: Genre) => {
     setGenre(id);
