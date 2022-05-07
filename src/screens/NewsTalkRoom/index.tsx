@@ -72,7 +72,7 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
         }}
       />
     );
-  }, [memberImageUrls]);
+  }, [memberImageUrls, id, navigation]);
 
   const [menuVisible, setMenuVisible] = useState(false);
 
@@ -114,6 +114,7 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     );
 
     const _visible =
+      // 自分が必ずメンバーに含まれるので0じゃない
       membersData?.newsTalkRoom.members.edges.length <= 1 &&
       !messageData.newsTalkRoom.messages.edges.length &&
       !shownPopUp;

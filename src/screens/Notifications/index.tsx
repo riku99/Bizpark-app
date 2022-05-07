@@ -1,30 +1,29 @@
-import React, {
-  useLayoutEffect,
-  useCallback,
-  useEffect,
-  useState,
-} from 'react';
-import { Box, HStack, Text, useColorModeValue, Pressable } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
-import { UserImage } from 'src/components/UserImage';
-import {
-  useGetNotificationsQuery,
-  NotificationType,
-  TalkRoomType,
-  GetNotificationsQuery,
-  useSeeNotificationMutation,
-} from 'src/generated/graphql';
 import { formatDistanceToNow } from 'date-fns';
 import { ja } from 'date-fns/locale';
-import { useFindThoughtTalkRoom } from 'src/hooks/thoughtTalkRoom';
+import { Box, HStack, Pressable, Text, useColorModeValue } from 'native-base';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useState,
+} from 'react';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { btoa } from 'react-native-quick-base64';
+import { Indicator } from 'src/components/Indicator';
+import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
+import { RefreshControl } from 'src/components/RefreshControl';
+import { UserImage } from 'src/components/UserImage';
+import {
+  GetNotificationsQuery,
+  NotificationType,
+  TalkRoomType,
+  useGetNotificationsQuery,
+  useSeeNotificationMutation,
+} from 'src/generated/graphql';
 import { useFindNewsTalkRoom } from 'src/hooks/newsTalkRoom';
 import { useFindOneOnOneTalkRoom } from 'src/hooks/oneOnOneTalkRoom';
-import { Indicator } from 'src/components/Indicator';
-import { StyleSheet } from 'react-native';
-import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
-import { btoa } from 'react-native-quick-base64';
-import { RefreshControl } from 'src/components/RefreshControl';
-import { SafeAreaView } from 'react-native';
+import { useFindThoughtTalkRoom } from 'src/hooks/thoughtTalkRoom';
+import { RootNavigationScreenProp } from 'src/types';
 
 type Props = RootNavigationScreenProp<'Notifications'>;
 
@@ -232,7 +231,7 @@ export const NotificationsScreen = ({ navigation }: Props) => {
   }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
       <InfiniteFlatList<Item>
         data={notificationData.notifications.edges}
         renderItem={renderItem}
@@ -247,6 +246,9 @@ export const NotificationsScreen = ({ navigation }: Props) => {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
   indicator: {
     marginTop: 10,
   },
