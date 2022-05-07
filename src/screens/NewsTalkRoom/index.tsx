@@ -1,6 +1,12 @@
 import { gql, useApolloClient } from '@apollo/client';
 import { HeaderBackButton } from '@react-navigation/elements';
-import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { DotsHorizontal } from 'src/components/DotsHorizontal';
 import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
 import { TalkRoomUserImagesHeader } from 'src/components/TalkRoomUserImagseHeader';
@@ -12,6 +18,7 @@ import {
   useGetNewsTalkRoomMessagesQuery,
 } from 'src/generated/graphql';
 import { useDeleteNewsTalkRoomFromCache } from 'src/hooks/newsTalkRoom';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 import { RootNavigationScreenProp } from 'src/types';
 import { FirstMemberPopUp } from './FirstMemberPopUp';
 import { Menu } from './Menu';
@@ -95,7 +102,27 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
 
   const { deleteNewsTalkRoom } = useDeleteNewsTalkRoomFromCache();
 
-  const [popUpVisible, setPopUpVisible] = useState(true);
+  const [popUpVisible, setPopUpVisible] = useState(false);
+
+  useEffect(() => {
+    if (!membersData || !messageData) {
+      return;
+    }
+
+    const shownPopUp = storage.getBoolean(
+      mmkvStorageKeys.talkRoomFirstMemberPopUpKey
+    );
+
+    const _visible =
+      membersData?.newsTalkRoom.members.edges.length <= 1 &&
+      !messageData.newsTalkRoom.messages.edges.length &&
+      !shownPopUp;
+
+    if (_visible) {
+      setPopUpVisible(true);
+      storage.set(mmkvStorageKeys.talkRoomFirstMemberPopUpKey, true);
+    }
+  }, [membersData, messageData, setPopUpVisible]);
 
   return (
     <>
