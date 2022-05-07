@@ -1,8 +1,16 @@
 import auth from '@react-native-firebase/auth';
 import { Box, Button, Input, Text } from 'native-base';
-import React, { useLayoutEffect } from 'react';
-import { Alert, SafeAreaView } from 'react-native';
+import React, { useEffect, useLayoutEffect } from 'react';
+import { Alert, Keyboard, SafeAreaView, StyleSheet } from 'react-native';
+import Animated, {
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
+} from 'react-native-reanimated';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CloseButton } from 'src/components/BackButon';
+
+const AnimatedButton = Animated.createAnimatedComponent(Button);
 
 type Props = RootNavigationScreenProp<'EmailChange'>;
 
@@ -13,6 +21,31 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
       headerRight: () => <CloseButton />,
     });
   }, [navigation]);
+
+  const { bottom: safeAreaBottom } = useSafeAreaInsets();
+
+  const buttonBottom = useSharedValue(0);
+  const buttonContainerStyle = useAnimatedStyle(() => {
+    return {
+      bottom: buttonBottom.value,
+    };
+  });
+
+  useEffect(() => {
+    const subscription = Keyboard.addListener('keyboardWillShow', (e) => {
+      console.log(e);
+      buttonBottom.value = withTiming(
+        e.endCoordinates.height - safeAreaBottom + BUTTON_BOTTOM,
+        {
+          duration: e.duration,
+        }
+      );
+    });
+
+    return () => {
+      subscription.remove();
+    };
+  }, [buttonBottom, safeAreaBottom]);
 
   const firebaseUser = auth().currentUser;
   if (!firebaseUser) {
@@ -33,11 +66,7 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
   const email = firebaseUser.email;
 
   return (
-    <SafeAreaView
-      style={{
-        flex: 1,
-      }}
-    >
+    <SafeAreaView style={styles.container}>
       <Box flex="1" px="4">
         <Text fontWeight="bold" mt="2">
           現在
@@ -57,6 +86,7 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
             mt="2"
             fontSize="16"
             fontWeight="bold"
+            keyboardType="email-address"
             _focus={{
               borderBottomColor: 'pink',
             }}
@@ -65,19 +95,27 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
           <Text mt="2">メールアドレスを入力してください</Text>
         </Box>
 
-        <Button
+        <AnimatedButton
           h="12"
           w="100%"
           alignSelf="center"
           position="absolute"
-          bottom="2"
+          style={[buttonContainerStyle]}
           _text={{
             fontSize: 18,
           }}
         >
           変更する
-        </Button>
+        </AnimatedButton>
       </Box>
     </SafeAreaView>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+  },
+});
+
+const BUTTON_BOTTOM = 8;
