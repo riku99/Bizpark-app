@@ -1,16 +1,16 @@
 import {
-  NativeStackScreenProps,
   NativeStackNavigationProp,
+  NativeStackScreenProps,
 } from '@react-navigation/native-stack';
-import { SettingsParamList } from 'src/navigations/Settings';
-import { ThoughtTalkRoomStackParamList } from 'src/navigations/ThoughtTalkRoom';
-import { NewsTalkRoomStackParamList } from 'src/navigations/NewsTalkRoom';
-import { OneOnOneTalkRoomStackParamList } from 'src/navigations/OneOnOneTalkRoom';
 import { PushNotificationMessage } from 'src/generated/graphql';
 import { RootStackParamList } from 'src/navigations';
-import { MainStackParamList } from 'src/navigations/Main';
-import { AuthSrackParamList } from 'src/navigations/Auth';
+import { AuthStackParamList } from 'src/navigations/Auth';
 import { HomeStackParamList } from 'src/navigations/Home';
+import { MainStackParamList } from 'src/navigations/Main';
+import { NewsTalkRoomStackParamList } from 'src/navigations/NewsTalkRoom';
+import { OneOnOneTalkRoomStackParamList } from 'src/navigations/OneOnOneTalkRoom';
+import { SettingsParamList } from 'src/navigations/Settings';
+import { ThoughtTalkRoomStackParamList } from 'src/navigations/ThoughtTalkRoom';
 
 export type PushNotificationData = PushNotificationMessage;
 
@@ -40,7 +40,7 @@ export type ThoughtNavigationScreenProps<
 
 export type AllStackParamList = RootStackParamList &
   MainStackParamList &
-  AuthSrackParamList &
+  AuthStackParamList &
   SettingsParamList &
   ThoughtTalkRoomStackParamList &
   NewsTalkRoomStackParamList &

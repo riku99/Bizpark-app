@@ -1,11 +1,11 @@
-import React from 'react';
-import { useTheme } from 'native-base';
-import { SignupScreen } from 'src/screens/Signup';
-import { SigninScreen } from 'src/screens/Siginin';
-import { MailFormScreen } from 'src/screens/MailForm';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useTheme } from 'native-base';
+import React from 'react';
+import { MailFormScreen } from 'src/screens/MailForm';
+import { SigninScreen } from 'src/screens/Siginin';
+import { SignupScreen } from 'src/screens/Signup';
 
-export type AuthSrackParamList = {
+export type AuthStackParamList = {
   Signup: undefined;
   Signin: undefined;
   MailForm: {
@@ -13,7 +13,7 @@ export type AuthSrackParamList = {
   };
 };
 
-const Stack = createNativeStackNavigator<AuthSrackParamList>();
+const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 export const AuthStack = () => {
   const { colors } = useTheme();

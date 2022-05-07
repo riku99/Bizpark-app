@@ -5,6 +5,7 @@ import { Box, ScrollView, Text, useColorModeValue, VStack } from 'native-base';
 import React, { useLayoutEffect, useState } from 'react';
 import { Alert, Platform, StyleSheet } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
+import { CloseButton } from 'src/components/BackButon';
 import { ListItem } from 'src/components/ListItem';
 import { RightIcon } from 'src/components/RightIcon';
 import {
@@ -28,6 +29,7 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: 'アカウント',
+      headerRight: () => <CloseButton />,
     });
   }, [navigation]);
 
@@ -128,6 +130,10 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
   const email = user ? user.email : '';
   const provider = storage.getString(mmkvStorageKeys.loginProvider) ?? '不明';
 
+  const onEmailChangePress = () => {
+    navigation.navigate('EmailChange');
+  };
+
   return (
     <ScrollView flex={1}>
       {/* 基本情報 */}
@@ -138,19 +144,20 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
 
         <VStack mt="2">
           <ListItem
-            title="メールアドレス"
+            title="メールアドレスを変更"
             titleStyle={styles.basicStatusItemTitle}
             ItemRight={<Text>{email}</Text>}
+            onPress={onEmailChangePress}
+          />
+          <ListItem
+            title="パスワードを変更"
+            titleStyle={styles.basicStatusItemTitle}
           />
           <ListItem
             title="ログイン方法"
             titleStyle={styles.basicStatusItemTitle}
             ItemRight={<Text>{provider}</Text>}
             disablePress
-          />
-          <ListItem
-            title="パスワード変更"
-            titleStyle={styles.basicStatusItemTitle}
           />
         </VStack>
       </Box>
