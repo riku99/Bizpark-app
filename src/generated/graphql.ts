@@ -259,6 +259,7 @@ export type Mutation = {
   unblock: User;
   unfollow: User;
   unlikeThought?: Maybe<Thought>;
+  updateEmail?: Maybe<Scalars['Boolean']>;
   updateMe: Me;
   uploadImage: SubImage;
   uploadThoughtImages: UploadThoughtImagesResponse;
@@ -413,6 +414,11 @@ export type MutationUnfollowArgs = {
 
 export type MutationUnlikeThoughtArgs = {
   input: UnLikeThoughtInput;
+};
+
+
+export type MutationUpdateEmailArgs = {
+  input: UpdateEmailInput;
 };
 
 
@@ -960,6 +966,10 @@ export type UnLikeThoughtInput = {
   thoughtId: Scalars['String'];
 };
 
+export type UpdateEmailInput = {
+  email: Scalars['String'];
+};
+
 export type UpdateMeInput = {
   bio?: InputMaybe<Scalars['String']>;
   facebook?: InputMaybe<Scalars['String']>;
@@ -1278,6 +1288,13 @@ export type UnlikeThoughtMutationVariables = Exact<{
 
 
 export type UnlikeThoughtMutation = { __typename?: 'Mutation', unlikeThought?: { __typename?: 'Thought', id: string, liked?: boolean | null | undefined } | null | undefined };
+
+export type UpdateEmailMutationVariables = Exact<{
+  input: UpdateEmailInput;
+}>;
+
+
+export type UpdateEmailMutation = { __typename?: 'Mutation', updateEmail?: boolean | null | undefined };
 
 export type UpdateMeMutationVariables = Exact<{
   input: UpdateMeInput;
@@ -2859,6 +2876,37 @@ export function useUnlikeThoughtMutation(baseOptions?: Apollo.MutationHookOption
 export type UnlikeThoughtMutationHookResult = ReturnType<typeof useUnlikeThoughtMutation>;
 export type UnlikeThoughtMutationResult = Apollo.MutationResult<UnlikeThoughtMutation>;
 export type UnlikeThoughtMutationOptions = Apollo.BaseMutationOptions<UnlikeThoughtMutation, UnlikeThoughtMutationVariables>;
+export const UpdateEmailDocument = gql`
+    mutation UpdateEmail($input: UpdateEmailInput!) {
+  updateEmail(input: $input)
+}
+    `;
+export type UpdateEmailMutationFn = Apollo.MutationFunction<UpdateEmailMutation, UpdateEmailMutationVariables>;
+
+/**
+ * __useUpdateEmailMutation__
+ *
+ * To run a mutation, you first call `useUpdateEmailMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateEmailMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateEmailMutation, { data, loading, error }] = useUpdateEmailMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useUpdateEmailMutation(baseOptions?: Apollo.MutationHookOptions<UpdateEmailMutation, UpdateEmailMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<UpdateEmailMutation, UpdateEmailMutationVariables>(UpdateEmailDocument, options);
+      }
+export type UpdateEmailMutationHookResult = ReturnType<typeof useUpdateEmailMutation>;
+export type UpdateEmailMutationResult = Apollo.MutationResult<UpdateEmailMutation>;
+export type UpdateEmailMutationOptions = Apollo.BaseMutationOptions<UpdateEmailMutation, UpdateEmailMutationVariables>;
 export const UpdateMeDocument = gql`
     mutation UpdateMe($input: UpdateMeInput!) {
   updateMe(input: $input) {

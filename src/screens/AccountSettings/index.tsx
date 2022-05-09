@@ -12,9 +12,9 @@ import {
   useDeleteAccountMutation,
   useVerifyIapReceiptMutation,
 } from 'src/generated/graphql';
+import { getLoginProvider } from 'src/helpers/getLoginProvider';
 import { useSignOut } from 'src/hooks/auth';
 import { useLoggedIn } from 'src/hooks/me';
-import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 import { RootNavigationScreenProp } from 'src/types';
 
 type Props = RootNavigationScreenProp<'AccountSettings'>;
@@ -128,7 +128,7 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
 
   const user = auth().currentUser;
   const email = user ? user.email : '';
-  const provider = storage.getString(mmkvStorageKeys.loginProvider) ?? '不明';
+  const provider = getLoginProvider() ?? '不明';
 
   const onEmailChangePress = () => {
     navigation.navigate('EmailChange');

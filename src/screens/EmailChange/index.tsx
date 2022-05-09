@@ -10,6 +10,9 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CloseButton } from 'src/components/BackButon';
+import { loginProviders } from 'src/constants';
+import { useUpdateEmailMutation } from 'src/generated/graphql';
+import { getLoginProvider } from 'src/helpers/getLoginProvider';
 
 const AnimatedButton = Animated.createAnimatedComponent(Button);
 
@@ -24,7 +27,7 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
   }, [navigation]);
 
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
-
+  const [updateEmailMutation] = useUpdateEmailMutation();
   const [newEmail, setNewEmail] = useState('');
 
   const buttonBottom = useSharedValue(0);
@@ -65,19 +68,74 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
     return null;
   }
 
+  const email = firebaseUser.email;
+
   const onSubmit = async () => {
     try {
-      const { idToken } = await GoogleSignin.signIn();
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      await firebaseUser.reauthenticateWithCredential(googleCredential);
-      await firebaseUser.updateEmail(newEmail);
-      Alert.alert('更新しました');
+      const provider = getLoginProvider();
+
+      if (!provider) {
+        Alert.alert(
+          '',
+          'ログイン情報が存在しません。お手数ですがログインし直してください'
+        );
+        return;
+      }
+
+      if (provider === loginProviders.google) {
+        Alert.alert('', '再度Googleログインが必要です。続けてよろしいですか?', [
+          {
+            text: 'キャンセル',
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: async () => {
+              const { idToken } = await GoogleSignin.signIn();
+              const googleCredential =
+                auth.GoogleAuthProvider.credential(idToken);
+              await firebaseUser.reauthenticateWithCredential(googleCredential);
+              await firebaseUser.updateEmail(newEmail);
+              Alert.alert('更新しました');
+            },
+          },
+        ]);
+      } else if (provider === loginProviders.apple) {
+        console.log('Apple');
+      } else if (provider === loginProviders.mailAddress) {
+        Alert.prompt(
+          'パスワードを入力してください',
+          '',
+          async (value) => {
+            const emailCredential = auth.EmailAuthProvider.credential(
+              email,
+              value
+            );
+            await firebaseUser.reauthenticateWithCredential(emailCredential);
+
+            await updateEmailMutation({
+              variables: {
+                input: {
+                  email: value,
+                },
+              },
+              onError: () => {
+                // アドレスを元に戻したい
+              },
+              onCompleted: async () => {
+                await firebaseUser.updateEmail(newEmail);
+                Alert.alert('更新しました');
+              },
+            });
+          },
+          'secure-text'
+        );
+      }
     } catch (e) {
+      Alert.alert('更新に失敗しました');
       console.log(e);
     }
   };
-
-  const email = firebaseUser.email;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -122,6 +180,7 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
             fontSize: 18,
           }}
           onPress={onSubmit}
+          isDisabled={!newEmail.length}
         >
           変更する
         </AnimatedButton>
@@ -130,10 +189,10 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
   );
 };
 
+const BUTTON_BOTTOM = 8;
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
   },
 });
-
-const BUTTON_BOTTOM = 8;
