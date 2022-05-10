@@ -1,8 +1,10 @@
+import { appleAuth } from '@invertase/react-native-apple-authentication';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { Box, Button, Input, Text } from 'native-base';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Alert, Keyboard, SafeAreaView, StyleSheet } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import Animated, {
   useAnimatedStyle,
   useSharedValue,
@@ -29,6 +31,7 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const [updateEmailMutation] = useUpdateEmailMutation();
   const [newEmail, setNewEmail] = useState('');
+  const [spinnerVisible, setSpinnerVisible] = useState(false);
 
   const buttonBottom = useSharedValue(0);
   const buttonContainerStyle = useAnimatedStyle(() => {
@@ -70,6 +73,98 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
 
   const email = firebaseUser.email;
 
+  const updateEmail = async () => {
+    setSpinnerVisible(true);
+    await updateEmailMutation({
+      variables: {
+        input: {
+          email: newEmail,
+        },
+      },
+      onCompleted: async () => {
+        try {
+          await firebaseUser.updateEmail(newEmail);
+          setSpinnerVisible(false);
+          Alert.alert('更新しました');
+          return;
+        } catch (e) {
+          console.log(e);
+
+          await updateEmailMutation({
+            variables: {
+              input: {
+                email,
+              },
+            },
+          });
+
+          setSpinnerVisible(false);
+          Alert.alert('更新に失敗しました');
+          return;
+        }
+      },
+      onError: () => {
+        setSpinnerVisible(false);
+        Alert.alert('更新に失敗しました');
+        return;
+      },
+    });
+  };
+
+  const updateWithGoogle = async () => {
+    try {
+      const { idToken } = await GoogleSignin.signIn();
+      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+      await firebaseUser.reauthenticateWithCredential(googleCredential);
+      await updateEmail();
+    } catch (e) {
+      console.log(e);
+      Alert.alert('更新に失敗しました');
+    }
+  };
+
+  const updateWithApple = async () => {
+    try {
+      const appleAuthResponse = await appleAuth.performRequest({
+        requestedOperation: appleAuth.Operation.LOGIN,
+        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
+      });
+
+      if (!appleAuthResponse.identityToken) {
+        Alert.alert('無効なアカウントです');
+        return;
+      }
+
+      const { identityToken, nonce } = appleAuthResponse;
+      const appleCredential = auth.AppleAuthProvider.credential(
+        identityToken,
+        nonce
+      );
+
+      await firebaseUser.reauthenticateWithCredential(appleCredential);
+      await updateEmail();
+    } catch (e) {
+      console.log(e);
+      Alert.alert('更新に失敗しました');
+    }
+  };
+
+  const updateWithPassword = async (value: string) => {
+    try {
+      const emailCredential = auth.EmailAuthProvider.credential(email, value);
+      await firebaseUser.reauthenticateWithCredential(emailCredential);
+      await updateEmail();
+    } catch (e) {
+      console.log(e);
+      setSpinnerVisible(false);
+      if (e.code === 'auth/wrong-password') {
+        Alert.alert('パスワードが間違っています');
+      } else {
+        Alert.alert('更新に失敗しました');
+      }
+    }
+  };
+
   const onSubmit = async () => {
     try {
       const provider = getLoginProvider();
@@ -90,44 +185,25 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
           },
           {
             text: 'OK',
-            onPress: async () => {
-              const { idToken } = await GoogleSignin.signIn();
-              const googleCredential =
-                auth.GoogleAuthProvider.credential(idToken);
-              await firebaseUser.reauthenticateWithCredential(googleCredential);
-              await firebaseUser.updateEmail(newEmail);
-              Alert.alert('更新しました');
-            },
+            onPress: updateWithGoogle,
           },
         ]);
       } else if (provider === loginProviders.apple) {
-        console.log('Apple');
+        Alert.alert('', '再度Appleログインが必要です。続けてよろしいですか?', [
+          {
+            text: 'キャンセル',
+            style: 'cancel',
+          },
+          {
+            text: 'OK',
+            onPress: updateWithApple,
+          },
+        ]);
       } else if (provider === loginProviders.mailAddress) {
         Alert.prompt(
           'パスワードを入力してください',
           '',
-          async (value) => {
-            const emailCredential = auth.EmailAuthProvider.credential(
-              email,
-              value
-            );
-            await firebaseUser.reauthenticateWithCredential(emailCredential);
-
-            await updateEmailMutation({
-              variables: {
-                input: {
-                  email: value,
-                },
-              },
-              onError: () => {
-                // アドレスを元に戻したい
-              },
-              onCompleted: async () => {
-                await firebaseUser.updateEmail(newEmail);
-                Alert.alert('更新しました');
-              },
-            });
-          },
+          updateWithPassword,
           'secure-text'
         );
       }
@@ -138,54 +214,58 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
   };
 
   return (
-    <SafeAreaView style={styles.container}>
-      <Box flex="1" px="4">
-        <Text fontWeight="bold" mt="2">
-          現在
-        </Text>
+    <>
+      <SafeAreaView style={styles.container}>
+        <Box flex="1" px="4">
+          <Text fontWeight="bold" mt="2">
+            現在
+          </Text>
 
-        <Text mt="2" fontWeight="bold" fontSize="md">
-          {email}
-        </Text>
+          <Text mt="2" fontWeight="bold" fontSize="md">
+            {email}
+          </Text>
 
-        <Box mt="8">
-          <Text fontWeight="bold">新規</Text>
+          <Box mt="8">
+            <Text fontWeight="bold">新規</Text>
 
-          <Input
-            borderWidth="0"
-            borderBottomWidth="1"
-            selectionColor="pink"
-            mt="2"
-            fontSize="16"
-            fontWeight="bold"
-            keyboardType="email-address"
-            _focus={{
-              borderBottomColor: 'pink',
+            <Input
+              borderWidth="0"
+              borderBottomWidth="1"
+              selectionColor="pink"
+              mt="2"
+              fontSize="16"
+              fontWeight="bold"
+              keyboardType="email-address"
+              _focus={{
+                borderBottomColor: 'pink',
+              }}
+              onChangeText={(text) => {
+                setNewEmail(text);
+              }}
+            />
+
+            <Text mt="2">メールアドレスを入力してください</Text>
+          </Box>
+
+          <AnimatedButton
+            h="12"
+            w="100%"
+            alignSelf="center"
+            position="absolute"
+            style={[buttonContainerStyle]}
+            _text={{
+              fontSize: 18,
             }}
-            onChangeText={(text) => {
-              setNewEmail(text);
-            }}
-          />
-
-          <Text mt="2">メールアドレスを入力してください</Text>
+            onPress={onSubmit}
+            isDisabled={!newEmail.length}
+          >
+            変更する
+          </AnimatedButton>
         </Box>
+      </SafeAreaView>
 
-        <AnimatedButton
-          h="12"
-          w="100%"
-          alignSelf="center"
-          position="absolute"
-          style={[buttonContainerStyle]}
-          _text={{
-            fontSize: 18,
-          }}
-          onPress={onSubmit}
-          isDisabled={!newEmail.length}
-        >
-          変更する
-        </AnimatedButton>
-      </Box>
-    </SafeAreaView>
+      <Spinner visible={spinnerVisible} overlayColor="rgba(0,0,0,0.5)" />
+    </>
   );
 };
 
