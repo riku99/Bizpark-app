@@ -1,4 +1,4 @@
-import { IMessage } from 'react-native-gifted-chat';
+import 'react-native-gifted-chat';
 
 declare module 'react-native-gifted-chat' {
   interface IMessage {

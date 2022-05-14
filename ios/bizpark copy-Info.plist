@@ -21,11 +21,15 @@
 	<key>CFBundleURLTypes</key>
 	<array>
 		<dict>
+			<key>CFBundleIdentifier</key>
+			<string></string>
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
+			<key>CFBundleURLName</key>
+			<string>Bundle ID</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>com.googleusercontent.apps.582409484990-h5o1rtin2clbeb2cl1rfc358pnee83m0</string>
+				<string>com.riku.bizpark-dev</string>
 			</array>
 		</dict>
 	</array>

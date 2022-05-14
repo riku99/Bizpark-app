@@ -62,6 +62,7 @@ export const useSignUpWithEmail = () => {
               mmkvStorageKeys.loginProvider,
               loginProviders.mailAddress
             );
+            await firebaseUser.sendEmailVerification();
           }
         } catch (e) {
           console.log(e);
