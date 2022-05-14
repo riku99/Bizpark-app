@@ -1,6 +1,7 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useTheme } from 'native-base';
 import React from 'react';
+import { EmailVerificationScreen } from 'src/screens/EmailVerification';
 import { MailFormScreen } from 'src/screens/MailForm';
 import { SigninScreen } from 'src/screens/Siginin';
 import { SignupScreen } from 'src/screens/Signup';
@@ -10,6 +11,11 @@ export type AuthStackParamList = {
   Signin: undefined;
   MailForm: {
     type: 'signUp' | 'signIn';
+  };
+  EmailVerification: {
+    name: string;
+    email: string;
+    password: string;
   };
 };
 
@@ -34,6 +40,10 @@ export const AuthStack = () => {
       <Stack.Screen name="Signup" component={SignupScreen} />
       <Stack.Screen name="Signin" component={SigninScreen} />
       <Stack.Screen name="MailForm" component={MailFormScreen} />
+      <Stack.Screen
+        name="EmailVerification"
+        component={EmailVerificationScreen}
+      />
     </Stack.Navigator>
   );
 };

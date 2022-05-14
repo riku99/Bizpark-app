@@ -1,17 +1,17 @@
-import React, { ComponentProps, useLayoutEffect } from 'react';
+import auth from '@react-native-firebase/auth';
 import {
   Box,
   Input,
-  VStack,
+  KeyboardAvoidingView,
   Text,
   useTheme,
-  KeyboardAvoidingView,
+  VStack,
 } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
-import { TouchableWithoutFeedback, Keyboard } from 'react-native';
-import { useForm, Controller, UseControllerProps } from 'react-hook-form';
+import React, { ComponentProps, useLayoutEffect } from 'react';
+import { Controller, UseControllerProps, useForm } from 'react-hook-form';
+import { Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Button } from 'react-native-elements';
-import { useSignUpWithEmail, useSignInWithEmail } from 'src/hooks/auth';
+import { useSignInWithEmail, useSignUpWithEmail } from 'src/hooks/auth';
 
 type FormProps<T> = {
   label: string;
@@ -87,11 +87,44 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
   const onSubmmitPress = () => {
     handleSubmit(async (data) => {
       if (type === 'signUp') {
-        await registerUser({
-          email: data.email,
-          password: data.password,
-          name: data.name,
-        });
+        // await registerUser({
+        //   email: data.email,
+        //   password: data.password,
+        //   name: data.name,
+        // });
+        Alert.alert(
+          data.email,
+          '上記のメールアドレスに認証用のメールを送ります。\nメールアドレスを変更する場合はキャンセルを押してください。',
+          [
+            {
+              text: 'キャンセル',
+              style: 'cancel',
+            },
+            {
+              text: '送る',
+              onPress: async () => {
+                try {
+                  const emailResult = await auth().fetchSignInMethodsForEmail(
+                    data.email
+                  );
+
+                  if (emailResult.length === 0) {
+                    navigation.navigate('EmailVerification', {
+                      name: data.name,
+                      email: data.email,
+                      password: data.password,
+                    });
+                  } else {
+                    Alert.alert('無効なメールアドレスです');
+                  }
+                } catch (e) {
+                  console.log(e);
+                  Alert.alert('無効なメールアドレスです');
+                }
+              },
+            },
+          ]
+        );
 
         return;
       }
@@ -146,7 +179,7 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
               />
             )}
             <Button
-              title={type === 'signUp' ? '登録' : 'ログイン'}
+              title={type === 'signUp' ? '次へ' : 'ログイン'}
               buttonStyle={{
                 backgroundColor: colors.pink,
               }}
