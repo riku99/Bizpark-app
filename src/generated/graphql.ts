@@ -30,6 +30,10 @@ export type BlockedByUser = {
   name: Scalars['String'];
 };
 
+export type CreateEmailAuthCodeInput = {
+  email: Scalars['String'];
+};
+
 export type CreateNewsPickInput = {
   newsId: Scalars['Int'];
 };
@@ -229,6 +233,7 @@ export type Mutation = {
   __typename?: 'Mutation';
   addDeviceToken?: Maybe<Scalars['Boolean']>;
   block: User;
+  createEmailAuthCode: Scalars['Int'];
   createNewsPick: NewsPick;
   createNewsTalkRoomMessage: NewsTalkRoomMessage;
   createOneOnOneTalkRoom: OneOnOneTalkRoom;
@@ -263,6 +268,7 @@ export type Mutation = {
   updateMe: Me;
   uploadImage: SubImage;
   uploadThoughtImages: UploadThoughtImagesResponse;
+  verifyEmailAuthCode?: Maybe<Scalars['Boolean']>;
   verifyIapReceipt: Me;
 };
 
@@ -274,6 +280,11 @@ export type MutationAddDeviceTokenArgs = {
 
 export type MutationBlockArgs = {
   blockTo: Scalars['ID'];
+};
+
+
+export type MutationCreateEmailAuthCodeArgs = {
+  input: CreateEmailAuthCodeInput;
 };
 
 
@@ -434,6 +445,12 @@ export type MutationUploadImageArgs = {
 
 export type MutationUploadThoughtImagesArgs = {
   files: Array<Scalars['Upload']>;
+};
+
+
+export type MutationVerifyEmailAuthCodeArgs = {
+  id: Scalars['Int'];
+  input: VerifyEmailAuthCodeInput;
 };
 
 
@@ -1038,6 +1055,16 @@ export enum UserGetError {
   NotFound = 'NOT_FOUND'
 }
 
+export enum VerifyEmailAuthCodeError {
+  Expired = 'EXPIRED',
+  Invalid = 'INVALID',
+  NotFound = 'NOT_FOUND'
+}
+
+export type VerifyEmailAuthCodeInput = {
+  code: Scalars['String'];
+};
+
 export type VerifyIapReceiptInput = {
   platform: Scalars['String'];
   productId: Scalars['String'];
@@ -1263,6 +1290,13 @@ export type SeenOneOnOneTalkRoomMessageMutationVariables = Exact<{
 
 export type SeenOneOnOneTalkRoomMessageMutation = { __typename?: 'Mutation', seenOneOnOneTalkRoomMessage: { __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined } };
 
+export type SendEmailAuthCodeMutationVariables = Exact<{
+  input: CreateEmailAuthCodeInput;
+}>;
+
+
+export type SendEmailAuthCodeMutation = { __typename?: 'Mutation', createEmailAuthCode: number };
+
 export type SignOutMutationVariables = Exact<{ [key: string]: never; }>;
 
 
@@ -1316,6 +1350,14 @@ export type UploadThoughtImagesMutationVariables = Exact<{
 
 
 export type UploadThoughtImagesMutation = { __typename?: 'Mutation', uploadThoughtImages: { __typename?: 'UploadThoughtImagesResponse', images: Array<{ __typename?: 'SubImage', url: string, width?: number | null | undefined, height?: number | null | undefined }> } };
+
+export type VerifyEmailAuthCodeMutationVariables = Exact<{
+  input: VerifyEmailAuthCodeInput;
+  id: Scalars['Int'];
+}>;
+
+
+export type VerifyEmailAuthCodeMutation = { __typename?: 'Mutation', verifyEmailAuthCode?: boolean | null | undefined };
 
 export type VerifyIapReceiptMutationVariables = Exact<{
   input: VerifyIapReceiptInput;
@@ -2741,6 +2783,37 @@ export function useSeenOneOnOneTalkRoomMessageMutation(baseOptions?: Apollo.Muta
 export type SeenOneOnOneTalkRoomMessageMutationHookResult = ReturnType<typeof useSeenOneOnOneTalkRoomMessageMutation>;
 export type SeenOneOnOneTalkRoomMessageMutationResult = Apollo.MutationResult<SeenOneOnOneTalkRoomMessageMutation>;
 export type SeenOneOnOneTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<SeenOneOnOneTalkRoomMessageMutation, SeenOneOnOneTalkRoomMessageMutationVariables>;
+export const SendEmailAuthCodeDocument = gql`
+    mutation SendEmailAuthCode($input: CreateEmailAuthCodeInput!) {
+  createEmailAuthCode(input: $input)
+}
+    `;
+export type SendEmailAuthCodeMutationFn = Apollo.MutationFunction<SendEmailAuthCodeMutation, SendEmailAuthCodeMutationVariables>;
+
+/**
+ * __useSendEmailAuthCodeMutation__
+ *
+ * To run a mutation, you first call `useSendEmailAuthCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useSendEmailAuthCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [sendEmailAuthCodeMutation, { data, loading, error }] = useSendEmailAuthCodeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useSendEmailAuthCodeMutation(baseOptions?: Apollo.MutationHookOptions<SendEmailAuthCodeMutation, SendEmailAuthCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<SendEmailAuthCodeMutation, SendEmailAuthCodeMutationVariables>(SendEmailAuthCodeDocument, options);
+      }
+export type SendEmailAuthCodeMutationHookResult = ReturnType<typeof useSendEmailAuthCodeMutation>;
+export type SendEmailAuthCodeMutationResult = Apollo.MutationResult<SendEmailAuthCodeMutation>;
+export type SendEmailAuthCodeMutationOptions = Apollo.BaseMutationOptions<SendEmailAuthCodeMutation, SendEmailAuthCodeMutationVariables>;
 export const SignOutDocument = gql`
     mutation SignOut {
   signOut {
@@ -3010,6 +3083,38 @@ export function useUploadThoughtImagesMutation(baseOptions?: Apollo.MutationHook
 export type UploadThoughtImagesMutationHookResult = ReturnType<typeof useUploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationResult = Apollo.MutationResult<UploadThoughtImagesMutation>;
 export type UploadThoughtImagesMutationOptions = Apollo.BaseMutationOptions<UploadThoughtImagesMutation, UploadThoughtImagesMutationVariables>;
+export const VerifyEmailAuthCodeDocument = gql`
+    mutation VerifyEmailAuthCode($input: VerifyEmailAuthCodeInput!, $id: Int!) {
+  verifyEmailAuthCode(input: $input, id: $id)
+}
+    `;
+export type VerifyEmailAuthCodeMutationFn = Apollo.MutationFunction<VerifyEmailAuthCodeMutation, VerifyEmailAuthCodeMutationVariables>;
+
+/**
+ * __useVerifyEmailAuthCodeMutation__
+ *
+ * To run a mutation, you first call `useVerifyEmailAuthCodeMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useVerifyEmailAuthCodeMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [verifyEmailAuthCodeMutation, { data, loading, error }] = useVerifyEmailAuthCodeMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useVerifyEmailAuthCodeMutation(baseOptions?: Apollo.MutationHookOptions<VerifyEmailAuthCodeMutation, VerifyEmailAuthCodeMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<VerifyEmailAuthCodeMutation, VerifyEmailAuthCodeMutationVariables>(VerifyEmailAuthCodeDocument, options);
+      }
+export type VerifyEmailAuthCodeMutationHookResult = ReturnType<typeof useVerifyEmailAuthCodeMutation>;
+export type VerifyEmailAuthCodeMutationResult = Apollo.MutationResult<VerifyEmailAuthCodeMutation>;
+export type VerifyEmailAuthCodeMutationOptions = Apollo.BaseMutationOptions<VerifyEmailAuthCodeMutation, VerifyEmailAuthCodeMutationVariables>;
 export const VerifyIapReceiptDocument = gql`
     mutation VerifyIapReceipt($input: VerifyIapReceiptInput!) {
   verifyIapReceipt(input: $input) {

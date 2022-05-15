@@ -16,6 +16,7 @@ export type AuthStackParamList = {
     name: string;
     email: string;
     password: string;
+    emailAuthCodeId: number;
   };
 };
 

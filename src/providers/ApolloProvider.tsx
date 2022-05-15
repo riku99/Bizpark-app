@@ -27,7 +27,6 @@ type Props = {
 
 const uploadLink = createUploadLink({
   uri: Config.APP_ENDPOINT,
-  // uri: 'http://172.20.10.3:4000/graphql',
 });
 
 const wsLink = new WebSocketLink({

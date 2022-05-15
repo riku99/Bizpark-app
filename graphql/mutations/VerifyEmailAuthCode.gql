@@ -1,0 +1,3 @@
+mutation VerifyEmailAuthCode($input: VerifyEmailAuthCodeInput!, $id: Int!) {
+  verifyEmailAuthCode(input: $input, id: $id)
+}

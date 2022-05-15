@@ -11,7 +11,9 @@ import React, { ComponentProps, useLayoutEffect } from 'react';
 import { Controller, UseControllerProps, useForm } from 'react-hook-form';
 import { Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Button } from 'react-native-elements';
+import { useSendEmailAuthCodeMutation } from 'src/generated/graphql';
 import { useSignInWithEmail, useSignUpWithEmail } from 'src/hooks/auth';
+import { useSpinner } from 'src/hooks/spinner';
 
 type FormProps<T> = {
   label: string;
@@ -73,7 +75,8 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
   const { registerUser } = useSignUpWithEmail();
   const { signInWithEmail } = useSignInWithEmail();
   const { colors } = useTheme();
-
+  const { setSpinnerVisible } = useSpinner();
+  const [sendEmailMutation] = useSendEmailAuthCodeMutation();
   const { control, handleSubmit, watch } = useForm<FormData>();
 
   const email = watch('email');
@@ -87,11 +90,6 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
   const onSubmmitPress = () => {
     handleSubmit(async (data) => {
       if (type === 'signUp') {
-        // await registerUser({
-        //   email: data.email,
-        //   password: data.password,
-        //   name: data.name,
-        // });
         Alert.alert(
           data.email,
           '上記のメールアドレスに認証用のメールを送ります。\nメールアドレスを変更する場合はキャンセルを押してください。',
@@ -109,11 +107,29 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
                   );
 
                   if (emailResult.length === 0) {
-                    navigation.navigate('EmailVerification', {
-                      name: data.name,
-                      email: data.email,
-                      password: data.password,
-                    });
+                    try {
+                      setSpinnerVisible(true);
+                      const { data: emailAuthCodeData } =
+                        await sendEmailMutation({
+                          variables: {
+                            input: {
+                              email: data.email,
+                            },
+                          },
+                        });
+
+                      navigation.navigate('EmailVerification', {
+                        name: data.name,
+                        email: data.email,
+                        password: data.password,
+                        emailAuthCodeId: emailAuthCodeData.createEmailAuthCode,
+                      });
+                    } catch (e) {
+                      console.log(e);
+                      Alert.alert('送信に失敗しました');
+                    } finally {
+                      setSpinnerVisible(false);
+                    }
                   } else {
                     Alert.alert('無効なメールアドレスです');
                   }
