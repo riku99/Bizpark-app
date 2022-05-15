@@ -12,7 +12,7 @@ import { Controller, UseControllerProps, useForm } from 'react-hook-form';
 import { Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useSendEmailAuthCodeMutation } from 'src/generated/graphql';
-import { useSignInWithEmail, useSignUpWithEmail } from 'src/hooks/auth';
+import { useSignInWithEmail } from 'src/hooks/auth';
 import { useSpinner } from 'src/hooks/spinner';
 
 type FormProps<T> = {
@@ -72,7 +72,6 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation]);
 
-  const { registerUser } = useSignUpWithEmail();
   const { signInWithEmail } = useSignInWithEmail();
   const { colors } = useTheme();
   const { setSpinnerVisible } = useSpinner();

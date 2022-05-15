@@ -12,6 +12,7 @@ import {
 } from 'react-native';
 import Mail from 'src/assets/lottie/mail.json';
 import {
+  useSendEmailAuthCodeMutation,
   useVerifyEmailAuthCodeMutation,
   VerifyEmailAuthCodeError,
 } from 'src/generated/graphql';
@@ -21,7 +22,7 @@ import { getGraphQLError } from 'src/utils';
 type Props = RootNavigationScreenProp<'EmailVerification'>;
 
 export const EmailVerificationScreen = ({ navigation, route }: Props) => {
-  const { emailAuthCodeId, email, name, password } = route.params;
+  const { email, name, password } = route.params;
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -34,6 +35,10 @@ export const EmailVerificationScreen = ({ navigation, route }: Props) => {
   const { registerUser } = useSignUpWithEmail();
   const [verifyEmailAuthCodeMutation] = useVerifyEmailAuthCodeMutation();
   const [code, setCode] = useState('');
+  const [sendEmailMutation] = useSendEmailAuthCodeMutation();
+  const [emailAuthCodeId, setEmailAuthCodeId] = useState(
+    route.params.emailAuthCodeId
+  );
 
   const onSubmit = async () => {
     await verifyEmailAuthCodeMutation({
@@ -68,9 +73,25 @@ export const EmailVerificationScreen = ({ navigation, route }: Props) => {
               '認証コードが見つかりません',
               'お手数ですが初めからやり直してください。'
             );
+
+            navigation.popToTop();
             return;
           }
         }
+      },
+    });
+  };
+
+  const onResendPress = async () => {
+    await sendEmailMutation({
+      variables: {
+        input: {
+          email,
+        },
+      },
+      onCompleted: (result) => {
+        setEmailAuthCodeId(result.createEmailAuthCode);
+        Alert.alert('再送信しました');
       },
     });
   };
@@ -105,7 +126,7 @@ export const EmailVerificationScreen = ({ navigation, route }: Props) => {
 
         <View style={styles.resendBox}>
           <Text>メールが届きませんか?</Text>
-          <Pressable>
+          <Pressable onPress={onResendPress}>
             <Text style={styles.text4}>再送信する</Text>
           </Pressable>
         </View>
