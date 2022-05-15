@@ -46,6 +46,7 @@ export const EmailVerificationScreen = ({ navigation, route }: Props) => {
         id: emailAuthCodeId,
         input: {
           code,
+          email,
         },
       },
       onCompleted: async () => {
