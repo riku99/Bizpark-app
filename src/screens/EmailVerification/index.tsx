@@ -14,10 +14,9 @@ import Mail from 'src/assets/lottie/mail.json';
 import {
   useSendEmailAuthCodeMutation,
   useVerifyEmailAuthCodeMutation,
-  VerifyEmailAuthCodeError,
 } from 'src/generated/graphql';
+import { handleVerifyEmailAuthCodeMutationError } from 'src/helpers/handleVerifyEmailAuthCodeMutationError';
 import { useSignUpWithEmail } from 'src/hooks/auth';
-import { getGraphQLError } from 'src/utils';
 
 type Props = RootNavigationScreenProp<'EmailVerification'>;
 
@@ -56,30 +55,7 @@ export const EmailVerificationScreen = ({ navigation, route }: Props) => {
           name,
         });
       },
-      onError: (errors) => {
-        const e = getGraphQLError(errors, 0);
-        if (e) {
-          if (e.code === VerifyEmailAuthCodeError.Expired) {
-            Alert.alert('有効期限が切れています');
-            return;
-          }
-
-          if (e.code === VerifyEmailAuthCodeError.Invalid) {
-            Alert.alert('コードが間違っています');
-            return;
-          }
-
-          if (e.code === VerifyEmailAuthCodeError.NotFound) {
-            Alert.alert(
-              '認証コードが見つかりません',
-              'お手数ですが初めからやり直してください。'
-            );
-
-            navigation.popToTop();
-            return;
-          }
-        }
-      },
+      onError: handleVerifyEmailAuthCodeMutationError,
     });
   };
 

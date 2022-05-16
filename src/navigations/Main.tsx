@@ -1,38 +1,37 @@
-import React, { useEffect } from 'react';
-import { BottomTab } from './Tab';
-import { useColorModeValue, useTheme } from 'native-base';
-import { ThoughtScreen } from 'src/screens/Thought';
-import { ThoughtWritingScreen } from 'src/screens/ThoughtWriting';
-import { ThoughtShareScreen } from 'src/screens/ThoughtShare';
-import { NewsWebViewScreen } from 'src/screens/NewsWebView';
-import { UserEditScreen } from 'src/screens/UserEdit';
-import { UserItemEditScreen } from 'src/screens/UserItemEdit';
-import { UserProfileScreen } from 'src/screens/UserProfile';
-import { Settings } from './Settings';
-import { ThoughtTalkRoomStack } from './ThoughtTalkRoom';
-import { NewsTalkRoomStack } from './NewsTalkRoom';
-import { OneOnOneTalkRoomStack } from './OneOnOneTalkRoom';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useApolloClient } from '@apollo/client';
 import { NavigatorScreenParams } from '@react-navigation/native';
-import { ThoughtTalkRoomStackParamList } from 'src/navigations/ThoughtTalkRoom';
-import { NewsTalkRoomStackParamList } from 'src/navigations/NewsTalkRoom';
-import { OneOnOneTalkRoomStackParamList } from 'src/navigations/OneOnOneTalkRoom';
-import { ThoughtShare, Socials } from 'src/types';
-import { useToughtTalkRoomsWithSubsciption } from 'src/hooks/thoughtTalkRoom';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { useColorModeValue, useTheme } from 'native-base';
+import React, { useEffect } from 'react';
+import FastImage from 'react-native-fast-image';
+import { useInitialDataLazyQuery } from 'src/generated/graphql';
+import { requestUserPermission } from 'src/helpers/pushNotifications';
 import { useActiveData } from 'src/hooks/active';
+import { useLoggedIn } from 'src/hooks/me';
 import { useNewsTalkRoomsWithSusbscription } from 'src/hooks/newsTalkRoom';
 import { useOneOnOneTalkRoomsWithSubscription } from 'src/hooks/oneOnOneTalkRoom';
 import { useDeviceToken } from 'src/hooks/pushNotificatoins';
-import { requestUserPermission } from 'src/helpers/pushNotifications';
-import { useInitialDataLazyQuery } from 'src/generated/graphql';
-import FastImage from 'react-native-fast-image';
-import { useApolloClient } from '@apollo/client';
-import { useLoggedIn } from 'src/hooks/me';
+import { useToughtTalkRoomsWithSubsciption } from 'src/hooks/thoughtTalkRoom';
+import { NewsTalkRoomStackParamList } from 'src/navigations/NewsTalkRoom';
+import { OneOnOneTalkRoomStackParamList } from 'src/navigations/OneOnOneTalkRoom';
+import { ThoughtTalkRoomStackParamList } from 'src/navigations/ThoughtTalkRoom';
+import { IAPScreen } from 'src/screens/IAP';
+import { NewsTabOrderChangeScreen } from 'src/screens/NewsTabOrderChange';
+import { NewsWebViewScreen } from 'src/screens/NewsWebView';
 import { NotificationsScreen } from 'src/screens/Notifications';
 import { TabOrderChangeScreen } from 'src/screens/TabOrderChange';
-import { NewsTabOrderChangeScreen } from 'src/screens/NewsTabOrderChange';
-import { IAPScreen } from 'src/screens/IAP';
-import { useMyId } from 'src/hooks/me';
+import { ThoughtScreen } from 'src/screens/Thought';
+import { ThoughtShareScreen } from 'src/screens/ThoughtShare';
+import { ThoughtWritingScreen } from 'src/screens/ThoughtWriting';
+import { UserEditScreen } from 'src/screens/UserEdit';
+import { UserItemEditScreen } from 'src/screens/UserItemEdit';
+import { UserProfileScreen } from 'src/screens/UserProfile';
+import { Socials, ThoughtShare } from 'src/types';
+import { NewsTalkRoomStack } from './NewsTalkRoom';
+import { OneOnOneTalkRoomStack } from './OneOnOneTalkRoom';
+import { Settings } from './Settings';
+import { BottomTab } from './Tab';
+import { ThoughtTalkRoomStack } from './ThoughtTalkRoom';
 
 export type MainStackParamList = {
   Tab: undefined;
@@ -76,8 +75,6 @@ export const MainStack = React.memo(() => {
   const { colors } = useTheme();
 
   const client = useApolloClient();
-
-  const myId = useMyId();
 
   const [initialDataQuery, { called }] = useInitialDataLazyQuery({
     fetchPolicy: 'cache-and-network',

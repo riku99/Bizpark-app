@@ -12,9 +12,10 @@ import Animated, {
 } from 'react-native-reanimated';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { CloseButton } from 'src/components/BackButon';
-import { loginProviders } from 'src/constants';
-import { useUpdateEmailMutation } from 'src/generated/graphql';
-import { getLoginProvider } from 'src/helpers/getLoginProvider';
+import {
+  useSendEmailAuthCodeMutation,
+  useUpdateEmailMutation,
+} from 'src/generated/graphql';
 
 const AnimatedButton = Animated.createAnimatedComponent(Button);
 
@@ -30,6 +31,7 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
 
   const { bottom: safeAreaBottom } = useSafeAreaInsets();
   const [updateEmailMutation] = useUpdateEmailMutation();
+  const [sendEmailMutation] = useSendEmailAuthCodeMutation();
   const [newEmail, setNewEmail] = useState('');
   const [spinnerVisible, setSpinnerVisible] = useState(false);
 
@@ -165,53 +167,119 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
     }
   };
 
-  const onSubmit = async () => {
-    try {
-      const provider = getLoginProvider();
+  const onNext = async () => {
+    setSpinnerVisible(true);
 
-      if (!provider) {
-        Alert.alert(
-          '',
-          'ログイン情報が存在しません。お手数ですがログインし直してください'
-        );
-        return;
-      }
+    const emailResult = await auth().fetchSignInMethodsForEmail(newEmail);
 
-      if (provider === loginProviders.google) {
-        Alert.alert('', '再度Googleログインが必要です。続けてよろしいですか?', [
-          {
-            text: 'キャンセル',
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: updateWithGoogle,
-          },
-        ]);
-      } else if (provider === loginProviders.apple) {
-        Alert.alert('', '再度Appleログインが必要です。続けてよろしいですか?', [
-          {
-            text: 'キャンセル',
-            style: 'cancel',
-          },
-          {
-            text: 'OK',
-            onPress: updateWithApple,
-          },
-        ]);
-      } else if (provider === loginProviders.mailAddress) {
-        Alert.prompt(
-          'パスワードを入力してください',
-          '',
-          updateWithPassword,
-          'secure-text'
-        );
-      }
-    } catch (e) {
-      Alert.alert('更新に失敗しました');
-      console.log(e);
+    if (emailResult.length === 0) {
+      Alert.prompt(
+        'パスワードを入力してください',
+        'メールアドレス変更には再度ログインする必要があるため、パスワードが必要です。',
+        async (password: string) => {
+          try {
+            const emailCredential = auth.EmailAuthProvider.credential(
+              email,
+              password
+            );
+
+            await firebaseUser.reauthenticateWithCredential(emailCredential);
+
+            Alert.alert(
+              newEmail,
+              '上記のメールアドレスに認証用のメールを送ります。\nメールアドレスを変更する場合はキャンセルを押してください。',
+              [
+                {
+                  text: 'キャンセル',
+                  style: 'cancel',
+                },
+                {
+                  text: '送る',
+                  onPress: async () => {
+                    try {
+                      try {
+                        const { data: emailAuthCodeData } =
+                          await sendEmailMutation({
+                            variables: {
+                              input: {
+                                email: newEmail,
+                              },
+                            },
+                          });
+
+                        navigation.navigate('EmaiChangeVerification', {
+                          kind: 'EmailChange',
+                          email: newEmail,
+                          emailAuthCodeId:
+                            emailAuthCodeData.createEmailAuthCode,
+                        });
+                      } catch (e) {
+                        console.log(e);
+                        Alert.alert('送信に失敗しました');
+                      }
+                    } catch (e) {
+                      console.log(e);
+                    }
+                  },
+                },
+              ]
+            );
+          } catch (e) {
+            Alert.alert('パスワードが間違っています');
+          } finally {
+            setSpinnerVisible(false);
+          }
+        },
+        'secure-text'
+      );
+    } else {
+      setSpinnerVisible(false);
+      Alert.alert('無効なメールアドレスです');
     }
   };
+
+  // const onSubmit = async () => {
+  //   try {
+  //     const provider = getLoginProvider();
+
+  //     if (!provider) {
+  //       Alert.alert(
+  //         '',
+  //         'ログイン情報が存在しません。お手数ですがログインし直してください'
+  //       );
+  //       return;
+  //     }
+
+  //     if (provider === loginProviders.google) {
+  //       Alert.alert('', '再度Googleログインが必要です。続けてよろしいですか?', [
+  //         {
+  //           text: 'キャンセル',
+  //           style: 'cancel',
+  //         },
+  //         {
+  //           text: 'OK',
+  //           onPress: updateWithGoogle,
+  //         },
+  //       ]);
+  //     } else if (provider === loginProviders.apple) {
+  //       Alert.alert('', '再度Appleログインが必要です。続けてよろしいですか?', [
+  //         {
+  //           text: 'キャンセル',
+  //           style: 'cancel',
+  //         },
+  //         {
+  //           text: 'OK',
+  //           onPress: updateWithApple,
+  //         },
+  //       ]);
+  //     } else if (provider === loginProviders.mailAddress) {
+  //       Alert.prompt('パスワードを入力してください', '', next, 'secure-text');
+  //     }
+  //   } catch (e) {
+  //     Alert.alert('更新に失敗しました');
+  //     console.log(e);
+  //   }
+  // };
 
   return (
     <>
@@ -256,10 +324,10 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
             _text={{
               fontSize: 18,
             }}
-            onPress={onSubmit}
+            onPress={onNext}
             isDisabled={!newEmail.length}
           >
-            変更する
+            次へ
           </AnimatedButton>
         </Box>
       </SafeAreaView>
