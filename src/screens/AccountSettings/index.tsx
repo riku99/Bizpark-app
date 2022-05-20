@@ -8,6 +8,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 import { CloseButton } from 'src/components/BackButon';
 import { ListItem } from 'src/components/ListItem';
 import { RightIcon } from 'src/components/RightIcon';
+import { loginProviders } from 'src/constants';
 import {
   useDeleteAccountMutation,
   useVerifyIapReceiptMutation,
@@ -132,6 +133,10 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
   const provider = getLoginProvider() ?? '不明';
 
   const onEmailChangePress = () => {
+    if (provider !== loginProviders.mailAddress) {
+      return;
+    }
+
     navigation.navigate('EmailChange');
   };
 
@@ -149,16 +154,22 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
 
         <VStack mt="2">
           <ListItem
-            title="メールアドレスを変更"
+            title={
+              provider === loginProviders.mailAddress
+                ? 'メールアドレスを変更'
+                : '登録中のメールアドレス'
+            }
             titleStyle={styles.basicStatusItemTitle}
             ItemRight={<Text>{email}</Text>}
             onPress={onEmailChangePress}
           />
-          <ListItem
-            title="パスワードを変更"
-            titleStyle={styles.basicStatusItemTitle}
-            onPress={onPasswordChangePress}
-          />
+          {provider === loginProviders.mailAddress && (
+            <ListItem
+              title="パスワードを変更"
+              titleStyle={styles.basicStatusItemTitle}
+              onPress={onPasswordChangePress}
+            />
+          )}
           <ListItem
             title="ログイン方法"
             titleStyle={styles.basicStatusItemTitle}

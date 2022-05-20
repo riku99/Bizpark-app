@@ -1,6 +1,4 @@
-import { appleAuth } from '@invertase/react-native-apple-authentication';
 import auth from '@react-native-firebase/auth';
-import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { Box, Button, Input, Text } from 'native-base';
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import { Alert, Keyboard, SafeAreaView, StyleSheet } from 'react-native';
@@ -113,44 +111,6 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
     });
   };
 
-  const updateWithGoogle = async () => {
-    try {
-      const { idToken } = await GoogleSignin.signIn();
-      const googleCredential = auth.GoogleAuthProvider.credential(idToken);
-      await firebaseUser.reauthenticateWithCredential(googleCredential);
-      await updateEmail();
-    } catch (e) {
-      console.log(e);
-      Alert.alert('更新に失敗しました');
-    }
-  };
-
-  const updateWithApple = async () => {
-    try {
-      const appleAuthResponse = await appleAuth.performRequest({
-        requestedOperation: appleAuth.Operation.LOGIN,
-        requestedScopes: [appleAuth.Scope.EMAIL, appleAuth.Scope.FULL_NAME],
-      });
-
-      if (!appleAuthResponse.identityToken) {
-        Alert.alert('無効なアカウントです');
-        return;
-      }
-
-      const { identityToken, nonce } = appleAuthResponse;
-      const appleCredential = auth.AppleAuthProvider.credential(
-        identityToken,
-        nonce
-      );
-
-      await firebaseUser.reauthenticateWithCredential(appleCredential);
-      await updateEmail();
-    } catch (e) {
-      console.log(e);
-      Alert.alert('更新に失敗しました');
-    }
-  };
-
   const onNext = async () => {
     setSpinnerVisible(true);
 
@@ -238,49 +198,6 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
       Alert.alert('無効なメールアドレスです');
     }
   };
-
-  // const onSubmit = async () => {
-  //   try {
-  //     const provider = getLoginProvider();
-
-  //     if (!provider) {
-  //       Alert.alert(
-  //         '',
-  //         'ログイン情報が存在しません。お手数ですがログインし直してください'
-  //       );
-  //       return;
-  //     }
-
-  //     if (provider === loginProviders.google) {
-  //       Alert.alert('', '再度Googleログインが必要です。続けてよろしいですか?', [
-  //         {
-  //           text: 'キャンセル',
-  //           style: 'cancel',
-  //         },
-  //         {
-  //           text: 'OK',
-  //           onPress: updateWithGoogle,
-  //         },
-  //       ]);
-  //     } else if (provider === loginProviders.apple) {
-  //       Alert.alert('', '再度Appleログインが必要です。続けてよろしいですか?', [
-  //         {
-  //           text: 'キャンセル',
-  //           style: 'cancel',
-  //         },
-  //         {
-  //           text: 'OK',
-  //           onPress: updateWithApple,
-  //         },
-  //       ]);
-  //     } else if (provider === loginProviders.mailAddress) {
-  //       Alert.prompt('パスワードを入力してください', '', next, 'secure-text');
-  //     }
-  //   } catch (e) {
-  //     Alert.alert('更新に失敗しました');
-  //     console.log(e);
-  //   }
-  // };
 
   return (
     <>
