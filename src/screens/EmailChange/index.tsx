@@ -151,22 +151,6 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
     }
   };
 
-  const updateWithPassword = async (value: string) => {
-    try {
-      const emailCredential = auth.EmailAuthProvider.credential(email, value);
-      await firebaseUser.reauthenticateWithCredential(emailCredential);
-      await updateEmail();
-    } catch (e) {
-      console.log(e);
-      setSpinnerVisible(false);
-      if (e.code === 'auth/wrong-password') {
-        Alert.alert('パスワードが間違っています');
-      } else {
-        Alert.alert('更新に失敗しました');
-      }
-    }
-  };
-
   const onNext = async () => {
     setSpinnerVisible(true);
 
@@ -192,41 +176,43 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
                 {
                   text: 'キャンセル',
                   style: 'cancel',
+                  onPress: () => {
+                    setSpinnerVisible(false);
+                  },
                 },
                 {
                   text: '送る',
                   onPress: async () => {
                     try {
-                      try {
-                        const { data: emailAuthCodeData } =
-                          await sendEmailMutation({
-                            variables: {
-                              input: {
-                                email: newEmail,
-                              },
+                      const { data: emailAuthCodeData } =
+                        await sendEmailMutation({
+                          variables: {
+                            input: {
+                              email: newEmail,
                             },
-                          });
-
-                        navigation.navigate('EmaiChangeVerification', {
-                          kind: 'EmailChange',
-                          email: newEmail,
-                          emailAuthCodeId:
-                            emailAuthCodeData.createEmailAuthCode,
+                          },
                         });
-                      } catch (e) {
-                        console.log(e);
-                        Alert.alert('送信に失敗しました');
-                      }
+
+                      navigation.navigate('EmaiChangeVerification', {
+                        kind: 'EmailChange',
+                        email: newEmail,
+                        emailAuthCodeId: emailAuthCodeData.createEmailAuthCode,
+                      });
                     } catch (e) {
-                      console.log(e);
+                      Alert.alert('送信に失敗しました');
+                    } finally {
+                      setSpinnerVisible(false);
                     }
                   },
                 },
               ]
             );
           } catch (e) {
-            Alert.alert('パスワードが間違っています');
-          } finally {
+            if (e.code === 'auth/wrong-password') {
+              Alert.alert('パスワードが間違っています');
+            } else {
+              Alert.alert('更新に失敗しました');
+            }
             setSpinnerVisible(false);
           }
         },
