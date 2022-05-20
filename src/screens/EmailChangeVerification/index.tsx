@@ -90,6 +90,7 @@ export const EmailChangeVerificationScreen = ({ navigation, route }: Props) => {
           return;
         }
       } catch (e) {
+        Alert.alert(e);
         handleVerifyEmailAuthCodeMutationError(e);
       }
     } catch (e) {

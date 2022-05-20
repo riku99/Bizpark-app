@@ -8,15 +8,16 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput,
+  TextInput
 } from 'react-native';
 import Mail from 'src/assets/lottie/mail.json';
 import {
   useSendEmailAuthCodeMutation,
-  useVerifyEmailAuthCodeMutation,
+  useVerifyEmailAuthCodeMutation
 } from 'src/generated/graphql';
 import { handleVerifyEmailAuthCodeMutationError } from 'src/helpers/handleVerifyEmailAuthCodeMutationError';
 import { useSignUpWithEmail } from 'src/hooks/auth';
+import { useSpinner } from 'src/hooks/spinner';
 
 type Props = RootNavigationScreenProp<'EmailVerification'>;
 
@@ -38,8 +39,10 @@ export const EmailVerificationScreen = ({ navigation, route }: Props) => {
   const [emailAuthCodeId, setEmailAuthCodeId] = useState(
     route.params.emailAuthCodeId
   );
+  const { setSpinnerVisible } = useSpinner();
 
   const onSubmit = async () => {
+    setSpinnerVisible(true)
     await verifyEmailAuthCodeMutation({
       variables: {
         id: emailAuthCodeId,
@@ -54,23 +57,33 @@ export const EmailVerificationScreen = ({ navigation, route }: Props) => {
           password,
           name,
         });
+        setSpinnerVisible(false)
       },
-      onError: handleVerifyEmailAuthCodeMutationError,
+      onError: (e) => {
+        setSpinnerVisible(false)
+        handleVerifyEmailAuthCodeMutationError(e)
+      },
     });
   };
 
   const onResendPress = async () => {
-    await sendEmailMutation({
-      variables: {
-        input: {
-          email,
+    setSpinnerVisible(true);
+    try {
+      const { data: resendData } = await sendEmailMutation({
+        variables: {
+          input: {
+            email,
+          },
         },
-      },
-      onCompleted: (result) => {
-        setEmailAuthCodeId(result.createEmailAuthCode);
-        Alert.alert('再送信しました');
-      },
-    });
+      });
+
+      setEmailAuthCodeId(resendData.createEmailAuthCode);
+      Alert.alert('再送信しました', '最新の認証コードをお使いください');
+    } catch (e) {
+      Alert.alert('再送信に失敗しました');
+    } finally {
+      setSpinnerVisible(false);
+    }
   };
 
   return (
