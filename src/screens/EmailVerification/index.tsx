@@ -8,12 +8,12 @@ import {
   ScrollView,
   StyleSheet,
   Text,
-  TextInput
+  TextInput,
 } from 'react-native';
 import Mail from 'src/assets/lottie/mail.json';
 import {
   useSendEmailAuthCodeMutation,
-  useVerifyEmailAuthCodeMutation
+  useVerifyEmailAuthCodeMutation,
 } from 'src/generated/graphql';
 import { handleVerifyEmailAuthCodeMutationError } from 'src/helpers/handleVerifyEmailAuthCodeMutationError';
 import { useSignUpWithEmail } from 'src/hooks/auth';
@@ -42,7 +42,7 @@ export const EmailVerificationScreen = ({ navigation, route }: Props) => {
   const { setSpinnerVisible } = useSpinner();
 
   const onSubmit = async () => {
-    setSpinnerVisible(true)
+    setSpinnerVisible(true);
     await verifyEmailAuthCodeMutation({
       variables: {
         id: emailAuthCodeId,
@@ -57,11 +57,11 @@ export const EmailVerificationScreen = ({ navigation, route }: Props) => {
           password,
           name,
         });
-        setSpinnerVisible(false)
+        setSpinnerVisible(false);
       },
       onError: (e) => {
-        setSpinnerVisible(false)
-        handleVerifyEmailAuthCodeMutationError(e)
+        setSpinnerVisible(false);
+        handleVerifyEmailAuthCodeMutationError(e);
       },
     });
   };
@@ -109,7 +109,7 @@ export const EmailVerificationScreen = ({ navigation, route }: Props) => {
           <TextInput
             style={styles.codeInput}
             placeholder="認証コード"
-            keyboardType="numbers-and-punctuation"
+            keyboardType="number-pad"
             onChangeText={setCode}
           />
         </View>
