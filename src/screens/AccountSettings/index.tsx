@@ -13,6 +13,7 @@ import {
   useVerifyIapReceiptMutation,
 } from 'src/generated/graphql';
 import { getLoginProvider } from 'src/helpers/getLoginProvider';
+import { sendPasswordResetEmail } from 'src/helpers/sendPasswordResetEmail';
 import { useSignOut } from 'src/hooks/auth';
 import { useLoggedIn } from 'src/hooks/me';
 import { RootNavigationScreenProp } from 'src/types';
@@ -135,27 +136,7 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
   };
 
   const onPasswordChangePress = () => {
-    Alert.alert(
-      email,
-      '上記のメールアドレスにパスワード変更用のメールを送ります。',
-      [
-        {
-          text: 'キャンセル',
-          style: 'cancel',
-        },
-        {
-          text: '送る',
-          onPress: async () => {
-            try {
-              await auth().sendPasswordResetEmail(email);
-              Alert.alert('送信しました');
-            } catch (e) {
-              Alert.alert('送信に失敗しました');
-            }
-          },
-        },
-      ]
-    );
+    sendPasswordResetEmail(email);
   };
 
   return (

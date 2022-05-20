@@ -3,6 +3,7 @@ import {
   Box,
   Input,
   KeyboardAvoidingView,
+  Pressable,
   Text,
   useTheme,
   VStack,
@@ -12,6 +13,7 @@ import { Controller, UseControllerProps, useForm } from 'react-hook-form';
 import { Alert, Keyboard, TouchableWithoutFeedback } from 'react-native';
 import { Button } from 'react-native-elements';
 import { useSendEmailAuthCodeMutation } from 'src/generated/graphql';
+import { sendPasswordResetEmail } from 'src/helpers/sendPasswordResetEmail';
 import { useSignInWithEmail } from 'src/hooks/auth';
 import { useSpinner } from 'src/hooks/spinner';
 
@@ -153,6 +155,16 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
     })();
   };
 
+  const onPasswordForgetPress = () => {
+    Alert.prompt(
+      '登録したメールアドレスを入力してください',
+      '',
+      async (email) => {
+        sendPasswordResetEmail(email);
+      }
+    );
+  };
+
   return (
     <KeyboardAvoidingView flex={1}>
       <TouchableWithoutFeedback
@@ -208,6 +220,19 @@ export const MailFormScreen = ({ navigation, route }: Props) => {
               activeOpacity={1}
               onPress={onSubmmitPress}
             />
+
+            {type === 'signIn' && (
+              <Pressable onPress={onPasswordForgetPress}>
+                <Text
+                  color="#199dfa"
+                  textDecorationLine="underline"
+                  alignSelf="center"
+                  marginTop="4"
+                >
+                  パスワードを忘れた方はこちら
+                </Text>
+              </Pressable>
+            )}
           </VStack>
         </Box>
       </TouchableWithoutFeedback>
