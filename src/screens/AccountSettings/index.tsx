@@ -134,6 +134,30 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
     navigation.navigate('EmailChange');
   };
 
+  const onPasswordChangePress = () => {
+    Alert.alert(
+      email,
+      '上記のメールアドレスにパスワード変更用のメールを送ります。',
+      [
+        {
+          text: 'キャンセル',
+          style: 'cancel',
+        },
+        {
+          text: '送る',
+          onPress: async () => {
+            try {
+              await auth().sendPasswordResetEmail(email);
+              Alert.alert('送信しました');
+            } catch (e) {
+              Alert.alert('送信に失敗しました');
+            }
+          },
+        },
+      ]
+    );
+  };
+
   return (
     <ScrollView flex={1}>
       {/* 基本情報 */}
@@ -152,6 +176,7 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
           <ListItem
             title="パスワードを変更"
             titleStyle={styles.basicStatusItemTitle}
+            onPress={onPasswordChangePress}
           />
           <ListItem
             title="ログイン方法"

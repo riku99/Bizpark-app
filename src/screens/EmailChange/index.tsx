@@ -160,62 +160,77 @@ export const EmailChangeScreen = ({ navigation }: Props) => {
       Alert.prompt(
         'パスワードを入力してください',
         'メールアドレス変更には再度ログインする必要があるため、パスワードが必要です。',
-        async (password: string) => {
-          try {
-            const emailCredential = auth.EmailAuthProvider.credential(
-              email,
-              password
-            );
+        [
+          {
+            text: 'キャンセル',
+            style: 'cancel',
+            onPress: () => {
+              setSpinnerVisible(false);
+            },
+          },
+          {
+            text: 'OK',
+            onPress: async (password) => {
+              try {
+                const emailCredential = auth.EmailAuthProvider.credential(
+                  email,
+                  password
+                );
 
-            await firebaseUser.reauthenticateWithCredential(emailCredential);
+                await firebaseUser.reauthenticateWithCredential(
+                  emailCredential
+                );
 
-            Alert.alert(
-              newEmail,
-              '上記のメールアドレスに認証用のメールを送ります。\nメールアドレスを変更する場合はキャンセルを押してください。',
-              [
-                {
-                  text: 'キャンセル',
-                  style: 'cancel',
-                  onPress: () => {
-                    setSpinnerVisible(false);
-                  },
-                },
-                {
-                  text: '送る',
-                  onPress: async () => {
-                    try {
-                      const { data: emailAuthCodeData } =
-                        await sendEmailMutation({
-                          variables: {
-                            input: {
-                              email: newEmail,
-                            },
-                          },
-                        });
+                Alert.alert(
+                  newEmail,
+                  '上記のメールアドレスに認証用のメールを送ります。\nメールアドレスを変更する場合はキャンセルを押してください。',
+                  [
+                    {
+                      text: 'キャンセル',
+                      style: 'cancel',
+                      onPress: () => {
+                        setSpinnerVisible(false);
+                      },
+                    },
+                    {
+                      text: '送る',
+                      onPress: async () => {
+                        try {
+                          const { data: emailAuthCodeData } =
+                            await sendEmailMutation({
+                              variables: {
+                                input: {
+                                  email: newEmail,
+                                },
+                              },
+                            });
 
-                      navigation.navigate('EmaiChangeVerification', {
-                        kind: 'EmailChange',
-                        email: newEmail,
-                        emailAuthCodeId: emailAuthCodeData.createEmailAuthCode,
-                      });
-                    } catch (e) {
-                      Alert.alert('送信に失敗しました');
-                    } finally {
-                      setSpinnerVisible(false);
-                    }
-                  },
-                },
-              ]
-            );
-          } catch (e) {
-            if (e.code === 'auth/wrong-password') {
-              Alert.alert('パスワードが間違っています');
-            } else {
-              Alert.alert('更新に失敗しました');
-            }
-            setSpinnerVisible(false);
-          }
-        },
+                          navigation.navigate('EmaiChangeVerification', {
+                            kind: 'EmailChange',
+                            email: newEmail,
+                            emailAuthCodeId:
+                              emailAuthCodeData.createEmailAuthCode,
+                          });
+                        } catch (e) {
+                          Alert.alert('送信に失敗しました');
+                        } finally {
+                          setSpinnerVisible(false);
+                        }
+                      },
+                    },
+                  ]
+                );
+              } catch (e) {
+                if (e.code === 'auth/wrong-password') {
+                  Alert.alert('パスワードが間違っています');
+                } else {
+                  Alert.alert('更新に失敗しました');
+                }
+                setSpinnerVisible(false);
+              }
+            },
+          },
+        ],
         'secure-text'
       );
     } else {
