@@ -1,23 +1,25 @@
 import {
   ApolloClient,
-  InMemoryCache,
   ApolloProvider as ApolloProviderBase,
   from,
+  InMemoryCache,
   split,
 } from '@apollo/client';
-import { onError } from '@apollo/client/link/error';
 import { setContext } from '@apollo/client/link/context';
+import { onError } from '@apollo/client/link/error';
+import { WebSocketLink } from '@apollo/client/link/ws';
+import {
+  getMainDefinition,
+  relayStylePagination,
+} from '@apollo/client/utilities';
+import auth from '@react-native-firebase/auth';
+import { createUploadLink } from 'apollo-upload-client';
 import React from 'react';
+import { Alert } from 'react-native';
+import Config from 'react-native-config';
 import { useToast } from 'react-native-toast-notifications';
 import { CustomErrorResponseCode } from 'src/generated/graphql';
-import auth from '@react-native-firebase/auth';
-import { Alert } from 'react-native';
-import { relayStylePagination } from '@apollo/client/utilities';
-import { createUploadLink } from 'apollo-upload-client';
-import { WebSocketLink } from '@apollo/client/link/ws';
-import { getMainDefinition } from '@apollo/client/utilities';
 import { useLoggedIn } from 'src/hooks/me';
-import Config from 'react-native-config';
 
 type Props = {
   children: JSX.Element;

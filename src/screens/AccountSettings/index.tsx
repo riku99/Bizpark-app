@@ -1,19 +1,23 @@
+import { useApolloClient } from '@apollo/client';
+import auth from '@react-native-firebase/auth';
+import * as InAppPurchases from 'expo-in-app-purchases';
+import { Box, ScrollView, Text, useColorModeValue, VStack } from 'native-base';
 import React, { useLayoutEffect, useState } from 'react';
-import { Box } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
+import { Alert, Platform, StyleSheet } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
+import { CloseButton } from 'src/components/BackButon';
 import { ListItem } from 'src/components/ListItem';
 import { RightIcon } from 'src/components/RightIcon';
-import { Alert } from 'react-native';
-import { useSignOut } from 'src/hooks/auth';
-import { useLoggedIn } from 'src/hooks/me';
+import { loginProviders } from 'src/constants';
 import {
   useDeleteAccountMutation,
   useVerifyIapReceiptMutation,
 } from 'src/generated/graphql';
-import { useApolloClient } from '@apollo/client';
-import Spinner from 'react-native-loading-spinner-overlay';
-import * as InAppPurchases from 'expo-in-app-purchases';
-import { Platform } from 'react-native';
+import { getLoginProvider } from 'src/helpers/getLoginProvider';
+import { sendPasswordResetEmail } from 'src/helpers/sendPasswordResetEmail';
+import { useSignOut } from 'src/hooks/auth';
+import { useLoggedIn } from 'src/hooks/me';
+import { RootNavigationScreenProp } from 'src/types';
 
 type Props = RootNavigationScreenProp<'AccountSettings'>;
 
@@ -27,6 +31,7 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
   useLayoutEffect(() => {
     navigation.setOptions({
       title: 'アカウント',
+      headerRight: () => <CloseButton />,
     });
   }, [navigation]);
 
@@ -39,10 +44,12 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
         setSpinnerVisible(true);
         const { results } = await InAppPurchases.getPurchaseHistoryAsync();
         if (!results.length) {
+          setSpinnerVisible(false);
           Alert.alert('', '購入内容が存在しません');
           return;
         }
         const latestResult = results[0];
+        console.log(latestResult);
         await verifyReceiptMutation({
           variables: {
             input: {
@@ -119,21 +126,83 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
     },
   ];
 
+  const textGray = useColorModeValue('lt.textGray', 'dt.textGray');
+
+  const user = auth().currentUser;
+  const email = user ? user.email : '';
+  const provider = getLoginProvider() ?? '不明';
+
+  const onEmailChangePress = () => {
+    if (provider !== loginProviders.mailAddress) {
+      return;
+    }
+
+    navigation.navigate('EmailChange');
+  };
+
+  const onPasswordChangePress = () => {
+    sendPasswordResetEmail(email);
+  };
+
   return (
-    <Box flex={1}>
-      {list.map((l, idx) => (
-        <ListItem
-          key={idx}
-          title={l.title}
-          onPress={l.onPress}
-          ItemRight={l.rightIcon ? <RightIcon /> : undefined}
-          titleStyle={{
-            fontSize: 16,
-            ...l.titleStyle,
-          }}
-        />
-      ))}
+    <ScrollView flex={1}>
+      {/* 基本情報 */}
+      <Box mt="1">
+        <Text fontWeight="bold" color={textGray} fontSize="13" pl="4">
+          基本情報
+        </Text>
+
+        <VStack mt="2">
+          <ListItem
+            title={
+              provider === loginProviders.mailAddress
+                ? 'メールアドレスを変更'
+                : '登録中のメールアドレス'
+            }
+            titleStyle={styles.basicStatusItemTitle}
+            ItemRight={<Text>{email}</Text>}
+            onPress={onEmailChangePress}
+          />
+          {provider === loginProviders.mailAddress && (
+            <ListItem
+              title="パスワードを変更"
+              titleStyle={styles.basicStatusItemTitle}
+              onPress={onPasswordChangePress}
+            />
+          )}
+          <ListItem
+            title="ログイン方法"
+            titleStyle={styles.basicStatusItemTitle}
+            ItemRight={<Text>{provider}</Text>}
+            disablePress
+          />
+        </VStack>
+      </Box>
+
+      <Box mt="4">
+        {list.map((l, idx) => (
+          <ListItem
+            key={idx}
+            title={l.title}
+            onPress={l.onPress}
+            ItemRight={l.rightIcon ? <RightIcon /> : undefined}
+            titleStyle={{
+              ...styles.itemTitleStyle,
+              ...l.titleStyle,
+            }}
+          />
+        ))}
+      </Box>
       <Spinner visible={spinnerVisible} overlayColor="rgba(0,0,0,0.5)" />
-    </Box>
+    </ScrollView>
   );
 };
+
+const styles = StyleSheet.create({
+  basicStatusItemTitle: {
+    fontSize: 14,
+  },
+  itemTitleStyle: {
+    fontSize: 16,
+  },
+});

@@ -2829,6 +2829,11 @@
   dependencies:
     invariant "^2.2.4"
 
+"@react-native-firebase/analytics@^14.9.3":
+  version "14.9.3"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/analytics/-/analytics-14.9.3.tgz#f558325dfd0529666cdc03b89507998248dee14f"
+  integrity sha512-KAL2ss7TF6eWV/wTfQNeuAr3AVNpUmuYNqC+PwDRtAJUcfiwwCc+gcsXp8UzA7ELC+JWLO4kDc+1LkdFr7p81g==
+
 "@react-native-firebase/app@^14.1.0":
   version "14.1.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/app/-/app-14.1.0.tgz#f3a26c893c86e9cb50f9735bc9ab0b1fef6462aa"
@@ -2842,6 +2847,11 @@
   version "14.1.0"
   resolved "https://registry.yarnpkg.com/@react-native-firebase/auth/-/auth-14.1.0.tgz#853fdaf045d417f9bbbdb3accf08cebbc6e7e4ed"
   integrity sha512-Z+9F6N4Xx5YnggINqzKN0rP2ROBTKapXHKA0IIkFISB4RZsuDXnS3FhFUArGdVnjv87ywgp3Lb+mdIGq9cl8Ug==
+
+"@react-native-firebase/dynamic-links@^14.9.3":
+  version "14.9.3"
+  resolved "https://registry.yarnpkg.com/@react-native-firebase/dynamic-links/-/dynamic-links-14.9.3.tgz#8fae4a95cdb78ea328b4d352e8820c3a84e835aa"
+  integrity sha512-AwhOTgWTVnQiKdPAesVBtdq2i+XKjE6yQF8RrE9Pcm97yFxIjhsPWLtnH/xxMETi1M+KmSvGfFeKa8qTDIC+oQ==
 
 "@react-native-firebase/firestore@^14.7.0":
   version "14.7.0"

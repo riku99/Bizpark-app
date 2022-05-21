@@ -19,3 +19,9 @@ export const NO_USER_IMAGE_URL =
   'https://storage.googleapis.com/bizpark-dev/no-user.png';
 
 export const INITIAL_MESSAGE_COUNT = 20;
+
+export const loginProviders = {
+  google: 'Google',
+  apple: 'Apple',
+  mailAddress: 'メールアドレス',
+};

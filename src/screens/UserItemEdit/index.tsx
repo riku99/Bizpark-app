@@ -1,5 +1,5 @@
+import { Box, Input, Pressable, Text, useColorModeValue } from 'native-base';
 import React, { useLayoutEffect, useState } from 'react';
-import { Box, Input, Text, useColorModeValue, Pressable } from 'native-base';
 import { RootNavigationScreenProp } from 'src/types';
 
 type Props = RootNavigationScreenProp<'UserItemEdit'>;
@@ -70,7 +70,6 @@ export const UserItemEditScreen = ({ navigation, route }: Props) => {
           keyboardAppearance={useColorModeValue('light', 'dark')}
           onChangeText={setNewValue}
           defaultValue={value}
-          // placeholder={placeholder}
         />
       </Box>
     </Box>

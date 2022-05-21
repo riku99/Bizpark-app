@@ -6,6 +6,7 @@ import { useCallback } from 'react';
 import { Alert } from 'react-native';
 import Config from 'react-native-config';
 import { useToast } from 'react-native-toast-notifications';
+import { loginProviders } from 'src/constants';
 import {
   useCreateUserMutation,
   useInitialDataLazyQuery,
@@ -14,7 +15,7 @@ import {
 import { appleSignIn, googleSignIn } from 'src/helpers/auth';
 import { useLoggedIn } from 'src/hooks/me';
 import { useSpinner } from 'src/hooks/spinner';
-import { storage } from 'src/storage/mmkv';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 import { spinnerVisibleVar } from 'src/stores/spinner';
 import { useCustomToast } from './toast';
 
@@ -57,6 +58,10 @@ export const useSignUpWithEmail = () => {
 
           if (data) {
             setLoggedIn(true);
+            storage.set(
+              mmkvStorageKeys.loginProvider,
+              loginProviders.mailAddress
+            );
           }
         } catch (e) {
           console.log(e);
@@ -115,6 +120,7 @@ export const useSignupWithApple = () => {
 
       if (data) {
         setLoggedIn(true);
+        storage.set(mmkvStorageKeys.loginProvider, loginProviders.apple);
       }
     } catch (e) {
       console.log(e);
@@ -149,6 +155,7 @@ export const useSignupWithGoogle = () => {
 
       if (data) {
         setLoggedIn(true);
+        storage.set(mmkvStorageKeys.loginProvider, loginProviders.google);
       }
     } catch (e) {
       console.log(e);
@@ -177,6 +184,10 @@ export const useSignInWithEmail = () => {
             const { data } = await getInitialData();
             if (data) {
               setLoggedIn(true);
+              storage.set(
+                mmkvStorageKeys.loginProvider,
+                loginProviders.mailAddress
+              );
             }
           }
         } catch (e) {}
@@ -206,6 +217,7 @@ export const useSignInWithGoogle = () => {
         const { data } = await getInitialData();
         if (data) {
           setLoggedIn(true);
+          storage.set(mmkvStorageKeys.loginProvider, loginProviders.google);
         }
       }
     } catch (e) {
@@ -233,6 +245,7 @@ export const useSignInWithApple = () => {
         const { data } = await getInitialData();
         if (data) {
           setLoggedIn(true);
+          storage.set(mmkvStorageKeys.loginProvider, loginProviders.apple);
         }
       }
     } catch (e) {

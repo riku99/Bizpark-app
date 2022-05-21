@@ -6,4 +6,5 @@ export const iapReceiptStorageKey = 'iap.receipt';
 
 export const mmkvStorageKeys = {
   talkRoomFirstMemberPopUpKey: 'popup.talkRoomFirstMember',
+  loginProvider: 'login.provider',
 };

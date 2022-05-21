@@ -1,0 +1,3 @@
+mutation SendEmailAuthCode($input: CreateEmailAuthCodeInput!) {
+  createEmailAuthCode(input: $input)
+}
