@@ -1,17 +1,18 @@
-import React, { ComponentProps } from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { Pressable, Text, useColorModeValue } from 'native-base';
+import React, { ComponentProps } from 'react';
+import { Alert } from 'react-native';
 import {
+  CustomErrorResponseCode,
   GetOneOnOneTalkRoomsDocument,
   GetOneOnOneTalkRoomsQuery,
   useCreateOneOnOneTalkRoomMutation,
-  CustomErrorResponseCode,
 } from 'src/generated/graphql';
-import { spinnerVisibleVar } from 'src/stores/spinner';
+import { useIsPlusPlan } from 'src/hooks/me';
 import { useFindOneOnOneTalkRoomFromUserId } from 'src/hooks/oneOnOneTalkRoom';
-import { useNavigation } from '@react-navigation/native';
+import { spinnerVisibleVar } from 'src/stores/spinner';
 import { RootNavigationProp } from 'src/types';
 import { getGraphQLError } from 'src/utils';
-import { Alert } from 'react-native';
 
 type Props = {
   user: {
@@ -22,14 +23,17 @@ type Props = {
 
 export const SendMessageButton = ({ user, ...props }: Props) => {
   const borderColor = useColorModeValue('textBlack', 'textWhite');
-
   const [createTalkRoomMutation] = useCreateOneOnOneTalkRoomMutation();
-
   const { findOneOnOneTalkRoom } = useFindOneOnOneTalkRoomFromUserId();
-
   const navigation = useNavigation<RootNavigationProp<'UserProfile'>>();
+  const isPlusPlan = useIsPlusPlan();
 
   const onPress = async () => {
+    if (!isPlusPlan) {
+      navigation.navigate('IAP');
+      return;
+    }
+
     let talkRoomId: number | null = null;
 
     const existingTalkRoom = findOneOnOneTalkRoom({ userId: user.id });
