@@ -1,17 +1,18 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
-import { useEffect, useCallback } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useNavigation } from '@react-navigation/native';
+import { useCallback, useEffect } from 'react';
 import {
+  PushNotificationFollowDataType,
+  PushNotificationMessageDataType,
   useAddDeviceTokenMutation,
-  PushNotificationDataKind,
-  useGetOneOnOneTalkRoomLazyQuery,
   useGetNewsTalkRoomLazyQuery,
+  useGetOneOnOneTalkRoomLazyQuery,
   useGetThoughtTalkRoomLazyQuery,
 } from 'src/generated/graphql';
 import { PushNotificationData, RootNavigationProp } from 'src/types';
-import { useNavigation } from '@react-navigation/native';
 
 const DEVICE_TOKEN_STORAGE_KEY = 'DEVICE_TOKEN';
 
@@ -84,7 +85,9 @@ export const useFcmHandler = () => {
     async (remoteMessage: FirebaseMessagingTypes.RemoteMessage) => {
       const data = remoteMessage.data as PushNotificationData;
 
-      if (data.type === PushNotificationDataKind.OneOnOneTalkRoomMessage) {
+      if (
+        data.type === PushNotificationMessageDataType.OneOnOneTalkRoomMessage
+      ) {
         const talkRoomId = Number(data.roomId);
 
         navigation.navigate('OneOnOneTalkRoom', {
@@ -103,7 +106,7 @@ export const useFcmHandler = () => {
         return;
       }
 
-      if (data.type === PushNotificationDataKind.NewsTalkRoomMessage) {
+      if (data.type === PushNotificationMessageDataType.NewsTalkRoomMessage) {
         const talkRoomId = Number(data.roomId);
 
         navigation.navigate('NewsTalkRoom', {
@@ -122,7 +125,9 @@ export const useFcmHandler = () => {
         return;
       }
 
-      if (data.type === PushNotificationDataKind.ThoughtTalkRoomMessage) {
+      if (
+        data.type === PushNotificationMessageDataType.ThoughtTalkRoomMessage
+      ) {
         const talkRoomId = Number(data.roomId);
 
         navigation.navigate('ThoughtTalkRoom', {
@@ -138,6 +143,13 @@ export const useFcmHandler = () => {
           },
         });
 
+        return;
+      }
+
+      if (data.type === PushNotificationFollowDataType.Follow) {
+        navigation.navigate('UserProfile', {
+          id: data.userId,
+        });
         return;
       }
     },

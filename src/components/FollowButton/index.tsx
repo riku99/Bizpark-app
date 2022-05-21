@@ -1,18 +1,18 @@
-import React, { useState, ComponentProps, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import * as Haptics from 'expo-haptics';
 import { Pressable, Text, useColorModeValue } from 'native-base';
+import React, { ComponentProps, useEffect, useState } from 'react';
+import { Alert } from 'react-native';
+import { useToast } from 'react-native-toast-notifications';
 import {
-  useFollowMutation,
-  useUnfollowMutation,
   FollowError,
   UnFollowError,
+  useFollowMutation,
+  useUnfollowMutation,
 } from 'src/generated/graphql';
-import { useToast } from 'react-native-toast-notifications';
-import { getGraphQLError } from 'src/utils';
-import * as Haptics from 'expo-haptics';
 import { useIsPlusPlan } from 'src/hooks/me';
-import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from 'src/types';
-import { Alert } from 'react-native';
+import { getGraphQLError } from 'src/utils';
 
 type Props = {
   userId: string;

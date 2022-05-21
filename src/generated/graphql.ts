@@ -665,18 +665,28 @@ export enum Plan {
   Plus = 'Plus'
 }
 
-export enum PushNotificationDataKind {
+export type PushNotificationFollowData = {
+  __typename?: 'PushNotificationFollowData';
+  type: PushNotificationFollowDataType;
+  userId: Scalars['String'];
+};
+
+export enum PushNotificationFollowDataType {
+  Follow = 'FOLLOW'
+}
+
+export type PushNotificationMessageData = {
+  __typename?: 'PushNotificationMessageData';
+  id: Scalars['String'];
+  roomId: Scalars['String'];
+  type: PushNotificationMessageDataType;
+};
+
+export enum PushNotificationMessageDataType {
   NewsTalkRoomMessage = 'NEWS_TALK_ROOM_MESSAGE',
   OneOnOneTalkRoomMessage = 'ONE_ON_ONE_TALK_ROOM_MESSAGE',
   ThoughtTalkRoomMessage = 'THOUGHT_TALK_ROOM_MESSAGE'
 }
-
-export type PushNotificationMessage = {
-  __typename?: 'PushNotificationMessage';
-  id: Scalars['String'];
-  roomId: Scalars['String'];
-  type: PushNotificationDataKind;
-};
 
 export type Query = {
   __typename?: 'Query';
