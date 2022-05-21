@@ -10,6 +10,7 @@ import { loginProviders } from 'src/constants';
 import {
   useCreateUserMutation,
   useInitialDataLazyQuery,
+  useMeLazyQuery,
   useSignOutMutation,
 } from 'src/generated/graphql';
 import { appleSignIn, googleSignIn } from 'src/helpers/auth';
@@ -138,22 +139,33 @@ export const useSignupWithGoogle = () => {
   const { setLoggedIn } = useLoggedIn();
 
   const [createUserMutation] = useCreateUserMutation();
+  const [getInitialData] = useInitialDataLazyQuery();
+  const [meQuery] = useMeLazyQuery({
+    fetchPolicy: 'no-cache',
+  });
 
   const signupWithGoogle = useCallback(async () => {
     spinnerVisibleVar(true);
     try {
       const { googleData, idToken } = await googleSignIn();
-      const { data } = await createUserMutation({
-        variables: {
-          input: {
-            email: googleData.user.email,
-            idToken,
-            name: googleData.user.displayName,
-          },
-        },
-      });
 
-      if (data) {
+      const { data: meData } = await meQuery();
+
+      if (!meData.me) {
+        await createUserMutation({
+          variables: {
+            input: {
+              email: googleData.user.email,
+              idToken,
+              name: googleData.user.displayName,
+            },
+          },
+        });
+
+        setLoggedIn(true);
+        storage.set(mmkvStorageKeys.loginProvider, loginProviders.google);
+      } else {
+        await getInitialData();
         setLoggedIn(true);
         storage.set(mmkvStorageKeys.loginProvider, loginProviders.google);
       }
@@ -162,7 +174,7 @@ export const useSignupWithGoogle = () => {
     } finally {
       spinnerVisibleVar(false);
     }
-  }, [createUserMutation, setLoggedIn]);
+  }, [createUserMutation, setLoggedIn, getInitialData]);
 
   return {
     signupWithGoogle,
