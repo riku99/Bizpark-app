@@ -46,14 +46,13 @@ export const SignupScreen = ({ navigation }: Props) => {
           <Google onPress={onGooglePress} />
         </VStack>
         <Box flexDirection="row" justifyContent="center" mt={8}>
-          <Text color="textBlack">既に登録済みの方</Text>
           <Pressable
             onPress={() => {
-              navigation.navigate('Signin');
+              navigation.navigate('MailForm', { type: 'signIn' });
             }}
           >
-            <Text ml={8} textDecorationLine="underline" color="textBlack">
-              ログイン
+            <Text color="textBlack" textDecorationLine="underline">
+              既にメールアドレスで登録済みの方
             </Text>
           </Pressable>
         </Box>
