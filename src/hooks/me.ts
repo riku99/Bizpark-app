@@ -1,14 +1,14 @@
-import {
-  useGetMyIdQuery,
-  useGetMyNameQuery,
-  useGetMyImageUrlQuery,
-  useGetMyPlanQuery,
-  Plan,
-} from 'src/generated/graphql';
-import { useCallback, useEffect } from 'react';
 import { useReactiveVar } from '@apollo/client';
-import { loggedInVar, STORAGE_KEY } from 'src/stores/loggedIn';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useCallback, useEffect } from 'react';
+import {
+  Plan,
+  useGetMyIdQuery,
+  useGetMyImageUrlQuery,
+  useGetMyNameQuery,
+  useGetMyPlanQuery,
+} from 'src/generated/graphql';
+import { loggedInVar, STORAGE_KEY } from 'src/stores/loggedIn';
 
 export const useLoggedIn = () => {
   const loggedIn = useReactiveVar(loggedInVar.loggedIn);
@@ -45,7 +45,7 @@ export const useMyId = () => {
     fetchPolicy: 'cache-only',
   });
 
-  if (!data) {
+  if (!data?.me) {
     return null;
   }
 

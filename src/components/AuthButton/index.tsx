@@ -1,6 +1,6 @@
-import React, { ComponentProps } from 'react';
-import { Box, Pressable, Text } from 'native-base';
 import { AntDesign, MaterialIcons } from '@expo/vector-icons';
+import { Box, Pressable, Text } from 'native-base';
+import React, { ComponentProps } from 'react';
 import GoogleIcon from 'src/assets/svg/google.svg';
 
 type BaseProps = {
@@ -48,7 +48,7 @@ export const Apple = ({ onPress, type = 'signup' }: Props) => {
   return (
     <Base
       bg="black"
-      title={`Appleで${type === 'signup' ? '登録' : 'ログイン'}`}
+      title="Appleで登録・ログイン"
       icon={<AntDesign name="apple1" color="white" size={22} />}
       onPress={onPress}
       titleColor="white"
@@ -59,7 +59,7 @@ export const Apple = ({ onPress, type = 'signup' }: Props) => {
 export const Google = ({ onPress, type = 'signup' }: Props) => {
   return (
     <Base
-      title={`Googleで${type === 'signup' ? '登録' : 'ログイン'}`}
+      title="Googleで登録・ログイン"
       bg="white"
       titleColor="black"
       icon={<GoogleIcon width={22} height={22} />}

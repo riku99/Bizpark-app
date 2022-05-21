@@ -10,6 +10,7 @@ import { loginProviders } from 'src/constants';
 import {
   useCreateUserMutation,
   useInitialDataLazyQuery,
+  useMeLazyQuery,
   useSignOutMutation,
 } from 'src/generated/graphql';
 import { appleSignIn, googleSignIn } from 'src/helpers/auth';
@@ -102,32 +103,53 @@ export const useSignupWithApple = () => {
   const { setLoggedIn } = useLoggedIn();
   const { setSpinnerVisible } = useSpinner();
   const [createUserMutation] = useCreateUserMutation();
+  const [meQuery] = useMeLazyQuery({
+    fetchPolicy: 'no-cache',
+  });
+  const [getInitialData] = useInitialDataLazyQuery();
 
   const signupWithApple = useCallback(async () => {
     setSpinnerVisible(true);
     try {
       const { appleData, idToken, name } = await appleSignIn();
 
-      const { data } = await createUserMutation({
-        variables: {
-          input: {
-            email: appleData.user.email,
-            name: name ?? '仮名',
-            idToken,
-          },
-        },
-      });
+      const { data: meData } = await meQuery();
 
-      if (data) {
-        setLoggedIn(true);
-        storage.set(mmkvStorageKeys.loginProvider, loginProviders.apple);
+      if (!meData.me) {
+        const { data } = await createUserMutation({
+          variables: {
+            input: {
+              email: appleData.user.email,
+              name: name ?? '仮名',
+              idToken,
+            },
+          },
+        });
+
+        if (data) {
+          setLoggedIn(true);
+          storage.set(mmkvStorageKeys.loginProvider, loginProviders.apple);
+        }
+      } else {
+        const { data } = await getInitialData();
+
+        if (data) {
+          setLoggedIn(true);
+          storage.set(mmkvStorageKeys.loginProvider, loginProviders.apple);
+        }
       }
     } catch (e) {
       console.log(e);
     } finally {
       setSpinnerVisible(false);
     }
-  }, [createUserMutation, setLoggedIn, setSpinnerVisible]);
+  }, [
+    createUserMutation,
+    setLoggedIn,
+    setSpinnerVisible,
+    getInitialData,
+    meQuery,
+  ]);
 
   return {
     signupWithApple,
@@ -138,22 +160,33 @@ export const useSignupWithGoogle = () => {
   const { setLoggedIn } = useLoggedIn();
 
   const [createUserMutation] = useCreateUserMutation();
+  const [getInitialData] = useInitialDataLazyQuery();
+  const [meQuery] = useMeLazyQuery({
+    fetchPolicy: 'no-cache',
+  });
 
   const signupWithGoogle = useCallback(async () => {
     spinnerVisibleVar(true);
     try {
       const { googleData, idToken } = await googleSignIn();
-      const { data } = await createUserMutation({
-        variables: {
-          input: {
-            email: googleData.user.email,
-            idToken,
-            name: googleData.user.displayName,
-          },
-        },
-      });
 
-      if (data) {
+      const { data: meData } = await meQuery();
+
+      if (!meData.me) {
+        await createUserMutation({
+          variables: {
+            input: {
+              email: googleData.user.email,
+              idToken,
+              name: googleData.user.displayName,
+            },
+          },
+        });
+
+        setLoggedIn(true);
+        storage.set(mmkvStorageKeys.loginProvider, loginProviders.google);
+      } else {
+        await getInitialData();
         setLoggedIn(true);
         storage.set(mmkvStorageKeys.loginProvider, loginProviders.google);
       }
@@ -162,7 +195,7 @@ export const useSignupWithGoogle = () => {
     } finally {
       spinnerVisibleVar(false);
     }
-  }, [createUserMutation, setLoggedIn]);
+  }, [createUserMutation, setLoggedIn, getInitialData, meQuery]);
 
   return {
     signupWithGoogle,
@@ -202,61 +235,6 @@ export const useSignInWithEmail = () => {
 
   return {
     signInWithEmail,
-  };
-};
-
-export const useSignInWithGoogle = () => {
-  const { setLoggedIn } = useLoggedIn();
-  const [getInitialData, { called }] = useInitialDataLazyQuery();
-
-  const signInWithGoogle = useCallback(async () => {
-    spinnerVisibleVar(true);
-    try {
-      await googleSignIn();
-      if (!called) {
-        const { data } = await getInitialData();
-        if (data) {
-          setLoggedIn(true);
-          storage.set(mmkvStorageKeys.loginProvider, loginProviders.google);
-        }
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      spinnerVisibleVar(false);
-    }
-  }, [called, getInitialData, setLoggedIn]);
-
-  return {
-    signInWithGoogle,
-  };
-};
-
-export const useSignInWithApple = () => {
-  const { setLoggedIn } = useLoggedIn();
-  const { setSpinnerVisible } = useSpinner();
-  const [getInitialData, { called }] = useInitialDataLazyQuery();
-
-  const signInWithApple = useCallback(async () => {
-    setSpinnerVisible(true);
-    try {
-      await appleSignIn();
-      if (!called) {
-        const { data } = await getInitialData();
-        if (data) {
-          setLoggedIn(true);
-          storage.set(mmkvStorageKeys.loginProvider, loginProviders.apple);
-        }
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      setSpinnerVisible(false);
-    }
-  }, [setLoggedIn, setSpinnerVisible, called, getInitialData]);
-
-  return {
-    signInWithApple,
   };
 };
 

@@ -3,7 +3,6 @@ import { useTheme } from 'native-base';
 import React from 'react';
 import { EmailVerificationScreen } from 'src/screens/EmailVerification';
 import { MailFormScreen } from 'src/screens/MailForm';
-import { SigninScreen } from 'src/screens/Siginin';
 import { SignupScreen } from 'src/screens/Signup';
 
 export type AuthStackParamList = {
@@ -39,7 +38,6 @@ export const AuthStack = () => {
       }}
     >
       <Stack.Screen name="Signup" component={SignupScreen} />
-      <Stack.Screen name="Signin" component={SigninScreen} />
       <Stack.Screen name="MailForm" component={MailFormScreen} />
       <Stack.Screen
         name="EmailVerification"
