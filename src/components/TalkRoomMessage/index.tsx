@@ -13,12 +13,14 @@ import {
   CreateUserNewsTalkRoomMessageSeenMutationFn,
   CreateUserThoughtTalkRoomMessageSeenMutationFn,
   CustomErrorResponseCode,
-  GetNewsTalkRoomMessageQueryResult,
   GetNewsTalkRoomMessagesQuery,
   GetNewsTalkRoomMessagesQueryResult,
-  GetOneOnOneTalkRoomMessageQueryResult,
+  GetNewsTalkRoomsDocument,
+  GetNewsTalkRoomsQueryResult,
   GetOneOnOneTalkRoomMessagesQuery,
   GetOneOnOneTalkRoomMessagesQueryResult,
+  GetOneOnOneTalkRoomsDocument,
+  GetOneOnOneTalkRoomsQueryResult,
   GetThoughtTalkRoomMessagesQuery,
   GetThoughtTalkRoomMessagesQueryResult,
   GetThoughtTalkRoomsDocument,
@@ -55,7 +57,7 @@ type Props =
       createMessage: CreateNewsTalkRoomMessageMutationFn;
       createSeen: CreateUserNewsTalkRoomMessageSeenMutationFn;
       deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
-      talkRoomsData: GetNewsTalkRoomMessageQueryResult['data'];
+      talkRoomsData: GetNewsTalkRoomsQueryResult['data'];
     }
   | {
       type: 'OneOnOne';
@@ -65,7 +67,7 @@ type Props =
       createMessage: CreateOneOnOneTalkRoomMessageMutationFn;
       createSeen: SeenOneOnOneTalkRoomMessageMutationFn;
       deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
-      talkRoomsData: GetOneOnOneTalkRoomMessageQueryResult['data'];
+      talkRoomsData: GetOneOnOneTalkRoomsQueryResult['data'];
     };
 
 const isTmp = (str: string) => str.slice(0, 3) === 'tmp';
@@ -411,7 +413,51 @@ export const TalkRoomMessage = React.memo((props: Props) => {
                   replyTo,
                 },
               },
-              onCompleted: (result) => {},
+              onCompleted: (result) => {
+                if (!result.createNewsTalkRoomMessage) {
+                  return;
+                }
+
+                const currentRooms = props.talkRoomsData.newsTalkRooms;
+                const targetRoom = currentRooms.find((r) => r.id === roomId);
+
+                if (!targetRoom) {
+                  return;
+                }
+
+                const newMessageEdge = {
+                  node: result.createNewsTalkRoomMessage,
+                  cursor: result.createNewsTalkRoomMessage.id.toString(),
+                };
+
+                const newMessageConnection = {
+                  ...targetRoom.messages,
+                  edges: [newMessageEdge, ...targetRoom.messages.edges],
+                  pageInfo: {
+                    ...targetRoom.messages.pageInfo,
+                    startCursor: newMessageEdge.node.id.toString(),
+                  },
+                };
+
+                const newRoomData = {
+                  ...targetRoom,
+                  allMessageSeen: true,
+                  messages: newMessageConnection,
+                };
+
+                const filteredRooms = currentRooms.filter(
+                  (r) => r.id !== roomId
+                );
+
+                const newTalkRoomList = [newRoomData, ...filteredRooms];
+
+                cache.writeQuery({
+                  query: GetNewsTalkRoomsDocument,
+                  data: {
+                    newsTalkRooms: newTalkRoomList,
+                  },
+                });
+              },
             });
 
           if (createdNewsTalkRoomMessageData) {
@@ -430,6 +476,51 @@ export const TalkRoomMessage = React.memo((props: Props) => {
                   talkRoomId: roomId,
                   replyTo,
                 },
+              },
+              onCompleted: (result) => {
+                if (!result.createOneOnOneTalkRoomMessage) {
+                  return;
+                }
+
+                const currentRooms = props.talkRoomsData.oneOnOneTalkRooms;
+                const targetRoom = currentRooms.find((r) => r.id === roomId);
+
+                if (!targetRoom) {
+                  return;
+                }
+
+                const newMessageEdge = {
+                  node: result.createOneOnOneTalkRoomMessage,
+                  cursor: result.createOneOnOneTalkRoomMessage.id.toString(),
+                };
+
+                const newMessageConnection = {
+                  ...targetRoom.messages,
+                  edges: [newMessageEdge, ...targetRoom.messages.edges],
+                  pageInfo: {
+                    ...targetRoom.messages.pageInfo,
+                    startCursor: newMessageEdge.node.id.toString(),
+                  },
+                };
+
+                const newRoomData = {
+                  ...targetRoom,
+                  allMessageSeen: true,
+                  messages: newMessageConnection,
+                };
+
+                const filteredRooms = currentRooms.filter(
+                  (r) => r.id !== roomId
+                );
+
+                const newTalkRoomList = [newRoomData, ...filteredRooms];
+
+                cache.writeQuery({
+                  query: GetOneOnOneTalkRoomsDocument,
+                  data: {
+                    oneOnOneTalkRooms: newTalkRoomList,
+                  },
+                });
               },
             });
 

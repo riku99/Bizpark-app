@@ -42,9 +42,7 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     },
   });
 
-  const { data: talkRoomsData } = useGetNewsTalkRoomsQuery({
-    fetchPolicy: 'cache-only',
-  });
+  const { data: talkRoomsData } = useGetNewsTalkRoomsQuery();
 
   const { cache } = useApolloClient();
 
