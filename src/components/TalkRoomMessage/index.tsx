@@ -12,7 +12,6 @@ import {
   CreateThoughtTalkRoomMessageMutationFn,
   CreateUserNewsTalkRoomMessageSeenMutationFn,
   CreateUserThoughtTalkRoomMessageSeenMutationFn,
-  CustomErrorResponseCode,
   GetNewsTalkRoomMessagesQuery,
   GetNewsTalkRoomMessagesQueryResult,
   GetNewsTalkRoomsDocument,
@@ -25,6 +24,7 @@ import {
   GetThoughtTalkRoomMessagesQueryResult,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQueryResult,
+  MessageSendError,
   NewsTalkRoomMessage,
   NewsTalkRoomMessageEdge,
   OneOnOneTalkRoomMessage,
@@ -545,8 +545,11 @@ export const TalkRoomMessage = React.memo((props: Props) => {
       const error = getGraphQLError(e, 0);
 
       // トークルームが削除されている or メンバーから削除されている場合はキャッシュからトークルーム消す
-      if (error?.code === CustomErrorResponseCode.InvalidRequest) {
-        Alert.alert(error.message, '', [
+      if (
+        error?.code === MessageSendError.NotFound ||
+        MessageSendError.BlockingOrBlocked
+      ) {
+        Alert.alert('トークルームが見つかりません', '', [
           {
             text: 'OK',
             onPress: async () => {

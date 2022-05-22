@@ -229,6 +229,11 @@ export type Me = {
   twitter?: Maybe<Scalars['String']>;
 };
 
+export enum MessageSendError {
+  BlockingOrBlocked = 'BLOCKING_OR_BLOCKED',
+  NotFound = 'NOT_FOUND'
+}
+
 export type Mutation = {
   __typename?: 'Mutation';
   addDeviceToken?: Maybe<Scalars['Boolean']>;
