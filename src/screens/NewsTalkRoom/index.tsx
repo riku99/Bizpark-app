@@ -16,6 +16,7 @@ import {
   useCreateUserNewsTalkRoomMessageSeenMutation,
   useGetNewsTalkRoomMembersQuery,
   useGetNewsTalkRoomMessagesQuery,
+  useGetNewsTalkRoomsQuery,
 } from 'src/generated/graphql';
 import { useDeleteNewsTalkRoomFromCache } from 'src/hooks/newsTalkRoom';
 import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
@@ -39,6 +40,10 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       talkRoomId: id,
     },
+  });
+
+  const { data: talkRoomsData } = useGetNewsTalkRoomsQuery({
+    fetchPolicy: 'cache-only',
   });
 
   const { cache } = useApolloClient();
@@ -135,6 +140,7 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
         createMessage={createMessageMutation}
         createSeen={createSeenMutation}
         deleteTalkRoomFromCache={deleteNewsTalkRoom}
+        talkRoomsData={talkRoomsData}
       />
 
       <Menu

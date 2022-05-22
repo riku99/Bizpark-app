@@ -9,6 +9,7 @@ import {
   useGetThoughtTalkRoomMembersQuery,
   useGetThoughtTalkRoomMessagesQuery,
   useGetThoughtTalkRoomParentQuery,
+  useGetThoughtTalkRoomsQuery,
 } from 'src/generated/graphql';
 import { useDeleteThoughtTalkRoomsItemFromCache } from 'src/hooks/thoughtTalkRoom';
 import { RootNavigationScreenProp } from 'src/types';
@@ -32,6 +33,10 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       talkRoomId: id,
     },
+  });
+
+  const { data: talkRoomsData } = useGetThoughtTalkRoomsQuery({
+    fetchPolicy: 'cache-only',
   });
 
   const memberImageUrls = useMemo(() => {
@@ -92,6 +97,7 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
         createMessage={createMessageMutation}
         createSeen={createSeenMutation}
         deleteTalkRoomFromCache={deleteThoghtTalkRoom}
+        talkRoomsData={talkRoomsData}
       />
 
       <Menu
