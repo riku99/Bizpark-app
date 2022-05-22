@@ -1,36 +1,42 @@
+import { useApolloClient } from '@apollo/client';
+import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
-import {
-  GetThoughtTalkRoomMessagesQuery,
-  CustomErrorResponseCode,
-  PageInfo,
-  GetThoughtTalkRoomMessagesQueryResult,
-  GetNewsTalkRoomMessagesQueryResult,
-  GetNewsTalkRoomMessagesQuery,
-  NewsTalkRoomMessageEdge,
-  ThoughtTalkRoomMessageEdge,
-  ThoughtTalkRoomMessage,
-  NewsTalkRoomMessage,
-  CreateThoughtTalkRoomMessageMutationFn,
-  CreateUserThoughtTalkRoomMessageSeenMutationFn,
-  CreateNewsTalkRoomMessageMutationFn,
-  CreateUserNewsTalkRoomMessageSeenMutationFn,
-  GetOneOnOneTalkRoomMessagesQueryResult,
-  SeenOneOnOneTalkRoomMessageMutationFn,
-  OneOnOneTalkRoomMessageEdge,
-  OneOnOneTalkRoomMessage,
-  CreateOneOnOneTalkRoomMessageMutationFn,
-  GetOneOnOneTalkRoomMessagesQuery,
-} from 'src/generated/graphql';
+import { Alert } from 'react-native';
 import { IMessage } from 'react-native-gifted-chat';
+import { btoa } from 'react-native-quick-base64';
 import { BaseChat } from 'src/components/BaseChat';
 import { NO_USER_IMAGE_URL } from 'src/constants';
-import { createRandomStr } from 'src/utils';
-import { getGraphQLError } from 'src/utils';
-import { btoa } from 'react-native-quick-base64';
-import { Alert } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import {
+  CreateNewsTalkRoomMessageMutationFn,
+  CreateOneOnOneTalkRoomMessageMutationFn,
+  CreateThoughtTalkRoomMessageMutationFn,
+  CreateUserNewsTalkRoomMessageSeenMutationFn,
+  CreateUserThoughtTalkRoomMessageSeenMutationFn,
+  GetNewsTalkRoomMessagesQuery,
+  GetNewsTalkRoomMessagesQueryResult,
+  GetNewsTalkRoomsDocument,
+  GetNewsTalkRoomsQueryResult,
+  GetOneOnOneTalkRoomMessagesQuery,
+  GetOneOnOneTalkRoomMessagesQueryResult,
+  GetOneOnOneTalkRoomsDocument,
+  GetOneOnOneTalkRoomsQueryResult,
+  GetThoughtTalkRoomMessagesQuery,
+  GetThoughtTalkRoomMessagesQueryResult,
+  GetThoughtTalkRoomsDocument,
+  GetThoughtTalkRoomsQueryResult,
+  MessageSendError,
+  NewsTalkRoomMessage,
+  NewsTalkRoomMessageEdge,
+  OneOnOneTalkRoomMessage,
+  OneOnOneTalkRoomMessageEdge,
+  PageInfo,
+  SeenOneOnOneTalkRoomMessageMutationFn,
+  ThoughtTalkRoomMessage,
+  ThoughtTalkRoomMessageEdge,
+} from 'src/generated/graphql';
+import { useMyId, useMyImageUrl, useMyName } from 'src/hooks/me';
 import { RootNavigationProp } from 'src/types';
-import { useMyId, useMyName, useMyImageUrl } from 'src/hooks/me';
+import { createRandomStr, getGraphQLError } from 'src/utils';
 
 type Props =
   | {
@@ -41,6 +47,7 @@ type Props =
       createMessage: CreateThoughtTalkRoomMessageMutationFn;
       createSeen: CreateUserThoughtTalkRoomMessageSeenMutationFn;
       deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
+      talkRoomsData: GetThoughtTalkRoomsQueryResult['data'];
     }
   | {
       type: 'News';
@@ -50,6 +57,7 @@ type Props =
       createMessage: CreateNewsTalkRoomMessageMutationFn;
       createSeen: CreateUserNewsTalkRoomMessageSeenMutationFn;
       deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
+      talkRoomsData: GetNewsTalkRoomsQueryResult['data'];
     }
   | {
       type: 'OneOnOne';
@@ -59,6 +67,7 @@ type Props =
       createMessage: CreateOneOnOneTalkRoomMessageMutationFn;
       createSeen: SeenOneOnOneTalkRoomMessageMutationFn;
       deleteTalkRoomFromCache: ({ talkRoomId }: { talkRoomId: number }) => void;
+      talkRoomsData: GetOneOnOneTalkRoomsQueryResult['data'];
     };
 
 const isTmp = (str: string) => str.slice(0, 3) === 'tmp';
@@ -71,6 +80,7 @@ export const TalkRoomMessage = React.memo((props: Props) => {
   const myId = useMyId();
   const myName = useMyName();
   const myImageUrl = useMyImageUrl();
+  const { cache } = useApolloClient();
 
   const [pageInfo, setPageInfo] = useState<PageInfo>(() => {
     switch (props.type) {
@@ -339,6 +349,51 @@ export const TalkRoomMessage = React.memo((props: Props) => {
                   replyTo,
                 },
               },
+              onCompleted: (result) => {
+                if (!result.createThoughtTalkRoomMessage) {
+                  return;
+                }
+
+                const currentRooms = props.talkRoomsData.thoughtTalkRooms;
+                const targetRoom = currentRooms.find((r) => r.id === roomId);
+
+                if (!targetRoom) {
+                  return;
+                }
+
+                const newMessageEdge = {
+                  node: result.createThoughtTalkRoomMessage,
+                  cursor: result.createThoughtTalkRoomMessage.id.toString(),
+                };
+
+                const newMessageConnection = {
+                  ...targetRoom.messages,
+                  edges: [newMessageEdge, ...targetRoom.messages.edges],
+                  pageInfo: {
+                    ...targetRoom.messages.pageInfo,
+                    startCursor: newMessageEdge.node.id.toString(),
+                  },
+                };
+
+                const newRoomData = {
+                  ...targetRoom,
+                  allMessageSeen: true,
+                  messages: newMessageConnection,
+                };
+
+                const filteredRooms = currentRooms.filter(
+                  (r) => r.id !== roomId
+                );
+
+                const newTalkRoomList = [newRoomData, ...filteredRooms];
+
+                cache.writeQuery({
+                  query: GetThoughtTalkRoomsDocument,
+                  data: {
+                    thoughtTalkRooms: newTalkRoomList,
+                  },
+                });
+              },
             });
 
           if (createdThoughtTalkRoomMessageData) {
@@ -358,6 +413,51 @@ export const TalkRoomMessage = React.memo((props: Props) => {
                   replyTo,
                 },
               },
+              onCompleted: (result) => {
+                if (!result.createNewsTalkRoomMessage) {
+                  return;
+                }
+
+                const currentRooms = props.talkRoomsData.newsTalkRooms;
+                const targetRoom = currentRooms.find((r) => r.id === roomId);
+
+                if (!targetRoom) {
+                  return;
+                }
+
+                const newMessageEdge = {
+                  node: result.createNewsTalkRoomMessage,
+                  cursor: result.createNewsTalkRoomMessage.id.toString(),
+                };
+
+                const newMessageConnection = {
+                  ...targetRoom.messages,
+                  edges: [newMessageEdge, ...targetRoom.messages.edges],
+                  pageInfo: {
+                    ...targetRoom.messages.pageInfo,
+                    startCursor: newMessageEdge.node.id.toString(),
+                  },
+                };
+
+                const newRoomData = {
+                  ...targetRoom,
+                  allMessageSeen: true,
+                  messages: newMessageConnection,
+                };
+
+                const filteredRooms = currentRooms.filter(
+                  (r) => r.id !== roomId
+                );
+
+                const newTalkRoomList = [newRoomData, ...filteredRooms];
+
+                cache.writeQuery({
+                  query: GetNewsTalkRoomsDocument,
+                  data: {
+                    newsTalkRooms: newTalkRoomList,
+                  },
+                });
+              },
             });
 
           if (createdNewsTalkRoomMessageData) {
@@ -376,6 +476,51 @@ export const TalkRoomMessage = React.memo((props: Props) => {
                   talkRoomId: roomId,
                   replyTo,
                 },
+              },
+              onCompleted: (result) => {
+                if (!result.createOneOnOneTalkRoomMessage) {
+                  return;
+                }
+
+                const currentRooms = props.talkRoomsData.oneOnOneTalkRooms;
+                const targetRoom = currentRooms.find((r) => r.id === roomId);
+
+                if (!targetRoom) {
+                  return;
+                }
+
+                const newMessageEdge = {
+                  node: result.createOneOnOneTalkRoomMessage,
+                  cursor: result.createOneOnOneTalkRoomMessage.id.toString(),
+                };
+
+                const newMessageConnection = {
+                  ...targetRoom.messages,
+                  edges: [newMessageEdge, ...targetRoom.messages.edges],
+                  pageInfo: {
+                    ...targetRoom.messages.pageInfo,
+                    startCursor: newMessageEdge.node.id.toString(),
+                  },
+                };
+
+                const newRoomData = {
+                  ...targetRoom,
+                  allMessageSeen: true,
+                  messages: newMessageConnection,
+                };
+
+                const filteredRooms = currentRooms.filter(
+                  (r) => r.id !== roomId
+                );
+
+                const newTalkRoomList = [newRoomData, ...filteredRooms];
+
+                cache.writeQuery({
+                  query: GetOneOnOneTalkRoomsDocument,
+                  data: {
+                    oneOnOneTalkRooms: newTalkRoomList,
+                  },
+                });
               },
             });
 
@@ -400,8 +545,11 @@ export const TalkRoomMessage = React.memo((props: Props) => {
       const error = getGraphQLError(e, 0);
 
       // トークルームが削除されている or メンバーから削除されている場合はキャッシュからトークルーム消す
-      if (error?.code === CustomErrorResponseCode.InvalidRequest) {
-        Alert.alert(error.message, '', [
+      if (
+        error?.code === MessageSendError.NotFound ||
+        MessageSendError.BlockingOrBlocked
+      ) {
+        Alert.alert('トークルームが見つかりません', '', [
           {
             text: 'OK',
             onPress: async () => {
