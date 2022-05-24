@@ -1,6 +1,7 @@
-import { ToastProvider as FastToastProvider } from 'react-native-toast-notifications';
 import React from 'react';
 import { Dimensions } from 'react-native';
+import { ToastProvider as FastToastProvider } from 'react-native-toast-notifications';
+import { ERROR_TOAST_DURATION } from 'src/constants';
 
 type Props = {
   children: JSX.Element;
@@ -11,7 +12,7 @@ export const ToastProvider = ({ children }: Props) => {
     <FastToastProvider
       offset={TOAST_OFFSET}
       style={{ width: TOAST_WIDTH }}
-      duration={2500}
+      duration={ERROR_TOAST_DURATION}
     >
       {children}
     </FastToastProvider>

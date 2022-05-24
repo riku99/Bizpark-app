@@ -25,3 +25,5 @@ export const loginProviders = {
   apple: 'Apple',
   mailAddress: 'メールアドレス',
 };
+
+export const ERROR_TOAST_DURATION = 2500
