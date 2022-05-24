@@ -192,11 +192,11 @@ export const ApolloProvider = ({ children }: Props) => {
       }
 
       if (code === 'INTERNAL_SERVER_ERROR') {
-        console.log('some error');
         toast.show('何らかのエラーが発生しました', { type: 'danger' });
         return;
       }
 
+      // これは後で消したい
       if (code === CustomErrorResponseCode.AlreadyUserExisting) {
         toast.show('既にユーザーが存在しています', { type: 'danger' });
         return;
