@@ -3,14 +3,14 @@ import {
   ApolloProvider as ApolloProviderBase,
   from,
   InMemoryCache,
-  split
+  split,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
 import { WebSocketLink } from '@apollo/client/link/ws';
 import {
   getMainDefinition,
-  relayStylePagination
+  relayStylePagination,
 } from '@apollo/client/utilities';
 import auth from '@react-native-firebase/auth';
 import { createUploadLink } from 'apollo-upload-client';

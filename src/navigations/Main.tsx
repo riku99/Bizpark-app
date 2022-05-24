@@ -7,6 +7,7 @@ import FastImage from 'react-native-fast-image';
 import { useInitialDataLazyQuery } from 'src/generated/graphql';
 import { requestUserPermission } from 'src/helpers/pushNotifications';
 import { useActiveData } from 'src/hooks/active';
+import { useSignOut } from 'src/hooks/auth';
 import { useLoggedIn } from 'src/hooks/me';
 import { useNewsTalkRoomsWithSusbscription } from 'src/hooks/newsTalkRoom';
 import { useOneOnOneTalkRoomsWithSubscription } from 'src/hooks/oneOnOneTalkRoom';
@@ -71,10 +72,9 @@ const Stack = createNativeStackNavigator<MainStackParamList>();
 
 export const MainStack = React.memo(() => {
   const { loggedIn, checkedStorage } = useLoggedIn();
-
   const { colors } = useTheme();
-
   const client = useApolloClient();
+  const { signOut } = useSignOut();
 
   const [initialDataQuery, { called }] = useInitialDataLazyQuery({
     fetchPolicy: 'cache-and-network',
@@ -101,7 +101,7 @@ export const MainStack = React.memo(() => {
   useEffect(() => {
     (async function () {
       if (!loggedIn && checkedStorage && called) {
-        await client.clearStore();
+        await signOut();
         console.log('🧹 clear cache');
       }
     })();

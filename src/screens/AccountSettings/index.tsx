@@ -1,4 +1,5 @@
 import { useApolloClient } from '@apollo/client';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import * as InAppPurchases from 'expo-in-app-purchases';
 import { Box, ScrollView, Text, useColorModeValue, VStack } from 'native-base';
@@ -17,6 +18,7 @@ import { getLoginProvider } from 'src/helpers/getLoginProvider';
 import { sendPasswordResetEmail } from 'src/helpers/sendPasswordResetEmail';
 import { useSignOut } from 'src/hooks/auth';
 import { useLoggedIn } from 'src/hooks/me';
+import { storage } from 'src/storage/mmkv';
 import { RootNavigationScreenProp } from 'src/types';
 
 type Props = RootNavigationScreenProp<'AccountSettings'>;
@@ -83,7 +85,7 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
             text: 'ログアウト',
             style: 'destructive',
             onPress: async () => {
-              await signOut();
+              setLoggedIn(false);
             },
           },
         ]);
@@ -111,7 +113,10 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
                 try {
                   setSpinnerVisible(true);
                   await deleteAccountMutation();
+                  await auth().signOut();
                   await client.clearStore();
+                  await AsyncStorage.clear();
+                  storage.clearAll();
                   setLoggedIn(false);
                 } catch (e) {
                   console.log(e);

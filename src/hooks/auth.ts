@@ -246,6 +246,13 @@ export const useSignOut = () => {
 
   const signOut = useCallback(async () => {
     try {
+      const firebaseUser = auth().currentUser;
+
+      if (!firebaseUser) {
+        console.log('退会処理です');
+        return;
+      }
+
       await signOutMutation();
     } catch (e) {
       console.log(e);
