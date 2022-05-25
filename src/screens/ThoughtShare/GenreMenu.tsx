@@ -1,5 +1,5 @@
+import { MenuAction, MenuView } from '@react-native-menu/menu';
 import React from 'react';
-import { MenuView, MenuAction } from '@react-native-menu/menu';
 import { Genre } from 'src/generated/graphql';
 
 type Props = {
@@ -10,19 +10,19 @@ type Props = {
 const menuAction: MenuAction[] = [
   {
     id: Genre.Business,
-    title: 'Busines👨‍💻\n(仕事, 最新ビジネス etc...)',
+    title: 'ビジネス👨‍💻\n(仕事, 最新ビジネス etc...)',
   },
   {
     id: Genre.Politics,
-    title: 'Politics💴\n(政治, 国際政治, 選挙 etc...)',
+    title: '政治💴\n(政治, 国際政治, 選挙 etc...)',
   },
   {
     id: Genre.Economy,
-    title: 'Economy💹\n(経済, 金融, 株 etc...)',
+    title: '金融・経済💹\n(経済, 金融, 株 etc...)',
   },
   {
     id: Genre.Society,
-    title: 'Society🙋‍♂️🙋‍♀️\n(社会問題, 環境, etc...)',
+    title: '社会🙋‍♂️🙋‍♀️\n(社会問題, 環境, etc...)',
   },
 ];
 

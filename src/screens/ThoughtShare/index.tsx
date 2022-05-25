@@ -150,16 +150,16 @@ export const ThoughtShareScreen = ({ navigation, route }: Props) => {
   if (genre) {
     switch (genre) {
       case Genre.Business:
-        menuText = 'Business';
+        menuText = 'ビジネス';
         break;
       case Genre.Politics:
-        menuText = 'Politics';
+        menuText = '政治';
         break;
       case Genre.Economy:
-        menuText = 'Economy';
+        menuText = '金融経済';
         break;
       case Genre.Society:
-        menuText = 'Society';
+        menuText = '社会';
         break;
     }
   }
