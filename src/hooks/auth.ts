@@ -248,8 +248,9 @@ export const useSignOut = () => {
     try {
       const firebaseUser = auth().currentUser;
 
+      // 退会処理の場合もuseSignOutが呼ばれるが、sign out用のミューテーションはいらない
+      // アカウント削除処理でfirebaseUserも削除しているのでそれで判定する
       if (!firebaseUser) {
-        console.log('退会処理です');
         return;
       }
 
