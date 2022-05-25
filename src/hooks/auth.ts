@@ -246,6 +246,14 @@ export const useSignOut = () => {
 
   const signOut = useCallback(async () => {
     try {
+      const firebaseUser = auth().currentUser;
+
+      // 退会処理の場合もuseSignOutが呼ばれるが、sign out用のミューテーションはいらない
+      // アカウント削除処理でfirebaseUserも削除しているのでそれで判定する
+      if (!firebaseUser) {
+        return;
+      }
+
       await signOutMutation();
     } catch (e) {
       console.log(e);

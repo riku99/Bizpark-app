@@ -14,10 +14,11 @@ import {
 } from '@apollo/client/utilities';
 import auth from '@react-native-firebase/auth';
 import { createUploadLink } from 'apollo-upload-client';
-import React from 'react';
+import React, { useRef } from 'react';
 import { Alert } from 'react-native';
 import Config from 'react-native-config';
 import { useToast } from 'react-native-toast-notifications';
+import { ERROR_TOAST_DURATION } from 'src/constants';
 import { CustomErrorResponseCode } from 'src/generated/graphql';
 import { useLoggedIn } from 'src/hooks/me';
 
@@ -177,22 +178,37 @@ const cache = new InMemoryCache({
 export const ApolloProvider = ({ children }: Props) => {
   const toast = useToast();
   const { setLoggedIn } = useLoggedIn();
+  const errorToastDisplayRef = useRef(false);
 
   const errorLink = onError((error) => {
     try {
+      if (error.networkError) {
+        if (!errorToastDisplayRef.current) {
+          toast.show('ネットワークに接続されていません');
+          errorToastDisplayRef.current = true;
+        } else {
+          setTimeout(() => {
+            errorToastDisplayRef.current = false;
+          }, ERROR_TOAST_DURATION);
+        }
+        return;
+      }
+
       const firstError = error.graphQLErrors[0];
       const code = firstError.extensions.code;
 
       console.log('This log is output from errorLink');
       console.log(firstError.message);
 
-      if (error.networkError) {
-        toast.show('ネットワークに接続されていません');
-        return;
-      }
-
       if (code === 'INTERNAL_SERVER_ERROR') {
-        toast.show('何らかのエラーが発生しました', { type: 'danger' });
+        if (!errorToastDisplayRef.current) {
+          toast.show('何らかのエラーが発生しました', { type: 'danger' });
+          errorToastDisplayRef.current = true;
+        } else {
+          setTimeout(() => {
+            errorToastDisplayRef.current = false;
+          }, ERROR_TOAST_DURATION);
+        }
         return;
       }
 
@@ -202,6 +218,7 @@ export const ApolloProvider = ({ children }: Props) => {
         return;
       }
 
+      // ここサーバ側でloggedInの処理ができてなかったりストレージの削除処理できていないので直す
       if (code === 'FORBIDDEN') {
         Alert.alert('エラーが発生しました', 'ログインし直してください', [
           {
@@ -213,8 +230,6 @@ export const ApolloProvider = ({ children }: Props) => {
         ]);
         return;
       }
-
-      console.log(error);
     } catch (e) {
       console.log(e);
     }
