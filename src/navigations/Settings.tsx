@@ -5,6 +5,7 @@ import { AccountSettingsScreen } from 'src/screens/AccountSettings';
 import { BlockingUsersScreen } from 'src/screens/BlockingUsers';
 import { EmailChangeScreen } from 'src/screens/EmailChange';
 import { EmailChangeVerificationScreen } from 'src/screens/EmailChangeVerification';
+import { MessageSettingsScreen } from 'src/screens/MessageSettings';
 import { SettingsScreen } from 'src/screens/Settings';
 import { UserSettingsScreen } from 'src/screens/UserSettings';
 
@@ -19,6 +20,7 @@ export type SettingsParamList = {
     email: string;
     kind: 'EmailChange';
   };
+  MessageSettings: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsParamList>();
@@ -44,6 +46,7 @@ export const Settings = React.memo(() => {
         name="EmaiChangeVerification"
         component={EmailChangeVerificationScreen}
       />
+      <Stack.Screen name="MessageSettings" component={MessageSettingsScreen} />
     </Stack.Navigator>
   );
 });

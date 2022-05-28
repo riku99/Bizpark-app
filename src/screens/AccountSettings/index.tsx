@@ -16,7 +16,6 @@ import {
 } from 'src/generated/graphql';
 import { getLoginProvider } from 'src/helpers/getLoginProvider';
 import { sendPasswordResetEmail } from 'src/helpers/sendPasswordResetEmail';
-import { useSignOut } from 'src/hooks/auth';
 import { useLoggedIn } from 'src/hooks/me';
 import { storage } from 'src/storage/mmkv';
 import { RootNavigationScreenProp } from 'src/types';
@@ -28,7 +27,6 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
   const [deleteAccountMutation] = useDeleteAccountMutation();
   const [verifyReceiptMutation] = useVerifyIapReceiptMutation();
   const client = useApolloClient();
-  const { signOut } = useSignOut();
 
   useLayoutEffect(() => {
     navigation.setOptions({

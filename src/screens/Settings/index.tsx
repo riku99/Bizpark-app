@@ -1,12 +1,11 @@
-import React, { useLayoutEffect } from 'react';
+import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
 import { ScrollView, useColorModeValue, useTheme } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
-import { CloseButton } from 'src/components/BackButon';
+import React, { useLayoutEffect } from 'react';
 import { StyleSheet } from 'react-native';
+import { CloseButton } from 'src/components/BackButon';
 import { ListItem } from 'src/components/ListItem';
-import { MaterialIcons } from '@expo/vector-icons';
-import { Feather } from '@expo/vector-icons';
 import { RightIcon } from 'src/components/RightIcon';
+import { RootNavigationScreenProp } from 'src/types';
 
 type Props = RootNavigationScreenProp<'Settings'>;
 
@@ -34,6 +33,13 @@ export const SettingsScreen = ({ navigation }: Props) => {
       title: 'ユーザー',
       onPress: () => {
         navigation.navigate('UserSettings');
+      },
+    },
+    {
+      Icon: <AntDesign name="message1" size={24} color={iconColor} />,
+      title: 'メッセージ',
+      onPress: () => {
+        navigation.navigate('MessageSettings');
       },
     },
   ];

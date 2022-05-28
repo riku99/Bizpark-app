@@ -9,6 +9,7 @@ query InitialData {
     instagram
     linkedin
     loggedIn
+    receiveOneOnOneTalkRoomMessage
   }
   thoughtTalkRooms: thoughtTalkRooms {
     ...ThoughtTalkRoomParts
