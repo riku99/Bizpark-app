@@ -639,6 +639,12 @@ export type OneOnOneTalkRoomMessagesArgs = {
   first?: InputMaybe<Scalars['Int']>;
 };
 
+export enum OneOnOneTalkRoomCreationError {
+  BlockingOrBlocked = 'BLOCKING_OR_BLOCKED',
+  Rejection = 'REJECTION',
+  UserNotFound = 'USER_NOT_FOUND'
+}
+
 export type OneOnOneTalkRoomMessage = TalkRoomMessage & {
   __typename?: 'OneOnOneTalkRoomMessage';
   createdAt: Scalars['String'];

@@ -3,9 +3,9 @@ import { Pressable, Text, useColorModeValue } from 'native-base';
 import React, { ComponentProps } from 'react';
 import { Alert } from 'react-native';
 import {
-  CustomErrorResponseCode,
   GetOneOnOneTalkRoomsDocument,
   GetOneOnOneTalkRoomsQuery,
+  OneOnOneTalkRoomCreationError,
   useCreateOneOnOneTalkRoomMutation,
 } from 'src/generated/graphql';
 import { useIsPlusPlan } from 'src/hooks/me';
@@ -75,11 +75,20 @@ export const SendMessageButton = ({ user, ...props }: Props) => {
       } catch (e) {
         console.log(e);
         const gqlError = getGraphQLError(e, 0);
-        if (
-          gqlError &&
-          gqlError.code === CustomErrorResponseCode.InvalidRequest
-        ) {
-          Alert.alert(gqlError.message);
+        if (gqlError) {
+          if (
+            gqlError.code === OneOnOneTalkRoomCreationError.BlockingOrBlocked
+          ) {
+            Alert.alert('トークルームを作成できませんでした');
+          } else if (
+            gqlError.code === OneOnOneTalkRoomCreationError.Rejection
+          ) {
+            Alert.alert('相手がメッセージの受け取りを許可していません');
+          } else if (
+            gqlError.code === OneOnOneTalkRoomCreationError.UserNotFound
+          ) {
+            Alert.alert('ユーザーが存在しません');
+          }
         }
       } finally {
         spinnerVisibleVar(false);
