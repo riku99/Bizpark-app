@@ -7,6 +7,7 @@ import {
   useGetMyImageUrlQuery,
   useGetMyNameQuery,
   useGetMyPlanQuery,
+  useGetReceiveOneOnOneTalkRoomMessageQuery,
 } from 'src/generated/graphql';
 import { loggedInVar, STORAGE_KEY } from 'src/stores/loggedIn';
 
@@ -95,4 +96,14 @@ export const useIsPlusPlan = () => {
   const { data } = useGetMyPlanQuery();
 
   return data?.me && data.me.plan === Plan.Plus;
+};
+
+export const useReceiveOneOnOneTalkRoomMessage = () => {
+  const { data } = useGetReceiveOneOnOneTalkRoomMessageQuery();
+
+  if (!data) {
+    return null;
+  }
+
+  return data.me.receiveOneOnOneTalkRoomMessage;
 };

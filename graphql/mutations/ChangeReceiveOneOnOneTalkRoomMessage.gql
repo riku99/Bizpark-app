@@ -1,0 +1,8 @@
+mutation ChangeReceiveOneOnOneTalkRoomMessage(
+  $input: ChangeReceiveOneOnOneTalkRoomMessageInput!
+) {
+  changeReceiveOneOnOneTalkRoomMessage(input: $input) {
+    id
+    receiveOneOnOneTalkRoomMessage
+  }
+}
