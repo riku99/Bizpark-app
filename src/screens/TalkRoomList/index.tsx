@@ -1,18 +1,26 @@
-import React, { useLayoutEffect, useMemo, useCallback, useEffect } from 'react';
-import { RootNavigationScreenProp } from 'src/types';
-import { ThoughtTalkRoomList } from './ThoughtTalkRoomList';
-import { NewsTalkRoomList } from './NewsTalkRoomList';
-import { OneOnOneTalkRoomList } from './OneOnOneTalkRoomList';
-import { useTopTabBarStyle } from 'src/hooks/theme';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { Box } from 'native-base';
+import React, {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useState,
+} from 'react';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 import { Badge } from 'src/components/Badge';
 import {
   useGetNewsTalkRoomsQuery,
-  useGetThoughtTalkRoomsQuery,
   useGetOneOnOneTalkRoomsQuery,
+  useGetThoughtTalkRoomsQuery,
 } from 'src/generated/graphql';
-import { Box } from 'native-base';
+import { useTopTabBarStyle } from 'src/hooks/theme';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
+import { RootNavigationScreenProp } from 'src/types';
+import { ActiveTalkRoomPopUp } from './ActiveTalkRoomPopUp';
+import { NewsTalkRoomList } from './NewsTalkRoomList';
+import { OneOnOneTalkRoomList } from './OneOnOneTalkRoomList';
+import { ThoughtTalkRoomList } from './ThoughtTalkRoomList';
 
 type Props = RootNavigationScreenProp<'Tab'>;
 
@@ -25,6 +33,20 @@ export const TalkListScreen = ({ navigation }: Props) => {
       headerShown: false,
       headerShadowVisible: false,
     });
+  }, []);
+
+  const [activeTalkRoomPopUpVisible, setActiveTalkRoomPopUpVisible] =
+    useState(false);
+
+  useEffect(() => {
+    const isDisplayed = storage.getBoolean(
+      mmkvStorageKeys.displayedActiveTalkRoomPopUp
+    );
+
+    if (!isDisplayed) {
+      setActiveTalkRoomPopUpVisible(true);
+      storage.set(mmkvStorageKeys.displayedActiveTalkRoomPopUp, true);
+    }
   }, []);
 
   const { defaultScreenStyle, style, sceneContainerStyle } =
@@ -117,6 +139,13 @@ export const TalkListScreen = ({ navigation }: Props) => {
           }}
         />
       </TopTab.Navigator>
+
+      <ActiveTalkRoomPopUp
+        isVisible={activeTalkRoomPopUpVisible}
+        hidePopUp={() => {
+          setActiveTalkRoomPopUpVisible(false);
+        }}
+      />
     </>
   );
 };
