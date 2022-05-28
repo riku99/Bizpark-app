@@ -15,6 +15,7 @@ import {
   useGetThoughtTalkRoomsQuery,
 } from 'src/generated/graphql';
 import { useTopTabBarStyle } from 'src/hooks/theme';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 import { RootNavigationScreenProp } from 'src/types';
 import { ActiveTalkRoomPopUp } from './ActiveTalkRoomPopUp';
 import { NewsTalkRoomList } from './NewsTalkRoomList';
@@ -38,7 +39,14 @@ export const TalkListScreen = ({ navigation }: Props) => {
     useState(false);
 
   useEffect(() => {
-    setActiveTalkRoomPopUpVisible(true);
+    const isDisplayed = storage.getBoolean(
+      mmkvStorageKeys.displayedActiveTalkRoomPopUp
+    );
+
+    if (!isDisplayed) {
+      setActiveTalkRoomPopUpVisible(true);
+      storage.set(mmkvStorageKeys.displayedActiveTalkRoomPopUp, true);
+    }
   }, []);
 
   const { defaultScreenStyle, style, sceneContainerStyle } =
@@ -133,9 +141,9 @@ export const TalkListScreen = ({ navigation }: Props) => {
       </TopTab.Navigator>
 
       <ActiveTalkRoomPopUp
-        isVisible={true}
+        isVisible={activeTalkRoomPopUpVisible}
         hidePopUp={() => {
-          // setActiveTalkRoomPopUpVisible(false);
+          setActiveTalkRoomPopUpVisible(false);
         }}
       />
     </>
