@@ -3,15 +3,10 @@ import {
   ApolloProvider as ApolloProviderBase,
   from,
   InMemoryCache,
-  split,
 } from '@apollo/client';
 import { setContext } from '@apollo/client/link/context';
 import { onError } from '@apollo/client/link/error';
-import { WebSocketLink } from '@apollo/client/link/ws';
-import {
-  getMainDefinition,
-  relayStylePagination,
-} from '@apollo/client/utilities';
+import { relayStylePagination } from '@apollo/client/utilities';
 import auth from '@react-native-firebase/auth';
 import { createUploadLink } from 'apollo-upload-client';
 import React, { useRef } from 'react';
@@ -29,34 +24,6 @@ type Props = {
 const uploadLink = createUploadLink({
   uri: Config.APP_ENDPOINT,
 });
-
-const wsLink = new WebSocketLink({
-  uri: Config.APP_WS_ENDPOINT,
-  options: {
-    reconnect: true,
-    lazy: true,
-    connectionParams: async () => {
-      const currentUser = auth().currentUser;
-      const idToken = await currentUser.getIdToken();
-
-      return {
-        authToken: `Bearer ${idToken}`,
-      };
-    },
-  },
-});
-
-const splitLink = split(
-  ({ query }) => {
-    const definition = getMainDefinition(query);
-    return (
-      definition.kind === 'OperationDefinition' &&
-      definition.operation === 'subscription'
-    );
-  },
-  wsLink,
-  uploadLink
-);
 
 const authLink = setContext(async (_, { headers }) => {
   const currentUser = auth().currentUser;
@@ -224,7 +191,6 @@ export const ApolloProvider = ({ children }: Props) => {
           {
             onPress: async () => {
               setLoggedIn(false);
-              await auth().signOut();
             },
           },
         ]);
@@ -236,7 +202,7 @@ export const ApolloProvider = ({ children }: Props) => {
   });
 
   const client = new ApolloClient({
-    link: from([errorLink, authLink, splitLink]),
+    link: from([errorLink, authLink, uploadLink]),
     cache,
   });
 
