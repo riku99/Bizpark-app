@@ -1,0 +1,8 @@
+mutation ChangeReceiveFollowPushNotification(
+  $input: ChangeReceiveFollowPushNotificationInput!
+) {
+  changeReceiveFollowPushNotification(input: $input) {
+    id
+    receiveFollowPushNotification
+  }
+}

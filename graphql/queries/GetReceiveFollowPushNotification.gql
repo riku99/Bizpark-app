@@ -1,0 +1,5 @@
+query GetReceiveFollowPushNotification {
+  me {
+    receiveFollowPushNotification
+  }
+}

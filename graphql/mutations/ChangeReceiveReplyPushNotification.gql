@@ -1,0 +1,8 @@
+mutation ChangeReceiveReplyPushNotification(
+  $input: ChangeReceiveReplyPushNotificationInput!
+) {
+  changeReceiveReplyPushNotification(input: $input) {
+    id
+    receiveReplyPushNotification
+  }
+}

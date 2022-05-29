@@ -2,26 +2,30 @@ import { useTheme } from 'native-base';
 import React, { useState } from 'react';
 import { Switch } from 'react-native';
 import { ListItem } from 'src/components/ListItem';
-import { useChangeReceiveOneOnOneTalkRoomMessageMutation } from 'src/generated/graphql';
-import { useReceiveOneOnOneTalkRoomMessage } from 'src/hooks/me';
+import {
+  useChangeReceiveFollowPushNotificationMutation,
+  useGetReceiveFollowPushNotificationQuery,
+} from 'src/generated/graphql';
 
-export const ReceiveMessageSwitchItem = () => {
+export const Follow = () => {
   const { colors } = useTheme();
-  const receiveMessge = useReceiveOneOnOneTalkRoomMessage();
-  const [switchValue, setSwitchValue] = useState(!!receiveMessge);
-  const [changeReceiveMessageMutation] =
-    useChangeReceiveOneOnOneTalkRoomMessageMutation();
+  const { data } = useGetReceiveFollowPushNotificationQuery();
+  const [switchValue, setSwitchValue] = useState(
+    !!data?.me?.receiveFollowPushNotification
+  );
+  const [changeReceiveFollowPushNotificationMutation] =
+    useChangeReceiveFollowPushNotificationMutation();
 
   const onSwitchValueChange = async (value: boolean) => {
     setSwitchValue(value);
-
-    await changeReceiveMessageMutation({
+    await changeReceiveFollowPushNotificationMutation({
       variables: {
         input: {
           value,
         },
       },
-      onError: () => {
+      onError: (e) => {
+        console.log(e);
         setSwitchValue(!value);
       },
     });
@@ -29,17 +33,15 @@ export const ReceiveMessageSwitchItem = () => {
 
   return (
     <ListItem
-      title="個人メッセージを受け取る"
+      title="フォロー"
       disablePress
-      titleStyle={{
-        fontSize: 16,
-      }}
+      titleStyle={{ fontSize: 16 }}
       ItemRight={
         <Switch
-          value={switchValue}
           trackColor={{
             true: colors.pink,
           }}
+          value={switchValue}
           onValueChange={onSwitchValueChange}
         />
       }

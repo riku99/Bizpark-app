@@ -30,7 +30,19 @@ export type BlockedByUser = {
   name: Scalars['String'];
 };
 
+export type ChangeReceiveFollowPushNotificationInput = {
+  value: Scalars['Boolean'];
+};
+
 export type ChangeReceiveOneOnOneTalkRoomMessageInput = {
+  value: Scalars['Boolean'];
+};
+
+export type ChangeReceiveOneOnOneTalkRoomMessagePushNotificationInput = {
+  value: Scalars['Boolean'];
+};
+
+export type ChangeReceiveReplyPushNotificationInput = {
   value: Scalars['Boolean'];
 };
 
@@ -229,7 +241,10 @@ export type Me = {
   loggedIn: Scalars['Boolean'];
   name: Scalars['String'];
   plan: Plan;
+  receiveFollowPushNotification?: Maybe<Scalars['Boolean']>;
   receiveOneOnOneTalkRoomMessage: Scalars['Boolean'];
+  receiveOneOnOneTalkRoomMessagePushNotification?: Maybe<Scalars['Boolean']>;
+  receiveReplyPushNotification?: Maybe<Scalars['Boolean']>;
   snsAccounts?: Maybe<SnsAccounts>;
   twitter?: Maybe<Scalars['String']>;
 };
@@ -243,7 +258,10 @@ export type Mutation = {
   __typename?: 'Mutation';
   addDeviceToken?: Maybe<Scalars['Boolean']>;
   block: User;
+  changeReceiveFollowPushNotification: Me;
   changeReceiveOneOnOneTalkRoomMessage: Me;
+  changeReceiveOneOnOneTalkRoomMessagePushNotification: Me;
+  changeReceiveReplyPushNotification: Me;
   createEmailAuthCode: Scalars['Int'];
   createNewsPick: NewsPick;
   createNewsTalkRoomMessage: NewsTalkRoomMessage;
@@ -294,8 +312,23 @@ export type MutationBlockArgs = {
 };
 
 
+export type MutationChangeReceiveFollowPushNotificationArgs = {
+  input: ChangeReceiveFollowPushNotificationInput;
+};
+
+
 export type MutationChangeReceiveOneOnOneTalkRoomMessageArgs = {
   input: ChangeReceiveOneOnOneTalkRoomMessageInput;
+};
+
+
+export type MutationChangeReceiveOneOnOneTalkRoomMessagePushNotificationArgs = {
+  input: ChangeReceiveOneOnOneTalkRoomMessagePushNotificationInput;
+};
+
+
+export type MutationChangeReceiveReplyPushNotificationArgs = {
+  input: ChangeReceiveReplyPushNotificationInput;
 };
 
 
@@ -1150,12 +1183,33 @@ export type BlockMutationVariables = Exact<{
 
 export type BlockMutation = { __typename?: 'Mutation', block: { __typename?: 'User', blocking?: boolean | null | undefined, follow?: boolean | null | undefined, id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } };
 
+export type ChangeReceiveFollowPushNotificationMutationVariables = Exact<{
+  input: ChangeReceiveFollowPushNotificationInput;
+}>;
+
+
+export type ChangeReceiveFollowPushNotificationMutation = { __typename?: 'Mutation', changeReceiveFollowPushNotification: { __typename?: 'Me', id: string, receiveFollowPushNotification?: boolean | null | undefined } };
+
 export type ChangeReceiveOneOnOneTalkRoomMessageMutationVariables = Exact<{
   input: ChangeReceiveOneOnOneTalkRoomMessageInput;
 }>;
 
 
 export type ChangeReceiveOneOnOneTalkRoomMessageMutation = { __typename?: 'Mutation', changeReceiveOneOnOneTalkRoomMessage: { __typename?: 'Me', id: string, receiveOneOnOneTalkRoomMessage: boolean } };
+
+export type ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutationVariables = Exact<{
+  input: ChangeReceiveOneOnOneTalkRoomMessagePushNotificationInput;
+}>;
+
+
+export type ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation = { __typename?: 'Mutation', changeReceiveOneOnOneTalkRoomMessagePushNotification: { __typename?: 'Me', id: string, receiveOneOnOneTalkRoomMessagePushNotification?: boolean | null | undefined } };
+
+export type ChangeReceiveReplyPushNotificationMutationVariables = Exact<{
+  input: ChangeReceiveReplyPushNotificationInput;
+}>;
+
+
+export type ChangeReceiveReplyPushNotificationMutation = { __typename?: 'Mutation', changeReceiveReplyPushNotification: { __typename?: 'Me', id: string, receiveReplyPushNotification?: boolean | null | undefined } };
 
 export type CreateNewsPickMutationVariables = Exact<{
   input: CreateNewsPickInput;
@@ -1549,10 +1603,25 @@ export type GetPickedNewsQueryVariables = Exact<{
 
 export type GetPickedNewsQuery = { __typename?: 'Query', user: { __typename?: 'User', id: string, blocked?: boolean | null | undefined, pickedNews?: { __typename?: 'NewsPickConnection', edges: Array<{ __typename?: 'NewsPickEdge', cursor: string, node: { __typename?: 'NewsPick', id: number, news?: { __typename?: 'News', picked: boolean, id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } };
 
+export type GetReceiveFollowPushNotificationQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetReceiveFollowPushNotificationQuery = { __typename?: 'Query', me?: { __typename?: 'Me', receiveFollowPushNotification?: boolean | null | undefined } | null | undefined };
+
 export type GetReceiveOneOnOneTalkRoomMessageQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type GetReceiveOneOnOneTalkRoomMessageQuery = { __typename?: 'Query', me?: { __typename?: 'Me', receiveOneOnOneTalkRoomMessage: boolean } | null | undefined };
+
+export type GetReceiveOneOnOneTalkRoomMessagePushNotificationQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetReceiveOneOnOneTalkRoomMessagePushNotificationQuery = { __typename?: 'Query', me?: { __typename?: 'Me', receiveOneOnOneTalkRoomMessagePushNotification?: boolean | null | undefined } | null | undefined };
+
+export type GetReceiveReplyPushNotificationQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetReceiveReplyPushNotificationQuery = { __typename?: 'Query', me?: { __typename?: 'Me', receiveReplyPushNotification?: boolean | null | undefined } | null | undefined };
 
 export type GetThoughtQueryVariables = Exact<{
   id: Scalars['ID'];
@@ -1606,12 +1675,12 @@ export type GetThoughtTalkRoomParentQuery = { __typename?: 'Query', thoughtTalkR
 export type InitialDataQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type InitialDataQuery = { __typename?: 'Query', me?: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined, loggedIn: boolean, receiveOneOnOneTalkRoomMessage: boolean } | null | undefined, thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined>, newsTalkRooms: Array<{ __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined }>, oneOnONeTalkRooms: Array<{ __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
+export type InitialDataQuery = { __typename?: 'Query', me?: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined, loggedIn: boolean, receiveOneOnOneTalkRoomMessage: boolean, receiveReplyPushNotification?: boolean | null | undefined, receiveOneOnOneTalkRoomMessagePushNotification?: boolean | null | undefined, receiveFollowPushNotification?: boolean | null | undefined } | null | undefined, thoughtTalkRooms: Array<{ __typename?: 'ThoughtTalkRoom', id: number, createdAt?: string | null | undefined, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'ThoughtTalkRoomMemberConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMemberEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, thought?: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, contributor?: { __typename?: 'User', id: string } | null | undefined } | null | undefined, messages?: { __typename?: 'ThoughtTalkRoomMessageConnection', edges: Array<{ __typename?: 'ThoughtTalkRoomMessageEdge', cursor: string, node: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } | null | undefined, replyMessage?: { __typename?: 'ThoughtTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined>, newsTalkRooms: Array<{ __typename?: 'NewsTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, members?: { __typename?: 'NewsTalkRoomMemberConnection', edges: Array<{ __typename?: 'NewsTalkRoomMemberEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMember', id: number, user: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined, news?: { __typename?: 'News', id: number, title: string, link: string, image?: string | null | undefined, articleCreatedAt?: string | null | undefined, genre: NewsGenre, provider?: string | null | undefined } | null | undefined, messages?: { __typename?: 'NewsTalkRoomMessageConnection', edges: Array<{ __typename?: 'NewsTalkRoomMessageEdge', cursor: string, node: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } | null | undefined, replyMessage?: { __typename?: 'NewsTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined }>, oneOnONeTalkRooms: Array<{ __typename?: 'OneOnOneTalkRoom', id: number, allMessageSeen?: boolean | null | undefined, updatedAt: string, sender?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } | null | undefined, recipient?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } | null | undefined, messages?: { __typename?: 'OneOnOneTalkRoomMessageConnection', edges: Array<{ __typename?: 'OneOnOneTalkRoomMessageEdge', cursor: string, node: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, roomId?: number | null | undefined, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined, replyMessage?: { __typename?: 'OneOnOneTalkRoomMessage', id: number, text: string, createdAt: string, sender?: { __typename?: 'User', id: string, name: string, imageUrl?: string | null | undefined } | null | undefined } | null | undefined } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } | null | undefined } | null | undefined> };
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined, loggedIn: boolean, plan: Plan, receiveOneOnOneTalkRoomMessage: boolean } | null | undefined };
+export type MeQuery = { __typename?: 'Query', me?: { __typename?: 'Me', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, facebook?: string | null | undefined, twitter?: string | null | undefined, instagram?: string | null | undefined, linkedin?: string | null | undefined, loggedIn: boolean, plan: Plan } | null | undefined };
 
 export type NewsQueryVariables = Exact<{
   genre: NewsGenre;
@@ -2002,6 +2071,40 @@ export function useBlockMutation(baseOptions?: Apollo.MutationHookOptions<BlockM
 export type BlockMutationHookResult = ReturnType<typeof useBlockMutation>;
 export type BlockMutationResult = Apollo.MutationResult<BlockMutation>;
 export type BlockMutationOptions = Apollo.BaseMutationOptions<BlockMutation, BlockMutationVariables>;
+export const ChangeReceiveFollowPushNotificationDocument = gql`
+    mutation ChangeReceiveFollowPushNotification($input: ChangeReceiveFollowPushNotificationInput!) {
+  changeReceiveFollowPushNotification(input: $input) {
+    id
+    receiveFollowPushNotification
+  }
+}
+    `;
+export type ChangeReceiveFollowPushNotificationMutationFn = Apollo.MutationFunction<ChangeReceiveFollowPushNotificationMutation, ChangeReceiveFollowPushNotificationMutationVariables>;
+
+/**
+ * __useChangeReceiveFollowPushNotificationMutation__
+ *
+ * To run a mutation, you first call `useChangeReceiveFollowPushNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeReceiveFollowPushNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeReceiveFollowPushNotificationMutation, { data, loading, error }] = useChangeReceiveFollowPushNotificationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useChangeReceiveFollowPushNotificationMutation(baseOptions?: Apollo.MutationHookOptions<ChangeReceiveFollowPushNotificationMutation, ChangeReceiveFollowPushNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeReceiveFollowPushNotificationMutation, ChangeReceiveFollowPushNotificationMutationVariables>(ChangeReceiveFollowPushNotificationDocument, options);
+      }
+export type ChangeReceiveFollowPushNotificationMutationHookResult = ReturnType<typeof useChangeReceiveFollowPushNotificationMutation>;
+export type ChangeReceiveFollowPushNotificationMutationResult = Apollo.MutationResult<ChangeReceiveFollowPushNotificationMutation>;
+export type ChangeReceiveFollowPushNotificationMutationOptions = Apollo.BaseMutationOptions<ChangeReceiveFollowPushNotificationMutation, ChangeReceiveFollowPushNotificationMutationVariables>;
 export const ChangeReceiveOneOnOneTalkRoomMessageDocument = gql`
     mutation ChangeReceiveOneOnOneTalkRoomMessage($input: ChangeReceiveOneOnOneTalkRoomMessageInput!) {
   changeReceiveOneOnOneTalkRoomMessage(input: $input) {
@@ -2036,6 +2139,74 @@ export function useChangeReceiveOneOnOneTalkRoomMessageMutation(baseOptions?: Ap
 export type ChangeReceiveOneOnOneTalkRoomMessageMutationHookResult = ReturnType<typeof useChangeReceiveOneOnOneTalkRoomMessageMutation>;
 export type ChangeReceiveOneOnOneTalkRoomMessageMutationResult = Apollo.MutationResult<ChangeReceiveOneOnOneTalkRoomMessageMutation>;
 export type ChangeReceiveOneOnOneTalkRoomMessageMutationOptions = Apollo.BaseMutationOptions<ChangeReceiveOneOnOneTalkRoomMessageMutation, ChangeReceiveOneOnOneTalkRoomMessageMutationVariables>;
+export const ChangeReceiveOneOnOneTalkRoomMessagePushNotificationDocument = gql`
+    mutation ChangeReceiveOneOnOneTalkRoomMessagePushNotification($input: ChangeReceiveOneOnOneTalkRoomMessagePushNotificationInput!) {
+  changeReceiveOneOnOneTalkRoomMessagePushNotification(input: $input) {
+    id
+    receiveOneOnOneTalkRoomMessagePushNotification
+  }
+}
+    `;
+export type ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutationFn = Apollo.MutationFunction<ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation, ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutationVariables>;
+
+/**
+ * __useChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation__
+ *
+ * To run a mutation, you first call `useChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeReceiveOneOnOneTalkRoomMessagePushNotificationMutation, { data, loading, error }] = useChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation(baseOptions?: Apollo.MutationHookOptions<ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation, ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation, ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutationVariables>(ChangeReceiveOneOnOneTalkRoomMessagePushNotificationDocument, options);
+      }
+export type ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutationHookResult = ReturnType<typeof useChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation>;
+export type ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutationResult = Apollo.MutationResult<ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation>;
+export type ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutationOptions = Apollo.BaseMutationOptions<ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutation, ChangeReceiveOneOnOneTalkRoomMessagePushNotificationMutationVariables>;
+export const ChangeReceiveReplyPushNotificationDocument = gql`
+    mutation ChangeReceiveReplyPushNotification($input: ChangeReceiveReplyPushNotificationInput!) {
+  changeReceiveReplyPushNotification(input: $input) {
+    id
+    receiveReplyPushNotification
+  }
+}
+    `;
+export type ChangeReceiveReplyPushNotificationMutationFn = Apollo.MutationFunction<ChangeReceiveReplyPushNotificationMutation, ChangeReceiveReplyPushNotificationMutationVariables>;
+
+/**
+ * __useChangeReceiveReplyPushNotificationMutation__
+ *
+ * To run a mutation, you first call `useChangeReceiveReplyPushNotificationMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useChangeReceiveReplyPushNotificationMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [changeReceiveReplyPushNotificationMutation, { data, loading, error }] = useChangeReceiveReplyPushNotificationMutation({
+ *   variables: {
+ *      input: // value for 'input'
+ *   },
+ * });
+ */
+export function useChangeReceiveReplyPushNotificationMutation(baseOptions?: Apollo.MutationHookOptions<ChangeReceiveReplyPushNotificationMutation, ChangeReceiveReplyPushNotificationMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<ChangeReceiveReplyPushNotificationMutation, ChangeReceiveReplyPushNotificationMutationVariables>(ChangeReceiveReplyPushNotificationDocument, options);
+      }
+export type ChangeReceiveReplyPushNotificationMutationHookResult = ReturnType<typeof useChangeReceiveReplyPushNotificationMutation>;
+export type ChangeReceiveReplyPushNotificationMutationResult = Apollo.MutationResult<ChangeReceiveReplyPushNotificationMutation>;
+export type ChangeReceiveReplyPushNotificationMutationOptions = Apollo.BaseMutationOptions<ChangeReceiveReplyPushNotificationMutation, ChangeReceiveReplyPushNotificationMutationVariables>;
 export const CreateNewsPickDocument = gql`
     mutation CreateNewsPick($input: CreateNewsPickInput!) {
   createNewsPick(input: $input) {
@@ -4132,6 +4303,40 @@ export function useGetPickedNewsLazyQuery(baseOptions?: Apollo.LazyQueryHookOpti
 export type GetPickedNewsQueryHookResult = ReturnType<typeof useGetPickedNewsQuery>;
 export type GetPickedNewsLazyQueryHookResult = ReturnType<typeof useGetPickedNewsLazyQuery>;
 export type GetPickedNewsQueryResult = Apollo.QueryResult<GetPickedNewsQuery, GetPickedNewsQueryVariables>;
+export const GetReceiveFollowPushNotificationDocument = gql`
+    query GetReceiveFollowPushNotification {
+  me {
+    receiveFollowPushNotification
+  }
+}
+    `;
+
+/**
+ * __useGetReceiveFollowPushNotificationQuery__
+ *
+ * To run a query within a React component, call `useGetReceiveFollowPushNotificationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReceiveFollowPushNotificationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReceiveFollowPushNotificationQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetReceiveFollowPushNotificationQuery(baseOptions?: Apollo.QueryHookOptions<GetReceiveFollowPushNotificationQuery, GetReceiveFollowPushNotificationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetReceiveFollowPushNotificationQuery, GetReceiveFollowPushNotificationQueryVariables>(GetReceiveFollowPushNotificationDocument, options);
+      }
+export function useGetReceiveFollowPushNotificationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReceiveFollowPushNotificationQuery, GetReceiveFollowPushNotificationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetReceiveFollowPushNotificationQuery, GetReceiveFollowPushNotificationQueryVariables>(GetReceiveFollowPushNotificationDocument, options);
+        }
+export type GetReceiveFollowPushNotificationQueryHookResult = ReturnType<typeof useGetReceiveFollowPushNotificationQuery>;
+export type GetReceiveFollowPushNotificationLazyQueryHookResult = ReturnType<typeof useGetReceiveFollowPushNotificationLazyQuery>;
+export type GetReceiveFollowPushNotificationQueryResult = Apollo.QueryResult<GetReceiveFollowPushNotificationQuery, GetReceiveFollowPushNotificationQueryVariables>;
 export const GetReceiveOneOnOneTalkRoomMessageDocument = gql`
     query GetReceiveOneOnOneTalkRoomMessage {
   me {
@@ -4166,6 +4371,74 @@ export function useGetReceiveOneOnOneTalkRoomMessageLazyQuery(baseOptions?: Apol
 export type GetReceiveOneOnOneTalkRoomMessageQueryHookResult = ReturnType<typeof useGetReceiveOneOnOneTalkRoomMessageQuery>;
 export type GetReceiveOneOnOneTalkRoomMessageLazyQueryHookResult = ReturnType<typeof useGetReceiveOneOnOneTalkRoomMessageLazyQuery>;
 export type GetReceiveOneOnOneTalkRoomMessageQueryResult = Apollo.QueryResult<GetReceiveOneOnOneTalkRoomMessageQuery, GetReceiveOneOnOneTalkRoomMessageQueryVariables>;
+export const GetReceiveOneOnOneTalkRoomMessagePushNotificationDocument = gql`
+    query GetReceiveOneOnOneTalkRoomMessagePushNotification {
+  me {
+    receiveOneOnOneTalkRoomMessagePushNotification
+  }
+}
+    `;
+
+/**
+ * __useGetReceiveOneOnOneTalkRoomMessagePushNotificationQuery__
+ *
+ * To run a query within a React component, call `useGetReceiveOneOnOneTalkRoomMessagePushNotificationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReceiveOneOnOneTalkRoomMessagePushNotificationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReceiveOneOnOneTalkRoomMessagePushNotificationQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetReceiveOneOnOneTalkRoomMessagePushNotificationQuery(baseOptions?: Apollo.QueryHookOptions<GetReceiveOneOnOneTalkRoomMessagePushNotificationQuery, GetReceiveOneOnOneTalkRoomMessagePushNotificationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetReceiveOneOnOneTalkRoomMessagePushNotificationQuery, GetReceiveOneOnOneTalkRoomMessagePushNotificationQueryVariables>(GetReceiveOneOnOneTalkRoomMessagePushNotificationDocument, options);
+      }
+export function useGetReceiveOneOnOneTalkRoomMessagePushNotificationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReceiveOneOnOneTalkRoomMessagePushNotificationQuery, GetReceiveOneOnOneTalkRoomMessagePushNotificationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetReceiveOneOnOneTalkRoomMessagePushNotificationQuery, GetReceiveOneOnOneTalkRoomMessagePushNotificationQueryVariables>(GetReceiveOneOnOneTalkRoomMessagePushNotificationDocument, options);
+        }
+export type GetReceiveOneOnOneTalkRoomMessagePushNotificationQueryHookResult = ReturnType<typeof useGetReceiveOneOnOneTalkRoomMessagePushNotificationQuery>;
+export type GetReceiveOneOnOneTalkRoomMessagePushNotificationLazyQueryHookResult = ReturnType<typeof useGetReceiveOneOnOneTalkRoomMessagePushNotificationLazyQuery>;
+export type GetReceiveOneOnOneTalkRoomMessagePushNotificationQueryResult = Apollo.QueryResult<GetReceiveOneOnOneTalkRoomMessagePushNotificationQuery, GetReceiveOneOnOneTalkRoomMessagePushNotificationQueryVariables>;
+export const GetReceiveReplyPushNotificationDocument = gql`
+    query GetReceiveReplyPushNotification {
+  me {
+    receiveReplyPushNotification
+  }
+}
+    `;
+
+/**
+ * __useGetReceiveReplyPushNotificationQuery__
+ *
+ * To run a query within a React component, call `useGetReceiveReplyPushNotificationQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetReceiveReplyPushNotificationQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetReceiveReplyPushNotificationQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetReceiveReplyPushNotificationQuery(baseOptions?: Apollo.QueryHookOptions<GetReceiveReplyPushNotificationQuery, GetReceiveReplyPushNotificationQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetReceiveReplyPushNotificationQuery, GetReceiveReplyPushNotificationQueryVariables>(GetReceiveReplyPushNotificationDocument, options);
+      }
+export function useGetReceiveReplyPushNotificationLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetReceiveReplyPushNotificationQuery, GetReceiveReplyPushNotificationQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetReceiveReplyPushNotificationQuery, GetReceiveReplyPushNotificationQueryVariables>(GetReceiveReplyPushNotificationDocument, options);
+        }
+export type GetReceiveReplyPushNotificationQueryHookResult = ReturnType<typeof useGetReceiveReplyPushNotificationQuery>;
+export type GetReceiveReplyPushNotificationLazyQueryHookResult = ReturnType<typeof useGetReceiveReplyPushNotificationLazyQuery>;
+export type GetReceiveReplyPushNotificationQueryResult = Apollo.QueryResult<GetReceiveReplyPushNotificationQuery, GetReceiveReplyPushNotificationQueryVariables>;
 export const GetThoughtDocument = gql`
     query GetThought($id: ID!) {
   thought(id: $id) {
@@ -4472,6 +4745,9 @@ export const InitialDataDocument = gql`
     linkedin
     loggedIn
     receiveOneOnOneTalkRoomMessage
+    receiveReplyPushNotification
+    receiveOneOnOneTalkRoomMessagePushNotification
+    receiveFollowPushNotification
   }
   thoughtTalkRooms: thoughtTalkRooms {
     ...ThoughtTalkRoomParts
@@ -4526,7 +4802,6 @@ export const MeDocument = gql`
     linkedin
     loggedIn
     plan
-    receiveOneOnOneTalkRoomMessage
   }
 }
     `;
