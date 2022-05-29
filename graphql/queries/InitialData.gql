@@ -10,6 +10,9 @@ query InitialData {
     linkedin
     loggedIn
     receiveOneOnOneTalkRoomMessage
+    receiveReplyPushNotification
+    receiveOneOnOneTalkRoomMessagePushNotification
+    receiveFollowPushNotification
   }
   thoughtTalkRooms: thoughtTalkRooms {
     ...ThoughtTalkRoomParts
