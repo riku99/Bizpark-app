@@ -2,13 +2,34 @@ import { useTheme } from 'native-base';
 import React, { useState } from 'react';
 import { Switch } from 'react-native';
 import { ListItem } from 'src/components/ListItem';
+import {
+  useChangeReceiveFollowPushNotificationMutation,
+  useGetReceiveFollowPushNotificationQuery,
+} from 'src/generated/graphql';
 
 export const Follow = () => {
   const { colors } = useTheme();
+  const { data } = useGetReceiveFollowPushNotificationQuery();
+  const [switchValue, setSwitchValue] = useState(
+    !!data?.me?.receiveFollowPushNotification
+  );
+  const [changeReceiveFollowPushNotificationMutation] =
+    useChangeReceiveFollowPushNotificationMutation();
 
-  const [switchValue, setSwitchValue] = useState(true);
-
-  const onSwitchValueChange = (value: boolean) => {};
+  const onSwitchValueChange = async (value: boolean) => {
+    setSwitchValue(value);
+    await changeReceiveFollowPushNotificationMutation({
+      variables: {
+        input: {
+          value,
+        },
+      },
+      onError: (e) => {
+        console.log(e);
+        setSwitchValue(!value);
+      },
+    });
+  };
 
   return (
     <ListItem

@@ -1,0 +1,8 @@
+mutation ChangeReceiveOneOnOneTalkRoomMessagePushNotification(
+  $input: ChangeReceiveOneOnOneTalkRoomMessagePushNotificationInput!
+) {
+  changeReceiveOneOnOneTalkRoomMessagePushNotification(input: $input) {
+    id
+    receiveOneOnOneTalkRoomMessagePushNotification
+  }
+}
