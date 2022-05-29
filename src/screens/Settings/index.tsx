@@ -1,7 +1,6 @@
-import { AntDesign, Feather, MaterialIcons } from '@expo/vector-icons';
+import { AntDesign, Entypo, Feather, MaterialIcons } from '@expo/vector-icons';
 import { ScrollView, useColorModeValue, useTheme } from 'native-base';
 import React, { useLayoutEffect } from 'react';
-import { StyleSheet } from 'react-native';
 import { CloseButton } from 'src/components/BackButon';
 import { ListItem } from 'src/components/ListItem';
 import { RightIcon } from 'src/components/RightIcon';
@@ -42,10 +41,17 @@ export const SettingsScreen = ({ navigation }: Props) => {
         navigation.navigate('MessageSettings');
       },
     },
+    {
+      Icon: <Entypo name="notification" size={24} color={iconColor} />,
+      title: 'プッシュ通知',
+      onPress: () => {
+        navigation.navigate('PushNotificationSettings');
+      },
+    },
   ];
 
   return (
-    <ScrollView flex={1} contentContainerStyle={styles.contetContainer}>
+    <ScrollView flex={1}>
       {settingList.map((item, idx) => (
         <ListItem
           title={item.title}
@@ -61,9 +67,3 @@ export const SettingsScreen = ({ navigation }: Props) => {
     </ScrollView>
   );
 };
-
-const styles = StyleSheet.create({
-  contetContainer: {
-    // paddingHorizontal: 16,
-  },
-});

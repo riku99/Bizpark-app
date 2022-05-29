@@ -30,6 +30,7 @@ export const ReceiveMessageSwitchItem = () => {
   return (
     <ListItem
       title="個人メッセージを受け取る"
+      disablePress
       titleStyle={{
         fontSize: 16,
       }}
