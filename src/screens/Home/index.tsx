@@ -4,7 +4,10 @@ import { Button, useColorMode } from 'native-base';
 import React, { useLayoutEffect } from 'react';
 import { AddButton } from 'src/components/AddButton';
 import { CreatingToast } from 'src/components/CreatingToast';
-import { useFcmHandler } from 'src/hooks/pushNotificatoins';
+import {
+  useCheckFcmWhenKilled,
+  useFcmHandler,
+} from 'src/hooks/pushNotificatoins';
 import { useTabOrder } from 'src/hooks/tabOrder';
 import { useTopTabBarStyle } from 'src/hooks/theme';
 import { creatingThoughtVar } from 'src/stores/thought';
@@ -43,6 +46,7 @@ export const HomeScreen = React.memo(({ navigation }: Props) => {
   const { tabOrder } = useTabOrder();
 
   useFcmHandler();
+  useCheckFcmWhenKilled();
 
   return (
     <>

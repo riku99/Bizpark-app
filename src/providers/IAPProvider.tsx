@@ -4,7 +4,7 @@ import { Alert, Platform } from 'react-native';
 import Config from 'react-native-config';
 import { useVerifyIapReceiptMutation } from 'src/generated/graphql';
 import { useSpinner } from 'src/hooks/spinner';
-import { iapReceiptStorageKey, storage } from 'src/storage/mmkv';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 
 type Props = {
   children: JSX.Element;
@@ -45,7 +45,7 @@ export const IAPProvider = ({ children }: Props) => {
         body.receipt = purchace.transactionReceipt;
 
         // サーバーでの検証処理中にエラーやユーザーがアプリキルして正常に終わらなかった場合、次回起動時に再検証行えるようにストレージに保存
-        storage.set(iapReceiptStorageKey, JSON.stringify(body));
+        storage.set(mmkvStorageKeys.iapReceiptStorage, JSON.stringify(body));
       }
 
       if (Platform.OS === 'android') {
@@ -58,7 +58,7 @@ export const IAPProvider = ({ children }: Props) => {
       }
 
       try {
-        console.log('Request verifyIapReceipt ✋')
+        console.log('Request verifyIapReceipt ✋');
         // 検証リクエスト
         await verifyIapReceiptMutation({
           variables: {
@@ -70,7 +70,7 @@ export const IAPProvider = ({ children }: Props) => {
           },
           onCompleted: (data) => {
             console.log('レシート検証完了');
-            storage.delete(iapReceiptStorageKey);
+            storage.delete(mmkvStorageKeys.iapReceiptStorage);
           },
           onError: (error) => {
             console.log(error);
