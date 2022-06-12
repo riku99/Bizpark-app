@@ -746,6 +746,7 @@ export enum PushNotificationMessageDataType {
 export type Query = {
   __typename?: 'Query';
   blockingUsers: Array<Maybe<User>>;
+  developer?: Maybe<User>;
   follows: UserConnection;
   initialData: InitialResponse;
   me?: Maybe<Me>;
@@ -1727,6 +1728,11 @@ export type GetNewsTalkRoomInNewsTalkRoomScreenQueryVariables = Exact<{
 
 
 export type GetNewsTalkRoomInNewsTalkRoomScreenQuery = { __typename?: 'Query', newsTalkRoom: { __typename?: 'NewsTalkRoom', id: number, news?: { __typename?: 'News', id: number } | null | undefined } };
+
+export type GetDeveloperAccountInSettingsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type GetDeveloperAccountInSettingsQuery = { __typename?: 'Query', developer?: { __typename?: 'User', id: string } | null | undefined };
 
 export type GetThoughtTalkRoomParentInThoughtTalkRoomScreenQueryVariables = Exact<{
   id: Scalars['Int'];
@@ -5066,6 +5072,40 @@ export function useGetNewsTalkRoomInNewsTalkRoomScreenLazyQuery(baseOptions?: Ap
 export type GetNewsTalkRoomInNewsTalkRoomScreenQueryHookResult = ReturnType<typeof useGetNewsTalkRoomInNewsTalkRoomScreenQuery>;
 export type GetNewsTalkRoomInNewsTalkRoomScreenLazyQueryHookResult = ReturnType<typeof useGetNewsTalkRoomInNewsTalkRoomScreenLazyQuery>;
 export type GetNewsTalkRoomInNewsTalkRoomScreenQueryResult = Apollo.QueryResult<GetNewsTalkRoomInNewsTalkRoomScreenQuery, GetNewsTalkRoomInNewsTalkRoomScreenQueryVariables>;
+export const GetDeveloperAccountInSettingsDocument = gql`
+    query GetDeveloperAccountInSettings {
+  developer {
+    id
+  }
+}
+    `;
+
+/**
+ * __useGetDeveloperAccountInSettingsQuery__
+ *
+ * To run a query within a React component, call `useGetDeveloperAccountInSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDeveloperAccountInSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDeveloperAccountInSettingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetDeveloperAccountInSettingsQuery(baseOptions?: Apollo.QueryHookOptions<GetDeveloperAccountInSettingsQuery, GetDeveloperAccountInSettingsQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetDeveloperAccountInSettingsQuery, GetDeveloperAccountInSettingsQueryVariables>(GetDeveloperAccountInSettingsDocument, options);
+      }
+export function useGetDeveloperAccountInSettingsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetDeveloperAccountInSettingsQuery, GetDeveloperAccountInSettingsQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetDeveloperAccountInSettingsQuery, GetDeveloperAccountInSettingsQueryVariables>(GetDeveloperAccountInSettingsDocument, options);
+        }
+export type GetDeveloperAccountInSettingsQueryHookResult = ReturnType<typeof useGetDeveloperAccountInSettingsQuery>;
+export type GetDeveloperAccountInSettingsLazyQueryHookResult = ReturnType<typeof useGetDeveloperAccountInSettingsLazyQuery>;
+export type GetDeveloperAccountInSettingsQueryResult = Apollo.QueryResult<GetDeveloperAccountInSettingsQuery, GetDeveloperAccountInSettingsQueryVariables>;
 export const GetThoughtTalkRoomParentInThoughtTalkRoomScreenDocument = gql`
     query GetThoughtTalkRoomParentInThoughtTalkRoomScreen($id: Int!) {
   thoughtTalkRoom(id: $id) {

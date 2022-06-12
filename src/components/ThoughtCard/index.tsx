@@ -1,16 +1,16 @@
-import React, { ComponentProps, useState, useEffect } from 'react';
-import { Box, Text, Pressable, HStack } from 'native-base';
+import { useNavigation } from '@react-navigation/native';
+import { Box, HStack, Pressable, Text } from 'native-base';
+import React, { ComponentProps, useEffect, useState } from 'react';
+import { Dimensions, StyleSheet } from 'react-native';
+import { ContentsCard } from 'src/components/ContentsCard';
 import { Image } from 'src/components/Image';
 import { UserImage } from 'src/components/UserImage';
-import { ContentsCard } from 'src/components/ContentsCard';
-import { useNavigation } from '@react-navigation/native';
-import { RootNavigationProp } from 'src/types';
 import {
   useGetThoughtQuery,
   useLikeThoughtMutation,
   useUnlikeThoughtMutation,
 } from 'src/generated/graphql';
-import { StyleSheet, Dimensions } from 'react-native';
+import { RootNavigationProp } from 'src/types';
 import { Like } from '../Like';
 
 type Props = {
