@@ -1,0 +1,8 @@
+query GetNewsTalkRoomInNewsTalkRoomScreen($id: Int!) {
+  newsTalkRoom(id: $id) {
+    id
+    news {
+      id
+    }
+  }
+}

@@ -1,6 +1,7 @@
 import { HeaderBackButton } from '@react-navigation/elements';
 import React, { useCallback, useLayoutEffect, useMemo, useState } from 'react';
 import { DotsHorizontal } from 'src/components/DotsHorizontal';
+import { Indicator } from 'src/components/Indicator';
 import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
 import { TalkRoomUserImagesHeader } from 'src/components/TalkRoomUserImagseHeader';
 import {
@@ -8,7 +9,7 @@ import {
   useCreateUserThoughtTalkRoomMessageSeenMutation,
   useGetThoughtTalkRoomMembersQuery,
   useGetThoughtTalkRoomMessagesQuery,
-  useGetThoughtTalkRoomParentQuery,
+  useGetThoughtTalkRoomParentInThoughtTalkRoomScreenQuery,
   useGetThoughtTalkRoomsQuery,
 } from 'src/generated/graphql';
 import { useDeleteThoughtTalkRoomsItemFromCache } from 'src/hooks/thoughtTalkRoom';
@@ -26,7 +27,6 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       id,
     },
-    fetchPolicy: 'cache-only',
   });
 
   const { data: membersData } = useGetThoughtTalkRoomMembersQuery({
@@ -35,9 +35,7 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
     },
   });
 
-  const { data: talkRoomsData } = useGetThoughtTalkRoomsQuery({
-    fetchPolicy: 'cache-only',
-  });
+  const { data: talkRoomsData } = useGetThoughtTalkRoomsQuery();
 
   const memberImageUrls = useMemo(() => {
     return membersData?.thoughtTalkRoom.members.edges
@@ -81,11 +79,16 @@ export const ThoughtTalkRoomScreen = ({ navigation, route }: Props) => {
     });
   }, [navigation, renderHeaderTitle]);
 
-  const { data: thoughtData } = useGetThoughtTalkRoomParentQuery({
-    variables: {
-      id,
-    },
-  });
+  const { data: thoughtData } =
+    useGetThoughtTalkRoomParentInThoughtTalkRoomScreenQuery({
+      variables: {
+        id,
+      },
+    });
+
+  if (!messageData || !thoughtData) {
+    return <Indicator />;
+  }
 
   return (
     <>

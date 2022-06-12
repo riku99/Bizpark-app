@@ -153,7 +153,12 @@ export const useFcmHandler = () => {
         return;
       }
     },
-    [navigation]
+    [
+      navigation,
+      getNewsTalkRoomQuery,
+      getOneOnOneTalkRoomQuery,
+      getThoughtTalkRoomQuery,
+    ]
   );
 
   useEffect(() => {
@@ -164,11 +169,11 @@ export const useFcmHandler = () => {
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
-        if (remoteMessage) {
+        if (remoteMessage && remoteMessage.data) {
           onOpened(remoteMessage);
         }
       });
 
     return unsbscribe;
-  }, [onOpened]);
+  }, [onOpened, navigation]);
 };
