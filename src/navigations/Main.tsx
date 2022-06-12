@@ -161,6 +161,7 @@ export const MainStack = React.memo(() => {
         />
         <Stack.Screen name="Notifications" component={NotificationsScreen} />
         <Stack.Screen name="IAP" component={IAPScreen} />
+
         <Stack.Group
           screenOptions={{
             presentation: 'modal',
