@@ -1,18 +1,18 @@
-import React, { useLayoutEffect, useState, useCallback } from 'react';
-import { useColorModeValue, useTheme } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
-import { useUserQuery, UserGetError } from 'src/generated/graphql';
 import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { useToast } from 'react-native-toast-notifications';
-import { useUnblock, useBlock } from 'src/hooks/users';
-import { Menu } from './Menu';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useColorModeValue, useTheme } from 'native-base';
+import React, { useCallback, useLayoutEffect, useState } from 'react';
+import { Alert } from 'react-native';
+import { useToast } from 'react-native-toast-notifications';
+import { UserGetError, useUserQuery } from 'src/generated/graphql';
+import { useMyId } from 'src/hooks/me';
 import { useTopTabBarStyle } from 'src/hooks/theme';
+import { useBlock, useUnblock } from 'src/hooks/users';
+import { RootNavigationScreenProp } from 'src/types';
+import { getGraphQLError } from 'src/utils';
+import { Menu } from './Menu';
 import { UserProfile } from './Profile';
 import { Thoughts } from './Thoughts';
-import { useMyId } from 'src/hooks/me';
-import { Alert } from 'react-native';
-import { getGraphQLError } from 'src/utils';
 
 type Props = RootNavigationScreenProp<'UserProfile'>;
 

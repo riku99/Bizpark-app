@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
+import { Feather } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/native';
 import { Pressable } from 'native-base';
+import React, { useState } from 'react';
+import { Alert, StyleSheet } from 'react-native';
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
 } from 'react-native-gesture-handler';
 import Animated, {
-  useAnimatedGestureHandler,
-  useSharedValue,
-  useAnimatedStyle,
-  withTiming,
   runOnJS,
+  useAnimatedGestureHandler,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from 'react-native-reanimated';
 import { ListItem } from 'src/components/ListItem';
 import { UserImage } from 'src/components/UserImage';
-import { useNavigation } from '@react-navigation/native';
-import { RootNavigationProp } from 'src/types';
-import { StyleSheet, Alert } from 'react-native';
-import { Feather } from '@expo/vector-icons';
 import {
-  useDeleteThoughtTalkRoomMemberMutation,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,
+  useDeleteThoughtTalkRoomMemberMutation,
 } from 'src/generated/graphql';
+import { RootNavigationProp } from 'src/types';
 
 type Props = {
   talkRoomId: number;

@@ -1,10 +1,9 @@
-import React from 'react';
-import { HStack, Text, Pressable } from 'native-base';
-import { useUserCacheFragment } from 'src/hooks/users';
-import { UserImage } from 'src/components/UserImage';
-import { FollowButton } from 'src/components/FollowButton';
-import { RootNavigationProp } from 'src/types';
 import { useNavigation } from '@react-navigation/native';
+import { HStack, Pressable, Text } from 'native-base';
+import React from 'react';
+import { FollowButton } from 'src/components/FollowButton';
+import { UserImage } from 'src/components/UserImage';
+import { RootNavigationProp } from 'src/types';
 
 type Props = {
   id: string;

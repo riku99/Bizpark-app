@@ -1,36 +1,36 @@
-import React, { useLayoutEffect, useState, useEffect } from 'react';
+import { MaterialCommunityIcons } from '@expo/vector-icons';
+import { MotiView } from 'moti';
 import {
   Box,
-  Text,
-  ScrollView,
-  useColorModeValue,
   HStack,
   Pressable,
+  ScrollView,
+  Text,
+  useColorModeValue,
 } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
-import { Alert, StyleSheet, Dimensions } from 'react-native';
-import { MotiView } from 'moti';
-import { Image } from 'src/components/Image';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import React, { useEffect, useLayoutEffect, useState } from 'react';
+import { Alert, Dimensions, StyleSheet } from 'react-native';
 import ImageView from 'react-native-image-viewing';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useToast } from 'react-native-toast-notifications';
+import { Image } from 'src/components/Image';
+import { Indicator } from 'src/components/Indicator';
+import { Like } from 'src/components/Like';
 import { UserImage } from 'src/components/UserImage';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
-import { Menu } from './Menu';
 import {
-  useDeleteThoughtMutation,
   CustomErrorResponseCode,
+  useDeleteThoughtMutation,
   useGetThoughtQuery,
   useLikeThoughtMutation,
   useUnlikeThoughtMutation,
 } from 'src/generated/graphql';
-import { spinnerVisibleVar } from 'src/stores/spinner';
-import { useToast } from 'react-native-toast-notifications';
-import { JoinButton } from './JoinButton';
-import { Indicator } from 'src/components/Indicator';
-import { getGraphQLError } from 'src/utils';
 import { useMyId } from 'src/hooks/me';
 import { useTextColor } from 'src/hooks/theme';
-import { Like } from 'src/components/Like';
+import { spinnerVisibleVar } from 'src/stores/spinner';
+import { RootNavigationScreenProp } from 'src/types';
+import { getGraphQLError } from 'src/utils';
+import { JoinButton } from './JoinButton';
+import { Menu } from './Menu';
 
 type Props = {} & RootNavigationScreenProp<'Thought'>;
 
