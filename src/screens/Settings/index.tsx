@@ -1,6 +1,7 @@
 import { AntDesign, Entypo, Feather, MaterialIcons } from '@expo/vector-icons';
 import { ScrollView, useColorModeValue, useTheme } from 'native-base';
 import React, { useLayoutEffect } from 'react';
+import { Linking } from 'react-native';
 import { CloseButton } from 'src/components/BackButon';
 import { ListItem } from 'src/components/ListItem';
 import { RightIcon } from 'src/components/RightIcon';
@@ -46,6 +47,15 @@ export const SettingsScreen = ({ navigation }: Props) => {
       title: 'プッシュ通知',
       onPress: () => {
         navigation.navigate('PushNotificationSettings');
+      },
+    },
+    {
+      Icon: <Feather name="send" size={24} color={iconColor} />,
+      title: 'お問い合わせ',
+      onPress: async () => {
+        await Linking.openURL(
+          'https://docs.google.com/forms/d/e/1FAIpQLSe7lC7W6qR0TqE3x0Wp5WyumNOtjW3-B3l7iLV0Yuiu9wyXWA/viewform?usp=sf_link'
+        );
       },
     },
   ];
