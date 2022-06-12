@@ -1,7 +1,9 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { Box, Button } from 'native-base';
-import { CloseButton } from 'src/components/CloseButton';
+import React from 'react';
 import { StyleSheet } from 'react-native';
+import { useToast } from 'react-native-toast-notifications';
+import { CloseButton } from 'src/components/CloseButton';
 import {
   CustomErrorResponseCode,
   GetNewsTalkRoomsDocument,
@@ -10,10 +12,8 @@ import {
 } from 'src/generated/graphql';
 import { useFindNewsTalkRoomFromNewsId } from 'src/hooks/newsTalkRoom';
 import { spinnerVisibleVar } from 'src/stores/spinner';
-import { useNavigation } from '@react-navigation/native';
 import { RootNavigationProp } from 'src/types';
 import { getGraphQLError } from 'src/utils';
-import { useToast } from 'react-native-toast-notifications';
 
 type Props = {
   onCloseButtonPress: () => void;
@@ -92,7 +92,7 @@ export const JoinTalkButton = ({ onCloseButtonPress, newsId }: Props) => {
   return (
     <Box
       position="absolute"
-      w="90%"
+      w="96%"
       alignItems="center"
       alignSelf="center"
       bottom={4}
@@ -102,7 +102,13 @@ export const JoinTalkButton = ({ onCloseButtonPress, newsId }: Props) => {
         style={styles.closeButton}
         onPress={onCloseButtonPress}
       />
-      <Button w="100%" _text={{ fontSize: 16 }} onPress={onJoinPress}>
+      <Button
+        w="100%"
+        _text={{ fontSize: 18 }}
+        onPress={onJoinPress}
+        borderRadius="lg"
+        h="12"
+      >
         このニュースについてトークする
       </Button>
     </Box>
