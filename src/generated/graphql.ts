@@ -1721,6 +1721,13 @@ export type UserThoughtsQueryVariables = Exact<{
 
 export type UserThoughtsQuery = { __typename?: 'Query', userThoughts: { __typename?: 'ThoughtsConnection', edges: Array<{ __typename?: 'ThoughtEdge', cursor: string, node: { __typename?: 'Thought', id: string, title?: string | null | undefined, text: string, createdAt?: string | null | undefined, liked?: boolean | null | undefined, contributor?: { __typename?: 'User', id: string, name: string, bio?: string | null | undefined, imageUrl?: string | null | undefined, snsAccounts?: { __typename?: 'SnsAccounts', instagram?: string | null | undefined, twitter?: string | null | undefined, linkedin?: string | null | undefined, facebook?: string | null | undefined } | null | undefined } | null | undefined, images: Array<{ __typename?: 'ThoughtImage', id: string, url: string, width?: number | null | undefined, height?: number | null | undefined } | null | undefined> } }>, pageInfo: { __typename?: 'PageInfo', hasNextPage: boolean, hasPreviousPage: boolean, startCursor?: string | null | undefined, endCursor?: string | null | undefined } } };
 
+export type GetNewsTalkRoomInNewsTalkRoomScreenQueryVariables = Exact<{
+  id: Scalars['Int'];
+}>;
+
+
+export type GetNewsTalkRoomInNewsTalkRoomScreenQuery = { __typename?: 'Query', newsTalkRoom: { __typename?: 'NewsTalkRoom', id: number, news?: { __typename?: 'News', id: number } | null | undefined } };
+
 export const BlockedByUserPartsFragmentDoc = gql`
     fragment BlockedByUserParts on BlockedByUser {
   id
@@ -5014,3 +5021,41 @@ export function useUserThoughtsLazyQuery(baseOptions?: Apollo.LazyQueryHookOptio
 export type UserThoughtsQueryHookResult = ReturnType<typeof useUserThoughtsQuery>;
 export type UserThoughtsLazyQueryHookResult = ReturnType<typeof useUserThoughtsLazyQuery>;
 export type UserThoughtsQueryResult = Apollo.QueryResult<UserThoughtsQuery, UserThoughtsQueryVariables>;
+export const GetNewsTalkRoomInNewsTalkRoomScreenDocument = gql`
+    query GetNewsTalkRoomInNewsTalkRoomScreen($id: Int!) {
+  newsTalkRoom(id: $id) {
+    id
+    news {
+      id
+    }
+  }
+}
+    `;
+
+/**
+ * __useGetNewsTalkRoomInNewsTalkRoomScreenQuery__
+ *
+ * To run a query within a React component, call `useGetNewsTalkRoomInNewsTalkRoomScreenQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetNewsTalkRoomInNewsTalkRoomScreenQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetNewsTalkRoomInNewsTalkRoomScreenQuery({
+ *   variables: {
+ *      id: // value for 'id'
+ *   },
+ * });
+ */
+export function useGetNewsTalkRoomInNewsTalkRoomScreenQuery(baseOptions: Apollo.QueryHookOptions<GetNewsTalkRoomInNewsTalkRoomScreenQuery, GetNewsTalkRoomInNewsTalkRoomScreenQueryVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useQuery<GetNewsTalkRoomInNewsTalkRoomScreenQuery, GetNewsTalkRoomInNewsTalkRoomScreenQueryVariables>(GetNewsTalkRoomInNewsTalkRoomScreenDocument, options);
+      }
+export function useGetNewsTalkRoomInNewsTalkRoomScreenLazyQuery(baseOptions?: Apollo.LazyQueryHookOptions<GetNewsTalkRoomInNewsTalkRoomScreenQuery, GetNewsTalkRoomInNewsTalkRoomScreenQueryVariables>) {
+          const options = {...defaultOptions, ...baseOptions}
+          return Apollo.useLazyQuery<GetNewsTalkRoomInNewsTalkRoomScreenQuery, GetNewsTalkRoomInNewsTalkRoomScreenQueryVariables>(GetNewsTalkRoomInNewsTalkRoomScreenDocument, options);
+        }
+export type GetNewsTalkRoomInNewsTalkRoomScreenQueryHookResult = ReturnType<typeof useGetNewsTalkRoomInNewsTalkRoomScreenQuery>;
+export type GetNewsTalkRoomInNewsTalkRoomScreenLazyQueryHookResult = ReturnType<typeof useGetNewsTalkRoomInNewsTalkRoomScreenLazyQuery>;
+export type GetNewsTalkRoomInNewsTalkRoomScreenQueryResult = Apollo.QueryResult<GetNewsTalkRoomInNewsTalkRoomScreenQuery, GetNewsTalkRoomInNewsTalkRoomScreenQueryVariables>;

@@ -1,4 +1,3 @@
-import { gql, useApolloClient } from '@apollo/client';
 import { HeaderBackButton } from '@react-navigation/elements';
 import React, {
   useCallback,
@@ -8,12 +7,13 @@ import React, {
   useState,
 } from 'react';
 import { DotsHorizontal } from 'src/components/DotsHorizontal';
+import { Indicator } from 'src/components/Indicator';
 import { TalkRoomMessage } from 'src/components/TalkRoomMessage';
 import { TalkRoomUserImagesHeader } from 'src/components/TalkRoomUserImagseHeader';
 import {
-  NewsTalkRoom,
   useCreateNewsTalkRoomMessageMutation,
   useCreateUserNewsTalkRoomMessageSeenMutation,
+  useGetNewsTalkRoomInNewsTalkRoomScreenQuery,
   useGetNewsTalkRoomMembersQuery,
   useGetNewsTalkRoomMessagesQuery,
   useGetNewsTalkRoomsQuery,
@@ -33,7 +33,6 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     variables: {
       talkRoomId: id,
     },
-    fetchPolicy: 'cache-only',
   });
 
   const { data: membersData } = useGetNewsTalkRoomMembersQuery({
@@ -44,19 +43,12 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
 
   const { data: talkRoomsData } = useGetNewsTalkRoomsQuery();
 
-  const { cache } = useApolloClient();
-
-  const newsData = cache.readFragment<NewsTalkRoom>({
-    id: `NewsTalkRoom:${id}`,
-    fragment: gql`
-      fragment NewsTalkRoomWithNewsId on NewsTalkRoom {
-        id
-        news {
-          id
-        }
-      }
-    `,
-  });
+  const { data: newsTalkRoomData } =
+    useGetNewsTalkRoomInNewsTalkRoomScreenQuery({
+      variables: {
+        id,
+      },
+    });
 
   const memberImageUrls = useMemo(() => {
     return membersData?.newsTalkRoom.members.edges
@@ -128,6 +120,10 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
     }
   }, [membersData, messageData, setPopUpVisible]);
 
+  if (!messageData || !talkRoomsData || !newsTalkRoomData) {
+    return <Indicator />;
+  }
+
   return (
     <>
       <TalkRoomMessage
@@ -144,7 +140,7 @@ export const NewsTalkRoomScreen = ({ navigation, route }: Props) => {
       <Menu
         isVisible={menuVisible}
         closeMenu={closeMenu}
-        newsId={newsData.news.id}
+        newsId={newsTalkRoomData?.newsTalkRoom.news.id}
       />
 
       <FirstMemberPopUp

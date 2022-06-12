@@ -12,7 +12,6 @@ import {
   useGetOneOnOneTalkRoomLazyQuery,
   useGetThoughtTalkRoomLazyQuery,
 } from 'src/generated/graphql';
-import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 import { PushNotificationData, RootNavigationProp } from 'src/types';
 
 const DEVICE_TOKEN_STORAGE_KEY = 'DEVICE_TOKEN';
@@ -170,75 +169,11 @@ export const useFcmHandler = () => {
     messaging()
       .getInitialNotification()
       .then((remoteMessage) => {
-        if (remoteMessage) {
-          storage.set(
-            mmkvStorageKeys.pushNotificationWhenKilled,
-            JSON.stringify(remoteMessage)
-          );
+        if (remoteMessage && remoteMessage.data) {
+          onOpened(remoteMessage);
         }
       });
 
     return unsbscribe;
-  }, [onOpened]);
-};
-
-export const useCheckFcmWhenKilled = () => {
-  const navigation = useNavigation<RootNavigationProp<any>>();
-
-  useEffect(() => {
-    const remoteMessageStr = storage.getString(
-      mmkvStorageKeys.pushNotificationWhenKilled
-    );
-
-    if (remoteMessageStr) {
-      storage.delete(mmkvStorageKeys.pushNotificationWhenKilled);
-
-      const remoteMessage = JSON.parse(
-        remoteMessageStr
-      ) as FirebaseMessagingTypes.RemoteMessage;
-
-      const data = remoteMessage.data as PushNotificationData;
-
-      if (data) {
-        if (
-          data.type === PushNotificationMessageDataType.OneOnOneTalkRoomMessage
-        ) {
-          const talkRoomId = Number(data.roomId);
-
-          navigation.navigate('OneOnOneTalkRoom', {
-            screen: 'OneOnOneTalkRoomMain',
-            params: {
-              id: talkRoomId,
-            },
-          });
-        } else if (
-          data.type === PushNotificationMessageDataType.NewsTalkRoomMessage
-        ) {
-          const talkRoomId = Number(data.roomId);
-
-          navigation.navigate('NewsTalkRoom', {
-            screen: 'NewsTalkRoomMain',
-            params: {
-              id: talkRoomId,
-            },
-          });
-        } else if (
-          data.type === PushNotificationMessageDataType.ThoughtTalkRoomMessage
-        ) {
-          const talkRoomId = Number(data.roomId);
-
-          navigation.navigate('ThoughtTalkRoom', {
-            screen: 'ThoughtTalkRoomMain',
-            params: {
-              id: talkRoomId,
-            },
-          });
-        } else if (data.type === PushNotificationFollowDataType.Follow) {
-          navigation.navigate('UserProfile', {
-            id: data.userId,
-          });
-        }
-      }
-    }
-  }, [navigation]);
+  }, [onOpened, navigation]);
 };
