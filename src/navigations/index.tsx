@@ -1,8 +1,7 @@
-import dynamicLinks from '@react-native-firebase/dynamic-links';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { StatusBar } from 'expo-status-bar';
 import { useColorModeValue } from 'native-base';
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useLoggedIn } from 'src/hooks/me';
 import { TermsOfUseScreen } from 'src/screens/TermsOfUse';
 import { AuthStack } from './Auth';
@@ -20,19 +19,6 @@ export const RootNavigation = React.memo(() => {
   const { loggedIn } = useLoggedIn();
 
   const statusBarColor = useColorModeValue('dark', 'light');
-
-  useEffect(() => {
-    const unsbscribe = dynamicLinks().onLink((link) => {
-      console.log(link);
-
-      if (link.url === 'https://bizpark.me/email-verified') {
-        console.log('Hey, DL is correctly setup!');
-        // メールアドレス認証完了後の処理
-      }
-    });
-
-    return () => unsbscribe();
-  }, []);
 
   return (
     <>
