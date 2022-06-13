@@ -37,12 +37,12 @@ export const SignupScreen = ({ navigation }: Props) => {
   return (
     <Bg flex={1} bg="white" px="4">
       <SafeAreaView>
-        <Box h={HIGHER_8_DEVICE ? 310 : 280} alignItems="center" mt="10">
+        <Box h={HIGHER_8_DEVICE ? 310 : 270} alignItems="center" mt="10">
           <SwipeContent />
         </Box>
 
         <Text
-          color="textBlack"
+          color="darkGray"
           fontSize="12"
           alignSelf="center"
           mt="2"
@@ -55,7 +55,7 @@ export const SignupScreen = ({ navigation }: Props) => {
             justifyContent="center"
             textDecorationLine="underline"
             onPress={() => {
-              console.log('利用規約');
+              navigation.navigate('TermsOfUse');
             }}
           >
             利用規約
