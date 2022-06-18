@@ -1,14 +1,17 @@
-import { NativeBaseProvider, extendTheme } from 'native-base';
-import React from 'react';
 import { LinearGradient } from 'expo-linear-gradient';
+import { extendTheme, NativeBaseProvider } from 'native-base';
+import React from 'react';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 
 type Props = {
   children: JSX.Element;
 };
 
+const colorMode = storage.getString(mmkvStorageKeys.displayColorMode);
+
 const themeConfig = {
   useSystemColorMode: false,
-  initialColorMode: 'dark',
+  initialColorMode: !colorMode || colorMode === 'dark' ? 'dark' : 'light',
 };
 
 export const colors = {
