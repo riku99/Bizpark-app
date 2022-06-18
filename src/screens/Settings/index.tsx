@@ -93,6 +93,13 @@ export const SettingsScreen = ({ navigation }: Props) => {
         setSpinnerVisible(false);
       },
     },
+    {
+      Icon: <AntDesign name="infocirlceo" size={24} color={iconColor} />,
+      title: '利用規約',
+      onPress: async () => {
+        navigation.navigate('TermsOfUse');
+      },
+    },
   ];
 
   return (
