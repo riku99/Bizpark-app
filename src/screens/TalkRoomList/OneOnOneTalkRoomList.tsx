@@ -1,31 +1,24 @@
-import React, { useCallback, useState } from 'react';
-import {
-  Box,
-  FlatList,
-  useColorModeValue,
-  useTheme,
-  Pressable,
-  Text,
-} from 'native-base';
-import {
-  useGetOneOnOneTalkRoomsQuery,
-  GetOneOnOneTalkRoomsQuery,
-  useDeleteOneOnOneTalkRoomMutation,
-} from 'src/generated/graphql';
-import { ListItem } from 'react-native-elements';
-import { UserImage } from 'src/components/UserImage';
-import { Badge } from 'src/components/Badge';
 import { useNavigation } from '@react-navigation/native';
-import { RootNavigationProp } from 'src/types';
-import { StyleSheet, Alert } from 'react-native';
-import { useDeleteOneOnOneTalkRoomFromCache } from 'src/hooks/oneOnOneTalkRoom';
 import * as Haptics from 'expo-haptics';
+import { Box, Pressable, Text, useColorModeValue, useTheme } from 'native-base';
+import React, { useCallback, useState } from 'react';
+import { Alert, FlatList, StyleSheet } from 'react-native';
+import { ListItem } from 'react-native-elements';
+import { useToast } from 'react-native-toast-notifications';
+import { Badge } from 'src/components/Badge';
 import {
   InstaLikeModal,
   ListItem as MenuListItem,
 } from 'src/components/InstaLikeModal';
-import { useToast } from 'react-native-toast-notifications';
+import { UserImage } from 'src/components/UserImage';
+import {
+  GetOneOnOneTalkRoomsQuery,
+  useDeleteOneOnOneTalkRoomMutation,
+  useGetOneOnOneTalkRoomsQuery,
+} from 'src/generated/graphql';
 import { useMyId } from 'src/hooks/me';
+import { useDeleteOneOnOneTalkRoomFromCache } from 'src/hooks/oneOnOneTalkRoom';
+import { RootNavigationProp } from 'src/types';
 
 type Item = GetOneOnOneTalkRoomsQuery['oneOnOneTalkRooms'][number];
 
@@ -172,7 +165,7 @@ export const OneOnOneTalkRoomList = React.memo(() => {
       <FlatList
         data={talkRoomData.oneOnOneTalkRooms}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
       />
 
       <InstaLikeModal

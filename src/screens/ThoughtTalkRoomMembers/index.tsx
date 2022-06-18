@@ -1,17 +1,16 @@
-import React, { useLayoutEffect, useCallback } from 'react';
-import { RootNavigationScreenProp } from 'src/types';
-import {
-  useGetThoughtTalkRoomMembersQuery,
-  ThoughtTalkRoomMemberEdge,
-  useGetThoughtTalkRoomParentQuery,
-} from 'src/generated/graphql';
+import React, { useCallback, useLayoutEffect } from 'react';
+import { SafeAreaView, StyleSheet } from 'react-native';
+import { btoa } from 'react-native-quick-base64';
 import { Indicator } from 'src/components/Indicator';
 import { InfiniteFlatList } from 'src/components/InfiniteFlatList';
-import { btoa } from 'react-native-quick-base64';
-import { SafeAreaView } from 'react-native';
-import { MemberListItem } from './MemberListItem';
+import {
+  ThoughtTalkRoomMemberEdge,
+  useGetThoughtTalkRoomMembersQuery,
+  useGetThoughtTalkRoomParentQuery,
+} from 'src/generated/graphql';
 import { useMyId } from 'src/hooks/me';
-import { StyleSheet } from 'react-native';
+import { RootNavigationScreenProp } from 'src/types';
+import { MemberListItem } from './MemberListItem';
 
 type Props = RootNavigationScreenProp<'ThoughtTalkRoomMembers'>;
 

@@ -1,20 +1,13 @@
-import React, { useLayoutEffect, useCallback } from 'react';
 import { Box, Button } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
-import {
-  useBlockingUsersQuery,
-  User,
-  useUnBlockMutation,
-  BlockingUsersDocument,
-  BlockingUsersQueryResult,
-} from 'src/generated/graphql';
-import { Indicator } from 'src/components/Indicator';
-import { FlatList, StyleSheet } from 'react-native';
-import { UserImage } from 'src/components/UserImage';
-import { ListItem } from 'src/components/ListItem';
-import { Alert } from 'react-native';
+import React, { useCallback, useLayoutEffect } from 'react';
+import { Alert, FlatList, StyleSheet } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
+import { Indicator } from 'src/components/Indicator';
+import { ListItem } from 'src/components/ListItem';
+import { UserImage } from 'src/components/UserImage';
+import { useBlockingUsersQuery, User } from 'src/generated/graphql';
 import { useUnblock } from 'src/hooks/users';
+import { RootNavigationScreenProp } from 'src/types';
 
 type Props = RootNavigationScreenProp<'BlockingUsers'>;
 

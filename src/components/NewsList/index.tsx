@@ -1,16 +1,10 @@
-import React, { useCallback, useState } from 'react';
-import { RefreshControl } from 'react-native';
-import {
-  Box,
-  FlatList,
-  Divider,
-  useTheme,
-  useColorModeValue,
-} from 'native-base';
-import { NewsQuery, NewsEdge } from 'src/generated/graphql';
-import { NewsCard } from 'src/components/NewsCard';
-import { Indicator } from 'src/components/Indicator';
 import { useNavigation } from '@react-navigation/native';
+import { Box, Divider, useColorModeValue, useTheme } from 'native-base';
+import React, { useCallback, useState } from 'react';
+import { FlatList, RefreshControl } from 'react-native';
+import { Indicator } from 'src/components/Indicator';
+import { NewsCard } from 'src/components/NewsCard';
+import { NewsEdge, NewsQuery } from 'src/generated/graphql';
 import { RootNavigationProp } from 'src/types';
 
 type Props = {
@@ -92,8 +86,7 @@ export const List = React.memo(({ data, refresh, infiniteLoad }: Props) => {
       data={data}
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
-      keyExtractor={(i) => i.node.id}
-      contentContainerStyle={{}}
+      keyExtractor={(i) => i.node.id.toString()}
       refreshControl={
         <RefreshControl
           refreshing={refreshing}

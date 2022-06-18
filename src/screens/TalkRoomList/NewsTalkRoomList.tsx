@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import * as Haptics from 'expo-haptics';
-import { Box, FlatList } from 'native-base';
+import { Box } from 'native-base';
 import React, { useCallback, useState } from 'react';
-import { Alert } from 'react-native';
+import { Alert, FlatList } from 'react-native';
 import { useToast } from 'react-native-toast-notifications';
 import { InstaLikeModal, ListItem } from 'src/components/InstaLikeModal';
 import { TalkRoomListItem } from 'src/components/TalkRoomListItem';
@@ -130,7 +130,7 @@ export const NewsTalkRoomList = React.memo(() => {
       <FlatList
         data={talkRoomData.newsTalkRooms}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
       />
 
       <InstaLikeModal
