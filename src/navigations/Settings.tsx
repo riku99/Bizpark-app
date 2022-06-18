@@ -3,8 +3,10 @@ import React from 'react';
 import { useNavigationHeaderStyle } from 'src/hooks/theme';
 import { AccountSettingsScreen } from 'src/screens/AccountSettings';
 import { BlockingUsersScreen } from 'src/screens/BlockingUsers';
+import { DisplaySettings } from 'src/screens/DisplaySettings';
 import { EmailChangeScreen } from 'src/screens/EmailChange';
 import { EmailChangeVerificationScreen } from 'src/screens/EmailChangeVerification';
+import { IAPScreen } from 'src/screens/IAP';
 import { MessageSettingsScreen } from 'src/screens/MessageSettings';
 import { PushNotificationSettingsScreen } from 'src/screens/PushNotificationSettings';
 import { SettingsScreen } from 'src/screens/Settings';
@@ -25,6 +27,8 @@ export type SettingsParamList = {
   MessageSettings: undefined;
   PushNotificationSettings: undefined;
   TermsOfUse: undefined;
+  IAP: undefined;
+  DisplaySettings: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsParamList>();
@@ -56,6 +60,8 @@ export const Settings = React.memo(() => {
         component={PushNotificationSettingsScreen}
       />
       <Stack.Screen name="TermsOfUse" component={TermsOfUseScreen} />
+      <Stack.Screen name="IAP" component={IAPScreen} />
+      <Stack.Screen name="DisplaySettings" component={DisplaySettings} />
     </Stack.Navigator>
   );
 });

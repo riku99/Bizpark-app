@@ -2,7 +2,7 @@ import { useApolloClient } from '@apollo/client';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import * as InAppPurchases from 'expo-in-app-purchases';
-import { Box, ScrollView, Text, useColorModeValue, VStack } from 'native-base';
+import { Box, ScrollView, Text, VStack } from 'native-base';
 import React, { useLayoutEffect, useState } from 'react';
 import { Alert, Platform, StyleSheet } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -16,7 +16,7 @@ import {
 } from 'src/generated/graphql';
 import { getLoginProvider } from 'src/helpers/getLoginProvider';
 import { sendPasswordResetEmail } from 'src/helpers/sendPasswordResetEmail';
-import { useLoggedIn } from 'src/hooks/me';
+import { useIsPlusPlan, useLoggedIn } from 'src/hooks/me';
 import { storage } from 'src/storage/mmkv';
 import { RootNavigationScreenProp } from 'src/types';
 
@@ -27,6 +27,7 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
   const [deleteAccountMutation] = useDeleteAccountMutation();
   const [verifyReceiptMutation] = useVerifyIapReceiptMutation();
   const client = useApolloClient();
+  const isPlusPlan = useIsPlusPlan();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -39,6 +40,12 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
 
   const list = [
     {
+      title: 'プランをアップグレード',
+      onPress: () => {
+        navigation.navigate('IAP');
+      },
+    },
+    {
       title: '購入内容の復元',
       onPress: async () => {
         setSpinnerVisible(true);
@@ -49,7 +56,6 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
           return;
         }
         const latestResult = results[0];
-        console.log(latestResult);
         await verifyReceiptMutation({
           variables: {
             input: {
@@ -129,8 +135,6 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
     },
   ];
 
-  const textGray = useColorModeValue('lt.textGray', 'dt.textGray');
-
   const user = auth().currentUser;
   const email = user ? user.email : '';
   const provider = getLoginProvider() ?? '不明';
@@ -149,12 +153,7 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
 
   return (
     <ScrollView flex={1}>
-      {/* 基本情報 */}
       <Box mt="1">
-        <Text fontWeight="bold" color={textGray} fontSize="13" pl="4">
-          基本情報
-        </Text>
-
         <VStack mt="2">
           <ListItem
             title={
@@ -177,6 +176,13 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
             title="ログイン方法"
             titleStyle={styles.basicStatusItemTitle}
             ItemRight={<Text>{provider}</Text>}
+            disablePress
+          />
+          <ListItem
+            title="現在のプラン"
+            ItemRight={
+              <Text>{isPlusPlan ? 'プラスプラン' : '通常プラン'}</Text>
+            }
             disablePress
           />
         </VStack>

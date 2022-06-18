@@ -8,4 +8,5 @@ export const mmkvStorageKeys = {
   loginProvider: 'login.provider',
   displayedActiveTalkRoomPopUp: 'popup.activeTalkRoom',
   pushNotificationWhenKilled: 'pushNotificationWhenKilled',
+  displayColorMode: 'displayColorMode',
 };

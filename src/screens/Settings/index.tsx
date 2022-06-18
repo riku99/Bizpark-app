@@ -62,6 +62,13 @@ export const SettingsScreen = ({ navigation }: Props) => {
       },
     },
     {
+      Icon: <AntDesign name="mobile1" size={24} color={iconColor} />,
+      title: '表示スタイル',
+      onPress: () => {
+        navigation.navigate('DisplaySettings');
+      },
+    },
+    {
       Icon: <Feather name="send" size={24} color={iconColor} />,
       title: 'お問い合わせ',
       onPress: async () => {

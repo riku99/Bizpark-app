@@ -1,6 +1,5 @@
 import { useReactiveVar } from '@apollo/client';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { Button, useColorMode } from 'native-base';
 import React, { useLayoutEffect } from 'react';
 import { AddButton } from 'src/components/AddButton';
 import { CreatingToast } from 'src/components/CreatingToast';
@@ -30,14 +29,9 @@ export const HomeScreen = React.memo(({ navigation }: Props) => {
       // headerLeft: () => <Text>Logo</Text>,
     });
   }, [navigation]);
-  const { toggleColorMode } = useColorMode();
 
   const { defaultScreenStyle, style, sceneContainerStyle } =
     useTopTabBarStyle();
-
-  const onSubButtonPress = async () => {
-    toggleColorMode();
-  };
 
   const creatingThought = useReactiveVar(creatingThoughtVar);
   const { tabOrder } = useTabOrder();
@@ -120,15 +114,6 @@ export const HomeScreen = React.memo(({ navigation }: Props) => {
           }
         })}
       </TopTab.Navigator>
-      <Button
-        position="absolute"
-        w={50}
-        h={30}
-        bottom={30}
-        onPress={onSubButtonPress}
-      >
-        toggle
-      </Button>
 
       <AddButton />
 
