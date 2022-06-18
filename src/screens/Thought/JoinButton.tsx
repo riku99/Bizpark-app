@@ -1,16 +1,18 @@
-import React from 'react';
+import { useNavigation } from '@react-navigation/native';
 import { Button } from 'native-base';
+import React from 'react';
+import { Alert } from 'react-native';
+import { useToast } from 'react-native-toast-notifications';
 import {
-  useJoinThoughtTalkMutation,
   GetThoughtTalkRoomsDocument,
   GetThoughtTalkRoomsQuery,
+  ThouhgtTalkRoomJoinError,
+  useJoinThoughtTalkMutation,
 } from 'src/generated/graphql';
-import { useNavigation } from '@react-navigation/native';
-import { RootNavigationProp } from 'src/types';
 import { useFindThoughtTalkRoomsByThoughtId } from 'src/hooks/thoughtTalkRoom';
 import { spinnerVisibleVar } from 'src/stores/spinner';
+import { RootNavigationProp } from 'src/types';
 import { getGraphQLError } from 'src/utils';
-import { useToast } from 'react-native-toast-notifications';
 
 type Props = { thoughtId: string; contributorId: string };
 
@@ -60,10 +62,29 @@ export const JoinButton = ({ thoughtId, contributorId }: Props) => {
         if (data) {
           roomId = data.joinThoughtTalk.id;
         }
-      } catch (e) {
-        const result = getGraphQLError(e, 0);
-        if (result) {
-          toast.show(result.message, { type: 'danger' });
+      } catch (errors) {
+        const error = getGraphQLError(errors, 0);
+        if (error) {
+          if (error.code === ThouhgtTalkRoomJoinError.Blokced) {
+            Alert.alert('現在このトークに参加することができません');
+            return;
+          }
+
+          if (error.code === ThouhgtTalkRoomJoinError.UpperLimit) {
+            Alert.alert(
+              '参加できるトーク数が上限に達しています',
+              '無料プランのユーザーが参加できるトーク数は月に6つまでです。プランをアップグレードすることで無制限に参加できるようになります！',
+              [
+                {
+                  text: 'OK',
+                  onPress: () => {
+                    navigation.navigate('IAP');
+                  },
+                },
+              ]
+            );
+            return;
+          }
         }
       } finally {
         spinnerVisibleVar(false);
