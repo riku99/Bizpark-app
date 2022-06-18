@@ -581,6 +581,11 @@ export type NewsTalkRoomMessagesArgs = {
   first?: InputMaybe<Scalars['Int']>;
 };
 
+export enum NewsTalkRoomJoinError {
+  UpperLimit = 'UPPER_LIMIT',
+  UserRemoved = 'USER_REMOVED'
+}
+
 export type NewsTalkRoomMember = TalkRoomMember & {
   __typename?: 'NewsTalkRoomMember';
   createdAt?: Maybe<Scalars['String']>;
@@ -1040,6 +1045,11 @@ export type ThoughtsConnection = {
   edges: Array<ThoughtEdge>;
   pageInfo: PageInfo;
 };
+
+export enum ThouhgtTalkRoomJoinError {
+  Blokced = 'BLOKCED',
+  UpperLimit = 'UPPER_LIMIT'
+}
 
 export enum UnFollowError {
   NotFound = 'NOT_FOUND'

@@ -8,6 +8,7 @@ import { EmailChangeVerificationScreen } from 'src/screens/EmailChangeVerificati
 import { MessageSettingsScreen } from 'src/screens/MessageSettings';
 import { PushNotificationSettingsScreen } from 'src/screens/PushNotificationSettings';
 import { SettingsScreen } from 'src/screens/Settings';
+import { TermsOfUseScreen } from 'src/screens/TermsOfUse';
 import { UserSettingsScreen } from 'src/screens/UserSettings';
 
 export type SettingsParamList = {
@@ -23,6 +24,7 @@ export type SettingsParamList = {
   };
   MessageSettings: undefined;
   PushNotificationSettings: undefined;
+  TermsOfUse: undefined;
 };
 
 const Stack = createNativeStackNavigator<SettingsParamList>();
@@ -53,6 +55,7 @@ export const Settings = React.memo(() => {
         name="PushNotificationSettings"
         component={PushNotificationSettingsScreen}
       />
+      <Stack.Screen name="TermsOfUse" component={TermsOfUseScreen} />
     </Stack.Navigator>
   );
 });

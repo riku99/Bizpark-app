@@ -48,7 +48,7 @@ export const SignupScreen = ({ navigation }: Props) => {
           mt="2"
           textAlign="center"
         >
-          アカウント登録・ログインで
+          登録・ログインで
           <Text
             color="textBlack"
             fontSize="12"
