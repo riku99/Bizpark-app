@@ -1,4 +1,3 @@
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import messaging, {
   FirebaseMessagingTypes,
 } from '@react-native-firebase/messaging';
@@ -12,9 +11,8 @@ import {
   useGetOneOnOneTalkRoomLazyQuery,
   useGetThoughtTalkRoomLazyQuery,
 } from 'src/generated/graphql';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 import { PushNotificationData, RootNavigationProp } from 'src/types';
-
-const DEVICE_TOKEN_STORAGE_KEY = 'DEVICE_TOKEN';
 
 export const useDeviceToken = () => {
   const [addDeviceTokenMutation] = useAddDeviceTokenMutation();
@@ -23,9 +21,7 @@ export const useDeviceToken = () => {
     (async function () {
       const token = await messaging().getToken();
 
-      const storageDeviceToken = await AsyncStorage.getItem(
-        DEVICE_TOKEN_STORAGE_KEY
-      );
+      const storageDeviceToken = storage.getString(mmkvStorageKeys.deviceToken);
 
       if (!storageDeviceToken || token !== storageDeviceToken) {
         try {
@@ -38,7 +34,7 @@ export const useDeviceToken = () => {
             },
           });
 
-          await AsyncStorage.setItem(DEVICE_TOKEN_STORAGE_KEY, token);
+          storage.set(mmkvStorageKeys.deviceToken, token);
         } catch (e) {
           console.log(e);
         }
@@ -47,8 +43,8 @@ export const useDeviceToken = () => {
 
     return messaging().onTokenRefresh((token) => {
       (async function () {
-        const storageDeviceToken = await AsyncStorage.getItem(
-          DEVICE_TOKEN_STORAGE_KEY
+        const storageDeviceToken = storage.getString(
+          mmkvStorageKeys.deviceToken
         );
 
         await addDeviceTokenMutation({
@@ -60,7 +56,7 @@ export const useDeviceToken = () => {
           },
         });
 
-        await AsyncStorage.setItem(DEVICE_TOKEN_STORAGE_KEY, token);
+        storage.set(mmkvStorageKeys.deviceToken, token);
       })();
     });
   }, [addDeviceTokenMutation]);

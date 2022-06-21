@@ -9,4 +9,6 @@ export const mmkvStorageKeys = {
   displayedActiveTalkRoomPopUp: 'popup.activeTalkRoom',
   pushNotificationWhenKilled: 'pushNotificationWhenKilled',
   displayColorMode: 'displayColorMode',
+  loggedIn: 'loggedIn',
+  deviceToken: 'deviceToken',
 };

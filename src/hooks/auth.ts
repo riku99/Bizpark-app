@@ -1,5 +1,4 @@
 import { useApolloClient } from '@apollo/client';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import { GoogleSignin } from '@react-native-google-signin/google-signin';
 import { useCallback } from 'react';
@@ -11,7 +10,7 @@ import {
   useCreateUserMutation,
   useInitialDataLazyQuery,
   useMeLazyQuery,
-  useSignOutMutation,
+  useSignOutMutation
 } from 'src/generated/graphql';
 import { appleSignIn, googleSignIn } from 'src/helpers/auth';
 import { useLoggedIn } from 'src/hooks/me';
@@ -261,7 +260,6 @@ export const useSignOut = () => {
       await Promise.all([
         auth().signOut(),
         client.clearStore(),
-        AsyncStorage.clear(),
       ]);
 
       storage.clearAll();

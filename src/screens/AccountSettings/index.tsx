@@ -1,5 +1,4 @@
 import { useApolloClient } from '@apollo/client';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import auth from '@react-native-firebase/auth';
 import * as InAppPurchases from 'expo-in-app-purchases';
 import { Box, ScrollView, Text, VStack } from 'native-base';
@@ -119,7 +118,6 @@ export const AccountSettingsScreen = ({ navigation }: Props) => {
                   await deleteAccountMutation();
                   await auth().signOut();
                   await client.clearStore();
-                  await AsyncStorage.clear();
                   storage.clearAll();
                   setLoggedIn(false);
                 } catch (e) {

@@ -1,5 +1,4 @@
 import { useReactiveVar } from '@apollo/client';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useCallback, useEffect } from 'react';
 import {
   Plan,
@@ -9,7 +8,8 @@ import {
   useGetMyPlanQuery,
   useGetReceiveOneOnOneTalkRoomMessageQuery,
 } from 'src/generated/graphql';
-import { loggedInVar, STORAGE_KEY } from 'src/stores/loggedIn';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
+import { loggedInVar } from 'src/stores/loggedIn';
 
 export const useLoggedIn = () => {
   const loggedIn = useReactiveVar(loggedInVar.loggedIn);
@@ -18,10 +18,10 @@ export const useLoggedIn = () => {
   useEffect(() => {
     (async () => {
       if (!checkedStorage) {
-        const l = await AsyncStorage.getItem(STORAGE_KEY);
+        const l = storage.getBoolean(mmkvStorageKeys.loggedIn);
 
         if (l) {
-          loggedInVar.loggedIn(JSON.parse(l));
+          loggedInVar.loggedIn(l);
         }
 
         loggedInVar.checkedStorage(true);
@@ -31,7 +31,8 @@ export const useLoggedIn = () => {
 
   const setLoggedIn = useCallback(async (v: boolean) => {
     loggedInVar.loggedIn(v);
-    await AsyncStorage.setItem(STORAGE_KEY, JSON.stringify(v));
+
+    storage.set(mmkvStorageKeys.loggedIn, v);
   }, []);
 
   return {
