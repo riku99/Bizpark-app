@@ -1,6 +1,9 @@
 import { useReactiveVar } from '@apollo/client';
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import { useColorMode } from 'native-base';
 import React, { useLayoutEffect } from 'react';
+import LogoBlack from 'src/assets/svg/Logo-black.svg';
+import Logo from 'src/assets/svg/Logo.svg';
 import { AddButton } from 'src/components/AddButton';
 import { CreatingToast } from 'src/components/CreatingToast';
 import { useFcmHandler } from 'src/hooks/pushNotificatoins';
@@ -21,14 +24,21 @@ type Props = RootNavigationScreenProp<'Tab'>;
 const TopTab = createMaterialTopTabNavigator<TopTabParamList>();
 
 export const HomeScreen = React.memo(({ navigation }: Props) => {
+  const { colorMode } = useColorMode();
+
   useLayoutEffect(() => {
     navigation.setOptions({
       headerShadowVisible: false,
       headerTitle: '',
       headerRight: () => <HeaderRight />,
-      // headerLeft: () => <Text>Logo</Text>,
+      headerLeft: () =>
+        colorMode === 'dark' ? (
+          <Logo width={80} height={40} />
+        ) : (
+          <LogoBlack width={80} height={40} />
+        ),
     });
-  }, [navigation]);
+  }, [navigation, colorMode]);
 
   const { defaultScreenStyle, style, sceneContainerStyle } =
     useTopTabBarStyle();
