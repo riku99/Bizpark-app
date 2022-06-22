@@ -45,7 +45,6 @@
     "expo-haptics": "~11.0.3",
     "expo-in-app-purchases": "^12.1.1",
     "expo-linear-gradient": "~10.0.3",
-    "expo-splash-screen": "~0.14.1",
     "expo-status-bar": "~1.1.0",
     "graphql": "^16.2.0",
     "lottie-ios": "3.2.3",
@@ -108,5 +107,14 @@
     "react-native-svg-transformer": "^0.14.3",
     "typescript": "~4.3.5"
   },
-  "private": true
+  "private": true,
+  "expo": {
+    "autolinking": {
+      "ios": {
+        "exclude": [
+          "expo-splash-screen"
+        ]
+      }
+    }
+  }
 }
