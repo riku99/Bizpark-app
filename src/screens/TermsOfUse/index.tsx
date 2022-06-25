@@ -13,6 +13,12 @@ export const TermsOfUseScreen = ({ navigation }: Props) => {
       headerTitle: '利用規約',
       headerTintColor: 'black',
       headerBackTitleVisible: false,
+      headerStyle: {
+        backgroundColor: 'white',
+      },
+      headerTitleStyle: {
+        color: 'black',
+      },
     });
   }, [navigation]);
 

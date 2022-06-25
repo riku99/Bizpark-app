@@ -19,6 +19,12 @@ export const PrivacyPolicyScreen = ({ navigation }: Props) => {
       headerTitle: 'プライバシーポリシー',
       headerTintColor: 'black',
       headerBackTitleVisible: false,
+      headerStyle: {
+        backgroundColor: 'white',
+      },
+      headerTitleStyle: {
+        color: 'black',
+      },
     });
   }, [navigation]);
 

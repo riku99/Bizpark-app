@@ -7,7 +7,7 @@ import {
 } from '@expo/vector-icons';
 import { ScrollView, useColorModeValue, useTheme } from 'native-base';
 import React, { useLayoutEffect, useState } from 'react';
-import { Alert, Linking } from 'react-native';
+import { Alert } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { CloseButton } from 'src/components/BackButon';
 import { ListItem } from 'src/components/ListItem';
@@ -69,15 +69,6 @@ export const SettingsScreen = ({ navigation }: Props) => {
       },
     },
     {
-      Icon: <Feather name="send" size={24} color={iconColor} />,
-      title: 'お問い合わせ',
-      onPress: async () => {
-        await Linking.openURL(
-          'https://docs.google.com/forms/d/e/1FAIpQLSe7lC7W6qR0TqE3x0Wp5WyumNOtjW3-B3l7iLV0Yuiu9wyXWA/viewform?usp=sf_link'
-        );
-      },
-    },
-    {
       Icon: (
         <MaterialCommunityIcons
           name="account-check-outline"
@@ -102,9 +93,9 @@ export const SettingsScreen = ({ navigation }: Props) => {
     },
     {
       Icon: <AntDesign name="infocirlceo" size={24} color={iconColor} />,
-      title: '利用規約',
-      onPress: async () => {
-        navigation.navigate('TermsOfUse');
+      title: 'アプリについて',
+      onPress: () => {
+        navigation.navigate('AboutApp');
       },
     },
   ];
@@ -121,7 +112,7 @@ export const SettingsScreen = ({ navigation }: Props) => {
             onPress={item.onPress}
             key={idx}
             ItemRight={<RightIcon />}
-            ItemLeft={item.Icon}
+            ItemLeft={item?.Icon}
           />
         ))}
       </ScrollView>
