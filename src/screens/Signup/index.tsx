@@ -60,6 +60,18 @@ export const SignupScreen = ({ navigation }: Props) => {
           >
             利用規約
           </Text>
+          と
+          <Text
+            color="textBlack"
+            fontSize="12"
+            justifyContent="center"
+            textDecorationLine="underline"
+            onPress={() => {
+              navigation.navigate('PrivacyPolicy');
+            }}
+          >
+            プライバシーポリシー
+          </Text>
           に同意することになります
         </Text>
 

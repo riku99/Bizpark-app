@@ -1,19 +1,8 @@
-import React, { ComponentProps, useLayoutEffect } from 'react';
+import React, { useLayoutEffect } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
-import { Section } from './Section';
-import { SectionPart } from './SectionPart';
-
-type MainTextProps = {
-  children: string;
-} & ComponentProps<typeof Text>;
-
-const MainText = ({ children, ...props }: MainTextProps) => {
-  return (
-    <Text style={[styles.text, props.style]} {...props}>
-      {children}
-    </Text>
-  );
-};
+import { MainText } from '../../components/TermsOfUseAndPrivacyPolicyUtils/MainText';
+import { Section } from '../../components/TermsOfUseAndPrivacyPolicyUtils/Section';
+import { SectionPart } from '../../components/TermsOfUseAndPrivacyPolicyUtils/SectionPart';
 
 type Props = RootNavigationScreenProp<'TermsOfUse'>;
 
