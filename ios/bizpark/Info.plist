@@ -53,7 +53,7 @@
 		</dict>
 	</dict>
 	<key>NSPhotoLibraryUsageDescription</key>
-	<string></string>
+	<string>このアプリはフォトライブラリへのアクセスを要求しています。</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
