@@ -19,6 +19,7 @@ import { Like } from 'src/components/Like';
 import { UserImage } from 'src/components/UserImage';
 import {
   CustomErrorResponseCode,
+  useCreateThoughtReportMutation,
   useDeleteThoughtMutation,
   useGetThoughtQuery,
   useLikeThoughtMutation,
@@ -159,6 +160,7 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
   };
 
   const [blockMutation] = useBlock();
+  const [createThoughtReportMutation] = useCreateThoughtReportMutation();
 
   const onMenuAction = async (_id: string) => {
     if (_id === 'delete') {
@@ -204,6 +206,29 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
           },
         ]
       );
+      return;
+    }
+
+    if (_id === 'report') {
+      Alert.alert('この投稿を報告しますか?', '', [
+        {
+          text: 'キャンセル',
+          style: 'cancel',
+        },
+        {
+          text: '報告する',
+          onPress: async () => {
+            await createThoughtReportMutation({
+              variables: {
+                thoughtId: thoughtData.thought.id,
+              },
+              onCompleted: () => {
+                Alert.alert('報告しました');
+              },
+            });
+          },
+        },
+      ]);
     }
   };
 

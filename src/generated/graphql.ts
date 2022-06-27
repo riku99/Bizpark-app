@@ -269,6 +269,7 @@ export type Mutation = {
   createOneOnOneTalkRoomMessage: OneOnOneTalkRoomMessage;
   createPick: Pick;
   createThought: CreateThoughtResponse;
+  createThoughtReport?: Maybe<Scalars['Boolean']>;
   createThoughtTalkRoomMessage?: Maybe<ThoughtTalkRoomMessage>;
   createUser: Me;
   createUserNewsTalkRoomMessageSeen: NewsTalkRoom;
@@ -364,6 +365,11 @@ export type MutationCreatePickArgs = {
 
 export type MutationCreateThoughtArgs = {
   input: CreateThoughtInput;
+};
+
+
+export type MutationCreateThoughtReportArgs = {
+  thoughtId: Scalars['String'];
 };
 
 
@@ -1263,6 +1269,13 @@ export type CreateThoughtMutationVariables = Exact<{
 
 
 export type CreateThoughtMutation = { __typename?: 'Mutation', createThought: { __typename?: 'CreateThoughtResponse', id: string } };
+
+export type CreateThoughtReportMutationVariables = Exact<{
+  thoughtId: Scalars['String'];
+}>;
+
+
+export type CreateThoughtReportMutation = { __typename?: 'Mutation', createThoughtReport?: boolean | null | undefined };
 
 export type CreateThoughtTalkRoomMessageMutationVariables = Exact<{
   input: CreateThoughtTalkRoomMessageInput;
@@ -2440,6 +2453,37 @@ export function useCreateThoughtMutation(baseOptions?: Apollo.MutationHookOption
 export type CreateThoughtMutationHookResult = ReturnType<typeof useCreateThoughtMutation>;
 export type CreateThoughtMutationResult = Apollo.MutationResult<CreateThoughtMutation>;
 export type CreateThoughtMutationOptions = Apollo.BaseMutationOptions<CreateThoughtMutation, CreateThoughtMutationVariables>;
+export const CreateThoughtReportDocument = gql`
+    mutation CreateThoughtReport($thoughtId: String!) {
+  createThoughtReport(thoughtId: $thoughtId)
+}
+    `;
+export type CreateThoughtReportMutationFn = Apollo.MutationFunction<CreateThoughtReportMutation, CreateThoughtReportMutationVariables>;
+
+/**
+ * __useCreateThoughtReportMutation__
+ *
+ * To run a mutation, you first call `useCreateThoughtReportMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useCreateThoughtReportMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [createThoughtReportMutation, { data, loading, error }] = useCreateThoughtReportMutation({
+ *   variables: {
+ *      thoughtId: // value for 'thoughtId'
+ *   },
+ * });
+ */
+export function useCreateThoughtReportMutation(baseOptions?: Apollo.MutationHookOptions<CreateThoughtReportMutation, CreateThoughtReportMutationVariables>) {
+        const options = {...defaultOptions, ...baseOptions}
+        return Apollo.useMutation<CreateThoughtReportMutation, CreateThoughtReportMutationVariables>(CreateThoughtReportDocument, options);
+      }
+export type CreateThoughtReportMutationHookResult = ReturnType<typeof useCreateThoughtReportMutation>;
+export type CreateThoughtReportMutationResult = Apollo.MutationResult<CreateThoughtReportMutation>;
+export type CreateThoughtReportMutationOptions = Apollo.BaseMutationOptions<CreateThoughtReportMutation, CreateThoughtReportMutationVariables>;
 export const CreateThoughtTalkRoomMessageDocument = gql`
     mutation CreateThoughtTalkRoomMessage($input: CreateThoughtTalkRoomMessageInput!) {
   createThoughtTalkRoomMessage(input: $input) {

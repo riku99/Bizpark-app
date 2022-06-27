@@ -1,0 +1,3 @@
+mutation CreateThoughtReport($thoughtId: String!) {
+  createThoughtReport(thoughtId: $thoughtId)
+}
