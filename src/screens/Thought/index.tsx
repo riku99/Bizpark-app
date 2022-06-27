@@ -18,6 +18,7 @@ import { Indicator } from 'src/components/Indicator';
 import { Like } from 'src/components/Like';
 import { UserImage } from 'src/components/UserImage';
 import {
+  BlockError,
   CustomErrorResponseCode,
   useCreateThoughtReportMutation,
   useDeleteThoughtMutation,
@@ -200,6 +201,14 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
                 },
                 onCompleted: () => {
                   toast.show('ブロックしました', { type: 'success' });
+                },
+                onError: (e) => {
+                  const gqlError = getGraphQLError(e, 0);
+                  if (gqlError) {
+                    if (gqlError.code === BlockError.AlreadyBlocked) {
+                      Alert.alert('既にブロックしています');
+                    }
+                  }
                 },
               });
             },

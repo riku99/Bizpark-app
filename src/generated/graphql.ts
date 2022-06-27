@@ -23,6 +23,10 @@ export type AddDeviceTokenInput = {
   oldToken?: InputMaybe<Scalars['String']>;
 };
 
+export enum BlockError {
+  AlreadyBlocked = 'ALREADY_BLOCKED'
+}
+
 export type BlockedByUser = {
   __typename?: 'BlockedByUser';
   id: Scalars['ID'];
