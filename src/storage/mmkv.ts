@@ -11,4 +11,5 @@ export const mmkvStorageKeys = {
   displayColorMode: 'displayColorMode',
   loggedIn: 'loggedIn',
   deviceToken: 'deviceToken',
+  chckedTermsOfUse: 'chckedTermsOfUse', // 投稿ページで初回利用規約の同意が必要。それを表示したかどうか
 };

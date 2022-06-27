@@ -10,6 +10,7 @@ import { Alert, InputAccessoryView, TextInput } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import { CloseButton } from 'src/components/BackButon';
 import { useCheckedTermsOfUse } from 'src/hooks/termsOfUse';
+import { mmkvStorageKeys, storage } from 'src/storage/mmkv';
 import { RootNavigationScreenProp } from 'src/types';
 import { TextKeyboardAccessory } from './TextKeyboardAccessory';
 import { TitleKeyboardAccessory } from './TitleKeyboardAccessory';
@@ -32,7 +33,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
     }
   }, [title, text]);
 
-  const onNextPress = () => {
+  const onNextPress = useCallback(() => {
     if (nextDisabled) {
       return;
     }
@@ -42,7 +43,7 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       text,
       images,
     });
-  };
+  }, [navigation, nextDisabled, images, text, title]);
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -60,13 +61,15 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       ),
       title: '作成',
     });
-  }, [text, onNextPress]);
+  }, [text, onNextPress, nextDisabled, navigation]);
 
   const { checkedTermsOfUse, setCheckedTermsOfUse } = useCheckedTermsOfUse();
 
   useEffect(() => {
     const unsubscribe = navigation.addListener('focus', () => {
-      if (checkedTermsOfUse) {
+      const checked = storage.getBoolean(mmkvStorageKeys.chckedTermsOfUse);
+
+      if (checkedTermsOfUse && !checked) {
         setCheckedTermsOfUse(false);
         Alert.alert('利用規約に同意しますか?', '', [
           {
@@ -78,35 +81,45 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
           },
           {
             text: '同意する',
+            onPress: () => {
+              storage.set(mmkvStorageKeys.chckedTermsOfUse, true);
+            },
           },
         ]);
       }
     });
 
     return unsubscribe;
-  }, [navigation, checkedTermsOfUse]);
+  }, [navigation, checkedTermsOfUse, setCheckedTermsOfUse]);
 
   useEffect(() => {
-    Alert.alert('投稿するには利用規約に同意する必要があります', '', [
-      {
-        text: '利用規約を見る',
-        onPress: () => {
-          setCheckedTermsOfUse(true);
-          navigation.navigate('TermsOfUseModal');
+    const checked = storage.getBoolean(mmkvStorageKeys.chckedTermsOfUse);
+
+    if (!checked) {
+      Alert.alert('投稿するには利用規約に同意する必要があります', '', [
+        {
+          text: '利用規約を見る',
+          onPress: () => {
+            setCheckedTermsOfUse(true);
+            navigation.navigate('TermsOfUseModal');
+          },
         },
-      },
-      {
-        text: '同意する',
-      },
-      {
-        text: 'キャンセル',
-        style: 'cancel',
-        onPress: () => {
-          navigation.goBack();
+        {
+          text: '同意する',
+          onPress: () => {
+            storage.set(mmkvStorageKeys.chckedTermsOfUse, true);
+          },
         },
-      },
-    ]);
-  }, []);
+        {
+          text: 'キャンセル',
+          style: 'cancel',
+          onPress: () => {
+            navigation.goBack();
+          },
+        },
+      ]);
+    }
+  }, [navigation, setCheckedTermsOfUse]);
 
   const textInputRef = useRef<TextInput>(null);
 
@@ -116,8 +129,8 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       mediaType: 'photo',
       maxFiles: 4,
     })
-      .then((images) => {
-        const imageStateData = images.map((m) => {
+      .then((_images) => {
+        const imageStateData = _images.map((m) => {
           return { url: m.sourceURL, mime: m.mime };
         });
         setImages(imageStateData);
@@ -130,14 +143,11 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       });
   }, []);
 
-  const onSelectedImagesDeleteButtonPress = useCallback(
-    (url: string) => {
-      setImages((c) => {
-        return c.filter((image) => image.url !== url);
-      });
-    },
-    [images]
-  );
+  const onSelectedImagesDeleteButtonPress = useCallback((url: string) => {
+    setImages((c) => {
+      return c.filter((image) => image.url !== url);
+    });
+  }, []);
 
   return (
     <Box flex={1} px={4}>
