@@ -1,16 +1,17 @@
+import { Box, Input, Pressable, Text, useColorModeValue } from 'native-base';
 import React, {
-  useLayoutEffect,
-  useState,
-  useRef,
   useCallback,
   useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
 } from 'react';
-import { Box, Pressable, Text, Input, useColorModeValue } from 'native-base';
-import { RootNavigationScreenProp } from 'src/types';
-import { CloseButton } from 'src/components/BackButon';
-import { InputAccessoryView, TextInput } from 'react-native';
-import { TextKeyboardAccessory } from './TextKeyboardAccessory';
+import { Alert, InputAccessoryView, TextInput } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
+import { CloseButton } from 'src/components/BackButon';
+import { useCheckedTermsOfUse } from 'src/hooks/termsOfUse';
+import { RootNavigationScreenProp } from 'src/types';
+import { TextKeyboardAccessory } from './TextKeyboardAccessory';
 import { TitleKeyboardAccessory } from './TitleKeyboardAccessory';
 
 type Props = RootNavigationScreenProp<'ThoughtWriting'>;
@@ -60,6 +61,52 @@ export const ThoughtWritingScreen = ({ navigation }: Props) => {
       title: '作成',
     });
   }, [text, onNextPress]);
+
+  const { checkedTermsOfUse, setCheckedTermsOfUse } = useCheckedTermsOfUse();
+
+  useEffect(() => {
+    const unsubscribe = navigation.addListener('focus', () => {
+      if (checkedTermsOfUse) {
+        setCheckedTermsOfUse(false);
+        Alert.alert('利用規約に同意しますか?', '', [
+          {
+            text: 'キャンセル',
+            style: 'cancel',
+            onPress: () => {
+              navigation.goBack();
+            },
+          },
+          {
+            text: '同意する',
+          },
+        ]);
+      }
+    });
+
+    return unsubscribe;
+  }, [navigation, checkedTermsOfUse]);
+
+  useEffect(() => {
+    Alert.alert('投稿するには利用規約に同意する必要があります', '', [
+      {
+        text: '利用規約を見る',
+        onPress: () => {
+          setCheckedTermsOfUse(true);
+          navigation.navigate('TermsOfUseModal');
+        },
+      },
+      {
+        text: '同意する',
+      },
+      {
+        text: 'キャンセル',
+        style: 'cancel',
+        onPress: () => {
+          navigation.goBack();
+        },
+      },
+    ]);
+  }, []);
 
   const textInputRef = useRef<TextInput>(null);
 

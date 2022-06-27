@@ -21,6 +21,7 @@ import { NewsTabOrderChangeScreen } from 'src/screens/NewsTabOrderChange';
 import { NewsWebViewScreen } from 'src/screens/NewsWebView';
 import { NotificationsScreen } from 'src/screens/Notifications';
 import { TabOrderChangeScreen } from 'src/screens/TabOrderChange';
+import { TermsOfUseScreen } from 'src/screens/TermsOfUse';
 import { ThoughtScreen } from 'src/screens/Thought';
 import { ThoughtShareScreen } from 'src/screens/ThoughtShare';
 import { ThoughtWritingScreen } from 'src/screens/ThoughtWriting';
@@ -66,6 +67,7 @@ export type MainStackParamList = {
   ThoughtTalkRoom: NavigatorScreenParams<ThoughtTalkRoomStackParamList>;
   NewsTalkRoom: NavigatorScreenParams<NewsTalkRoomStackParamList>;
   OneOnOneTalkRoom: NavigatorScreenParams<OneOnOneTalkRoomStackParamList>;
+  TermsOfUseModal: undefined;
 };
 
 const Stack = createNativeStackNavigator<MainStackParamList>();
@@ -184,6 +186,7 @@ export const MainStack = React.memo(() => {
             name="NewsTabOrderChange"
             component={NewsTabOrderChangeScreen}
           />
+          <Stack.Screen name="TermsOfUseModal" component={TermsOfUseScreen} />
         </Stack.Group>
       </Stack.Navigator>
     </>
