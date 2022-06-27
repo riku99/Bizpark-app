@@ -1,16 +1,27 @@
+import { MenuAction, MenuView } from '@react-native-menu/menu';
 import React from 'react';
-import { MenuView, MenuAction } from '@react-native-menu/menu';
 
-type ID = 'delete';
+type AcionsIds = 'delete' | 'block' | 'report';
 
 type Props = {
   children: JSX.Element;
-  onAction: (id: ID) => void;
+  onAction: (id: AcionsIds) => void;
   isMyItem: boolean;
 };
 
 export const Menu = ({ children, onAction, isMyItem }: Props) => {
-  const baseAction = [];
+  const otherUserAction = [
+    {
+      id: 'block',
+      title: 'このユーザーをブロック',
+      image: 'nosign',
+    },
+    {
+      id: 'report',
+      title: 'この投稿を報告',
+      image: 'flag',
+    },
+  ];
 
   const myItemAction = [
     {
@@ -24,13 +35,13 @@ export const Menu = ({ children, onAction, isMyItem }: Props) => {
     },
   ];
 
-  const menuAction: MenuAction[] = isMyItem ? myItemAction : baseAction;
+  const menuAction: MenuAction[] = isMyItem ? myItemAction : otherUserAction;
 
   return (
     <MenuView
       actions={menuAction}
       onPressAction={(e) => {
-        onAction(e.nativeEvent.event as ID);
+        onAction(e.nativeEvent.event as AcionsIds);
       }}
     >
       {children}

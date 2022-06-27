@@ -26,6 +26,7 @@ import {
 } from 'src/generated/graphql';
 import { useMyId } from 'src/hooks/me';
 import { useTextColor } from 'src/hooks/theme';
+import { useBlock } from 'src/hooks/users';
 import { spinnerVisibleVar } from 'src/stores/spinner';
 import { RootNavigationScreenProp } from 'src/types';
 import { getGraphQLError } from 'src/utils';
@@ -157,6 +158,8 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
     }
   };
 
+  const [blockMutation] = useBlock();
+
   const onMenuAction = async (_id: string) => {
     if (_id === 'delete') {
       Alert.alert('削除する', '削除してよろしいですか?', [
@@ -172,6 +175,35 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
           },
         },
       ]);
+
+      return;
+    }
+
+    if (_id === 'block') {
+      Alert.alert(
+        'ブロックしますか?',
+        '投稿が表示されなくなり、フォローも解除されます',
+        [
+          {
+            text: 'キャンセル',
+            style: 'cancel',
+          },
+          {
+            text: 'ブロックする',
+            style: 'destructive',
+            onPress: async () => {
+              await blockMutation({
+                variables: {
+                  blockTo: thoughtData.thought.contributor.id,
+                },
+                onCompleted: () => {
+                  toast.show('ブロックしました', { type: 'success' });
+                },
+              });
+            },
+          },
+        ]
+      );
     }
   };
 
@@ -204,16 +236,13 @@ export const ThoughtScreen = ({ navigation, route }: Props) => {
             </HStack>
           </Pressable>
 
-          {/* 現在は項目が「削除」のみなのでhorizontalアイコンも表示しない */}
-          {isMyItem && (
-            <Menu onAction={onMenuAction} isMyItem={isMyItem}>
-              <MaterialCommunityIcons
-                name="dots-horizontal"
-                size={24}
-                color={dotsIconColor}
-              />
-            </Menu>
-          )}
+          <Menu onAction={onMenuAction} isMyItem={isMyItem}>
+            <MaterialCommunityIcons
+              name="dots-horizontal"
+              size={24}
+              color={dotsIconColor}
+            />
+          </Menu>
         </Box>
 
         <HStack>
